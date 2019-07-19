@@ -1,0 +1,595 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
+		432DED9D22E1F28D00DFA074 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* FirstViewController.swift */; };
+		432DED9F22E1F28D00DFA074 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9E22E1F28D00DFA074 /* SecondViewController.swift */; };
+		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
+		432DEDA422E1F28E00DFA074 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA322E1F28E00DFA074 /* Assets.xcassets */; };
+		432DEDA722E1F28E00DFA074 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */; };
+		432DEDB222E1F28E00DFA074 /* GeoCapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DEDB122E1F28E00DFA074 /* GeoCapTests.swift */; };
+		432DEDBD22E1F28E00DFA074 /* GeoCapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		432DEDAE22E1F28E00DFA074 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 432DED8F22E1F28D00DFA074 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 432DED9622E1F28D00DFA074;
+			remoteInfo = GeoCap;
+		};
+		432DEDB922E1F28E00DFA074 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 432DED8F22E1F28D00DFA074 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 432DED9622E1F28D00DFA074;
+			remoteInfo = GeoCap;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		432DED9C22E1F28D00DFA074 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		432DED9E22E1F28D00DFA074 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		432DEDA122E1F28D00DFA074 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		432DEDA322E1F28E00DFA074 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		432DEDA622E1F28E00DFA074 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		432DEDA822E1F28E00DFA074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		432DEDAD22E1F28E00DFA074 /* GeoCapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeoCapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		432DEDB122E1F28E00DFA074 /* GeoCapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCapTests.swift; sourceTree = "<group>"; };
+		432DEDB322E1F28E00DFA074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		432DEDB822E1F28E00DFA074 /* GeoCapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeoCapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCapUITests.swift; sourceTree = "<group>"; };
+		432DEDBE22E1F28E00DFA074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		432DED9422E1F28D00DFA074 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDAA22E1F28E00DFA074 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDB522E1F28E00DFA074 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		432DED8E22E1F28D00DFA074 = {
+			isa = PBXGroup;
+			children = (
+				432DED9922E1F28D00DFA074 /* GeoCap */,
+				432DEDB022E1F28E00DFA074 /* GeoCapTests */,
+				432DEDBB22E1F28E00DFA074 /* GeoCapUITests */,
+				432DED9822E1F28D00DFA074 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		432DED9822E1F28D00DFA074 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				432DED9722E1F28D00DFA074 /* GeoCap.app */,
+				432DEDAD22E1F28E00DFA074 /* GeoCapTests.xctest */,
+				432DEDB822E1F28E00DFA074 /* GeoCapUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		432DED9922E1F28D00DFA074 /* GeoCap */ = {
+			isa = PBXGroup;
+			children = (
+				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
+				432DED9C22E1F28D00DFA074 /* FirstViewController.swift */,
+				432DED9E22E1F28D00DFA074 /* SecondViewController.swift */,
+				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
+				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
+				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
+				432DEDA822E1F28E00DFA074 /* Info.plist */,
+			);
+			path = GeoCap;
+			sourceTree = "<group>";
+		};
+		432DEDB022E1F28E00DFA074 /* GeoCapTests */ = {
+			isa = PBXGroup;
+			children = (
+				432DEDB122E1F28E00DFA074 /* GeoCapTests.swift */,
+				432DEDB322E1F28E00DFA074 /* Info.plist */,
+			);
+			path = GeoCapTests;
+			sourceTree = "<group>";
+		};
+		432DEDBB22E1F28E00DFA074 /* GeoCapUITests */ = {
+			isa = PBXGroup;
+			children = (
+				432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */,
+				432DEDBE22E1F28E00DFA074 /* Info.plist */,
+			);
+			path = GeoCapUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		432DED9622E1F28D00DFA074 /* GeoCap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 432DEDC122E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCap" */;
+			buildPhases = (
+				432DED9322E1F28D00DFA074 /* Sources */,
+				432DED9422E1F28D00DFA074 /* Frameworks */,
+				432DED9522E1F28D00DFA074 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GeoCap;
+			productName = GeoCap;
+			productReference = 432DED9722E1F28D00DFA074 /* GeoCap.app */;
+			productType = "com.apple.product-type.application";
+		};
+		432DEDAC22E1F28E00DFA074 /* GeoCapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 432DEDC422E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapTests" */;
+			buildPhases = (
+				432DEDA922E1F28E00DFA074 /* Sources */,
+				432DEDAA22E1F28E00DFA074 /* Frameworks */,
+				432DEDAB22E1F28E00DFA074 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				432DEDAF22E1F28E00DFA074 /* PBXTargetDependency */,
+			);
+			name = GeoCapTests;
+			productName = GeoCapTests;
+			productReference = 432DEDAD22E1F28E00DFA074 /* GeoCapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		432DEDB722E1F28E00DFA074 /* GeoCapUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 432DEDC722E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapUITests" */;
+			buildPhases = (
+				432DEDB422E1F28E00DFA074 /* Sources */,
+				432DEDB522E1F28E00DFA074 /* Frameworks */,
+				432DEDB622E1F28E00DFA074 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				432DEDBA22E1F28E00DFA074 /* PBXTargetDependency */,
+			);
+			name = GeoCapUITests;
+			productName = GeoCapUITests;
+			productReference = 432DEDB822E1F28E00DFA074 /* GeoCapUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		432DED8F22E1F28D00DFA074 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Benjamin Angeria";
+				TargetAttributes = {
+					432DED9622E1F28D00DFA074 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					432DEDAC22E1F28E00DFA074 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 432DED9622E1F28D00DFA074;
+					};
+					432DEDB722E1F28E00DFA074 = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 432DED9622E1F28D00DFA074;
+					};
+				};
+			};
+			buildConfigurationList = 432DED9222E1F28D00DFA074 /* Build configuration list for PBXProject "GeoCap" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 432DED8E22E1F28D00DFA074;
+			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				432DED9622E1F28D00DFA074 /* GeoCap */,
+				432DEDAC22E1F28E00DFA074 /* GeoCapTests */,
+				432DEDB722E1F28E00DFA074 /* GeoCapUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		432DED9522E1F28D00DFA074 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				432DEDA722E1F28E00DFA074 /* LaunchScreen.storyboard in Resources */,
+				432DEDA422E1F28E00DFA074 /* Assets.xcassets in Resources */,
+				432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDAB22E1F28E00DFA074 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDB622E1F28E00DFA074 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		432DED9322E1F28D00DFA074 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				432DED9F22E1F28D00DFA074 /* SecondViewController.swift in Sources */,
+				432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */,
+				432DED9D22E1F28D00DFA074 /* FirstViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDA922E1F28E00DFA074 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				432DEDB222E1F28E00DFA074 /* GeoCapTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		432DEDB422E1F28E00DFA074 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				432DEDBD22E1F28E00DFA074 /* GeoCapUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		432DEDAF22E1F28E00DFA074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 432DED9622E1F28D00DFA074 /* GeoCap */;
+			targetProxy = 432DEDAE22E1F28E00DFA074 /* PBXContainerItemProxy */;
+		};
+		432DEDBA22E1F28E00DFA074 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 432DED9622E1F28D00DFA074 /* GeoCap */;
+			targetProxy = 432DEDB922E1F28E00DFA074 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		432DEDA022E1F28D00DFA074 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				432DEDA122E1F28D00DFA074 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				432DEDA622E1F28E00DFA074 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		432DEDBF22E1F28E00DFA074 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		432DEDC022E1F28E00DFA074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		432DEDC222E1F28E00DFA074 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCap/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCap";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		432DEDC322E1F28E00DFA074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCap/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCap";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		432DEDC522E1F28E00DFA074 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCapTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GeoCap.app/GeoCap";
+			};
+			name = Debug;
+		};
+		432DEDC622E1F28E00DFA074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCapTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GeoCap.app/GeoCap";
+			};
+			name = Release;
+		};
+		432DEDC822E1F28E00DFA074 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCapUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCapUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GeoCap;
+			};
+			name = Debug;
+		};
+		432DEDC922E1F28E00DFA074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 934788YR3T;
+				INFOPLIST_FILE = GeoCapUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Benjamin-Angeria.GeoCapUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GeoCap;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		432DED9222E1F28D00DFA074 /* Build configuration list for PBXProject "GeoCap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				432DEDBF22E1F28E00DFA074 /* Debug */,
+				432DEDC022E1F28E00DFA074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		432DEDC122E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				432DEDC222E1F28E00DFA074 /* Debug */,
+				432DEDC322E1F28E00DFA074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		432DEDC422E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				432DEDC522E1F28E00DFA074 /* Debug */,
+				432DEDC622E1F28E00DFA074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		432DEDC722E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				432DEDC822E1F28E00DFA074 /* Debug */,
+				432DEDC922E1F28E00DFA074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 432DED8F22E1F28D00DFA074 /* Project object */;
+}
