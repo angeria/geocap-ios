@@ -57,7 +57,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    // TODO: String localization
+    // TODO: String localization, improve wording (also in Info.plist)?
     private func showLocationAccessFailedAlert() {
         let title = "Location Access Denied"
         let message = "Access to your location was denied, please enable access in your settings to be able to play."
