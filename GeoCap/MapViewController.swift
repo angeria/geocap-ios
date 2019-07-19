@@ -25,6 +25,8 @@ class FirstViewController: UIViewController, MKMapViewDelegate {
         let uppsala = CLLocationCoordinate2D(latitude: CLLocationDegrees(59.8586), longitude: CLLocationDegrees(17.6389))
         let region = MKCoordinateRegion(center: uppsala, latitudinalMeters: 4000, longitudinalMeters: 4000)
         mapView.setRegion(region, animated: true)
+        
+        checkLocationAuthorizationStatus()
     }
         
     // MARK: - Map View
@@ -41,8 +43,29 @@ class FirstViewController: UIViewController, MKMapViewDelegate {
     
     let locationManager = CLLocationManager()
     
-    private func checkLocationAuthStatus() {
-        
+    // FIXME: Complete
+    private func checkLocationAuthorizationStatus() {
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .denied, .restricted:
+            showLocationAccessFailedAlert()
+        case .authorizedWhenInUse, .authorizedAlways:
+            print("add case")
+        @unknown default:
+            fatalError()
+        }
     }
+    
+    // TODO: String localization
+    private func showLocationAccessFailedAlert() {
+        let title = "Location Access Denied"
+        let message = "Access to your location was denied, please enable access in your settings to be able to play."
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+
 }
 
