@@ -6,7 +6,8 @@ target 'GeoCap' do
   use_frameworks!
 
   # Pods for GeoCap
-  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'FirebaseUI/Auth'
 
   target 'GeoCapTests' do
     inherit! :search_paths
