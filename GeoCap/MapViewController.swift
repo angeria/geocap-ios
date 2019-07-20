@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class FirstViewController: UIViewController, MKMapViewDelegate {
+class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate {
         let region = MKCoordinateRegion(center: uppsala, latitudinalMeters: 4000, longitudinalMeters: 4000)
         mapView.setRegion(region, animated: true)
         
-        checkLocationAuthorizationStatus()
+        requestUserLocationAuthorization()
     }
         
     // MARK: - Map View
@@ -39,33 +39,31 @@ class FirstViewController: UIViewController, MKMapViewDelegate {
         }
     }
 
-    // MARK: - User Location
+    // MARK: - User Location Authorization
     
     let locationManager = CLLocationManager()
     
-    // FIXME: Complete
-    private func checkLocationAuthorizationStatus() {
+    private func requestUserLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .denied, .restricted:
-            showLocationAccessFailedAlert()
+            presentLocationAccessDeniedAlert()
         case .authorizedWhenInUse, .authorizedAlways:
-            print("add case")
+            break
         @unknown default:
-            fatalError()
+            break
         }
     }
     
-    // TODO: String localization, improve wording (also in Info.plist)?
-    private func showLocationAccessFailedAlert() {
+    // TODO: String localization
+    private func presentLocationAccessDeniedAlert() {
         let title = "Location Access Denied"
-        let message = "Access to your location was denied, please enable access in your settings to be able to play."
+        let message = "Access to your location was denied, please enable location services to be able to play."
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .cancel)
+        let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-
+    
 }
-
