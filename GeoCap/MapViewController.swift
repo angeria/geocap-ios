@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FirebaseAuth
+import FirebaseUI
 
 class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
@@ -27,6 +29,8 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         mapView.setRegion(region, animated: true)
         
         requestUserLocationAuthorization()
+        
+        
     }
         
     // MARK: - Map View
