@@ -19,6 +19,8 @@ PODS:
   - FirebaseUI/Auth (8.0.4):
     - Firebase/Auth (~> 6.0)
     - GoogleUtilities/UserDefaults
+  - FirebaseUI/Email (8.0.4):
+    - FirebaseUI/Auth
   - GoogleUtilities/AppDelegateSwizzler (6.2.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -41,6 +43,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - FirebaseUI/Anonymous
   - FirebaseUI/Auth
+  - FirebaseUI/Email
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -61,6 +64,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
 
-PODFILE CHECKSUM: 7e2bf78668b8229437fb2b6f8ab7b814c7ce8974
+PODFILE CHECKSUM: 668ab663947411f00b7c1bc7b3b3710969d0c281
 
 COCOAPODS: 1.7.5
