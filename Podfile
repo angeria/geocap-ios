@@ -6,6 +6,9 @@ target 'GeoCap' do
   use_frameworks!
 
   # Pods for GeoCap
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+
   pod 'Firebase/Auth'
 
   pod 'FirebaseUI/Auth'
