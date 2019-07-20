@@ -45,7 +45,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
 
     // MARK: - User Location Authorization
     
-    let locationManager = CLLocationManager()
+    private let locationManager = CLLocationManager()
     
     private func requestUserLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {

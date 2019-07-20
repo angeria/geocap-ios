@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAnonymousAuthUI.bundle
 ${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle
