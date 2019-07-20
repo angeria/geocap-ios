@@ -9,8 +9,6 @@
 import UIKit
 import MapKit
 import CoreLocation
-import FirebaseAuth
-import FirebaseUI
 
 class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
@@ -28,8 +26,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         let region = MKCoordinateRegion(center: uppsala, latitudinalMeters: 4000, longitudinalMeters: 4000)
         mapView.setRegion(region, animated: true)
         
-        requestUserLocationAuthorization()
-        
+        requestUserLocationAuth()
         
     }
         
@@ -47,7 +44,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     private let locationManager = CLLocationManager()
     
-    private func requestUserLocationAuthorization() {
+    private func requestUserLocationAuth() {
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()

@@ -11,23 +11,30 @@ import FirebaseUI
 
 class SignInViewController: UIViewController, FUIAuthDelegate {
 
-    lazy var authUI = FUIAuth.defaultAuthUI()!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        authUI.delegate = self
-        
-        authUI.providers = [FUIAnonymousAuth()]
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         let authViewController = authUI.authViewController()
-        present(authViewController, animated: true)
+        present(authViewController, animated: false)
     }
 
+    // MARK: - AuthUI
+    
+    lazy var authUI: FUIAuth = {
+        let authUI = FUIAuth.defaultAuthUI()!
+        authUI.delegate = self
+        authUI.providers = [FUIAnonymousAuth(), FUIEmailAuth()]
+        return authUI
+    }()
+    
+    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
+        
+    }
+    
     /*
     // MARK: - Navigation
 

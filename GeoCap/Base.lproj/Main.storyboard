@@ -40,10 +40,10 @@
             </objects>
             <point key="canvasLocation" x="831.88405797101461" y="0.0"/>
         </scene>
-        <!--Sign In View Controller-->
+        <!--Sign In-->
         <scene sceneID="5NX-5H-tK6">
             <objects>
-                <viewController id="c1m-1H-Z4n" customClass="SignInViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Sign In" id="c1m-1H-Z4n" customClass="SignInViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hRz-wW-AZZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
