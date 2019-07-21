@@ -60,7 +60,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             break
         case .some where errorCode == .providerError:
             print("Login error from provider: \(error.userInfo[FUIAuthErrorUserInfoProviderIDKey]!)")
-        case .none where error.userInfo[NSUnderlyingErrorKey] != nil:
+        case errorCode where error.userInfo[NSUnderlyingErrorKey] != nil:
             print("Login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
         default:
             print("Login error: \(error.localizedDescription)")
