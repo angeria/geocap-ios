@@ -12,8 +12,6 @@ import FirebaseUI
 
 class AuthViewController: UIViewController, FUIAuthDelegate {
     
-    private lazy var db = Firestore.firestore()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -30,34 +28,56 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         
     }
 
-    // MARK: - AuthUI
+    // MARK: - Authorization
     
     lazy var authUI: FUIAuth = {
         let authUI = FUIAuth.defaultAuthUI()!
         authUI.delegate = self
-        authUI.providers = [FUIAnonymousAuth(), FUIEmailAuth()]
+        authUI.providers = [FUIEmailAuth()]
         return authUI
     }()
     
     private var loginSuccessful = false
     
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
-        if let authDataResult = authDataResult, error == nil {
-            loginSuccessful = true
-            
-            let user = authDataResult.user
-            
-            db.collection("users").document(user.uid).setData([
-                "name": user.displayName!,
-            ]) { err in
-                if let err = err {
-                    print("Error adding document: \(err)")
-                } else {
-                    print("Document added with ID: \(user.uid)")
-                }
+        switch error {
+        case .none:
+            if let user = authDataResult?.user {
+                saveUser(user)
+            }
+        case .some(let error):
+            handleSignInError(error)
+        }
+    }
+    
+    private func handleSignInError(_ error: Error) {
+        let error = error as NSError
+        let errorCode = FUIAuthErrorCode(rawValue: UInt(error.code))
+        
+        // TODO: Show alerts
+        switch errorCode {
+        case .some(let errorCode) where errorCode == .userCancelledSignIn:
+            break
+        case .some(let errorCode) where errorCode == .providerError:
+            print("Login error from provider: \(error.userInfo[FUIAuthErrorUserInfoProviderIDKey]!)")
+        case .none where error.userInfo[NSUnderlyingErrorKey] != nil:
+            print("Login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
+        default:
+            print("Login error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func saveUser(_ user: User) {
+        let db = Firestore.firestore()
+        db.collection("users").document(user.uid).setData([
+            "name": user.displayName!,
+        ]) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                print("Document added with ID: \(user.uid)")
             }
         }
-        
     }
     
     // MARK: - Navigation
