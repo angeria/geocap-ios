@@ -6,13 +6,15 @@ target 'GeoCap' do
   use_frameworks!
 
   # Pods for GeoCap
+  pod 'Protobuf', :inhibit_warnings => true
+
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
 
+  pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
 
   pod 'FirebaseUI/Auth'
-  pod 'FirebaseUI/Anonymous'
   pod 'FirebaseUI/Email'
 
   target 'GeoCapTests' do
