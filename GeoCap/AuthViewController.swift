@@ -57,6 +57,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         // TODO: Show alerts
         switch errorCode {
         case .some where errorCode == .userCancelledSignIn:
+            print("User cancelled sign-in")
             break
         case .some where errorCode == .providerError:
             print("Login error from provider: \(error.userInfo[FUIAuthErrorUserInfoProviderIDKey]!)")
