@@ -13,7 +13,7 @@
         <!--Map-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9pv-A4-QxB" customClass="MapViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -43,7 +43,6 @@
         <!--Authorization-->
         <scene sceneID="5NX-5H-tK6">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Authorization" id="c1m-1H-Z4n" customClass="AuthViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hRz-wW-AZZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -55,6 +54,7 @@
                         <segue destination="49e-Tb-3d3" kind="show" identifier="Show Map" id="g6l-3r-dXL"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-801" y="0.0"/>
         </scene>

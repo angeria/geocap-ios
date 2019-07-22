@@ -11,7 +11,13 @@ import MapKit
 import CoreLocation
 import Firebase
 
-class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+extension MapViewController {
+    enum Constants {
+        static let zoomLevel: CLLocationDistance = 4000
+    }
+}
+
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
     private lazy var db = Firestore.firestore()
     
@@ -47,7 +53,7 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         if !regionIsCenteredOnUserLocation {
-            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 4000, longitudinalMeters: 4000)
+            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
             regionIsCenteredOnUserLocation = true
         }
