@@ -8,10 +8,18 @@
 
 import Foundation
 import Firebase
+import MapKit.MKAnnotation
 
-struct Location {
+class Location: NSObject, MKAnnotation {
     let name: String
-    let coordinates: (Double, Double)
+    var title: String?
+    var coordinate: CLLocationCoordinate2D
+    
+    init(name: String, coordinate: CLLocationCoordinate2D) {
+        self.name = name
+        self.title = name
+        self.coordinate = coordinate
+    }
     
     init?(data: [String:Any]) {
         guard
@@ -20,6 +28,7 @@ struct Location {
             else { return nil }
         
         self.name = name
-        self.coordinates = (geoPoint.latitude, geoPoint.longitude)
+        self.title = name
+        self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
     }
 }
