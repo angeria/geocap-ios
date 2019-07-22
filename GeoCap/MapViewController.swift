@@ -55,14 +55,8 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
                 print("Error getting documents: \(error)")
             } else {
                 let locations = querySnapshot!.documents.compactMap { Location(data: $0.data()) }
-                self?.addLocations(locations)
+                self?.mapView.addAnnotations(locations)
             }
-        }
-    }
-    
-    private func addLocations(_ locations: [Location]) {
-        for location in locations {
-            print(location)
         }
     }
     
