@@ -26,7 +26,13 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
 
         requestUserLocationAuth()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
+        mapView.delegate = nil
+    }
+    
     // MARK: - Map View
 
     @IBOutlet weak var mapView: MKMapView! {
