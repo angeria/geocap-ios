@@ -9,11 +9,16 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Firebase
 
 class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
 
+    private lazy var db = Firestore.firestore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        fetchLocations()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -32,13 +37,30 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
 
-    private var initialRegionIsSet = false
+    private var regionIsCenteredOnUserLocation = false
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if !initialRegionIsSet {
+        if !regionIsCenteredOnUserLocation {
             let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 4000, longitudinalMeters: 4000)
             mapView.setRegion(region, animated: true)
-            initialRegionIsSet = true
+            regionIsCenteredOnUserLocation = true
+        }
+    }
+    
+    private func fetchLocations() {
+        db.collection("cities").document("uppsala").collection("locations").getDocuments { [weak self] (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                let locations = querySnapshot!.documents.compactMap { Location(data: $0.data()) }
+                self?.addLocations(locations)
+            }
+        }
+    }
+    
+    private func addLocations(_ locations: [Location]) {
+        for location in locations {
+            print(location)
         }
     }
     
