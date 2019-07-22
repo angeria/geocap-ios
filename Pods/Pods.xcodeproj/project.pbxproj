@@ -18140,6 +18140,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/BoringSSL-GRPC/BoringSSL-GRPC.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = openssl_grpc;
 				PRODUCT_NAME = openssl_grpc;
 				SDKROOT = iphoneos;
@@ -18176,6 +18182,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/Protobuf/Protobuf.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = Protobuf;
 				PRODUCT_NAME = Protobuf;
 				SDKROOT = iphoneos;
@@ -18200,6 +18212,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -18215,6 +18233,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -18308,6 +18332,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/gRPC-Core/gRPC-Core.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = grpc;
 				PRODUCT_NAME = grpc;
 				SDKROOT = iphoneos;
@@ -18343,6 +18373,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/Protobuf/Protobuf.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = Protobuf;
 				PRODUCT_NAME = Protobuf;
 				SDKROOT = iphoneos;
@@ -18363,6 +18399,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseUI";
 				INFOPLIST_FILE = "Target Support Files/FirebaseUI/ResourceBundle-FirebaseAuthUI-FirebaseUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = FirebaseAuthUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -18394,6 +18436,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseFirestore/FirebaseFirestore.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseFirestore;
 				PRODUCT_NAME = FirebaseFirestore;
 				SDKROOT = iphoneos;
@@ -18416,6 +18464,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -18446,6 +18500,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/gRPC-Core/gRPC-Core.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = grpc;
 				PRODUCT_NAME = grpc;
 				SDKROOT = iphoneos;
@@ -18467,6 +18527,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
 				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = "gRPCCertificates-Cpp";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -18558,6 +18624,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/GoogleUtilities/GoogleUtilities.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = GoogleUtilities;
 				PRODUCT_NAME = GoogleUtilities;
 				SDKROOT = iphoneos;
@@ -18596,6 +18668,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -18632,6 +18710,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/GTMSessionFetcher/GTMSessionFetcher.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = GTMSessionFetcher;
 				PRODUCT_NAME = GTMSessionFetcher;
 				SDKROOT = iphoneos;
@@ -18670,6 +18754,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCap/Pods-GeoCap.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -18706,6 +18796,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseFirestore/FirebaseFirestore.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseFirestore;
 				PRODUCT_NAME = FirebaseFirestore;
 				SDKROOT = iphoneos;
@@ -18729,6 +18825,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -18758,6 +18860,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/BoringSSL-GRPC/BoringSSL-GRPC.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = openssl_grpc;
 				PRODUCT_NAME = openssl_grpc;
 				SDKROOT = iphoneos;
@@ -18778,6 +18886,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseUI";
 				INFOPLIST_FILE = "Target Support Files/FirebaseUI/ResourceBundle-FirebaseEmailAuthUI-FirebaseUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = FirebaseEmailAuthUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -18809,6 +18923,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseCore/FirebaseCore.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseCore;
 				PRODUCT_NAME = FirebaseCore;
 				SDKROOT = iphoneos;
@@ -18845,6 +18965,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseInstanceID/FirebaseInstanceID.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseInstanceID;
 				PRODUCT_NAME = FirebaseInstanceID;
 				SDKROOT = iphoneos;
@@ -18881,6 +19007,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/gRPC-C++/gRPC-C++.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = grpcpp;
 				PRODUCT_NAME = grpcpp;
 				SDKROOT = iphoneos;
@@ -18918,6 +19050,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseUI/FirebaseUI.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseUI;
 				PRODUCT_NAME = FirebaseUI;
 				SDKROOT = iphoneos;
@@ -18938,6 +19076,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
 				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-Cpp-gRPC-C++-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = "gRPCCertificates-Cpp";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -18969,6 +19113,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = nanopb;
 				PRODUCT_NAME = nanopb;
 				SDKROOT = iphoneos;
@@ -18989,6 +19139,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseUI";
 				INFOPLIST_FILE = "Target Support Files/FirebaseUI/ResourceBundle-FirebaseEmailAuthUI-FirebaseUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = FirebaseEmailAuthUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -19020,6 +19176,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/nanopb/nanopb.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = nanopb;
 				PRODUCT_NAME = nanopb;
 				SDKROOT = iphoneos;
@@ -19056,6 +19218,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/GoogleUtilities/GoogleUtilities.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = GoogleUtilities;
 				PRODUCT_NAME = GoogleUtilities;
 				SDKROOT = iphoneos;
@@ -19091,6 +19259,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/leveldb-library/leveldb-library.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = leveldb;
 				PRODUCT_NAME = leveldb;
 				SDKROOT = iphoneos;
@@ -19127,6 +19301,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseAuth/FirebaseAuth.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseAuth;
 				PRODUCT_NAME = FirebaseAuth;
 				SDKROOT = iphoneos;
@@ -19163,6 +19343,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseAuth/FirebaseAuth.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseAuth;
 				PRODUCT_NAME = FirebaseAuth;
 				SDKROOT = iphoneos;
@@ -19198,6 +19384,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/gRPC-C++/gRPC-C++.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = grpcpp;
 				PRODUCT_NAME = grpcpp;
 				SDKROOT = iphoneos;
@@ -19220,6 +19412,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -19252,6 +19450,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -19291,6 +19495,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -19329,6 +19539,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -19353,6 +19569,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -19383,6 +19605,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseInstanceID/FirebaseInstanceID.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseInstanceID;
 				PRODUCT_NAME = FirebaseInstanceID;
 				SDKROOT = iphoneos;
@@ -19419,6 +19647,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseUI/FirebaseUI.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseUI;
 				PRODUCT_NAME = FirebaseUI;
 				SDKROOT = iphoneos;
@@ -19443,6 +19677,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -19458,6 +19698,12 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -19488,6 +19734,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/leveldb-library/leveldb-library.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = leveldb;
 				PRODUCT_NAME = leveldb;
 				SDKROOT = iphoneos;
@@ -19523,6 +19775,12 @@
 					"@loader_path/Frameworks",
 				);
 				MODULEMAP_FILE = "Target Support Files/GTMSessionFetcher/GTMSessionFetcher.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = GTMSessionFetcher;
 				PRODUCT_NAME = GTMSessionFetcher;
 				SDKROOT = iphoneos;
@@ -19543,6 +19801,12 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FirebaseUI";
 				INFOPLIST_FILE = "Target Support Files/FirebaseUI/ResourceBundle-FirebaseAuthUI-FirebaseUI-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_NAME = FirebaseAuthUI;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -19574,6 +19838,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/FirebaseCore/FirebaseCore.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				PRODUCT_MODULE_NAME = FirebaseCore;
 				PRODUCT_NAME = FirebaseCore;
 				SDKROOT = iphoneos;
@@ -19611,6 +19881,12 @@
 				);
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GeoCap/Pods-GeoCap.modulemap";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-Qunused-arguments",
+					"-Xanalyzer",
+					"-analyzer-disable-all-checks",
+				);
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
