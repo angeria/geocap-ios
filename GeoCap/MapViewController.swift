@@ -59,6 +59,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let location = annotation as? Location {
+            let marker = MKMarkerAnnotationView(annotation: location, reuseIdentifier: "Marker")
+            marker.canShowCallout = true
+//            marker.calloutOffset = CGPoint(x: -5, y: 5)
+            
+//            let buttonX = 150
+//            let buttonY = 150
+//            let buttonWidth = 100
+//            let buttonHeight = 50
+//            let button = UIButton(type: .system)
+//            button.setTitle("Ta över", for: .normal)
+//            button.tintColor = .white
+//            button.backgroundColor = .red
+//            button.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
+//            marker.rightCalloutAccessoryView = button
+            
+            return marker
+        }
+        return nil
+    }
+    
     // MARK: - Locations
     
     private func fetchLocations() {
