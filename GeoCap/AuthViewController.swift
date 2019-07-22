@@ -35,8 +35,8 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if let authListener = authListener {
-            Auth.auth().removeStateDidChangeListener(authListener)
+        if authListener != nil {
+            Auth.auth().removeStateDidChangeListener(authListener!)
         }
     }
     
@@ -68,13 +68,14 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         switch errorCode {
         case .some where errorCode == .userCancelledSignIn:
             print("User cancelled sign-in")
-            break
         case .some where errorCode == .providerError:
             print("Login error from provider: \(error.userInfo[FUIAuthErrorUserInfoProviderIDKey]!)")
-        case errorCode where error.userInfo[NSUnderlyingErrorKey] != nil:
-            print("Login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
+            fallthrough
         default:
-            print("Login error: \(error.localizedDescription)")
+            print("Login error description: \(error.localizedDescription)")
+            if error.userInfo[NSUnderlyingErrorKey] != nil {
+                print("Underlying login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
+            }
         }
     }
     
