@@ -16,18 +16,30 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         super.viewDidLoad()
     }
 
+    var authListener: AuthStateDidChangeListenerHandle?
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if loginSuccessful {
-            performSegue(withIdentifier: "Show Map", sender: nil)
-        } else {
-            let authViewController = authUI.authViewController()
-            present(authViewController, animated: false)
+        authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            if let _ = user {
+                self?.performSegue(withIdentifier: "Show Map", sender: nil)
+            } else {
+                if let authViewController = self?.authUI.authViewController() {
+                    self!.present(authViewController, animated: true)
+                }
+            }
         }
-        
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let authListener = authListener {
+            Auth.auth().removeStateDidChangeListener(authListener)
+        }
+    }
+    
     // MARK: - Authorization
     
     lazy var authUI: FUIAuth = {
@@ -36,8 +48,6 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         authUI.providers = [FUIEmailAuth()]
         return authUI
     }()
-    
-    private var loginSuccessful = false
     
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         switch error {
@@ -54,7 +64,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         let error = error as NSError
         let errorCode = FUIAuthErrorCode(rawValue: UInt(error.code))
         
-        // TODO: Show alerts
+        // TODO: Handle errors
         switch errorCode {
         case .some where errorCode == .userCancelledSignIn:
             print("User cancelled sign-in")
@@ -71,8 +81,10 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     private func saveUser(_ user: User) {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            "name": user.displayName!,
+            // TODO: Only unique names should be allowed. Maybe remove default to empty string?
+            "name": user.displayName ?? "",
         ]) { err in
+            // TODO: Handle errors
             if let err = err {
                 print("Error adding document: \(err)")
             } else {

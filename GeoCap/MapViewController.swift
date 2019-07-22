@@ -14,20 +14,12 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // FIXME: Change to actual location
-        let uppsala = CLLocationCoordinate2D(latitude: CLLocationDegrees(59.8586), longitude: CLLocationDegrees(17.6389))
-        let region = MKCoordinateRegion(center: uppsala, latitudinalMeters: 4000, longitudinalMeters: 4000)
-        mapView.setRegion(region, animated: true)
-        
+
         requestUserLocationAuth()
-        
     }
         
     // MARK: - Map View
@@ -40,6 +32,16 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
 
+    private var initialRegionIsSet = false
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        if !initialRegionIsSet {
+            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 4000, longitudinalMeters: 4000)
+            mapView.setRegion(region, animated: true)
+            initialRegionIsSet = true
+        }
+    }
+    
     // MARK: - User Location Authorization
     
     private let locationManager = CLLocationManager()
