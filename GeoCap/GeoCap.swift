@@ -13,6 +13,7 @@ import MapKit.MKAnnotation
 class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
+    var subtitle: String?
     var coordinate: CLLocationCoordinate2D
     
     init(name: String, coordinate: CLLocationCoordinate2D) {
