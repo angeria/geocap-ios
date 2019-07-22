@@ -47,6 +47,8 @@ class FirstViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
     
+    // MARK: - Locations
+    
     private func fetchLocations() {
         db.collection("cities").document("uppsala").collection("locations").getDocuments { [weak self] (querySnapshot, error) in
             if let error = error {

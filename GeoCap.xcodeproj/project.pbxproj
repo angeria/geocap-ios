@@ -120,15 +120,11 @@
 		432DED9922E1F28D00DFA074 /* GeoCap */ = {
 			isa = PBXGroup;
 			children = (
-				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
-				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
-				43E5CF7422E5A81B00DBED2E /* GeoCap.swift */,
 				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
+				43E5CF7422E5A81B00DBED2E /* GeoCap.swift */,
+				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
-				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
-				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
-				432DEDA822E1F28E00DFA074 /* Info.plist */,
-				43D0268A22E3007F00A0C255 /* GoogleService-Info.plist */,
+				43E5CF7622E5B41E00DBED2E /* Supporting Files */,
 			);
 			path = GeoCap;
 			sourceTree = "<group>";
@@ -149,6 +145,18 @@
 				432DEDBE22E1F28E00DFA074 /* Info.plist */,
 			);
 			path = GeoCapUITests;
+			sourceTree = "<group>";
+		};
+		43E5CF7622E5B41E00DBED2E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
+				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
+				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
+				432DEDA822E1F28E00DFA074 /* Info.plist */,
+				43D0268A22E3007F00A0C255 /* GoogleService-Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		8C06367070EC0B91C0517455 /* Frameworks */ = {
