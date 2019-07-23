@@ -8,13 +8,13 @@
 
 import Foundation
 import Firebase
-import MapKit.MKAnnotation
+import MapKit
 
 class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
     var subtitle: String?
-    var coordinate: CLLocationCoordinate2D
+    @objc dynamic var coordinate: CLLocationCoordinate2D
     
     init(name: String, coordinate: CLLocationCoordinate2D) {
         self.name = name
