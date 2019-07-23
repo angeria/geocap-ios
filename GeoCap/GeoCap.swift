@@ -31,5 +31,11 @@ class Location: NSObject, MKAnnotation {
         self.name = name
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+        
+        if let owner = data["owner"] as? String {
+            self.subtitle = "Captured by: \(owner)"
+        } else {
+            self.subtitle = "Not captured yet"
+        }
     }
 }
