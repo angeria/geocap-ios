@@ -24,6 +24,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        
         fetchLocations()
     }
 
@@ -60,25 +62,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if let location = annotation as? Location {
-            let marker = MKMarkerAnnotationView(annotation: location, reuseIdentifier: "Marker")
-            marker.canShowCallout = true
-//            marker.calloutOffset = CGPoint(x: -5, y: 5)
-            
-//            let buttonX = 150
-//            let buttonY = 150
-//            let buttonWidth = 100
-//            let buttonHeight = 50
-//            let button = UIButton(type: .system)
-//            button.setTitle("Ta över", for: .normal)
-//            button.tintColor = .white
-//            button.backgroundColor = .red
-//            button.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
-//            marker.rightCalloutAccessoryView = button
-            
-            return marker
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
+        
+        if let annotation = annotation as? Location {
+            let annotationView = setupLocationAnnotationView(for: annotation, on: mapView)
+            return annotationView
         }
+        
         return nil
+    }
+    
+    private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKAnnotationView {
+        let reuseIdentifier = NSStringFromClass(Location.self)
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation)
+        annotationView.canShowCallout = true
+        return annotationView
     }
     
     // MARK: - Locations
