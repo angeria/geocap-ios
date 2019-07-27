@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
 		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		1CB1574DE0F1D41ABC35D57A /* Pods-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		432DED9C22E1F28D00DFA074 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				433979E322E6F8DB00D73A2F /* LocationAnnotationView.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
+				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
 				432DEDA822E1F28E00DFA074 /* Info.plist */,
 				43E5CF7622E5B41E00DBED2E /* Supporting Files */,
 			);
@@ -428,6 +431,7 @@
 				433979E422E6F8DB00D73A2F /* LocationAnnotationView.swift in Sources */,
 				432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */,
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
+				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* GeoCap.swift in Sources */,
 				43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */,
 			);
