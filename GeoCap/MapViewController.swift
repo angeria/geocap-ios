@@ -32,6 +32,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        mapView.delegate = self
         requestUserLocationAuth()
     }
     
@@ -45,7 +46,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
 
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
-            mapView.delegate = self
             mapView.mapType = .mutedStandard
             mapView.showsUserLocation = true
         }
@@ -77,6 +77,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation)
         annotationView.canShowCallout = true
         return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        performSegue(withIdentifier: "Show Quiz", sender: nil)
     }
     
     // MARK: - Locations
