@@ -20,12 +20,12 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var nextQuestionButton: UIButton! {
         didSet {
-            nextQuestionButton.layer.cornerRadius = 15
+            nextQuestionButton.layer.cornerRadius = 10
         }
     }
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
-            answerButtons.forEach() { $0.layer.cornerRadius = 15 }
+            answerButtons.forEach() { $0.layer.cornerRadius = 10 }
         }
     }
     
