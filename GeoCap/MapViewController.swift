@@ -28,7 +28,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         fetchLocations()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 

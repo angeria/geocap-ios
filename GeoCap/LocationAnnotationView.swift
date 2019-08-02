@@ -20,7 +20,7 @@ class LocationAnnotationView: MKMarkerAnnotationView {
         button.setTitle("Capture", for: .normal)
         button.tintColor = .white
         // Extract color to constant
-        button.backgroundColor = .init(r: 45, g: 209, b: 135)
+        button.backgroundColor = .init(r: 135, g: 206, b: 235)
         // TODO: Extract constants
         // TODO: For some reason 50 is the perfect height, more than that and the title is misaligned
         button.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
@@ -32,10 +32,4 @@ class LocationAnnotationView: MKMarkerAnnotationView {
         fatalError("init(coder:) has not been implemented")
     }
 
-}
-
-extension UIColor {
-    convenience init(r: CGFloat, g: CGFloat, b: CGFloat) {
-        self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
-    }
 }

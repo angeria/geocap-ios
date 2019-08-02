@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '12.2'
+platform :ios, '12.4'
 
 target 'GeoCap' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -8,10 +8,7 @@ target 'GeoCap' do
   # Pods for GeoCap
   pod 'Protobuf', :inhibit_warnings => true
 
-  pod 'Firebase/Core'
   pod 'Firebase/Firestore'
-
-  pod 'Firebase/Auth'
 
   pod 'FirebaseUI/Auth'
   pod 'FirebaseUI/Email'
