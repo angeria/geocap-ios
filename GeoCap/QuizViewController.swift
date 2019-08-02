@@ -18,8 +18,16 @@ class QuizViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var nextQuestionButton: UIButton!
-    @IBOutlet var answerButtons: [UIButton]!
+    @IBOutlet weak var nextQuestionButton: UIButton! {
+        didSet {
+            nextQuestionButton.layer.cornerRadius = 15
+        }
+    }
+    @IBOutlet var answerButtons: [UIButton]! {
+        didSet {
+            answerButtons.forEach() { $0.layer.cornerRadius = 15 }
+        }
+    }
     
     var quizzes = [Quiz]()
     var currentQuiz: Quiz!
@@ -27,7 +35,7 @@ class QuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        answerButtons.forEach() { $0.layer.cornerRadius = 20 }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
