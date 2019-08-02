@@ -1,6 +1,6 @@
 //
-//  GeoCap.swift
-//  GeoCap
+//  Location.swift
+//  Location
 //
 //  Created by Benjamin Angeria on 2019-07-22.
 //  Copyright © 2019 Benjamin Angeria. All rights reserved.
