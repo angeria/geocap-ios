@@ -19,7 +19,6 @@ class LocationAnnotationView: MKMarkerAnnotationView {
         let button = UIButton(type: .system)
         button.setTitle("Capture", for: .normal)
         button.tintColor = .white
-        // Extract color to constant
         button.backgroundColor = UIColor.Custom.systemBlue
         // TODO: Extract constants
         // TODO: For some reason 50 is the perfect height, more than that and the title is misaligned
