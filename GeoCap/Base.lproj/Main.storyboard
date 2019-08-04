@@ -31,7 +31,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" selectedImage="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="first" selectedImage="first" id="acW-dT-cKf">
+                        <color key="badgeColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="show" identifier="Show Quiz" id="MeF-YK-qBM"/>
@@ -55,7 +57,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="Amongt other achievements, the Celsius ______ was invented here." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="Among other achievements, the Celsius ______ was invented here." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
                                 <rect key="frame" x="16" y="76" width="343" height="187"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
@@ -64,7 +66,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6IC-rL-MU1">
                                 <rect key="frame" x="16" y="279" width="343" height="288"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="60"/>
                                         <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                         <constraints>
@@ -79,7 +81,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="sjN-Wc-KDn"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq">
                                         <rect key="frame" x="0.0" y="76" width="343" height="60"/>
                                         <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -90,7 +92,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="QaP-7f-53X"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW">
                                         <rect key="frame" x="0.0" y="152" width="343" height="60"/>
                                         <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -101,7 +103,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="VWP-us-tjw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT">
                                         <rect key="frame" x="0.0" y="228" width="343" height="60"/>
                                         <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -120,10 +122,10 @@
                                 </constraints>
                             </stackView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Skr-BR-zYC">
-                                <rect key="frame" x="122.5" y="587" width="130" height="60"/>
+                                <rect key="frame" x="117.5" y="587" width="140" height="60"/>
                                 <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="pZA-Cu-QRK"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="pZA-Cu-QRK"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="tintColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
