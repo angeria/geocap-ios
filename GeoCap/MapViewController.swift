@@ -21,6 +21,9 @@ class MapViewController: UIViewController {
 
     private lazy var db = Firestore.firestore()
     
+    // Currently not removed at all and constantly listening for updates on locations
+    var locationUpdateListener: ListenerRegistration?
+    
     private var regionIsCenteredOnUserLocation = false
     
     // MARK: - Life Cycle
@@ -59,13 +62,31 @@ class MapViewController: UIViewController {
     // MARK: - Annotations
     
     private func fetchLocations() {
-        db.collection("cities").document("uppsala").collection("locations").getDocuments { [weak self] (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                let locations = querySnapshot!.documents.compactMap { Location(data: $0.data()) }
-                self?.mapView.addAnnotations(locations)
-            }
+        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations")
+            .addSnapshotListener { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error fetching locations: \(error!)")
+                    return
+                }
+                snapshot.documentChanges.forEach { [weak self] diff in
+                    guard let self = self else { return }
+                    guard let location = Location(data: diff.document.data()) else { return }
+                    
+                    if (diff.type == .added) {
+                        print("New location: \(location.name)")
+                        self.mapView.addAnnotation(location)
+                    }
+                    if (diff.type == .modified) {
+                        print("Modified location: \(location.name)")
+                        if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
+                            annotation.owner = location.owner
+                        }
+                    }
+                    if (diff.type == .removed) {
+                        print("Removed location: \(location.name)")
+                        self.mapView.removeAnnotation(location)
+                    }
+                }
         }
     }
     
@@ -152,6 +173,8 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        // Callouts stop showing if setting animated to false for some weird reason
+        mapView.deselectAnnotation(view.annotation, animated: true)
         performSegue(withIdentifier: "Show Quiz", sender: view)
     }
 }

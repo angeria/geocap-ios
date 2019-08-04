@@ -13,7 +13,12 @@ import MapKit
 class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
-    var subtitle: String?
+    var subtitle: String? = "Not captured yet"
+    var owner: String? {
+        didSet {
+            subtitle = "Captured by: \(owner!)"
+        }
+    }
     @objc dynamic var coordinate: CLLocationCoordinate2D
     
     init(name: String, coordinate: CLLocationCoordinate2D) {
@@ -26,16 +31,15 @@ class Location: NSObject, MKAnnotation {
         guard
             let name = data["name"] as? String,
             let geoPoint = data["coordinates"] as? GeoPoint
-            else { return nil }
+            else { print("Error initializing Location from data"); return nil }
         
         self.name = name
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
         
         if let owner = data["owner"] as? String {
+            self.owner = owner
             self.subtitle = "Captured by: \(owner)"
-        } else {
-            self.subtitle = "Not captured yet"
         }
     }
 }

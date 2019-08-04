@@ -52,12 +52,12 @@ class AuthViewController: UIViewController {
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            "userName": user.displayName ?? "",
+            "username": user.displayName ?? "",
         ]) { error in
             if let error = error {
-                print("Error adding document: \(error)")
+                print("Error adding user: \(error)")
             } else {
-                print("Document added with ID: \(user.uid)")
+                print("User added with ID: \(user.uid)")
             }
         }
     }
