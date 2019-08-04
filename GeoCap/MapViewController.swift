@@ -34,13 +34,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        // Has to be set every time the view appears because it's set to nil in viewDidDisappear
         mapView.delegate = self
+        
         requestUserLocationAuth()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
+        // Has to be set to nil for proper dealloaction according to docs
         mapView.delegate = nil
     }
     

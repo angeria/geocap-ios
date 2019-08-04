@@ -127,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
+				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
@@ -163,7 +164,6 @@
 				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
 				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
 				43D0268A22E3007F00A0C255 /* GoogleService-Info.plist */,
-				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";

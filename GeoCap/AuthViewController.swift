@@ -12,24 +12,21 @@ import FirebaseUI
 
 class AuthViewController: UIViewController, FUIAuthDelegate {
 
-    var authListener: AuthStateDidChangeListenerHandle?
+    private var authListener: AuthStateDidChangeListenerHandle?
+    private lazy var db = Firestore.firestore()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let authViewController = self.authUI.authViewController()
-        self.present(authViewController, animated: true)
-        
-        // The closure might fire twice during initialization if an user is logged in
-        // First time with user as nil and second time with a user
-        // Thus the need for authListenerIsInitalized to prevent incorrect segueing
+        // Sometimes the closure fires two times in a row  when a user is signed in
+        // First time with user as nil and second time with a user object
+        // To prevent segues colliding, currentUser is checked again synchronously
         authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
-            guard let self = self else { return }
-            
-            print("fired")
-            
             if user != nil {
-                self.performSegue(withIdentifier: "Show Map", sender: nil)
+                self?.performSegue(withIdentifier: "Show Map", sender: nil)
+            } else if Auth.auth().currentUser == nil {
+                let authViewController = self!.authUI.authViewController()
+                self?.present(authViewController, animated: true)
             }
         }
     }
@@ -40,8 +37,6 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
         }
-        
-        try? authUI.signOut()
     }
     
     lazy var authUI: FUIAuth = {
@@ -54,11 +49,26 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         switch error {
         case .none:
-            if let user = authDataResult?.user {
-                storeUser(user)
+            if let user = authDataResult?.user, authDataResult?.additionalUserInfo?.isNewUser == true {
+                storeNewUser(user)
             }
         case .some(let error):
             handleSignInError(error)
+        }
+    }
+    
+    private func storeNewUser(_ user: User) {
+        db.collection("users").document(user.uid).setData([
+            // TODO: Customize sign up screen to make display name mandatory
+            // TODO: Only unique names should be allowed
+            "name": user.displayName ?? "",
+        ]) { error in
+            // TODO: Handle errors
+            if let error = error {
+                print("Error adding document: \(error)")
+            } else {
+                print("Document added with ID: \(user.uid)")
+            }
         }
     }
     
@@ -88,21 +98,6 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
-    }
-    
-    private func storeUser(_ user: User) {
-        let db = Firestore.firestore()
-        db.collection("users").document(user.uid).setData([
-            // TODO: Only unique names should be allowed. Maybe remove default to empty string?
-            "name": user.displayName ?? "",
-        ]) { err in
-            // TODO: Handle errors
-            if let err = err {
-                print("Error adding document: \(err)")
-            } else {
-                print("Document added with ID: \(user.uid)")
-            }
-        }
     }
     
 }
