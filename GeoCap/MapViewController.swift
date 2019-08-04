@@ -73,7 +73,6 @@ class MapViewController: UIViewController {
                     guard let location = Location(data: diff.document.data()) else { return }
                     
                     if (diff.type == .added) {
-                        print("New location: \(location.name)")
                         self.mapView.addAnnotation(location)
                     }
                     if (diff.type == .modified) {
@@ -84,6 +83,7 @@ class MapViewController: UIViewController {
                     }
                     if (diff.type == .removed) {
                         print("Removed location: \(location.name)")
+                        // FIXME: Annotation is not removed
                         self.mapView.removeAnnotation(location)
                     }
                 }
