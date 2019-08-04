@@ -145,8 +145,8 @@ class QuizViewController: UIViewController {
             return
         }
         
+        // TODO: Make this more general for several cities
         let locationRef = db.collection("cities").document("uppsala").collection("locations").document(locationName)
-        
         locationRef.updateData([
             "owner": username
         ]) { err in
