@@ -10,11 +10,12 @@ import UIKit
 import Firebase
 import FirebaseUI
 
-class AuthViewController: UIViewController, FUIAuthDelegate {
+// TODO: Customize sign up screen
+
+class AuthViewController: UIViewController {
 
     private var authListener: AuthStateDidChangeListenerHandle?
-    private lazy var db = Firestore.firestore()
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -37,8 +38,6 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
         }
-        
-//        try? authUI.signOut()
     }
     
     lazy var authUI: FUIAuth = {
@@ -49,24 +48,12 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         return authUI
     }()
     
-    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
-        switch error {
-        case .none:
-            if let user = authDataResult?.user, authDataResult?.additionalUserInfo?.isNewUser == true {
-                storeNewUser(user)
-            }
-        case .some(let error):
-            handleSignInError(error)
-        }
-    }
-    
+    // TODO: Make display name mandatory
     private func storeNewUser(_ user: User) {
+        let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            // TODO: Customize sign up screen to make display name mandatory
-            // TODO: Only unique names should be allowed
-            "name": user.displayName ?? "",
+            "userName": user.displayName ?? "",
         ]) { error in
-            // TODO: Handle errors
             if let error = error {
                 print("Error adding document: \(error)")
             } else {
@@ -101,6 +88,21 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+    
+}
+
+extension AuthViewController: FUIAuthDelegate {
+    
+    func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
+        switch error {
+        case .none:
+            if let user = authDataResult?.user, authDataResult?.additionalUserInfo?.isNewUser == true {
+                storeNewUser(user)
+            }
+        case .some(let error):
+            handleSignInError(error)
+        }
     }
     
 }
