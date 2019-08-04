@@ -50,10 +50,8 @@ class QuizViewController: UIViewController {
         
         if sender.titleLabel?.text == currentQuiz.answer {
             sender.backgroundColor = UIColor.Custom.systemGreen
-            AudioServicesPlaySystemSound(1016)
         } else {
             sender.backgroundColor = UIColor.Custom.systemRed
-            AudioServicesPlaySystemSound (1016)
         }
     }
     
