@@ -37,11 +37,14 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
         }
+        
+//        try? authUI.signOut()
     }
     
     lazy var authUI: FUIAuth = {
         let authUI = FUIAuth.defaultAuthUI()!
         authUI.delegate = self
+        authUI.shouldHideCancelButton = true
         authUI.providers = [FUIEmailAuth()]
         return authUI
     }()
