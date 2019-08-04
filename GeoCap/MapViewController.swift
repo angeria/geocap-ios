@@ -17,9 +17,11 @@ extension MapViewController {
     }
 }
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapViewController: UIViewController {
 
     private lazy var db = Firestore.firestore()
+    
+    private var regionIsCenteredOnUserLocation = false
     
     // MARK: - Life Cycle
     
@@ -47,22 +49,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.delegate = nil
     }
     
-    // MARK: - Map View
-
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.mapType = .mutedStandard
             mapView.showsUserLocation = true
-        }
-    }
-
-    private var regionIsCenteredOnUserLocation = false
-    
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if !regionIsCenteredOnUserLocation {
-            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
-            mapView.setRegion(region, animated: true)
-            regionIsCenteredOnUserLocation = true
         }
     }
     
@@ -77,17 +67,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self?.mapView.addAnnotations(locations)
             }
         }
-    }
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
-        
-        if let annotation = annotation as? Location {
-            let annotationView = setupLocationAnnotationView(for: annotation, on: mapView)
-            return annotationView
-        }
-        
-        return nil
     }
     
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKAnnotationView {
@@ -106,10 +85,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         annotationView.rightCalloutAccessoryView = captureButton
         
         return annotationView
-    }
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        performSegue(withIdentifier: "Show Quiz", sender: nil)
     }
     
     // MARK: - User Location Authorization
@@ -143,4 +118,40 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         present(alert, animated: true)
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
+            if let locationName = annotationView.annotation?.title {
+                quizVC.locationName = locationName
+            }
+        }
+    }
+    
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        if !regionIsCenteredOnUserLocation {
+            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
+            mapView.setRegion(region, animated: true)
+            regionIsCenteredOnUserLocation = true
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
+        
+        if let annotation = annotation as? Location {
+            let annotationView = setupLocationAnnotationView(for: annotation, on: mapView)
+            return annotationView
+        }
+        
+        return nil
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        performSegue(withIdentifier: "Show Quiz", sender: view)
+    }
 }

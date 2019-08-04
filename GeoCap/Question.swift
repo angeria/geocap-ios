@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Quiz {
+struct Question {
     let title: String
     let question: String
     let answer: String
