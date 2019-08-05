@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>683184970497-smg8nlii2tblfjduilkr8j2allr1qhlb.apps.googleusercontent.com</string>
+	<string>683184970497-c6sufqtuu5ms6hijdhoi5i4plooolvel.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.683184970497-smg8nlii2tblfjduilkr8j2allr1qhlb</string>
+	<string>com.googleusercontent.apps.683184970497-c6sufqtuu5ms6hijdhoi5i4plooolvel</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB0gjNRhn7GV8D9_IAZ6ZViuqsjkWXdjto</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>Benjamin-Angeria.GeoCap</string>
+	<string>se.angeria.geocap</string>
 	<key>PROJECT_ID</key>
 	<string>geocap-backend</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:683184970497:ios:fbdefee81df3a4b0</string>
+	<string>1:683184970497:ios:ff24fefecb3ada9d</string>
 	<key>DATABASE_URL</key>
 	<string>https://geocap-backend.firebaseio.com</string>
 </dict>
