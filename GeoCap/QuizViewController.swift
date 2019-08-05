@@ -13,29 +13,10 @@ class QuizViewController: UIViewController {
     
     // TODO: Fonts
     
-    @IBOutlet weak var titleLabel: UILabel! {
-        didSet {
-            titleLabel.text = nil
-        }
-    }
-    @IBOutlet weak var questionLabel: UILabel! {
-        didSet {
-            questionLabel.text = nil
-        }
-    }
-    @IBOutlet weak var nextQuestionButton: UIButton! {
-        didSet {
-            nextQuestionButton.layer.cornerRadius = 10
-        }
-    }
-    @IBOutlet var answerButtons: [UIButton]! {
-        didSet {
-            answerButtons.forEach() {
-                $0.titleLabel?.text = nil
-                $0.layer.cornerRadius = 10
-            }
-        }
-    }
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var nextQuestionButton: UIButton!
+    @IBOutlet var answerButtons: [UIButton]!
     
     private lazy var db = Firestore.firestore()
     private var auth = Auth.auth()
@@ -44,8 +25,8 @@ class QuizViewController: UIViewController {
     private var questions = [Question]()
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
-    var locationName: String?
     private var username: String?
+    var locationName: String?
     
     override func viewDidLoad() {
         authListener = auth.addStateDidChangeListener { [weak self] (auth, user) in
@@ -57,6 +38,8 @@ class QuizViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        prepareView()
         
         fetchQuestions()
     }
@@ -84,6 +67,16 @@ class QuizViewController: UIViewController {
     @IBAction func nextQuestionPressed(_ sender: UIButton) {
         showNextQuestion()
         nextQuestionButton.isHidden = true
+    }
+    
+    private func prepareView() {
+        titleLabel.text = nil
+        questionLabel.text = nil
+        nextQuestionButton.layer.cornerRadius = 10
+        answerButtons.forEach() {
+            $0.titleLabel?.text = nil
+            $0.layer.cornerRadius = 10
+        }
     }
     
     private func fetchQuestions() {
@@ -141,7 +134,7 @@ class QuizViewController: UIViewController {
             return
         }
         guard let username = username else {
-            print("Error updating location owner: no user is logged in")
+            print("Error updating location owner: username is nil")
             return
         }
         

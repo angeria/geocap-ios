@@ -77,7 +77,9 @@ class MapViewController: UIViewController {
                 if (diff.type == .modified) {
                     print("Modified location: \(location.name)")
                     if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
-                        annotation.owner = location.owner
+                        if let owner = location.owner {
+                            annotation.owner = owner
+                        }
                     }
                 }
                 if (diff.type == .removed) {
