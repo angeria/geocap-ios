@@ -62,31 +62,30 @@ class MapViewController: UIViewController {
     // MARK: - Annotations
     
     private func fetchLocations() {
-        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations")
-            .addSnapshotListener { querySnapshot, error in
-                guard let snapshot = querySnapshot else {
-                    print("Error fetching locations: \(error!)")
-                    return
+        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { querySnapshot, error in
+            guard let snapshot = querySnapshot else {
+                print("Error fetching locations: \(error!)")
+                return
+            }
+            snapshot.documentChanges.forEach { [weak self] diff in
+                guard let self = self else { return }
+                guard let location = Location(data: diff.document.data()) else { return }
+                
+                if (diff.type == .added) {
+                    self.mapView.addAnnotation(location)
                 }
-                snapshot.documentChanges.forEach { [weak self] diff in
-                    guard let self = self else { return }
-                    guard let location = Location(data: diff.document.data()) else { return }
-                    
-                    if (diff.type == .added) {
-                        self.mapView.addAnnotation(location)
-                    }
-                    if (diff.type == .modified) {
-                        print("Modified location: \(location.name)")
-                        if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
-                            annotation.owner = location.owner
-                        }
-                    }
-                    if (diff.type == .removed) {
-                        print("Removed location: \(location.name)")
-                        // FIXME: Annotation is not removed
-                        self.mapView.removeAnnotation(location)
+                if (diff.type == .modified) {
+                    print("Modified location: \(location.name)")
+                    if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
+                        annotation.owner = location.owner
                     }
                 }
+                if (diff.type == .removed) {
+                    print("Removed location: \(location.name)")
+                    // FIXME: Annotation is not removed
+                    self.mapView.removeAnnotation(location)
+                }
+            }
         }
     }
     
