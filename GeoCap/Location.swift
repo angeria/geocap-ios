@@ -51,3 +51,13 @@ class Location: NSObject, MKAnnotation {
         }
     }
 }
+
+extension Location {
+    var overlay: MKOverlay {
+        if let coordinates = areaCoordinates {
+            return MKPolygon(coordinates: coordinates, count: coordinates.count)
+        } else {
+            return MKCircle(center: coordinate, radius: CLLocationDistance(200))
+        }
+    }
+}
