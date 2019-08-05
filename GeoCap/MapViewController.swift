@@ -73,6 +73,7 @@ class MapViewController: UIViewController {
                 
                 if (diff.type == .added) {
                     self.mapView.addAnnotation(location)
+                    self.mapView.addOverlay(location.overlay)
                 }
                 if (diff.type == .modified) {
                     print("Modified location: \(location.name)")
@@ -180,10 +181,16 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        var renderer = MKPolygonRenderer(polygon: overlay as! MKPolygon)
-        renderer.fillColor = .green
-        renderer.strokeColor = .blue
-        renderer.lineWidth = 5
-        return renderer
+        if let polygon = overlay as? MKPolygon {
+            let renderer = MKPolygonRenderer(polygon: polygon)
+            renderer.fillColor = .lightGray
+            renderer.alpha = 0.5
+            renderer.strokeColor = UIColor.Custom.systemBlue
+            renderer.lineWidth = 1
+            return renderer
+        }
+        // FIXME
+        return MKOverlayRenderer()
     }
+    
 }
