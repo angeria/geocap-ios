@@ -178,4 +178,12 @@ extension MapViewController: MKMapViewDelegate {
         mapView.deselectAnnotation(view.annotation, animated: true)
         performSegue(withIdentifier: "Show Quiz", sender: view)
     }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        var renderer = MKPolygonRenderer(polygon: overlay as! MKPolygon)
+        renderer.fillColor = .green
+        renderer.strokeColor = .blue
+        renderer.lineWidth = 5
+        return renderer
+    }
 }

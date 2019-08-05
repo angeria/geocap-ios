@@ -19,7 +19,11 @@ class Location: NSObject, MKAnnotation {
             subtitle = "Captured by: \(owner!)"
         }
     }
+    // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
     @objc dynamic var coordinate: CLLocationCoordinate2D
+    // Area coordinates enclosing location
+    var areaCoordinates: [CLLocationCoordinate2D]?
+    
     
     init(name: String, coordinate: CLLocationCoordinate2D) {
         self.name = name
@@ -30,12 +34,16 @@ class Location: NSObject, MKAnnotation {
     init?(data: [String:Any]) {
         guard
             let name = data["name"] as? String,
-            let geoPoint = data["coordinates"] as? GeoPoint
+            let center = data["center"] as? GeoPoint
             else { print("Error initializing Location from data"); return nil }
         
         self.name = name
         self.title = name
-        self.coordinate = CLLocationCoordinate2D(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+        self.coordinate = CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude)
+        
+        if let areaCoordinates = data["coordinates"] as? [GeoPoint] {
+            self.areaCoordinates = areaCoordinates.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+        }
         
         if let owner = data["owner"] as? String {
             self.owner = owner
