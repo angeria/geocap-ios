@@ -113,16 +113,9 @@ class MapViewController: UIViewController {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
         
-        if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.Custom.systemGreen
-        } else if annotation.owner == nil {
-            annotationView.markerTintColor = .lightGray
-        } else {
-            annotationView.markerTintColor = UIColor.Custom.systemRed
-        }
-        
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
+        annotationView.subtitleVisibility = .hidden
         
         let captureButton = UIButton(type: .system)
         captureButton.setTitle("Capture", for: .normal)
@@ -130,7 +123,20 @@ class MapViewController: UIViewController {
         captureButton.backgroundColor = UIColor.Custom.systemBlue
         // TODO: Extract constants and adjust to different text sizes
         captureButton.frame = CGRect(x: 0, y: 0, width: 90, height: 50)
-        annotationView.rightCalloutAccessoryView = captureButton
+        
+        if annotation.isCapturedByUser {
+            annotationView.markerTintColor = UIColor.Custom.systemGreen
+            let image = UIImage(named: "green-flag")
+            let imageView = UIImageView(image: image!)
+            imageView.frame = CGRect(x: 0, y: 0, width: 27, height: 32)
+            annotationView.rightCalloutAccessoryView = imageView
+        } else if annotation.owner == nil {
+            annotationView.markerTintColor = .lightGray
+            annotationView.rightCalloutAccessoryView = captureButton
+        } else {
+            annotationView.markerTintColor = UIColor.Custom.systemRed
+            annotationView.rightCalloutAccessoryView = captureButton
+        }
         
         return annotationView
     }
