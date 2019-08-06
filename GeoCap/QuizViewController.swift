@@ -26,6 +26,8 @@ class QuizViewController: UIViewController {
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
     private var username: String?
+    
+    // Dependency injection
     var locationName: String?
     
     override func viewDidLoad() {
