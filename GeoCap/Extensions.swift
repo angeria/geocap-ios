@@ -30,3 +30,15 @@ extension UIColor {
         static let systemGreen = UIColor(r: 52, g: 199, b: 89)
     }
 }
+
+extension UIViewController {
+    var contents: UIViewController {
+        if let navVC = self as? UINavigationController {
+            return navVC.visibleViewController ?? navVC
+        } else if let tabVC = self as? UITabBarController {
+            return tabVC.viewControllers?.first ?? tabVC
+        } else {
+            return self
+        }
+    }
+}
