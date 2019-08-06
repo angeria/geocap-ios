@@ -24,7 +24,7 @@ class AuthViewController: UIViewController {
         // To prevent segues colliding, currentUser is checked again synchronously
         authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             if user != nil {
-                self?.performSegue(withIdentifier: "Show Map", sender: nil)
+                self?.performSegue(withIdentifier: "Show Map", sender: user)
             } else if Auth.auth().currentUser == nil {
                 let authViewController = self!.authUI.authViewController()
                 self?.present(authViewController, animated: true)
@@ -88,6 +88,14 @@ class AuthViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let mapVC = segue.destination.contents as? MapViewController {
+            if let user = sender as? User {
+                mapVC.user = user
+            }
+        }
     }
     
 }

@@ -28,18 +28,19 @@ class MapViewController: UIViewController {
     }
     
     private lazy var db = Firestore.firestore()
-    
     // Currently not removed at all and constantly listening for updates on locations, even while map is not visible
     var locationUpdateListener: ListenerRegistration?
-    
     private var regionIsCenteredOnUserLocation = false
+    
+    // Dependency injection
+    var user: User!
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.register(LocationAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
         fetchLocations()
     }
@@ -69,7 +70,11 @@ class MapViewController: UIViewController {
             }
             snapshot.documentChanges.forEach { [weak self] diff in
                 guard let self = self else { return }
-                guard let location = Location(data: diff.document.data()) else { return }
+                guard let username = self.user.displayName else {
+                    print("Error in fetching locations: displayName is nil");
+                    return
+                }
+                guard let location = Location(data: diff.document.data(), username: username) else { return }
                 
                 if (diff.type == .added) {
                     self.mapView.addAnnotation(location)
@@ -79,7 +84,7 @@ class MapViewController: UIViewController {
                     print("Modified location: \(location.name)")
                     if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
                         if let owner = location.owner {
-                            annotation.owner = owner
+                            annotation.changeOwner(newOwner: owner, username: username)
                         }
                     }
                 }
@@ -94,9 +99,31 @@ class MapViewController: UIViewController {
         }
     }
     
-    private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKAnnotationView {
+    // Should optimally be subclassed but I couldn't get it to work properly
+    // I wasn't able to cast the annotation to Location in the init()
+    private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
         let reuseIdentifier = NSStringFromClass(Location.self)
-        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! LocationAnnotationView
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
+        
+        if annotation.isCapturedByUser {
+            annotationView.markerTintColor = UIColor.Custom.systemGreen
+        } else if annotation.owner == nil {
+            annotationView.markerTintColor = .lightGray
+        } else {
+            annotationView.markerTintColor = UIColor.Custom.systemRed
+        }
+        
+        annotationView.animatesWhenAdded = true
+        annotationView.canShowCallout = true
+        
+        let captureButton = UIButton(type: .system)
+        captureButton.setTitle("Capture", for: .normal)
+        captureButton.tintColor = .white
+        captureButton.backgroundColor = UIColor.Custom.systemBlue
+        // TODO: Extract constants and adjust to different text sizes
+        captureButton.frame = CGRect(x: 0, y: 0, width: 90, height: 50)
+        annotationView.rightCalloutAccessoryView = captureButton
+        
         return annotationView
     }
     
@@ -157,8 +184,7 @@ extension MapViewController: MKMapViewDelegate {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
         
         if let annotation = annotation as? Location {
-            let annotationView = setupLocationAnnotationView(for: annotation, on: mapView)
-            return annotationView
+            return setupLocationAnnotationView(for: annotation, on: mapView)
         }
         
         return nil

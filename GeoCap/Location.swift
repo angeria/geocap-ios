@@ -14,24 +14,14 @@ class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
     var subtitle: String? = "Not captured yet"
-    var owner: String? {
-        didSet {
-            subtitle = "Captured by: \(owner!)"
-        }
-    }
+    var owner: String?
+    var isCapturedByUser = false
     // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
     @objc dynamic var coordinate: CLLocationCoordinate2D
     // Area coordinates enclosing location
     var areaCoordinates: [CLLocationCoordinate2D]?
     
-    
-    init(name: String, coordinate: CLLocationCoordinate2D) {
-        self.name = name
-        self.title = name
-        self.coordinate = coordinate
-    }
-    
-    init?(data: [String:Any]) {
+    init?(data: [String:Any], username: String) {
         guard
             let name = data["name"] as? String,
             let center = data["center"] as? GeoPoint
@@ -41,13 +31,25 @@ class Location: NSObject, MKAnnotation {
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude)
         
+        super.init()
+        
         if let areaCoordinates = data["coordinates"] as? [GeoPoint] {
             self.areaCoordinates = areaCoordinates.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
         }
         
         if let owner = data["owner"] as? String {
-            self.owner = owner
-            self.subtitle = "Captured by: \(owner)"
+            changeOwner(newOwner: owner, username: username)
+        }
+    }
+    
+    func changeOwner(newOwner: String, username: String) {
+        owner = newOwner
+        if newOwner == username {
+            isCapturedByUser = true
+            subtitle = "Captured by you"
+        } else {
+            isCapturedByUser = false
+            subtitle = "Captured by \(newOwner)"
         }
     }
 }
@@ -60,5 +62,26 @@ extension Location {
             return MKCircle(center: coordinate, radius: 75)
         }
     }
+}
 
+extension MKPolygon {
+    var polygonRenderer: MKPolygonRenderer {
+        let renderer = MKPolygonRenderer(polygon: self)
+        renderer.fillColor = .lightGray
+        renderer.alpha = 0.4
+        renderer.strokeColor = UIColor.Custom.systemBlue
+        renderer.lineWidth = 1
+        return renderer
+    }
+}
+
+extension MKCircle {
+    var renderer: MKCircleRenderer {
+        let renderer = MKCircleRenderer(circle: self)
+        renderer.fillColor = .lightGray
+        renderer.alpha = 0.4
+        renderer.strokeColor = UIColor.Custom.systemBlue
+        renderer.lineWidth = 1
+        return renderer
+    }
 }

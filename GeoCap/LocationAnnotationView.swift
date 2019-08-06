@@ -12,8 +12,20 @@ import MapKit
 class LocationAnnotationView: MKMarkerAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
-        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        print(reuseIdentifier)
         
+        super.init(annotation: annotation, reuseIdentifier: nil)
+        
+        guard let annotation = annotation as? Location else { return }
+        print("yeah boi")
+        
+        if annotation.isCapturedByUser {
+            markerTintColor = UIColor.Custom.systemGreen
+        } else if annotation.owner == nil {
+            markerTintColor = .white
+        } else {
+            markerTintColor = UIColor.Custom.systemRed
+        }
         
         animatesWhenAdded = true
         canShowCallout = true
