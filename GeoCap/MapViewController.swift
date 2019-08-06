@@ -13,7 +13,7 @@ import Firebase
 
 extension MapViewController {
     enum Constants {
-        static let zoomLevel: CLLocationDistance = 3500
+        static let zoomLevel: CLLocationDistance = 2500
     }
 }
 
@@ -74,29 +74,37 @@ class MapViewController: UIViewController {
                     print("Error in fetching locations: displayName is nil");
                     return
                 }
-                guard let location = Location(data: diff.document.data(), username: username) else { return }
+                guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
                 
                 if (diff.type == .added) {
-                    self.mapView.addAnnotation(location)
-                    self.mapView.addOverlay(location.overlay)
+                    self.mapView.addAnnotation(newAnnotation)
+                    self.addLocationOverlay(newAnnotation)
                 }
                 if (diff.type == .modified) {
-                    print("Modified location: \(location.name)")
-                    if let annotation = self.mapView.annotations.first(where: { $0.title == location.name }) as? Location {
-                        if let owner = location.owner {
-                            annotation.changeOwner(newOwner: owner, username: username)
-                        }
+                    print("Modified location: \(newAnnotation.name)")
+                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                        self.mapView.removeAnnotation(oldAnnotation)
+                        self.mapView.removeOverlay(oldAnnotation.overlay)
+                        self.mapView.addAnnotation(newAnnotation)
+                        self.addLocationOverlay(newAnnotation)
                     }
                 }
                 if (diff.type == .removed) {
-                    print("Removed location: \(location.name)")
-                    // FIXME: Annotation is not removed immediately
-                    DispatchQueue.main.async {
-                        self.mapView.removeAnnotation(location)
+                    print("Removed location: \(newAnnotation.name)")
+                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                        self.mapView.removeAnnotation(oldAnnotation)
                     }
                 }
             }
         }
+    }
+    
+    // Awkward solution but used for making the affected location available to the delegate function which renders overlays
+    private var locationToOverlay: Location?
+    private func addLocationOverlay(_ location: Location) {
+        locationToOverlay = location
+        mapView.addOverlay(location.overlay)
+        locationToOverlay = nil
     }
     
     // Should optimally be subclassed but I couldn't get it to work properly
@@ -164,6 +172,7 @@ class MapViewController: UIViewController {
         if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
             if let locationName = annotationView.annotation?.title {
                 quizVC.locationName = locationName
+                quizVC.username = user.displayName
             }
         }
     }
@@ -196,21 +205,43 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard let location = locationToOverlay else { return MKOverlayRenderer(overlay: overlay) }
+        
         // Duplicate code but I can't figure out how to extract it
         switch overlay {
         case let polygon as MKPolygon:
             let renderer = MKPolygonRenderer(polygon: polygon)
-            renderer.fillColor = .lightGray
-            renderer.alpha = 0.4
-            renderer.strokeColor = UIColor.Custom.systemBlue
+            renderer.alpha = 0.45
             renderer.lineWidth = 1
+            
+            if location.isCapturedByUser {
+                renderer.fillColor = UIColor.Custom.systemGreen
+                renderer.strokeColor = UIColor.Custom.systemGreen
+            } else if location.owner == nil {
+                renderer.fillColor = .lightGray
+                renderer.strokeColor = .lightGray
+            } else {
+                renderer.fillColor = UIColor.Custom.systemRed
+                renderer.strokeColor = UIColor.Custom.systemRed
+            }
+            
             return renderer
         case let circle as MKCircle:
             let renderer = MKCircleRenderer(circle: circle)
-            renderer.fillColor = .lightGray
-            renderer.alpha = 0.4
-            renderer.strokeColor = UIColor.Custom.systemBlue
+            renderer.alpha = 0.45
             renderer.lineWidth = 1
+            
+            if location.isCapturedByUser {
+                renderer.fillColor = UIColor.Custom.systemGreen
+                renderer.strokeColor = UIColor.Custom.systemGreen
+            } else if location.owner == nil {
+                renderer.fillColor = .lightGray
+                renderer.strokeColor = .lightGray
+            } else {
+                renderer.fillColor = UIColor.Custom.systemRed
+                renderer.strokeColor = UIColor.Custom.systemRed
+            }
+            
             return renderer
         default:
             break
