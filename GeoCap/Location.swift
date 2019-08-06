@@ -20,6 +20,7 @@ class Location: NSObject, MKAnnotation {
     @objc dynamic var coordinate: CLLocationCoordinate2D
     // Area coordinates enclosing location
     var areaCoordinates: [CLLocationCoordinate2D]?
+    var overlay: MKOverlay
     
     init?(data: [String:Any], username: String) {
         guard
@@ -30,12 +31,18 @@ class Location: NSObject, MKAnnotation {
         self.name = name
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude)
-        
-        super.init()
-        
+    
         if let areaCoordinates = data["coordinates"] as? [GeoPoint] {
             self.areaCoordinates = areaCoordinates.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
         }
+        
+        if let coordinates = areaCoordinates {
+            overlay = MKPolygon(coordinates: coordinates, count: coordinates.count)
+        } else {
+            overlay = MKCircle(center: coordinate, radius: 75)
+        }
+        
+        super.init()
         
         if let owner = data["owner"] as? String {
             changeOwner(newOwner: owner, username: username)
@@ -51,37 +58,5 @@ class Location: NSObject, MKAnnotation {
             isCapturedByUser = false
             subtitle = "Captured by \(newOwner)"
         }
-    }
-}
-
-extension Location {
-    var overlay: MKOverlay {
-        if let coordinates = areaCoordinates {
-            return MKPolygon(coordinates: coordinates, count: coordinates.count)
-        } else {
-            return MKCircle(center: coordinate, radius: 75)
-        }
-    }
-}
-
-extension MKPolygon {
-    var polygonRenderer: MKPolygonRenderer {
-        let renderer = MKPolygonRenderer(polygon: self)
-        renderer.fillColor = .lightGray
-        renderer.alpha = 0.4
-        renderer.strokeColor = UIColor.Custom.systemBlue
-        renderer.lineWidth = 1
-        return renderer
-    }
-}
-
-extension MKCircle {
-    var renderer: MKCircleRenderer {
-        let renderer = MKCircleRenderer(circle: self)
-        renderer.fillColor = .lightGray
-        renderer.alpha = 0.4
-        renderer.strokeColor = UIColor.Custom.systemBlue
-        renderer.lineWidth = 1
-        return renderer
     }
 }

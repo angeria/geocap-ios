@@ -13,45 +13,48 @@ class QuizViewController: UIViewController {
     
     // TODO: Fonts
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var nextQuestionButton: UIButton!
-    @IBOutlet var answerButtons: [UIButton]!
-    
-    private lazy var db = Firestore.firestore()
-    private var auth = Auth.auth()
-    private var authListener: AuthStateDidChangeListenerHandle?
-    
-    private var questions = [Question]()
-    private var currentQuestion: Question?
-    private var correctAnswersCount = 0
-    private var username: String?
-    
-    // Dependency injection
-    var locationName: String?
-    
-    override func viewDidLoad() {
-        authListener = auth.addStateDidChangeListener { [weak self] (auth, user) in
-            if let user = user {
-                self?.username = user.displayName
+    @IBOutlet weak var titleLabel: UILabel! {
+        didSet {
+            titleLabel.text = nil
+        }
+    }
+    @IBOutlet weak var questionLabel: UILabel! {
+        didSet {
+            questionLabel.text = nil
+        }
+    }
+    @IBOutlet weak var nextQuestionButton: UIButton! {
+        didSet {
+            nextQuestionButton.layer.cornerRadius = 10
+        }
+    }
+    @IBOutlet var answerButtons: [UIButton]! {
+        didSet {
+            answerButtons.forEach() {
+                $0.titleLabel?.text = nil
+                $0.layer.cornerRadius = 10
             }
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        prepareView()
+    private lazy var db = Firestore.firestore()
+    
+    private var questions = [Question]()
+    private var currentQuestion: Question?
+    private var correctAnswersCount = 0
+    
+    // Dependency injections
+    var locationName: String?
+    var username: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         fetchQuestions()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let handle = authListener {
-            auth.removeStateDidChangeListener(handle)
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     @IBAction func answerPressed(_ sender: UIButton) {
@@ -69,16 +72,6 @@ class QuizViewController: UIViewController {
     @IBAction func nextQuestionPressed(_ sender: UIButton) {
         showNextQuestion()
         nextQuestionButton.isHidden = true
-    }
-    
-    private func prepareView() {
-        titleLabel.text = nil
-        questionLabel.text = nil
-        nextQuestionButton.layer.cornerRadius = 10
-        answerButtons.forEach() {
-            $0.titleLabel?.text = nil
-            $0.layer.cornerRadius = 10
-        }
     }
     
     private func fetchQuestions() {
