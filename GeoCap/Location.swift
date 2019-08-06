@@ -57,7 +57,8 @@ extension Location {
         if let coordinates = areaCoordinates {
             return MKPolygon(coordinates: coordinates, count: coordinates.count)
         } else {
-            return MKCircle(center: coordinate, radius: CLLocationDistance(200))
+            return MKCircle(center: coordinate, radius: 75)
         }
     }
+
 }

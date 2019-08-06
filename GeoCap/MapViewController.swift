@@ -13,15 +13,23 @@ import Firebase
 
 extension MapViewController {
     enum Constants {
-        static let zoomLevel: CLLocationDistance = 4000
+        static let zoomLevel: CLLocationDistance = 3500
     }
 }
 
 class MapViewController: UIViewController {
 
+    @IBOutlet weak var mapView: MKMapView! {
+        didSet {
+            mapView.delegate = self
+            mapView.mapType = .mutedStandard
+            mapView.showsUserLocation = true
+        }
+    }
+    
     private lazy var db = Firestore.firestore()
     
-    // Currently not removed at all and constantly listening for updates on locations
+    // Currently not removed at all and constantly listening for updates on locations, even while map is not visible
     var locationUpdateListener: ListenerRegistration?
     
     private var regionIsCenteredOnUserLocation = false
@@ -31,7 +39,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        mapView.register(LocationAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
         fetchLocations()
     }
@@ -39,25 +47,17 @@ class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // Has to be set every time the view appears because it's set to nil in viewDidDisappear
-        mapView.delegate = self
-        
         requestUserLocationAuth()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        // Has to be set to nil for proper dealloaction according to docs
-        mapView.delegate = nil
+        // Currently keeping map in memory all the time because it's the main view
+        // Uncomment this for proper deallocation according to delegate docs
+        // mapView.delegate = nil
     }
-    
-    @IBOutlet weak var mapView: MKMapView! {
-        didSet {
-            mapView.mapType = .mutedStandard
-            mapView.showsUserLocation = true
-        }
-    }
+
     
     // MARK: - Annotations
     
@@ -85,8 +85,10 @@ class MapViewController: UIViewController {
                 }
                 if (diff.type == .removed) {
                     print("Removed location: \(location.name)")
-                    // FIXME: Annotation is not removed
-                    self.mapView.removeAnnotation(location)
+                    // FIXME: Annotation is not removed immediately
+                    DispatchQueue.main.async {
+                        self.mapView.removeAnnotation(location)
+                    }
                 }
             }
         }
@@ -94,19 +96,7 @@ class MapViewController: UIViewController {
     
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKAnnotationView {
         let reuseIdentifier = NSStringFromClass(Location.self)
-        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
-        
-        annotationView.animatesWhenAdded = true
-        annotationView.canShowCallout = true
-        
-        let captureButton = UIButton(type: .system)
-        captureButton.setTitle("Capture", for: .normal)
-        captureButton.tintColor = .white
-        captureButton.backgroundColor = UIColor.Custom.systemBlue
-        // TODO: Extract constants and adjust to different text sizes
-        captureButton.frame = CGRect(x: 0, y: 0, width: 90, height: 50)
-        annotationView.rightCalloutAccessoryView = captureButton
-        
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! LocationAnnotationView
         return annotationView
     }
     
@@ -175,22 +165,32 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        // Callouts stop showing if setting animated to false for some weird reason
-        mapView.deselectAnnotation(view.annotation, animated: true)
+        mapView.deselectAnnotation(view.annotation, animated: false)
         performSegue(withIdentifier: "Show Quiz", sender: view)
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if let polygon = overlay as? MKPolygon {
+        // Duplicate code but I can't figure out how to extract it
+        switch overlay {
+        case let polygon as MKPolygon:
             let renderer = MKPolygonRenderer(polygon: polygon)
             renderer.fillColor = .lightGray
-            renderer.alpha = 0.5
+            renderer.alpha = 0.4
             renderer.strokeColor = UIColor.Custom.systemBlue
             renderer.lineWidth = 1
             return renderer
+        case let circle as MKCircle:
+            let renderer = MKCircleRenderer(circle: circle)
+            renderer.fillColor = .lightGray
+            renderer.alpha = 0.4
+            renderer.strokeColor = UIColor.Custom.systemBlue
+            renderer.lineWidth = 1
+            return renderer
+        default:
+            break
         }
-        // FIXME
-        return MKOverlayRenderer()
+        
+        return MKOverlayRenderer(overlay: overlay)
     }
     
 }
