@@ -9,27 +9,24 @@
 import Foundation
 
 struct Question {
-    let title: String
     let question: String
     let answer: String
-    let choices: [String]
+    let alternatives: [String]
     
-    init(title: String, question: String, answer: String, choices: [String]) {
-        self.title = title
+    init(question: String, answer: String, alternatives: [String]) {
         self.question = question
         self.answer = answer
-        self.choices = choices
+        self.alternatives = alternatives
     }
     
     init?(data: [String:Any]) {
         guard
-            let title = data["title"] as? String,
             let question = data["question"] as? String,
             let answer = data["answer"] as? String,
-            let choices = data["choices"] as? [String]
-            else { return nil }
+            let alternatives = data["alternatives"] as? [String]
+            else { print("Error in initializing Question"); return nil }
         
-        self.init(title: title, question: question, answer: answer, choices: choices)
+        self.init(question: question, answer: answer, alternatives: alternatives)
     }
     
 }

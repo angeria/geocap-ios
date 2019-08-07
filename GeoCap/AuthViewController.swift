@@ -25,9 +25,10 @@ class AuthViewController: UIViewController {
         authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
             if user != nil {
                 self?.performSegue(withIdentifier: "Show Map", sender: user)
-            } else if Auth.auth().currentUser == nil {
-                let authViewController = self!.authUI.authViewController()
-                self?.present(authViewController, animated: true)
+            } else if auth.currentUser == nil {
+                if let authViewController = self?.authUI.authViewController() {
+                    self!.present(authViewController, animated: true)
+                }
             }
         }
     }
@@ -52,7 +53,7 @@ class AuthViewController: UIViewController {
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            "username": user.displayName ?? "",
+            "username": user.displayName!,
         ]) { error in
             if let error = error {
                 print("Error adding user: \(error)")
@@ -93,7 +94,7 @@ class AuthViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let mapVC = segue.destination.contents as? MapViewController {
             if let user = sender as? User {
-                mapVC.user = user
+                mapVC.username = user.displayName!
             }
         }
     }

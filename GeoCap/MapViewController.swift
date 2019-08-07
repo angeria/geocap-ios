@@ -26,14 +26,12 @@ class MapViewController: UIViewController {
             mapView.showsUserLocation = true
         }
     }
-    
     private lazy var db = Firestore.firestore()
     // Currently not removed at all and constantly listening for updates on locations, even while map is not visible
     var locationUpdateListener: ListenerRegistration?
     private var regionIsCenteredOnUserLocation = false
-    
     // Dependency injection
-    var user: User!
+    var username: String!
     
     // MARK: - Life Cycle
     
@@ -63,25 +61,22 @@ class MapViewController: UIViewController {
     // MARK: - Annotations
     
     private func fetchLocations() {
-        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { querySnapshot, error in
+        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 print("Error fetching locations: \(error!)")
                 return
             }
-            snapshot.documentChanges.forEach { [weak self] diff in
+            
+            snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
-                guard let username = self.user.displayName else {
-                    print("Error in fetching locations: displayName is nil");
-                    return
-                }
-                guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
+                guard let newAnnotation = Location(data: diff.document.data(), username: self.username) else { return }
                 
                 if (diff.type == .added) {
                     self.mapView.addAnnotation(newAnnotation)
                     self.addLocationOverlay(newAnnotation)
                 }
+                
                 if (diff.type == .modified) {
-                    print("Modified location: \(newAnnotation.name)")
                     if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
                         self.mapView.removeAnnotation(oldAnnotation)
                         self.mapView.removeOverlay(oldAnnotation.overlay)
@@ -89,9 +84,10 @@ class MapViewController: UIViewController {
                         self.addLocationOverlay(newAnnotation)
                     }
                 }
+                
                 if (diff.type == .removed) {
-                    print("Removed location: \(newAnnotation.name)")
                     if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                        self.mapView.removeOverlay(oldAnnotation.overlay)
                         self.mapView.removeAnnotation(oldAnnotation)
                     }
                 }
@@ -120,21 +116,21 @@ class MapViewController: UIViewController {
         let captureButton = UIButton(type: .system)
         captureButton.setTitle("Capture", for: .normal)
         captureButton.tintColor = .white
-        captureButton.backgroundColor = UIColor.Custom.systemBlue
+        captureButton.backgroundColor = UIColor.GeoCap.blue
         // TODO: Extract constants and adjust to different text sizes
         captureButton.frame = CGRect(x: 0, y: 0, width: 90, height: 50)
         
         if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.Custom.systemGreen
+            annotationView.markerTintColor = UIColor.GeoCap.green
             let image = UIImage(named: "green-flag")
             let imageView = UIImageView(image: image!)
             imageView.frame = CGRect(x: 0, y: 0, width: 27, height: 32)
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
-            annotationView.markerTintColor = .lightGray
+            annotationView.markerTintColor = UIColor.GeoCap.blue
             annotationView.rightCalloutAccessoryView = captureButton
         } else {
-            annotationView.markerTintColor = UIColor.Custom.systemRed
+            annotationView.markerTintColor = UIColor.GeoCap.red
             annotationView.rightCalloutAccessoryView = captureButton
         }
         
@@ -176,10 +172,8 @@ class MapViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-            if let locationName = annotationView.annotation?.title {
-                quizVC.locationName = locationName
-                quizVC.username = user.displayName
-            }
+            quizVC.locationName = annotationView.annotation!.title!
+            quizVC.username = username
         }
     }
     
@@ -221,14 +215,14 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = 1
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.Custom.systemGreen
-                renderer.strokeColor = UIColor.Custom.systemGreen
+                renderer.fillColor = UIColor.GeoCap.green
+                renderer.strokeColor = UIColor.GeoCap.green
             } else if location.owner == nil {
-                renderer.fillColor = .lightGray
-                renderer.strokeColor = .lightGray
+                renderer.fillColor = UIColor.GeoCap.blue
+                renderer.strokeColor = UIColor.GeoCap.blue
             } else {
-                renderer.fillColor = UIColor.Custom.systemRed
-                renderer.strokeColor = UIColor.Custom.systemRed
+                renderer.fillColor = UIColor.GeoCap.red
+                renderer.strokeColor = UIColor.GeoCap.red
             }
             
             return renderer
@@ -238,14 +232,14 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = 1
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.Custom.systemGreen
-                renderer.strokeColor = UIColor.Custom.systemGreen
+                renderer.fillColor = UIColor.GeoCap.green
+                renderer.strokeColor = UIColor.GeoCap.green
             } else if location.owner == nil {
-                renderer.fillColor = .lightGray
-                renderer.strokeColor = .lightGray
+                renderer.fillColor = UIColor.GeoCap.blue
+                renderer.strokeColor = UIColor.GeoCap.blue
             } else {
-                renderer.fillColor = UIColor.Custom.systemRed
-                renderer.strokeColor = UIColor.Custom.systemRed
+                renderer.fillColor = UIColor.GeoCap.red
+                renderer.strokeColor = UIColor.GeoCap.red
             }
             
             return renderer

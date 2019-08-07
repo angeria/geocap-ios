@@ -51,30 +51,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uppsala" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cch-8I-BY2">
-                                <rect key="frame" x="16" y="36" width="343" height="24"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="Among other achievements, the Celsius ______ was invented here." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
-                                <rect key="frame" x="16" y="76" width="343" height="187"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="A portrait that comically exaggerates a person's physical traits is called a what?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
+                                <rect key="frame" x="16" y="20" width="343" height="216"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6IC-rL-MU1">
-                                <rect key="frame" x="16" y="279" width="343" height="288"/>
+                                <rect key="frame" x="16" y="252" width="343" height="348"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="60"/>
-                                        <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="75"/>
+                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="Lct-Ch-auM"/>
+                                            <constraint firstAttribute="height" constant="75" id="Lct-Ch-auM"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="tintColor" red="0.014124185778200626" green="0.47662842273712158" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Scale">
+                                        <state key="normal" title="landscape">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -82,10 +76,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq">
-                                        <rect key="frame" x="0.0" y="76" width="343" height="60"/>
-                                        <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Metric">
+                                        <rect key="frame" x="0.0" y="91" width="343" height="75"/>
+                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="caricature">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -93,10 +87,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW">
-                                        <rect key="frame" x="0.0" y="152" width="343" height="60"/>
-                                        <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Baseline">
+                                        <rect key="frame" x="0.0" y="182" width="343" height="75"/>
+                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="still life">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -104,10 +98,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT">
-                                        <rect key="frame" x="0.0" y="228" width="343" height="60"/>
-                                        <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Grade">
+                                        <rect key="frame" x="0.0" y="273" width="343" height="75"/>
+                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="Impressionism">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -121,44 +115,26 @@
                                     <constraint firstItem="o9L-qI-NsT" firstAttribute="height" secondItem="BFK-tV-XoW" secondAttribute="height" id="cYK-48-2gf"/>
                                 </constraints>
                             </stackView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Skr-BR-zYC">
-                                <rect key="frame" x="117.5" y="587" width="140" height="60"/>
-                                <color key="backgroundColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="pZA-Cu-QRK"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="tintColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                                <state key="normal" title="Next Question">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="nextQuestionPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="4ir-B9-aln"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="cch-8I-BY2" secondAttribute="trailing" constant="16" id="0U2-DB-Bc3"/>
-                            <constraint firstItem="Skr-BR-zYC" firstAttribute="top" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="20" id="5ZL-o2-sah"/>
-                            <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="cch-8I-BY2" secondAttribute="bottom" constant="16" id="8Jo-mo-bLw"/>
+                            <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" id="2DU-63-3jQ"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="8WB-hr-ywK"/>
-                            <constraint firstItem="cch-8I-BY2" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" constant="16" id="DFu-pf-8CS"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="nWZ-6v-edE" secondAttribute="trailing" constant="16" id="LL5-7T-dUa"/>
+                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="67" id="OrT-4t-OFq"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="16" id="QRS-T8-olZ"/>
-                            <constraint firstItem="cch-8I-BY2" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="VZ6-cW-BQd"/>
-                            <constraint firstItem="Skr-BR-zYC" firstAttribute="centerX" secondItem="Z6d-1K-Ooa" secondAttribute="centerX" id="coA-h7-NAt"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="hEo-hZ-6Dj"/>
-                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" secondItem="Skr-BR-zYC" secondAttribute="bottom" constant="20" id="iaR-Er-Q5O"/>
-                            <constraint firstItem="Skr-BR-zYC" firstAttribute="height" secondItem="o9L-qI-NsT" secondAttribute="height" id="m35-R9-zHc"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="6IC-rL-MU1" secondAttribute="trailing" constant="16" id="z3E-LJ-JDG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2g4-CM-phi"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Zeh-D3-dqF" appends="YES" id="Xur-Iy-Ud5"/>
+                        </connections>
                     </view>
                     <connections>
-                        <outlet property="nextQuestionButton" destination="Skr-BR-zYC" id="Ckk-Js-Dl8"/>
+                        <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>
-                        <outlet property="titleLabel" destination="cch-8I-BY2" id="RsU-Dj-sJb"/>
                         <outletCollection property="answerButtons" destination="Glb-p3-C4Y" collectionClass="NSMutableArray" id="lrt-f9-nap"/>
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
@@ -166,6 +142,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgB-3b-WCv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer enabled="NO" id="Zeh-D3-dqF">
+                    <connections>
+                        <action selector="tap:" destination="XzZ-RX-21L" id="O0Y-LC-DuP"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1672.8" y="-0.44977511244377816"/>
         </scene>

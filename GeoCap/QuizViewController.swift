@@ -13,21 +13,13 @@ class QuizViewController: UIViewController {
     
     // TODO: Fonts
     
-    @IBOutlet weak var titleLabel: UILabel! {
-        didSet {
-            titleLabel.text = nil
-        }
-    }
     @IBOutlet weak var questionLabel: UILabel! {
         didSet {
             questionLabel.text = nil
         }
     }
-    @IBOutlet weak var nextQuestionButton: UIButton! {
-        didSet {
-            nextQuestionButton.layer.cornerRadius = 10
-        }
-    }
+    
+    // TODO: Make buttons empty while loading actual answers
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
             answerButtons.forEach() {
@@ -47,6 +39,12 @@ class QuizViewController: UIViewController {
     var locationName: String?
     var username: String?
     
+    @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
+    @IBAction func tap(_ sender: UITapGestureRecognizer) {
+        showNextQuestion()
+        nextQuestionTapRecognizer.isEnabled = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,24 +57,22 @@ class QuizViewController: UIViewController {
     
     @IBAction func answerPressed(_ sender: UIButton) {
         answerButtons.forEach() { $0.isEnabled = false }
-        nextQuestionButton.isHidden = false
         
         if sender.titleLabel?.text == currentQuestion?.answer {
-            sender.backgroundColor = UIColor.Custom.systemGreen
+            sender.backgroundColor = UIColor.GeoCap.green
             correctAnswersCount += 1
         } else {
-            sender.backgroundColor = UIColor.Custom.systemRed
+            sender.backgroundColor = UIColor.GeoCap.red
         }
-    }
-    
-    @IBAction func nextQuestionPressed(_ sender: UIButton) {
-        showNextQuestion()
-        nextQuestionButton.isHidden = true
+        
+        nextQuestionTapRecognizer.isEnabled = true
     }
     
     private func fetchQuestions() {
         // TODO: (DODGE) Probably not fetch all questions
-        db.collection("cities").document("uppsala").collection("questions").getDocuments { [weak self] (querySnapshot, error) in
+
+        
+        db.collection("questions").getDocuments() { [weak self] (querySnapshot, error) in
             if let error = error {
                 print("Error getting questions: \(error)")
             } else {
@@ -105,11 +101,10 @@ class QuizViewController: UIViewController {
         } else {
             currentQuestion = questions.removeFirst()
             
-            titleLabel.text = currentQuestion!.title
             questionLabel.text = currentQuestion!.question
-            let choices = ([currentQuestion!.answer] + currentQuestion!.choices).shuffled()
-            for (i, choice) in choices.enumerated() {
-                self.answerButtons[i].setTitle(choice, for: .normal)
+            let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
+            for (i, alternative) in alternatives.enumerated() {
+                self.answerButtons[i].setTitle(alternative, for: .normal)
             }
             
             resetButtons()
@@ -119,7 +114,7 @@ class QuizViewController: UIViewController {
     private func resetButtons() {
         for button in answerButtons {
             button.isEnabled = true
-            button.backgroundColor = UIColor.Custom.systemBlue
+            button.backgroundColor = UIColor.GeoCap.blue
         }
     }
 
