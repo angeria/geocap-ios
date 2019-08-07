@@ -47,3 +47,15 @@ extension UIViewController {
         }
     }
 }
+
+extension UIView {
+    
+    func shake() {
+        self.transform = CGAffineTransform(translationX: 15, y: 0)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.25, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+            self.transform = CGAffineTransform.identity
+        }, completion: nil)
+    }
+
+}
+

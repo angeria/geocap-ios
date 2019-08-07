@@ -63,15 +63,21 @@ class QuizViewController: UIViewController {
             correctAnswersCount += 1
         } else {
             sender.backgroundColor = UIColor.GeoCap.red
+            sender.shake()
+//            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0, options: [.repeat], animations: {{
+//                sender.transform = CGAffineTransform(translationX: 0.5, y: 0)
+//                }}, completion: { completed in
+//                    if completed {
+//                        sender.transform = CGAffineTransform(translationX: -0.5, y: 0)
+//                    }
+//            })
         }
         
         nextQuestionTapRecognizer.isEnabled = true
     }
     
     private func fetchQuestions() {
-        // TODO: (DODGE) Probably not fetch all questions
-
-        
+        // TODO: Get three random questions instead of all
         db.collection("questions").getDocuments() { [weak self] (querySnapshot, error) in
             if let error = error {
                 print("Error getting questions: \(error)")
