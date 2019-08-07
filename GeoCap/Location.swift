@@ -18,7 +18,7 @@ class Location: NSObject, MKAnnotation {
     var isCapturedByUser = false
     // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
     @objc dynamic var coordinate: CLLocationCoordinate2D
-    // Area coordinates enclosing location
+    // Coordinates enclosing location
     var areaCoordinates: [CLLocationCoordinate2D]?
     var overlay: MKOverlay
     
@@ -26,7 +26,7 @@ class Location: NSObject, MKAnnotation {
         guard
             let name = data["name"] as? String,
             let center = data["center"] as? GeoPoint
-            else { print("Error initializing Location from data"); return nil }
+            else { print("Error initializing Location"); return nil }
         
         self.name = name
         self.title = name
