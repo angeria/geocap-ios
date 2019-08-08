@@ -55,22 +55,16 @@ class QuizViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
-    @IBAction func answerPressed(_ sender: UIButton) {
+    @IBAction func answerPressed(_ button: UIButton) {
         answerButtons.forEach() { $0.isEnabled = false }
         
-        if sender.titleLabel?.text == currentQuestion?.answer {
-            sender.backgroundColor = UIColor.GeoCap.green
+        if button.titleLabel?.text == currentQuestion?.answer {
+            button.backgroundColor = UIColor.GeoCap.green
+            button.scale()
             correctAnswersCount += 1
         } else {
-            sender.backgroundColor = UIColor.GeoCap.red
-            sender.shake()
-//            UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0, options: [.repeat], animations: {{
-//                sender.transform = CGAffineTransform(translationX: 0.5, y: 0)
-//                }}, completion: { completed in
-//                    if completed {
-//                        sender.transform = CGAffineTransform(translationX: -0.5, y: 0)
-//                    }
-//            })
+            button.backgroundColor = UIColor.GeoCap.red
+            button.shake()
         }
         
         nextQuestionTapRecognizer.isEnabled = true
