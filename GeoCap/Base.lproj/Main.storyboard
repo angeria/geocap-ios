@@ -31,9 +31,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="first" selectedImage="first" id="acW-dT-cKf">
-                        <color key="badgeColor" name="systemBlueColor" catalog="System" colorSpace="catalog"/>
-                    </tabBarItem>
+                    <tabBarItem key="tabBarItem" title="Map" image="tab-bar-map" selectedImage="tab-bar-map" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="show" identifier="Show Quiz" id="MeF-YK-qBM"/>
@@ -187,6 +185,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
+        <image name="tab-bar-map" width="46" height="46"/>
     </resources>
 </document>
