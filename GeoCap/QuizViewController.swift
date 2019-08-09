@@ -34,6 +34,7 @@ class QuizViewController: UIViewController {
     private var questions = [Question]()
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
+    private let numberOfQuestions = 3
     
     // Dependency injections
     var locationName: String?
@@ -70,89 +71,80 @@ class QuizViewController: UIViewController {
         nextQuestionTapRecognizer.isEnabled = true
     }
     
-    // TODO: Make more random; currently questions are often in same sets.
-    // FIXME: Prevent infinite loop
-    // FIXME: Fix edge case of getting < 3 questions
+    // Currently questions are recieved in random specific sets, effective since it's just one request
+    // Could be changed to fetch one question at a time which is more random but generates more reads
+    //
+    // Every question in db has a 'random' object with three randomly generated 64 bit integers
     private func fetchQuestions() {
         let questionsRef = db.collection("questions")
-        let randomBool = Bool.random()
+        let shouldFetchGreater = Bool.random()
         let randomIndex = Int.random(in: 0...2)
         let fieldName = "random." + String(randomIndex)
+        // 64 bit range
         let randomInt = Int.random(in: 0...9223372036854775807)
+        var tries = 0
         
-        func generateQuestions(_ querySnapshot: QuerySnapshot?) {
-            let documents = querySnapshot!.documents.shuffled()
-            for document in documents {
-                if let question = Question(data: document.data()) {
-                    self.questions.append(question)
+        // flow starts from switch at bottom
+        func generateQuestions(_ querySnapshot: QuerySnapshot?, _ error: Error?) {
+            if let error = error {
+                print("Error fetching questions: \(error)")
+            } else {
+                let documents = querySnapshot!.documents.shuffled()
+                for document in documents {
+                    if let question = Question(data: document.data()) {
+                        self.questions.append(question)
+                    }
+                    if self.questions.count == numberOfQuestions {
+                        self.showNextQuestion()
+                        return
+                    }
                 }
-                if self.questions.count == 3 {
-                    self.showNextQuestion()
-                    break
-                }
-            }
-        }
-        
-        func fetchGreater() {
-            questionsRef.whereField(fieldName, isGreaterThanOrEqualTo: randomInt)
-                .order(by: fieldName)
-                .limit(to: 3)
-                .getDocuments() { querySnapshot, error in
-                if let error = error {
-                    print("Error fetching questions: \(error)")
-                } else if querySnapshot?.count == 3 {
-                    generateQuestions(querySnapshot)
+                
+                // less than numberOfQuestions recieved
+                // edge case and should be rare
+                // if it happens, fetch again once in other direction for remaining questions
+                let remaining = numberOfQuestions - questions.count
+                tries += 1
+                if tries < 2 {
+                    fetch(greater: !shouldFetchGreater, amount: remaining)
                 } else {
-                    fetchSmaller()
+                    print("Warning: missing \(remaining) questions after two passes")
+                    presentingViewController?.dismiss(animated: true, completion: nil)
                 }
             }
         }
         
-        func fetchSmaller() {
-            questionsRef.whereField(fieldName, isLessThanOrEqualTo: randomInt)
-                .order(by: fieldName, descending: true)
-                .limit(to: 3)
-                .getDocuments() { querySnapshot, error in
-                if let error = error {
-                    print("Error fetching questions: \(error)")
-                } else if querySnapshot?.count == 3 {
-                    generateQuestions(querySnapshot)
-                } else {
-                    fetchGreater()
+        func fetch(greater: Bool, amount: Int) {
+            switch greater {
+            case true:
+                questionsRef.whereField(fieldName, isGreaterThanOrEqualTo: randomInt)
+                    .order(by: fieldName)
+                    .limit(to: amount)
+                    .getDocuments() { querySnapshot, error in
+                        generateQuestions(querySnapshot, error)
+                }
+            case false:
+                questionsRef.whereField(fieldName, isLessThan: randomInt)
+                    .order(by: fieldName, descending: true)
+                    .limit(to: amount)
+                    .getDocuments() { querySnapshot, error in
+                        generateQuestions(querySnapshot, error)
                 }
             }
         }
         
-        switch randomBool {
+        // starts here because nested functions need to be declared before
+        switch shouldFetchGreater {
         case true:
-            fetchGreater()
+            fetch(greater: true, amount: numberOfQuestions)
         case false:
-            fetchSmaller()
+            fetch(greater: false, amount: numberOfQuestions)
         }
     }
-        
-//    db.collection("questions").getDocuments() { [weak self] (querySnapshot, error) in
-//        if let error = error {
-//            print("Error getting questions: \(error)")
-//        } else {
-//            guard let self = self else { return }
-//
-//            let documents = querySnapshot!.documents.shuffled()
-//            for document in documents {
-//                if let question = Question(data: document.data()) {
-//                    self.questions.append(question)
-//                }
-//                if self.questions.count == 3 {
-//                    self.showNextQuestion()
-//                    break
-//                }
-//            }
-//        }
-//    }
 
     private func showNextQuestion() {
         if questions.isEmpty {
-            if correctAnswersCount == 3 {
+            if correctAnswersCount == numberOfQuestions {
                 updateLocationOwner()
             }
             presentingViewController?.dismiss(animated: true, completion: nil)
