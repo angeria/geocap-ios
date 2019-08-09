@@ -53,7 +53,7 @@ class Location: NSObject, MKAnnotation {
         owner = newOwner
         if newOwner == username {
             isCapturedByUser = true
-            subtitle = "Captured by you"
+            subtitle = nil
         } else {
             isCapturedByUser = false
             subtitle = "Captured by \(newOwner)"

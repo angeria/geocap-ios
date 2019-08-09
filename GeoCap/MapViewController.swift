@@ -109,6 +109,9 @@ class MapViewController: UIViewController {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
         
+        annotationView.glyphImage = UIImage(named: "marker-flag")
+        annotationView.glyphTintColor = .white
+        
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
@@ -122,9 +125,11 @@ class MapViewController: UIViewController {
         
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.GeoCap.green
-            let image = UIImage(named: "green-flag")
-            let imageView = UIImageView(image: image!)
-            imageView.frame = CGRect(x: 0, y: 0, width: 27, height: 32)
+            
+            let image = UIImage(named: "marker-flag")!.withRenderingMode(.alwaysTemplate)
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+            imageView.tintColor = UIColor.GeoCap.green
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
             annotationView.markerTintColor = UIColor.GeoCap.blue
