@@ -70,28 +70,86 @@ class QuizViewController: UIViewController {
         nextQuestionTapRecognizer.isEnabled = true
     }
     
+    // TODO: Make more random; currently questions are often in same sets.
+    // FIXME: Prevent infinite loop
+    // FIXME: Fix edge case of getting < 3 questions
     private func fetchQuestions() {
-        // TODO: Get three random questions instead of all
-        db.collection("questions").getDocuments() { [weak self] (querySnapshot, error) in
-            if let error = error {
-                print("Error getting questions: \(error)")
-            } else {
-                guard let self = self else { return }
-                
-                let documents = querySnapshot!.documents.shuffled()
-                for document in documents {
-                    if let question = Question(data: document.data()) {
-                        self.questions.append(question)
-                    }
-                    if self.questions.count == 3 {
-                        self.showNextQuestion()
-                        break
-                    }
+        let questionsRef = db.collection("questions")
+        let randomBool = Bool.random()
+        let randomIndex = Int.random(in: 0...2)
+        let fieldName = "random." + String(randomIndex)
+        let randomInt = Int.random(in: 0...9223372036854775807)
+        
+        func generateQuestions(_ querySnapshot: QuerySnapshot?) {
+            let documents = querySnapshot!.documents.shuffled()
+            for document in documents {
+                if let question = Question(data: document.data()) {
+                    self.questions.append(question)
+                }
+                if self.questions.count == 3 {
+                    self.showNextQuestion()
+                    break
                 }
             }
         }
+        
+        func fetchGreater() {
+            questionsRef.whereField(fieldName, isGreaterThanOrEqualTo: randomInt)
+                .order(by: fieldName)
+                .limit(to: 3)
+                .getDocuments() { querySnapshot, error in
+                if let error = error {
+                    print("Error fetching questions: \(error)")
+                } else if querySnapshot?.count == 3 {
+                    generateQuestions(querySnapshot)
+                } else {
+                    fetchSmaller()
+                }
+            }
+        }
+        
+        func fetchSmaller() {
+            questionsRef.whereField(fieldName, isLessThanOrEqualTo: randomInt)
+                .order(by: fieldName, descending: true)
+                .limit(to: 3)
+                .getDocuments() { querySnapshot, error in
+                if let error = error {
+                    print("Error fetching questions: \(error)")
+                } else if querySnapshot?.count == 3 {
+                    generateQuestions(querySnapshot)
+                } else {
+                    fetchGreater()
+                }
+            }
+        }
+        
+        switch randomBool {
+        case true:
+            fetchGreater()
+        case false:
+            fetchSmaller()
+        }
     }
-    
+        
+//    db.collection("questions").getDocuments() { [weak self] (querySnapshot, error) in
+//        if let error = error {
+//            print("Error getting questions: \(error)")
+//        } else {
+//            guard let self = self else { return }
+//
+//            let documents = querySnapshot!.documents.shuffled()
+//            for document in documents {
+//                if let question = Question(data: document.data()) {
+//                    self.questions.append(question)
+//                }
+//                if self.questions.count == 3 {
+//                    self.showNextQuestion()
+//                    break
+//                }
+//            }
+//        }
+//    }
+
     private func showNextQuestion() {
         if questions.isEmpty {
             if correctAnswersCount == 3 {
