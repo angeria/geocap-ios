@@ -12,6 +12,7 @@ import Firebase
 class QuizViewController: UIViewController {
     
     // TODO: Fonts
+    // TODO: SF Symbols after iOS 13
     
     @IBOutlet weak var questionLabel: UILabel! {
         didSet {
