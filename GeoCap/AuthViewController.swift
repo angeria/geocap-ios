@@ -94,7 +94,7 @@ class AuthViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let mapVC = segue.destination.contents as? MapViewController {
             if let user = sender as? User {
-                mapVC.username = user.displayName!
+                mapVC.user = user
             }
         }
     }

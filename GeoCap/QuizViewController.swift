@@ -37,9 +37,8 @@ class QuizViewController: UIViewController {
     private var correctAnswersCount = 0
     private let numberOfQuestions = 3
     
-    // Dependency injections
-    var locationName: String?
-    var username: String?
+    // Dependency injection
+    var locationName: String!
     
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
@@ -51,10 +50,6 @@ class QuizViewController: UIViewController {
         super.viewDidLoad()
         
         fetchQuestions()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     @IBAction func answerPressed(_ button: UIButton) {
@@ -170,12 +165,8 @@ class QuizViewController: UIViewController {
     }
 
     private func updateLocationOwner() {
-        guard let locationName = locationName else {
-            print("Error updating location owner: locationName is nil")
-            return
-        }
-        guard let username = username else {
-            print("Error updating location owner: username is nil")
+        guard let username = Auth.auth().currentUser?.displayName else {
+            print("Error updating location owner: couldn't get username")
             return
         }
         
