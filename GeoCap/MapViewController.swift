@@ -28,7 +28,7 @@ class MapViewController: UIViewController {
     }
     private lazy var db = Firestore.firestore()
     // Currently not removed at all and constantly listening for updates on locations, even while map is not visible
-    var locationUpdateListener: ListenerRegistration?
+    var locationListener: ListenerRegistration?
     private var regionIsCenteredOnUserLocation = false
     // Dependency injection
     var username: String!
@@ -61,7 +61,7 @@ class MapViewController: UIViewController {
     // MARK: - Annotations
     
     private func fetchLocations() {
-        locationUpdateListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { [weak self] querySnapshot, error in
+        locationListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 print("Error fetching locations: \(error!)")
                 return

@@ -28,6 +28,13 @@ class LeaderboardViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let userListener = userListener {
+            userListener.remove()
+        }
+    }
     
     private func fetchUsers() {
         userListener = db.collection("users").addSnapshotListener { [weak self] querySnapshot, error in
@@ -36,24 +43,24 @@ class LeaderboardViewController: UITableViewController {
                 return
             }
             
+            guard let self = self else { return }
             snapshot.documentChanges.forEach { diff in
-                guard let self = self else { return }
-                
                 if (diff.type == .added) {
-                    self.users += [diff.document.data()["username"]] as! [String]
+                    if let username = diff.document.data()["username"] as? String {
+                        self.users += [username]
+                    }
                 }
                 
                 if (diff.type == .modified) {
-                    
+                    // TODO:
                 }
                 
                 if (diff.type == .removed) {
-                    
+                    // TODO:
                 }
                 
-                // TODO: reloadData?
-                self.tableView.reloadData()
             }
+            self.tableView.reloadData()
         }
     }
     
@@ -65,7 +72,6 @@ class LeaderboardViewController: UITableViewController {
 //    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return users.count
     }
 
@@ -73,8 +79,7 @@ class LeaderboardViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         
         cell.textLabel?.text = users[indexPath.row]
-        // Configure the cell...
-
+        
         return cell
     }
 
