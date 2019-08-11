@@ -31,7 +31,7 @@ class MapViewController: UIViewController {
     var locationListener: ListenerRegistration?
     private var regionIsCenteredOnUserLocation = false
     // Dependency injection
-    var username: String!
+    var user: User!
     
     // MARK: - Life Cycle
     
@@ -69,7 +69,7 @@ class MapViewController: UIViewController {
             
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
-                guard let newAnnotation = Location(data: diff.document.data(), username: self.username) else { return }
+                guard let newAnnotation = Location(data: diff.document.data(), username: self.user.displayName!) else { return }
                 
                 if (diff.type == .added) {
                     self.mapView.addAnnotation(newAnnotation)
@@ -175,10 +175,22 @@ class MapViewController: UIViewController {
     
     // MARK: - Navigation
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "Show Quiz", let annotationView = sender as? MKAnnotationView {
+            if annotationView.annotation?.title != nil {
+                return true
+            }
+            print("Error in showing quiz: no location name")
+        }
+        
+        return false
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-            quizVC.locationName = annotationView.annotation!.title!
-            quizVC.username = username
+            if let locationName = annotationView.annotation?.title {
+                quizVC.locationName = locationName
+            }
         }
     }
     
