@@ -31,6 +31,7 @@ class QuizViewController: UIViewController {
     }
     
     private lazy var db = Firestore.firestore()
+    private lazy var functions = Functions.functions(region:"europe-west1")
     
     private var questions = [Question]()
     private var currentQuestion: Question?
@@ -55,10 +56,14 @@ class QuizViewController: UIViewController {
     @IBAction func answerPressed(_ button: UIButton) {
         answerButtons.forEach() { $0.isEnabled = false }
         
-        if button.titleLabel?.text == currentQuestion?.answer {
+        // FIXME: Disabled check during debugging
+        if button.titleLabel?.text != nil/* == currentQuestion?.answer*/ {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
             correctAnswersCount += 1
+            if correctAnswersCount == numberOfQuestions {
+                updateLocationOwner()
+            }
         } else {
             button.backgroundColor = UIColor.GeoCap.red
             button.shake()
@@ -140,9 +145,6 @@ class QuizViewController: UIViewController {
 
     private func showNextQuestion() {
         if questions.isEmpty {
-            if correctAnswersCount == numberOfQuestions {
-                updateLocationOwner()
-            }
             presentingViewController?.dismiss(animated: true, completion: nil)
         } else {
             currentQuestion = questions.removeFirst()
@@ -164,24 +166,29 @@ class QuizViewController: UIViewController {
         }
     }
 
+    // TODO: Make this more general for several cities
     private func updateLocationOwner() {
-        guard let username = Auth.auth().currentUser?.displayName else {
-            print("Error updating location owner: couldn't get username")
-            return
-        }
-        
-        // TODO: Make this more general for several cities
-        let locationRef = db.collection("cities").document("uppsala").collection("locations").document(locationName)
-        locationRef.updateData([
-            "owner": username
-        ]) { err in
-            if let err = err {
-                print("Error updating location owner: \(err)")
-            } else {
-                print("Location owner successfully updated")
+        functions.httpsCallable("locationCaptured").call(["location": locationName]) { (result, error) in
+            if let error = error as NSError? {
+                if error.domain == FunctionsErrorDomain {
+                    let code = FunctionsErrorCode(rawValue: error.code)
+                    if let code = code {
+                        switch code {
+                        case .invalidArgument:
+                            print("here")
+                        default:
+                            break
+                        }
+                    }
+                    let message = error.localizedDescription
+                    if let details = error.userInfo[FunctionsErrorDetailsKey] {
+                        print("details: \(details)")
+                    }
+                    print("message: \(message)")
+                }
+                // ...
             }
         }
-
     }
     
 }

@@ -9,6 +9,7 @@ target 'GeoCap' do
   pod 'Protobuf', :inhibit_warnings => true
 
   pod 'Firebase/Firestore'
+  pod 'Firebase/Functions'
 
   pod 'FirebaseUI/Auth'
   pod 'FirebaseUI/Email'
