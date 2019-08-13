@@ -142,6 +142,26 @@ class MapViewController: UIViewController {
         return annotationView
     }
     
+    func user(location: MKUserLocation, isInside overlay: MKOverlay) -> Bool {
+        let coordinates = location.coordinate
+        
+        switch overlay {
+        case let polygon as MKPolygon:
+            let polygonRenderer = MKPolygonRenderer(polygon: polygon)
+            let mapPoint = MKMapPoint(coordinates)
+            let polygonPoint = polygonRenderer.point(for: mapPoint)
+            return polygonRenderer.path.contains(polygonPoint)
+        case let circle as MKCircle:
+            let circleRenderer = MKCircleRenderer(circle: circle)
+            let mapPoint = MKMapPoint(coordinates)
+            let circlePoint = circleRenderer.point(for: mapPoint)
+            return circleRenderer.path.contains(circlePoint)
+        default:
+            print("Unexpected overlay in user(location:, isInside:)")
+            return false
+        }
+    }
+    
     // MARK: - User Location Authorization
     
     private let locationManager = CLLocationManager()
@@ -218,8 +238,16 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         mapView.deselectAnnotation(view.annotation, animated: false)
-        performSegue(withIdentifier: "Show Quiz", sender: view)
+        
+        if let annotation = view.annotation as? Location {
+            if user(location: mapView.userLocation, isInside: annotation.overlay) {
+                performSegue(withIdentifier: "Show Quiz", sender: view)
+            } else {
+                print("outside of area")
+            }
+        }
     }
+    
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let location = locationToOverlay else { return MKOverlayRenderer(overlay: overlay) }

@@ -39,7 +39,7 @@ class Location: NSObject, MKAnnotation {
         if let coordinates = areaCoordinates {
             overlay = MKPolygon(coordinates: coordinates, count: coordinates.count)
         } else {
-            overlay = MKCircle(center: coordinate, radius: 75)
+            overlay = MKCircle(center: coordinate, radius: 50)
         }
         
         super.init()
