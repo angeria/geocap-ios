@@ -64,7 +64,7 @@ class QuizViewController: UIViewController {
         answerButtons.forEach() { $0.isEnabled = false }
         
         // FIXME: Disabled check during debugging
-        if button.titleLabel?.text != nil/* == currentQuestion?.answer*/ {
+        if button.titleLabel?.text == currentQuestion?.answer {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
             correctAnswersCount += 1
@@ -74,6 +74,9 @@ class QuizViewController: UIViewController {
         } else {
             button.backgroundColor = UIColor.GeoCap.red
             button.shake()
+            
+            let correctAnswerButton = answerButtons.first() { $0.titleLabel?.text == currentQuestion?.answer }
+            correctAnswerButton?.backgroundColor = UIColor.GeoCap.green
         }
         
         timerBarTimer?.invalidate()
