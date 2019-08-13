@@ -14,13 +14,16 @@ class LeaderboardViewController: UITableViewController {
     private var userListener: ListenerRegistration?
     private lazy var db = Firestore.firestore()
     
-    var users = [String]()
+    var users = [(String, Int)]() {
+        didSet {
+            users.sort() { $0.1 > $1.1 }
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        fetchUsers()
-        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -28,6 +31,12 @@ class LeaderboardViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetchUsers()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -45,9 +54,12 @@ class LeaderboardViewController: UITableViewController {
             
             guard let self = self else { return }
             snapshot.documentChanges.forEach { diff in
-                if (diff.type == .added) {
+                if (diff.type == .added || diff.type == .modified) {
                     if let username = diff.document.data()["username"] as? String {
-                        self.users += [username]
+                        if let locationCount = diff.document.data()["capturedLocationsCount"] as? Int {
+                            self.users.removeAll(where: { $0.0 == username })
+                            self.users += [(username, locationCount)]
+                        }
                     }
                 }
                 
@@ -60,7 +72,6 @@ class LeaderboardViewController: UITableViewController {
                 }
                 
             }
-            self.tableView.reloadData()
         }
     }
     
@@ -78,7 +89,10 @@ class LeaderboardViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         
-        cell.textLabel?.text = users[indexPath.row]
+        
+        let (username, count) = users[indexPath.row]
+        cell.textLabel?.text = username
+        cell.detailTextLabel?.text = String(count)
         
         return cell
     }
