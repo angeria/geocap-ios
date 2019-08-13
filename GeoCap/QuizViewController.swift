@@ -167,24 +167,29 @@ class QuizViewController: UIViewController {
     }
 
     // TODO: Make this more general for several cities
+    // TODO: Handle errors
+    // TODO: Retry?
     private func updateLocationOwner() {
         functions.httpsCallable("locationCaptured").call(["location": locationName]) { (result, error) in
             if let error = error as NSError? {
+                print("Error from called https function locationCaptured() in updateLocationOwner()")
                 if error.domain == FunctionsErrorDomain {
                     let code = FunctionsErrorCode(rawValue: error.code)
                     if let code = code {
                         switch code {
                         case .invalidArgument:
-                            print("here")
+                            break
+                        case .failedPrecondition:
+                            break
                         default:
                             break
                         }
                     }
                     let message = error.localizedDescription
+                    print("Message: \(message)")
                     if let details = error.userInfo[FunctionsErrorDetailsKey] {
-                        print("details: \(details)")
+                        print("Details: \(details)")
                     }
-                    print("message: \(message)")
                 }
                 // ...
             }
