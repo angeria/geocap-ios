@@ -176,9 +176,8 @@
                                     <constraint firstItem="o9L-qI-NsT" firstAttribute="height" secondItem="BFK-tV-XoW" secondAttribute="height" id="cYK-48-2gf"/>
                                 </constraints>
                             </stackView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
-                                <rect key="frame" x="16" y="631" width="343" height="3"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
+                                <rect key="frame" x="16" y="632" width="343" height="2"/>
                                 <color key="progressTintColor" red="0.60697394609451294" green="0.87294381856918335" blue="0.6579318642616272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </progressView>
                         </subviews>
@@ -186,11 +185,15 @@
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" id="2DU-63-3jQ"/>
+                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="G0l-cd-InB" secondAttribute="bottom" constant="32" id="5WE-iZ-gyZ"/>
+                            <constraint firstItem="G0l-cd-InB" firstAttribute="top" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="32" id="5fJ-Lf-IqC"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="8WB-hr-ywK"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="nWZ-6v-edE" secondAttribute="trailing" constant="16" id="LL5-7T-dUa"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="67" id="OrT-4t-OFq"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="16" id="QRS-T8-olZ"/>
+                            <constraint firstItem="G0l-cd-InB" firstAttribute="centerX" secondItem="Z6d-1K-Ooa" secondAttribute="centerX" id="faX-Pa-4W8"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="hEo-hZ-6Dj"/>
+                            <constraint firstItem="G0l-cd-InB" firstAttribute="width" secondItem="6IC-rL-MU1" secondAttribute="width" id="yc3-iI-mW2"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="6IC-rL-MU1" secondAttribute="trailing" constant="16" id="z3E-LJ-JDG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2g4-CM-phi"/>
