@@ -32,7 +32,10 @@ class QuizViewController: UIViewController {
     
     @IBOutlet weak var timerBar: UIProgressView! {
         didSet {
-            timerBar.transform = CGAffineTransform(scaleX: 1, y: 5)
+            timerBar.layer.cornerRadius = 5
+            timerBar.clipsToBounds = true
+            timerBar.layer.sublayers![1].cornerRadius = 5
+            timerBar.subviews[1].clipsToBounds = true
         }
     }
     
@@ -63,7 +66,6 @@ class QuizViewController: UIViewController {
     @IBAction func answerPressed(_ button: UIButton) {
         answerButtons.forEach() { $0.isEnabled = false }
         
-        // FIXME: Disabled check during debugging
         if button.titleLabel?.text == currentQuestion?.answer {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
@@ -171,6 +173,7 @@ class QuizViewController: UIViewController {
         }
     }
     
+    // TODO: Timer gets stuck at end
     private func startTimerBar() {
         timerBar.progress = 1
         timerBar.progressTintColor = UIColor.GeoCap.green
@@ -179,7 +182,7 @@ class QuizViewController: UIViewController {
             guard let self = self else { return }
             
             switch self.timerBar.progress {
-            case ...0:
+            case ..<0:
                 self.timerBarTimer?.invalidate()
             case ..<0.35:
                 self.timerBar.progressTintColor = UIColor.GeoCap.red
