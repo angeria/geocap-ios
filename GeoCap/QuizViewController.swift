@@ -30,6 +30,12 @@ class QuizViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var timerBar: UIProgressView! {
+        didSet {
+            timerBar.transform = CGAffineTransform(scaleX: 1, y: 4)
+        }
+    }
+    
     private lazy var db = Firestore.firestore()
     private lazy var functions = Functions.functions(region:"europe-west1")
     
@@ -37,6 +43,7 @@ class QuizViewController: UIViewController {
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
     private let numberOfQuestions = 3
+    private var timerBarTimer: Timer?
     
     // Dependency injection
     var locationName: String!
@@ -69,6 +76,7 @@ class QuizViewController: UIViewController {
             button.shake()
         }
         
+        timerBarTimer?.invalidate()
         nextQuestionTapRecognizer.isEnabled = true
     }
     
@@ -156,6 +164,26 @@ class QuizViewController: UIViewController {
             }
             
             resetButtons()
+            startTimerBar()
+        }
+    }
+    
+    private func startTimerBar() {
+        timerBar.progress = 1
+        timerBar.progressTintColor = UIColor.GeoCap.green
+        
+        timerBarTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
+            guard let self = self else { return }
+            
+            switch self.timerBar.progress {
+            case ...0:
+                self.timerBarTimer?.invalidate()
+            case ..<0.35:
+                self.timerBar.progressTintColor = UIColor.GeoCap.red
+                fallthrough
+            default:
+                self.timerBar.setProgress(self.timerBar.progress - 0.001, animated: true)
+            }
         }
     }
     
