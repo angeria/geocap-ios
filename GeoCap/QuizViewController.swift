@@ -32,7 +32,7 @@ class QuizViewController: UIViewController {
     
     @IBOutlet weak var timerBar: UIProgressView! {
         didSet {
-            timerBar.transform = CGAffineTransform(scaleX: 1, y: 4)
+            timerBar.transform = CGAffineTransform(scaleX: 1, y: 5)
         }
     }
     
