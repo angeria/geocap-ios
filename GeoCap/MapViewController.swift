@@ -162,6 +162,15 @@ class MapViewController: UIViewController {
         }
     }
     
+    private func presentNotInsideAreaAlert() {
+        let title = "Not Inside Area"
+        let message = "You have to be inside the area of the location to capture it"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+    
     // MARK: - User Location Authorization
     
     private let locationManager = CLLocationManager()
@@ -243,11 +252,10 @@ extension MapViewController: MKMapViewDelegate {
             if user(location: mapView.userLocation, isInside: annotation.overlay) {
                 performSegue(withIdentifier: "Show Quiz", sender: view)
             } else {
-                print("outside of area")
+                presentNotInsideAreaAlert()
             }
         }
     }
-    
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let location = locationToOverlay else { return MKOverlayRenderer(overlay: overlay) }
