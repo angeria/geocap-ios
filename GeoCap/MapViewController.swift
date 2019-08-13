@@ -157,8 +157,7 @@ class MapViewController: UIViewController {
             let circlePoint = circleRenderer.point(for: mapPoint)
             return circleRenderer.path.contains(circlePoint)
         default:
-            print("Unexpected overlay in user(location:, isInside:)")
-            return false
+            fatalError("Unexpected overlay in user(location:, isInside:)")
         }
     }
     
@@ -252,7 +251,9 @@ extension MapViewController: MKMapViewDelegate {
             if user(location: mapView.userLocation, isInside: annotation.overlay) {
                 performSegue(withIdentifier: "Show Quiz", sender: view)
             } else {
-                presentNotInsideAreaAlert()
+                performSegue(withIdentifier: "Show Quiz", sender: view)
+                // FIXME: Uncomment and remove line above
+//                presentNotInsideAreaAlert()
             }
         }
     }
@@ -297,10 +298,8 @@ extension MapViewController: MKMapViewDelegate {
             
             return renderer
         default:
-            break
+            fatalError("Unexpected overlay in mapView(rendererFor:)")
         }
-        
-        return MKOverlayRenderer(overlay: overlay)
     }
     
 }

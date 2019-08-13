@@ -176,6 +176,11 @@
                                     <constraint firstItem="o9L-qI-NsT" firstAttribute="height" secondItem="BFK-tV-XoW" secondAttribute="height" id="cYK-48-2gf"/>
                                 </constraints>
                             </stackView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
+                                <rect key="frame" x="16" y="631" width="343" height="3"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="progressTintColor" red="0.60697394609451294" green="0.87294381856918335" blue="0.6579318642616272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
@@ -196,6 +201,7 @@
                     <connections>
                         <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>
+                        <outlet property="timerBar" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
                         <outletCollection property="answerButtons" destination="Glb-p3-C4Y" collectionClass="NSMutableArray" id="lrt-f9-nap"/>
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
@@ -209,7 +215,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1711" y="-371"/>
+            <point key="canvasLocation" x="1709.5999999999999" y="-371.06446776611699"/>
         </scene>
         <!--Authorization-->
         <scene sceneID="5NX-5H-tK6">
@@ -236,7 +242,6 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="selectedImageTintColor" red="0.39461201429367065" green="0.71614712476730347" blue="0.96636945009231567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
