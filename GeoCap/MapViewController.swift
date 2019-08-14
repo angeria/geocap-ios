@@ -251,9 +251,9 @@ extension MapViewController: MKMapViewDelegate {
             if user(location: mapView.userLocation, isInside: annotation.overlay) {
                 performSegue(withIdentifier: "Show Quiz", sender: view)
             } else {
-                performSegue(withIdentifier: "Show Quiz", sender: view)
+//                performSegue(withIdentifier: "Show Quiz", sender: view)
                 // FIXME: Uncomment and remove line above
-//                presentNotInsideAreaAlert()
+                presentNotInsideAreaAlert()
             }
         }
     }
