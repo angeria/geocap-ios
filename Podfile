@@ -13,6 +13,8 @@ target 'GeoCap' do
 
   pod 'FirebaseUI/Auth'
   pod 'FirebaseUI/Email'
+  pod 'FirebaseUI/Facebook'
+  pod 'FirebaseUI/Google'
 
   target 'GeoCapTests' do
     inherit! :search_paths
