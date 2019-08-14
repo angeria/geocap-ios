@@ -15,7 +15,7 @@ import FirebaseUI
 class AuthViewController: UIViewController {
 
     private var authListener: AuthStateDidChangeListenerHandle?
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -45,15 +45,29 @@ class AuthViewController: UIViewController {
         let authUI = FUIAuth.defaultAuthUI()!
         authUI.delegate = self
         authUI.shouldHideCancelButton = true
-        authUI.providers = [FUIEmailAuth()]
+        authUI.providers = [FUIEmailAuth(), FUIFacebookAuth()]
         return authUI
     }()
     
+    // For Facebook and Google
+    func application(_ app: UIApplication, open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
+        if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
+            return true
+        }
+        // other URL handling goes here.
+        return false
+    }
+    
     // TODO: Make display name mandatory
+    // TODO: Extract string literals to constants
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
+        
         db.collection("users").document(user.uid).setData([
             "username": user.displayName!,
+            "capturedLocationsCount": 0
         ]) { error in
             if let error = error {
                 print("Error adding user: \(error)")
@@ -113,5 +127,5 @@ extension AuthViewController: FUIAuthDelegate {
             handleSignInError(error)
         }
     }
-    
+
 }
