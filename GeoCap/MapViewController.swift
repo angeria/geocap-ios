@@ -126,9 +126,9 @@ class MapViewController: UIViewController {
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.GeoCap.green
             
-            let image = UIImage(named: "marker-flag")!.withRenderingMode(.alwaysTemplate)
+            let image = UIImage(named: "callout-flag")!.withRenderingMode(.alwaysTemplate)
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+            imageView.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
             imageView.tintColor = UIColor.GeoCap.green
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
