@@ -39,8 +39,6 @@ class AuthViewController: UIViewController {
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
         }
-        
-        try? Auth.auth().signOut()
     }
     
     lazy var authUI: FUIAuth = {
@@ -109,9 +107,13 @@ class AuthViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let mapVC = segue.destination.contents as? MapViewController {
-            if let user = sender as? User {
-                mapVC.user = user
+        if let tabVC = segue.destination as? UITabBarController {
+            let mapIndex = 1
+            tabVC.selectedIndex = mapIndex
+            if let mapVC = tabVC.viewControllers?[mapIndex] as? MapViewController {
+                if let user = sender as? User {
+                    mapVC.user = user
+                }
             }
         }
     }

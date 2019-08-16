@@ -52,11 +52,10 @@ class MapViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        // Currently keeping map in memory all the time because it's the main view
+        // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
         // Uncomment this for proper deallocation according to delegate docs
         // mapView.delegate = nil
     }
-
     
     // MARK: - Annotations
     
