@@ -39,16 +39,19 @@ class AuthViewController: UIViewController {
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
         }
+        
+        try? Auth.auth().signOut()
     }
     
     lazy var authUI: FUIAuth = {
         let authUI = FUIAuth.defaultAuthUI()!
         authUI.delegate = self
         authUI.shouldHideCancelButton = true
-        authUI.providers = [FUIEmailAuth(), FUIFacebookAuth()]
+        authUI.providers = [FUIEmailAuth(), FUIFacebookAuth(), FUIGoogleAuth()]
         return authUI
     }()
     
+    // If Facebook login doesn't work properly, try activating shared keychain in Capabilites
     // For Facebook and Google
     func application(_ app: UIApplication, open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
