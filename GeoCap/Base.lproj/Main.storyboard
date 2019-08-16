@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -35,11 +34,42 @@
                     <connections>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="show" identifier="Show Quiz" id="MeF-YK-qBM"/>
+                        <segue destination="c1m-1H-Z4n" kind="show" identifier="Show Auth" id="NNV-mL-YGr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="871" y="-370"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="7HD-Cm-ajL">
+            <objects>
+                <viewController id="SrA-5C-Dgb" customClass="ProfileViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lzp-3I-8xh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gEq-cg-01V">
+                                <rect key="frame" x="126" y="85" width="123" height="74"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
+                                <state key="normal" title="Sign Out"/>
+                                <connections>
+                                    <action selector="signOutPressed:" destination="SrA-5C-Dgb" eventType="touchUpInside" id="3IV-6P-5Wc"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="fUE-k9-7Rq"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Profile" image="tab-bar-profile" selectedImage="tab-bar-profile" id="Ehp-tO-H9e"/>
+                    <connections>
+                        <segue destination="c1m-1H-Z4n" kind="show" identifier="Show Auth" id="oh5-Rn-dvH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ih4-Iv-N2g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="869.60000000000002" y="1093.4032983508246"/>
         </scene>
         <!--Leaderboard-->
         <scene sceneID="9Jm-Ku-p7v">
@@ -251,6 +281,7 @@
                         <color key="selectedImageTintColor" red="0.39461201429367065" green="0.71614712476730347" blue="0.96636945009231567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
+                        <segue destination="SrA-5C-Dgb" kind="relationship" relationship="viewControllers" id="5Ju-JU-sSG"/>
                         <segue destination="9pv-A4-QxB" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="e3c-V5-gWS" kind="relationship" relationship="viewControllers" id="xHN-xU-rW5"/>
                     </connections>
@@ -262,6 +293,10 @@
     </scenes>
     <resources>
         <image name="tab-bar-map" width="46" height="46"/>
+        <image name="tab-bar-profile" width="46" height="46"/>
         <image name="tab-bar-trophy" width="46" height="46"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="oh5-Rn-dvH"/>
+    </inferredMetricsTieBreakers>
 </document>

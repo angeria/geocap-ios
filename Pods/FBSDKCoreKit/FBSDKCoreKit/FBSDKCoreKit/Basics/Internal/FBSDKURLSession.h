@@ -18,18 +18,27 @@
 
 #import <Foundation/Foundation.h>
 
+#import "FBSDKURLSessionTask.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FBSDKRestrictiveDataFilterManager : NSObject
+@interface FBSDKURLSession : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
+@property (atomic, strong, nullable) NSURLSession *session;
+@property (nonatomic, weak, nullable) id<NSURLSessionDataDelegate> delegate;
+@property (nonatomic, retain, nullable) NSOperationQueue *delegateQueue;
 
-+ (void)updateFilters:(nullable NSDictionary<NSString *, id> *)restrictiveParams;
+- (instancetype)initWithDelegate:(id<NSURLSessionDataDelegate>)delegate
+                   delegateQueue:(NSOperationQueue *)delegateQueue;
 
-+ (void)processEvents:(NSMutableArray<NSDictionary<NSString *, id> *> *)events;
-+ (nullable NSDictionary<NSString *, id> *)processParameters:(nullable NSDictionary<NSString *, id> *)parameters
-                                                   eventName:(NSString *)eventName;
+- (void)executeURLRequest:(NSURLRequest *)request
+        completionHandler:(FBSDKURLSessionTaskBlock)handler;
+
+- (void)updateSessionWithBlock:(dispatch_block_t)block;
+
+- (void)invalidateAndCancel;
+
+- (BOOL)valid;
 
 @end
 

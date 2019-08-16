@@ -15,6 +15,7 @@
 		432DEDA722E1F28E00DFA074 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */; };
 		432DEDB222E1F28E00DFA074 /* GeoCapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DEDB122E1F28E00DFA074 /* GeoCapTests.swift */; };
 		432DEDBD22E1F28E00DFA074 /* GeoCapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */; };
+		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0268C22E314AF00A0C255 /* AuthViewController.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
@@ -59,6 +60,7 @@
 		432DEDB822E1F28E00DFA074 /* GeoCapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeoCapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCapUITests.swift; sourceTree = "<group>"; };
 		432DEDBE22E1F28E00DFA074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43615CAD23072E5F003FC839 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		43D0268C22E314AF00A0C255 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
+				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
 				43D7A12A22F2D49700552D2C /* Question.swift */,
@@ -442,6 +445,7 @@
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
+				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
 				43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */,
 				43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */,
 			);

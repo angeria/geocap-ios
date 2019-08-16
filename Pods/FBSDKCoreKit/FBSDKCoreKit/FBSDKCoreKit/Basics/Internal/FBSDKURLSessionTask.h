@@ -18,23 +18,28 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^FBSDKURLSessionTaskBlock)(NSError *error,
+typedef void (^FBSDKURLSessionTaskBlock)(NSData *responseData,
                                          NSURLResponse *response,
-                                         NSData *responseData)
+                                         NSError *error)
 NS_SWIFT_NAME(URLSessionTaskBlock);
 
 NS_SWIFT_NAME(URLSessionTask)
 @interface FBSDKURLSessionTask : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
+@property (nonatomic, strong) NSURLSessionTask *task;
+@property (atomic, readonly) NSURLSessionTaskState state;
+@property (nonatomic, strong, readonly) NSDate *requestStartDate;
+@property (nonatomic, copy) FBSDKURLSessionTaskBlock handler;
+@property (nonatomic, assign) uint64_t requestStartTime;
+@property (nonatomic, assign) NSUInteger loggerSerialNumber;
+
 + (instancetype)new NS_UNAVAILABLE;
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
                     fromSession:(NSURLSession *)session
-              completionHandler:(FBSDKURLSessionTaskBlock)handler
-NS_DESIGNATED_INITIALIZER;
+              completionHandler:(FBSDKURLSessionTaskBlock)handler;
 
-- (void)cancel;
 - (void)start;
+- (void)cancel;
 
 @end
