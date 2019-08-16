@@ -19,14 +19,16 @@ class AuthViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Beware that the closure might fire twice during initialization
+        // Sometimes the closure fires two times in a row  when a user is signed in
+        // First time with user as nil and second time with a user object
+        // To prevent segues colliding, currentUser is checked again synchronously
         authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
-            if auth.currentUser == nil {
+            if let user = user {
+                self?.performSegue(withIdentifier: "Show Map", sender: user)
+            } else if auth.currentUser == nil {
                 if let authViewController = self?.authUI.authViewController() {
                     self!.present(authViewController, animated: true)
                 }
-            } else {
-                self?.performSegue(withIdentifier: "Show Map", sender: user)
             }
         }
     }
