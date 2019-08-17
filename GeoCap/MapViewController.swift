@@ -27,7 +27,8 @@ class MapViewController: UIViewController {
         }
     }
     private lazy var db = Firestore.firestore()
-    // Currently not removed at all and constantly listening for updates on locations, even while map is not visible
+    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
+    // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
     var locationListener: ListenerRegistration?
     private var regionIsCenteredOnUserLocation = false
     // Dependency injection
@@ -103,7 +104,7 @@ class MapViewController: UIViewController {
     }
     
     // Should optimally be subclassed but I couldn't get it to work properly
-    // I wasn't able to cast the annotation to Location in the init()
+    // I wasn't able to cast the annotation to Location in the subclass init()
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
@@ -250,8 +251,6 @@ extension MapViewController: MKMapViewDelegate {
             if user(location: mapView.userLocation, isInside: annotation.overlay) {
                 performSegue(withIdentifier: "Show Quiz", sender: view)
             } else {
-//                performSegue(withIdentifier: "Show Quiz", sender: view)
-                // FIXME: Uncomment and remove line above
                 presentNotInsideAreaAlert()
             }
         }
