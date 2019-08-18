@@ -205,15 +205,21 @@ class QuizViewController: UIViewController {
     }
 
     private func updateLocationOwner(isRetry: Bool = false) {
-        functions.httpsCallable("locationCaptured").call(["location": locationName]) { (result, error) in
+        functions.httpsCallable("updateLocationOwner").call(["location": locationName!, "isRetry": isRetry]) { (result, error) in
             if let error = error as NSError? {
-                print("Error from called https function locationCaptured() in updateLocationOwner()")
+                print("Error from https function updateLocationOwner()")
                 if error.domain == FunctionsErrorDomain {
+                    let message = error.localizedDescription
+                    print("Message: \(message)")
+                    if let details = error.userInfo[FunctionsErrorDetailsKey] {
+                        print("Details: \(details)")
+                    }
                     let code = FunctionsErrorCode(rawValue: error.code)
                     if let code = code {
                         switch code {
                         case .internal:
                             if !isRetry {
+                                print("Retrying...")
                                 self.updateLocationOwner(isRetry: true)
                             }
                         case .invalidArgument:
@@ -223,11 +229,6 @@ class QuizViewController: UIViewController {
                         default:
                             break
                         }
-                    }
-                    let message = error.localizedDescription
-                    print("Message: \(message)")
-                    if let details = error.userInfo[FunctionsErrorDetailsKey] {
-                        print("Details: \(details)")
                     }
                 }
                 // ...
