@@ -14,6 +14,12 @@ import Firebase
 extension MapViewController {
     enum Constants {
         static let zoomLevel: CLLocationDistance = 2500
+        static let captureButtonWidth: Int = 90
+        static let captureButtonHeight = 50
+        static let calloutFlagHeight = 32
+        static let calloutFlagWidth = 32
+        static let overlayAlpha: CGFloat = 0.45
+        static let overlayLineWidth: CGFloat = 1
     }
 }
 
@@ -121,14 +127,14 @@ class MapViewController: UIViewController {
         captureButton.tintColor = .white
         captureButton.backgroundColor = UIColor.GeoCap.blue
         // TODO: Extract constants and adjust to different text sizes
-        captureButton.frame = CGRect(x: 0, y: 0, width: 90, height: 50)
+        captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
         
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.GeoCap.green
             
             let image = UIImage(named: "callout-flag")!.withRenderingMode(.alwaysTemplate)
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
             imageView.tintColor = UIColor.GeoCap.green
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
@@ -187,7 +193,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    // TODO: String localization
     private func presentLocationAccessDeniedAlert() {
         let title = "Location Services Off"
         let message = "Turn on location services in settings to allow GeoCap to determine your current location"
@@ -204,13 +209,19 @@ class MapViewController: UIViewController {
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if identifier == "Show Quiz", let annotationView = sender as? MKAnnotationView {
-            if annotationView.annotation?.title != nil {
-                return true
+        if identifier == "Show Quiz" {
+            if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
+                if annotationView.annotation?.title != nil {
+                    if user(location: mapView.userLocation, isInside: annotation.overlay) {
+                        return true
+                    } else {
+//                        presentNotInsideAreaAlert()
+                        // return false
+                        return true
+                    }
+                }
             }
-            print("Error in showing quiz: no location name")
         }
-        
         return false
     }
     
@@ -244,16 +255,10 @@ extension MapViewController: MKMapViewDelegate {
         return nil
     }
     
+    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         mapView.deselectAnnotation(view.annotation, animated: false)
-        
-        if let annotation = view.annotation as? Location {
-            if user(location: mapView.userLocation, isInside: annotation.overlay) {
-                performSegue(withIdentifier: "Show Quiz", sender: view)
-            } else {
-                presentNotInsideAreaAlert()
-            }
-        }
+        performSegue(withIdentifier: "Show Quiz", sender: view)
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -263,8 +268,8 @@ extension MapViewController: MKMapViewDelegate {
         switch overlay {
         case let polygon as MKPolygon:
             let renderer = MKPolygonRenderer(polygon: polygon)
-            renderer.alpha = 0.45
-            renderer.lineWidth = 1
+            renderer.alpha = Constants.overlayAlpha
+            renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
                 renderer.fillColor = UIColor.GeoCap.green
@@ -280,8 +285,8 @@ extension MapViewController: MKMapViewDelegate {
             return renderer
         case let circle as MKCircle:
             let renderer = MKCircleRenderer(circle: circle)
-            renderer.alpha = 0.45
-            renderer.lineWidth = 1
+            renderer.alpha = Constants.overlayAlpha
+            renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
                 renderer.fillColor = UIColor.GeoCap.green

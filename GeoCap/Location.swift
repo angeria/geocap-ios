@@ -10,6 +10,12 @@ import Foundation
 import Firebase
 import MapKit
 
+extension Location {
+    enum Constants {
+        static let circleOverlayRadius: CLLocationDistance = 50
+    }
+}
+
 class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
@@ -39,7 +45,7 @@ class Location: NSObject, MKAnnotation {
         if let coordinates = areaCoordinates {
             overlay = MKPolygon(coordinates: coordinates, count: coordinates.count)
         } else {
-            overlay = MKCircle(center: coordinate, radius: 50)
+            overlay = MKCircle(center: coordinate, radius: Constants.circleOverlayRadius)
         }
         
         super.init()
