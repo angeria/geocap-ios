@@ -187,7 +187,7 @@ class QuizViewController: UIViewController {
                 self.timerBar.progressTintColor = UIColor.GeoCap.red
                 fallthrough
             default:
-                self.timerBar.setProgress(self.timerBar.progress - 0.001, animated: true)
+                self.timerBar.setProgress(self.timerBar.progress - 0.0005, animated: true)
             }
         }
     }
