@@ -34,7 +34,6 @@
                     <connections>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="show" identifier="Show Quiz" id="MeF-YK-qBM"/>
-                        <segue destination="c1m-1H-Z4n" kind="show" identifier="Show Auth" id="NNV-mL-YGr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -105,8 +104,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Jonh Johnsson" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RWD-pg-QPG">
-                                            <rect key="frame" x="16" y="12" width="116" height="20.5"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Name Namesson" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RWD-pg-QPG">
+                                            <rect key="frame" x="16" y="12" width="130.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -296,7 +295,4 @@
         <image name="tab-bar-profile" width="46" height="46"/>
         <image name="tab-bar-trophy" width="46" height="46"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="oh5-Rn-dvH"/>
-    </inferredMetricsTieBreakers>
 </document>
