@@ -9,14 +9,12 @@
 import Foundation
 import UIKit
 
-// TODO: Change to original system fonts when iOS 13 is released
 extension UIColor {
     
     struct GeoCap {
         static let green = UIColor(rgb: 0x8cda98)
         static let blue = UIColor(rgb: 0x65b7f6)
         static let red = UIColor(rgb: 0xfc7066)
-        static let pink = UIColor(rgb: 0xfdfd96)
     }
     
     convenience init(red: Int, green: Int, blue: Int) {

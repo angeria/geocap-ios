@@ -236,7 +236,7 @@
                     <connections>
                         <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>
-                        <outlet property="timerBar" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
+                        <outlet property="timer" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
                         <outletCollection property="answerButtons" destination="Glb-p3-C4Y" collectionClass="NSMutableArray" id="lrt-f9-nap"/>
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>

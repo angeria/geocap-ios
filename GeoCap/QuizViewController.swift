@@ -9,9 +9,16 @@
 import UIKit
 import Firebase
 
+extension QuizViewController {
+    enum Constants {
+        static let largest64BitNumber = 9223372036854775807
+        static let maximalNumberOfQuestionFetchTries = 1
+        static let locationRandomArrayCount = 3
+        static let numberOfQuestions = 3
+    }
+}
+
 class QuizViewController: UIViewController {
-    
-    // TODO: Fonts
     
     @IBOutlet weak var questionLabel: UILabel! {
         didSet {
@@ -29,12 +36,12 @@ class QuizViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var timerBar: UIProgressView! {
+    @IBOutlet weak var timer: UIProgressView! {
         didSet {
-            timerBar.layer.cornerRadius = 5
-            timerBar.clipsToBounds = true
-            timerBar.layer.sublayers![1].cornerRadius = 5
-            timerBar.subviews[1].clipsToBounds = true
+            timer.layer.cornerRadius = 5
+            timer.clipsToBounds = true
+            timer.layer.sublayers![1].cornerRadius = 5
+            timer.subviews[1].clipsToBounds = true
         }
     }
     
@@ -44,7 +51,7 @@ class QuizViewController: UIViewController {
     private var questions = [Question]()
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
-    private let numberOfQuestions = 3
+    private let numberOfQuestions = Constants.numberOfQuestions
     private var timerBarTimer: Timer?
     
     // Dependency injection
@@ -87,14 +94,13 @@ class QuizViewController: UIViewController {
     // Currently questions are recieved in random specific sets, effective since it's just one request
     // Could be changed to fetch one question at a time which is more random but generates more reads
     //
-    // Every question in db has a 'random' object with three randomly generated 64 bit integers
+    // Every question in db has a 'random' object with randomly generated 64 bit integers
     private func fetchQuestions() {
         let questionsRef = db.collection("questions")
         let shouldFetchGreater = Bool.random()
-        let randomIndex = Int.random(in: 0...2)
+        let randomIndex = Int.random(in: 0..<Constants.locationRandomArrayCount)
         let fieldName = "random." + String(randomIndex)
-        // 64 bit range
-        let randomInt = Int.random(in: 0...9223372036854775807)
+        let randomInt = Int.random(in: 0...Constants.largest64BitNumber)
         var tries = 0
         
         // flow starts from switch at bottom
@@ -118,10 +124,10 @@ class QuizViewController: UIViewController {
                 // if it happens, fetch again once in other direction for remaining questions
                 let remaining = numberOfQuestions - questions.count
                 tries += 1
-                if tries < 2 {
+                if tries <= Constants.maximalNumberOfQuestionFetchTries {
                     fetch(greater: !shouldFetchGreater, amount: remaining)
                 } else {
-                    print("Warning: missing \(remaining) questions after two passes")
+                    print("Warning: missing \(remaining) questions after \(Constants.maximalNumberOfQuestionFetchTries) passes")
                     presentingViewController?.dismiss(animated: true, completion: nil)
                 }
             }
@@ -168,26 +174,25 @@ class QuizViewController: UIViewController {
             }
             
             resetButtons()
-            startTimerBar()
+            startTimer()
         }
     }
     
-    // TODO: Timer gets stuck at end
-    private func startTimerBar() {
-        timerBar.progress = 1
-        timerBar.progressTintColor = UIColor.GeoCap.green
+    private func startTimer() {
+        timer.progress = 1
+        timer.progressTintColor = UIColor.GeoCap.green
         
         timerBarTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
             guard let self = self else { return }
             
-            switch self.timerBar.progress {
+            switch self.timer.progress {
             case ..<0:
                 self.timerBarTimer?.invalidate()
             case ..<0.35:
-                self.timerBar.progressTintColor = UIColor.GeoCap.red
+                self.timer.progressTintColor = UIColor.GeoCap.red
                 fallthrough
             default:
-                self.timerBar.setProgress(self.timerBar.progress - 0.0005, animated: true)
+                self.timer.setProgress(self.timer.progress - 0.0005, animated: true)
             }
         }
     }
@@ -199,10 +204,7 @@ class QuizViewController: UIViewController {
         }
     }
 
-    // TODO: Make this more general for several cities
-    // TODO: Handle errors
-    // TODO: Retry?
-    private func updateLocationOwner() {
+    private func updateLocationOwner(isRetry: Bool = false) {
         functions.httpsCallable("locationCaptured").call(["location": locationName]) { (result, error) in
             if let error = error as NSError? {
                 print("Error from called https function locationCaptured() in updateLocationOwner()")
@@ -210,6 +212,10 @@ class QuizViewController: UIViewController {
                     let code = FunctionsErrorCode(rawValue: error.code)
                     if let code = code {
                         switch code {
+                        case .internal:
+                            if !isRetry {
+                                self.updateLocationOwner(isRetry: true)
+                            }
                         case .invalidArgument:
                             break
                         case .failedPrecondition:

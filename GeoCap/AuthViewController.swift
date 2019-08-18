@@ -10,8 +10,6 @@ import UIKit
 import Firebase
 import FirebaseUI
 
-// TODO: Customize sign up screen
-
 class AuthViewController: UIViewController {
 
     private var authListener: AuthStateDidChangeListenerHandle?
@@ -61,8 +59,6 @@ class AuthViewController: UIViewController {
         return false
     }
     
-    // TODO: Make display name mandatory
-    // TODO: Extract string literals to constants
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         
