@@ -1,0 +1,15 @@
+/* Class = "UILabel"; text = "Captured locations"; ObjectID = "8Mx-9u-3Gi"; */
+"8Mx-9u-3Gi.text" = "Tagna platser";
+
+/* Class = "UITabBarItem"; title = "Leaderboard"; ObjectID = "9zQ-09-F47"; */
+"9zQ-09-F47.title" = "Leaderboard";
+
+/* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
+"acW-dT-cKf.title" = "Karta";
+
+/* Class = "UITabBarItem"; title = "Profile"; ObjectID = "Ehp-tO-H9e"; */
+"Ehp-tO-H9e.title" = "Profil";
+
+/* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
+"gEq-cg-01V.normalTitle" = "Logga ut";
+

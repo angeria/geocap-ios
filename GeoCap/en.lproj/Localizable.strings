@@ -1,0 +1,32 @@
+
+/* Title of alert when sign-in failed */
+"alert-action-title-sign-in-failed" = "Sign-In Failed";
+/* Message of alert when sign-in failed */
+"alert-action-message-sign-in-failed" = "Something went wrong when signing in, please try again";
+
+
+/* Alert title when location services is off */
+"alert-title-location-services-off" = "Locations Services Off";
+/* Alert message when location services is off */
+"alert-message-location-services-off" = "Turn on location services in settings to allow GeoCap to determine your current location";
+/* Title of alert action for going to 'Settings' */
+"alert-action-title-settings" = "Settings";
+
+
+/* Title of alert when user isn't inside area */
+"alert-title-not-inside-area" = "Not Inside Area";
+/* Message of alert when user isn't inside area */
+"alert-message-not-inside-area" = "You have to be inside the area of the location to capture it";
+
+
+/* Title of alert action OK */
+"alert-action-title-OK" = "OK";
+
+
+/* Capture button on location callout view */
+"callout-button-capture" = "Capture";
+/* Callout subtitle with name of owner: Captured by ‰@{username} */
+"callout-subtitle-captured-by-username" = "Captured by %@";
+/* Callout subtitle when a location isn't captured yet */
+"callout-subtitle-not-captured-yet" = "Not captured yet";
+

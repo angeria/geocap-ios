@@ -123,7 +123,8 @@ class MapViewController: UIViewController {
         annotationView.subtitleVisibility = .hidden
         
         let captureButton = UIButton(type: .system)
-        captureButton.setTitle("Capture", for: .normal)
+        let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
+        captureButton.setTitle(title, for: .normal)
         captureButton.tintColor = .white
         captureButton.backgroundColor = UIColor.GeoCap.blue
         captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
@@ -167,10 +168,11 @@ class MapViewController: UIViewController {
     }
     
     private func presentNotInsideAreaAlert() {
-        let title = "Not Inside Area"
-        let message = "You have to be inside the area of the location to capture it"
+        let title = NSLocalizedString("alert-title-not-inside-area", comment: "Title of alert when user isn't inside area")
+        let message = NSLocalizedString("alert-message-not-inside-area", comment: "Message of alert when user isn't inside area")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
@@ -193,11 +195,13 @@ class MapViewController: UIViewController {
     }
     
     private func presentLocationAccessDeniedAlert() {
-        let title = "Location Services Off"
-        let message = "Turn on location services in settings to allow GeoCap to determine your current location"
+        let title = NSLocalizedString("alert-title-location-services-off", comment: "Alert title when location services is off")
+        let message = NSLocalizedString("alert-message-location-services-off", comment: "Alert message when location services is off")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        let settingsAction = UIAlertAction(title: "Settings", style: .default, handler: {action in
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        let settingsActionTitle = NSLocalizedString("alert-action-title-settings", comment: "Title of alert action for going to 'Settings'")
+        let settingsAction = UIAlertAction(title: settingsActionTitle, style: .default, handler: {action in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
         })
         alert.addAction(settingsAction)
@@ -208,14 +212,17 @@ class MapViewController: UIViewController {
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
+        
         if identifier == "Show Quiz" {
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
                 if annotationView.annotation?.title != nil {
                     if user(location: mapView.userLocation, isInside: annotation.overlay) {
                         return true
                     } else {
+                        // FIXME: Uncomment this and remove 'return true'
 //                        presentNotInsideAreaAlert()
-                        // return false
+//                        return false
                         return true
                     }
                 }
@@ -225,6 +232,8 @@ class MapViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
         if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
             if let locationName = annotationView.annotation?.title {
                 quizVC.locationName = locationName
@@ -256,8 +265,10 @@ extension MapViewController: MKMapViewDelegate {
     
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        mapView.deselectAnnotation(view.annotation, animated: false)
-        performSegue(withIdentifier: "Show Quiz", sender: view)
+        mapView.deselectAnnotation(view.annotation, animated: true)
+        if shouldPerformSegue(withIdentifier: "Show Quiz", sender: view) {
+            performSegue(withIdentifier: "Show Quiz", sender: view)
+        }
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
