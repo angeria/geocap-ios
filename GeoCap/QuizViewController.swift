@@ -26,11 +26,9 @@ class QuizViewController: UIViewController {
         }
     }
     
-    // TODO: Make buttons empty while loading actual answers
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
             answerButtons.forEach() {
-                $0.titleLabel?.text = nil
                 $0.layer.cornerRadius = 10
             }
         }
