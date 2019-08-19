@@ -126,7 +126,6 @@ class MapViewController: UIViewController {
         captureButton.setTitle("Capture", for: .normal)
         captureButton.tintColor = .white
         captureButton.backgroundColor = UIColor.GeoCap.blue
-        // TODO: Extract constants and adjust to different text sizes
         captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
         
         if annotation.isCapturedByUser {
