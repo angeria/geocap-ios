@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */; };
+		43109487230AC9020071F3A5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43109489230AC9020071F3A5 /* Localizable.strings */; };
 		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
@@ -46,6 +48,10 @@
 
 /* Begin PBXFileReference section */
 		1CB1574DE0F1D41ABC35D57A /* Pods-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		4308FD76230ADD7E000A8BD0 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		43109478230AA4FF0071F3A5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		43109488230AC9020071F3A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4310948A230AC9040071F3A5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +141,7 @@
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
+				43109489230AC9020071F3A5 /* Localizable.strings */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -142,6 +149,7 @@
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				432DEDA822E1F28E00DFA074 /* Info.plist */,
+				4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */,
 				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
 				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
 				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
@@ -290,6 +298,7 @@
 			knownRegions = (
 				en,
 				Base,
+				sv,
 			);
 			mainGroup = 432DED8E22E1F28D00DFA074;
 			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
@@ -308,6 +317,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43109487230AC9020071F3A5 /* Localizable.strings in Resources */,
+				4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */,
 				432DEDA722E1F28E00DFA074 /* LaunchScreen.storyboard in Resources */,
 				43F8CFEE22F8064000824778 /* GoogleService-Info.plist in Resources */,
 				432DEDA422E1F28E00DFA074 /* Assets.xcassets in Resources */,
@@ -483,10 +494,28 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4308FD76230ADD7E000A8BD0 /* sv */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		43109489230AC9020071F3A5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43109488230AC9020071F3A5 /* en */,
+				4310948A230AC9040071F3A5 /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		432DEDA022E1F28D00DFA074 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				432DEDA122E1F28D00DFA074 /* Base */,
+				43109478230AA4FF0071F3A5 /* sv */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -506,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -567,6 +597,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

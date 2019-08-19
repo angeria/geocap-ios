@@ -19,7 +19,7 @@ extension Location {
 class Location: NSObject, MKAnnotation {
     let name: String
     var title: String?
-    var subtitle: String? = "Not captured yet"
+    var subtitle: String? = NSLocalizedString("callout-subtitle-not-captured-yet", comment: "Callout subtitle when a location isn't captured yet")
     var owner: String?
     var isCapturedByUser = false
     // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
@@ -62,7 +62,8 @@ class Location: NSObject, MKAnnotation {
             subtitle = nil
         } else {
             isCapturedByUser = false
-            subtitle = "Captured by \(newOwner)"
+            let format = NSLocalizedString("callout-subtitle-captured-by-username", comment:"Callout subtitle with name of owner: Captured by ‰@{username}")
+            subtitle = String.localizedStringWithFormat(format, newOwner)
         }
     }
 }

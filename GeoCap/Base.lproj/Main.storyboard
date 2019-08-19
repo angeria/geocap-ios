@@ -252,10 +252,10 @@
             </objects>
             <point key="canvasLocation" x="1709.5999999999999" y="-371.06446776611699"/>
         </scene>
-        <!--Authorization-->
+        <!--Auth View Controller-->
         <scene sceneID="5NX-5H-tK6">
             <objects>
-                <viewController title="Authorization" id="c1m-1H-Z4n" customClass="AuthViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="c1m-1H-Z4n" customClass="AuthViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hRz-wW-AZZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -9,6 +9,18 @@
 import Foundation
 import UIKit
 
+extension String {
+    var localized: String {
+        return NSLocalizedString(self, comment: "")
+    }
+
+    func localized(with values: CVarArg...) -> String {
+        return String.init(format: NSLocalizedString(self, comment: ""), arguments: values)
+    }
+}
+
+
+
 extension UIColor {
     
     struct GeoCap {

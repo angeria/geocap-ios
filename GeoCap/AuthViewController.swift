@@ -94,10 +94,11 @@ class AuthViewController: UIViewController {
     }
     
     private func presentLoginErrorAlert() {
-        let title = "Sign In Failed"
-        let message = "Something went wrong when signing in, please try again"
+        let title = NSLocalizedString("alert-action-title-sign-in-failed", comment: "Title of alert when sign-in failed")
+        let message = NSLocalizedString("alert-action-message-sign-in-failed", comment: "Message of alert when sign-in failed")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
