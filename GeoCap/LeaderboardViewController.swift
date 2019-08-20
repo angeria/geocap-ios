@@ -13,22 +13,12 @@ class LeaderboardViewController: UITableViewController {
 
     private var userListener: ListenerRegistration?
     private lazy var db = Firestore.firestore()
+    private let user = Auth.auth().currentUser
     
-    var users = [(String, Int)]() {
-        didSet {
-            users.sort() { $0.1 > $1.1 }
-            tableView.reloadData()
-        }
-    }
+    var users = [(String, Int)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +33,8 @@ class LeaderboardViewController: UITableViewController {
         if let userListener = userListener {
             userListener.remove()
         }
+        
+        users.removeAll()
     }
     
     private func fetchUsers() {
@@ -54,45 +46,49 @@ class LeaderboardViewController: UITableViewController {
             
             guard let self = self else { return }
             snapshot.documentChanges.forEach { diff in
-                if (diff.type == .added || diff.type == .modified) {
-                    if let username = diff.document.data()["username"] as? String {
-                        if let locationCount = diff.document.data()["capturedLocationsCount"] as? Int {
-                            self.users.removeAll(where: { $0.0 == username })
-                            self.users += [(username, locationCount)]
-                        }
-                    }
+                guard let username = diff.document.data()["username"] as? String else { return }
+                guard let locationCount = diff.document.data()["capturedLocationsCount"] as? Int else { return }
+                
+                if (diff.type == .added) {
+                    print("added")
+                    self.users += [(username, locationCount)]
                 }
                 
                 if (diff.type == .modified) {
-                    // TODO:
+                    print("modified")
+                    if let index = self.users.firstIndex(where: { $0.0 == username }) {
+                        self.users[index].1 = locationCount
+                    }
                 }
                 
                 if (diff.type == .removed) {
-                    // TODO:
+                    print("removed")
+                    if let index = self.users.firstIndex(where: { $0.0 == username }) {
+                        self.users.remove(at: index)
+                    }
                 }
-                
             }
+            
+            self.users.sort() { $0.1 > $1.1 }
+            self.tableView.reloadData()
         }
     }
     
     // MARK: - Table view data source
 
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         
-        
         let (username, count) = users[indexPath.row]
-        cell.textLabel?.text = username
+        cell.textLabel?.text = "\(indexPath.row + 1). \(username)"
         cell.detailTextLabel?.text = String(count)
+        if username == user?.displayName {
+            cell.backgroundColor = UIColor.GeoCap.green.withAlphaComponent(0.20)
+        }
         
         return cell
     }
