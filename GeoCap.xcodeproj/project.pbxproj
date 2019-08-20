@@ -139,11 +139,11 @@
 			children = (
 				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
-				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
+				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				43D7A12A22F2D49700552D2C /* Question.swift */,
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
