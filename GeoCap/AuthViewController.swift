@@ -43,27 +43,43 @@ class AuthViewController: UIViewController {
         let authUI = FUIAuth.defaultAuthUI()!
         authUI.delegate = self
         authUI.shouldHideCancelButton = true
-        authUI.providers = [FUIEmailAuth(), FUIFacebookAuth(), FUIGoogleAuth()]
+        
+        var actionCodeSettings = ActionCodeSettings()
+        actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com/")
+        actionCodeSettings.handleCodeInApp = true
+        actionCodeSettings.setAndroidPackageName("se.geocap", installIfNotAvailable: false, minimumVersion: "12")
+    
+        let emailLinkProdvider = FUIEmailAuth.init(authAuthUI: authUI, signInMethod: EmailLinkAuthSignInMethod, forceSameDevice: true, allowNewEmailAccounts: true, requireDisplayName: true, actionCodeSetting: actionCodeSettings)
+        
+        authUI.providers = [FUIFacebookAuth(), FUIGoogleAuth(), emailLinkProdvider]
         return authUI
     }()
     
     // If Facebook login doesn't work properly, try activating shared keychain in Capabilites
     // For Facebook and Google
-    func application(_ app: UIApplication, open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
-        if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
-            return true
-        }
-        // other URL handling goes here.
-        return false
-    }
+    // This doesn't seem to be needed?
+//    func application(_ app: UIApplication, open url: URL,
+//                     options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+//        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
+//        if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
+//            return true
+//        }
+//        // other URL handling goes here.
+//        return false
+//    }
+
     
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         
+        guard let username = user.displayName else {
+            print("Login error: user.diplayName == nil")
+            presentLoginErrorAlert()
+            return
+        }
+        
         db.collection("users").document(user.uid).setData([
-            "username": user.displayName!,
+            "username": username,
             "capturedLocationsCount": 0
         ]) { error in
             if let error = error {
@@ -98,7 +114,9 @@ class AuthViewController: UIViewController {
         let message = NSLocalizedString("alert-action-message-sign-in-failed", comment: "Message of alert when sign-in failed")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
+            self?.present(self!.authUI.authViewController(), animated: true)
+        }
         alert.addAction(okAction)
         present(alert, animated: true)
     }
