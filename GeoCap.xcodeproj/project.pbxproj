@@ -141,7 +141,6 @@
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
-				43109489230AC9020071F3A5 /* Localizable.strings */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -150,6 +149,7 @@
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				432DEDA822E1F28E00DFA074 /* Info.plist */,
 				4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */,
+				43109489230AC9020071F3A5 /* Localizable.strings */,
 				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
 				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
 				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
@@ -277,6 +277,9 @@
 								enabled = 0;
 							};
 							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.SafariKeychain = {
 								enabled = 1;
 							};
 						};
