@@ -47,7 +47,7 @@
                     <connections>
                         <outlet property="locationFilter" destination="2Tx-Iz-jwz" id="XeT-gb-Ema"/>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
-                        <segue destination="XzZ-RX-21L" kind="show" identifier="Show Quiz" id="MeF-YK-qBM"/>
+                        <segue destination="XzZ-RX-21L" kind="presentation" identifier="Show Quiz" id="MeF-YK-qBM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -157,14 +157,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="A portrait that comically exaggerates a person's physical traits is called a what?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
-                                <rect key="frame" x="16" y="64" width="343" height="216"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="A portrait that comically exaggerates a person's physical traits is called a what?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
+                                <rect key="frame" x="16" y="20" width="343" height="216"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6IC-rL-MU1">
-                                <rect key="frame" x="16" y="296" width="343" height="348"/>
+                                <rect key="frame" x="16" y="252" width="343" height="348"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="75"/>
@@ -222,7 +222,7 @@
                                 </constraints>
                             </stackView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
-                                <rect key="frame" x="16" y="672" width="343" height="10"/>
+                                <rect key="frame" x="16" y="628" width="343" height="10"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="Xgj-TH-8fx"/>
                                 </constraints>
