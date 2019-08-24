@@ -103,9 +103,11 @@ class AuthViewController: UIViewController {
         if let tabVC = segue.destination as? UITabBarController {
             let mapIndex = 1
             tabVC.selectedIndex = mapIndex
-            if let mapVC = tabVC.viewControllers?[mapIndex] as? MapViewController {
-                if let user = sender as? User {
-                    mapVC.user = user
+            if let navVC = tabVC.viewControllers?[mapIndex] as? UINavigationController {
+                if let mapVC = navVC.visibleViewController as? MapViewController {
+                    if let user = sender as? User {
+                        mapVC.user = user
+                    }
                 }
             }
         }
