@@ -24,12 +24,16 @@ extension MapViewController {
 }
 
 class MapViewController: UIViewController {
-
+    
+    @IBOutlet var userTrackingButton: MKUserTrackingButton!
+    
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
             mapView.mapType = .mutedStandard
             mapView.showsUserLocation = true
+            // TODO: Keep compass
+            mapView.showsCompass = false
         }
     }
     private lazy var db = Firestore.firestore()
@@ -44,10 +48,12 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
-        fetchLocations()
+        fetchLocations(type: .building)
+        
+        setupUserTrackingButton()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -64,40 +70,90 @@ class MapViewController: UIViewController {
         // mapView.delegate = nil
     }
     
+    // MARK: - User Location Button
+    
+    func setupUserTrackingButton() {
+        let button = MKUserTrackingButton(mapView: mapView)
+        button.layer.backgroundColor = UIColor(white: 1, alpha: 0.8).cgColor
+        button.layer.cornerRadius = 5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        mapView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
+            button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
+        ])
+    }
+    
+    // MARK: - Segmented Control (location filter)
+    
+    @IBOutlet weak var locationFilter: UISegmentedControl!
+    
+    @IBAction func locationFilter(_ sender: UISegmentedControl) {
+        clearMap()
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            fetchLocations(type: .building)
+        case 1:
+            fetchLocations(type: .area)
+        default:
+            fatalError("Unexpected segment index in locationFilter()")
+        }
+    }
+    
+    
     // MARK: - Annotations
     
-    private func fetchLocations() {
-        locationListener = db.collection("cities").document("uppsala").collection("locations").addSnapshotListener { [weak self] querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                print("Error fetching locations: \(error!)")
-                return
-            }
-            
-            snapshot.documentChanges.forEach { diff in
-                guard let self = self else { return }
-                guard let newAnnotation = Location(data: diff.document.data(), username: self.user.displayName!) else { return }
-                
-                if (diff.type == .added) {
-                    self.mapView.addAnnotation(newAnnotation)
-                    self.addLocationOverlay(newAnnotation)
+    enum LocationType: String {
+        case building
+        case area
+    }
+    
+    private func clearMap() {
+        let annotations = mapView.annotations
+        let overlays = mapView.overlays
+        mapView.removeAnnotations(annotations)
+        mapView.removeOverlays(overlays)
+    }
+    
+    private func fetchLocations(type: LocationType) {
+        
+        locationListener = db.collection("cities")
+            .document("uppsala")
+            .collection("locations")
+            .whereField("type", isEqualTo: type.rawValue)
+            .addSnapshotListener { [weak self] querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error fetching locations: \(error!)")
+                    return
                 }
                 
-                if (diff.type == .modified) {
-                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
-                        self.mapView.removeAnnotation(oldAnnotation)
-                        self.mapView.removeOverlay(oldAnnotation.overlay)
+                snapshot.documentChanges.forEach { diff in
+                    guard let self = self else { return }
+                    guard let newAnnotation = Location(data: diff.document.data(), username: self.user.displayName!) else { return }
+                    
+                    if (diff.type == .added) {
                         self.mapView.addAnnotation(newAnnotation)
                         self.addLocationOverlay(newAnnotation)
                     }
-                }
-                
-                if (diff.type == .removed) {
-                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
-                        self.mapView.removeOverlay(oldAnnotation.overlay)
-                        self.mapView.removeAnnotation(oldAnnotation)
+                    
+                    if (diff.type == .modified) {
+                        if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                            self.mapView.removeAnnotation(oldAnnotation)
+                            self.mapView.removeOverlay(oldAnnotation.overlay)
+                            self.mapView.addAnnotation(newAnnotation)
+                            self.addLocationOverlay(newAnnotation)
+                        }
+                    }
+                    
+                    if (diff.type == .removed) {
+                        if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                            self.mapView.removeOverlay(oldAnnotation.overlay)
+                            self.mapView.removeAnnotation(oldAnnotation)
+                        }
                     }
                 }
-            }
         }
     }
     
@@ -108,12 +164,15 @@ class MapViewController: UIViewController {
         mapView.addOverlay(location.overlay)
         locationToOverlay = nil
     }
-    
+
     // Should optimally be subclassed but I couldn't get it to work properly
     // I wasn't able to cast the annotation to Location in the subclass init()
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
+        
+        annotationView.clusteringIdentifier = "location"
+        annotationView.displayPriority = .defaultLow
         
         annotationView.glyphImage = UIImage(named: "marker-flag")
         annotationView.glyphTintColor = .white
@@ -256,8 +315,12 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
         
-        if let annotation = annotation as? Location {
-            return setupLocationAnnotationView(for: annotation, on: mapView)
+        if let locationAnnotation = annotation as? Location {
+            return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
+        } else if let clusterAnnotation = annotation as? MKClusterAnnotation {
+            let clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier, for: clusterAnnotation) as! MKMarkerAnnotationView
+            clusterView.markerTintColor = UIColor.GeoCap.blue
+            return clusterView
         }
         
         return nil
