@@ -50,19 +50,16 @@ class LeaderboardViewController: UITableViewController {
                 guard let locationCount = diff.document.data()["capturedLocationsCount"] as? Int else { return }
                 
                 if (diff.type == .added) {
-                    print("added")
                     self.users += [(username, locationCount)]
                 }
                 
                 if (diff.type == .modified) {
-                    print("modified")
                     if let index = self.users.firstIndex(where: { $0.0 == username }) {
                         self.users[index].1 = locationCount
                     }
                 }
                 
                 if (diff.type == .removed) {
-                    print("removed")
                     if let index = self.users.firstIndex(where: { $0.0 == username }) {
                         self.users.remove(at: index)
                     }
@@ -83,12 +80,11 @@ class LeaderboardViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         
+        cell.backgroundColor = .white
         let (username, count) = users[indexPath.row]
         cell.textLabel?.text = "\(indexPath.row + 1). \(username)"
         cell.detailTextLabel?.text = String(count)
-        if username == user?.displayName {
-            cell.backgroundColor = UIColor.GeoCap.green.withAlphaComponent(0.20)
-        }
+        cell.backgroundColor = (username == user?.displayName) ? UIColor.GeoCap.green.withAlphaComponent(0.20) : .white
         
         return cell
     }
