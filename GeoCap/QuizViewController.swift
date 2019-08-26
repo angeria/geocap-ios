@@ -204,7 +204,10 @@ class QuizViewController: UIViewController {
 
     // I'm not 100% sure that not having [weak self] in the closure doesn't cause a retention cycle
     private func updateLocationOwner(isRetry: Bool = false) {
-        functions.httpsCallable("updateLocationOwner").call(["location": locationName!, "isRetry": isRetry]) { (result, error) in
+        // Sending username as an argument since 'context.auth.token.name' was unreliable in the cloud function
+        guard let username = Auth.auth().currentUser?.displayName else { print("Error in updateLocationOwner: no username"); return }
+        
+        functions.httpsCallable("updateLocationOwner").call(["location": locationName!, "username": username, "isRetry": isRetry]) { (result, error) in
             if let error = error as NSError? {
                 print("Error from https function updateLocationOwner()")
                 print("Message: \(error.localizedDescription)")
