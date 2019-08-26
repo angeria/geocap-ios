@@ -57,8 +57,11 @@ class AuthViewController: UIViewController {
         }
         
         db.collection("users").document(user.uid).setData([
+            "uid": user.uid,
             "username": username,
-            "capturedLocationsCount": 0
+            "capturedLocations": [],
+            "capturedLocationsCount": 0,
+            "latestEventId": ""
         ]) { error in
             if let error = error {
                 print("Error adding user: \(error)")
