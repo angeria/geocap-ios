@@ -279,10 +279,8 @@ class MapViewController: UIViewController {
                     if user(location: mapView.userLocation, isInside: annotation.overlay) {
                         return true
                     } else {
-                        // FIXME: Uncomment this and remove 'return true'
-//                        presentNotInsideAreaAlert()
-//                        return false
-                        return true
+                        presentNotInsideAreaAlert()
+                        return false
                     }
                 }
             }
