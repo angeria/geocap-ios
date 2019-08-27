@@ -47,12 +47,14 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
         fetchLocations(type: .building)
         
         setupUserTrackingButton()
+        
+        setupNotificationToken()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,6 +84,29 @@ class MapViewController: UIViewController {
             button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
             button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
         ])
+    }
+    
+    // MARK: - Notifications
+    
+    private func setupNotificationToken() {
+        InstanceID.instanceID().instanceID { (result, error) in
+            if let error = error {
+                print("Error fetching remote instance ID: \(error)")
+            } else if let result = result {
+                let notificationToken = result.token
+                let userDefaults = UserDefaults.standard
+                guard notificationToken != userDefaults.string(forKey: "notificationToken") else { return }
+                
+                self.db.collection("users").document(self.user.uid).updateData(["notificationToken": notificationToken]) { error in
+                    if let error = error {
+                        print("Error setting notification token for user: \(error)")
+                    } else {
+                        print("Set notification token '\(notificationToken)' for user with ID: \(self.user.uid)")
+                        userDefaults.set(notificationToken, forKey: "notificationToken")
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - Segmented Control (location filter)

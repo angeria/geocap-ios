@@ -302,6 +302,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Copyright 2019 Google
 
+## FirebaseAnalytics
+
+Copyright 2019 Google
+
 ## FirebaseAnalyticsInterop
 
 
@@ -2773,6 +2777,10 @@ Copyright 2019 Google
    See the License for the specific language governing permissions and
    limitations under the License.
 
+
+## GoogleAppMeasurement
+
+Copyright 2019 Google
 
 ## GoogleDataTransport
 
