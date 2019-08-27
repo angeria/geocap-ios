@@ -51,14 +51,19 @@ class QuizViewController: UIViewController {
     private var correctAnswersCount = 0
     private let numberOfQuestions = Constants.numberOfQuestions
     private var timerBarTimer: Timer?
+    private var quizFailed = false
     
     // Dependency injection
     var locationName: String!
     
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
-        showNextQuestion()
-        nextQuestionTapRecognizer.isEnabled = false
+        if quizFailed || questions.isEmpty {
+            presentingViewController?.dismiss(animated: true, completion: nil)
+        } else {
+            showNextQuestion()
+            nextQuestionTapRecognizer.isEnabled = false
+        }
     }
     
     override func viewDidLoad() {
@@ -83,6 +88,8 @@ class QuizViewController: UIViewController {
             
             let correctAnswerButton = answerButtons.first() { $0.titleLabel?.text == currentQuestion?.answer }
             correctAnswerButton?.backgroundColor = UIColor.GeoCap.green
+            
+            quizFailed = true
         }
         
         timerBarTimer?.invalidate()
@@ -160,20 +167,16 @@ class QuizViewController: UIViewController {
     }
 
     private func showNextQuestion() {
-        if questions.isEmpty {
-            presentingViewController?.dismiss(animated: true, completion: nil)
-        } else {
-            currentQuestion = questions.removeFirst()
-            
-            questionLabel.text = currentQuestion!.question
-            let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
-            for (i, alternative) in alternatives.enumerated() {
-                self.answerButtons[i].setTitle(alternative, for: .normal)
-            }
-            
-            resetButtons()
-            startTimer()
+        currentQuestion = questions.removeFirst()
+        
+        questionLabel.text = currentQuestion!.question
+        let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
+        for (i, alternative) in alternatives.enumerated() {
+            self.answerButtons[i].setTitle(alternative, for: .normal)
         }
+        
+        resetButtons()
+        startTimer()
     }
     
     private func startTimer() {
