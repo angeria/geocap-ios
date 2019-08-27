@@ -27,6 +27,7 @@ extension UIColor {
         static let green = UIColor(rgb: 0x8cda98)
         static let blue = UIColor(rgb: 0x65b7f6)
         static let red = UIColor(rgb: 0xfc7066)
+        static let purple = UIColor(rgb: 0xb19cd9)
     }
     
     convenience init(red: Int, green: Int, blue: Int) {

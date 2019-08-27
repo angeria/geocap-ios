@@ -84,7 +84,7 @@ class LeaderboardViewController: UITableViewController {
         let (username, count) = users[indexPath.row]
         cell.textLabel?.text = "\(indexPath.row + 1). \(username)"
         cell.detailTextLabel?.text = String(count)
-        cell.backgroundColor = (username == user?.displayName) ? UIColor.GeoCap.green.withAlphaComponent(0.20) : .white
+        cell.backgroundColor = (username == user?.displayName) ? UIColor.GeoCap.purple.withAlphaComponent(0.20) : .white
         
         return cell
     }

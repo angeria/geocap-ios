@@ -189,12 +189,12 @@ class MapViewController: UIViewController {
         captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
         
         if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.GeoCap.green
+            annotationView.markerTintColor = UIColor.GeoCap.purple
             
             let image = UIImage(named: "callout-flag")!.withRenderingMode(.alwaysTemplate)
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
-            imageView.tintColor = UIColor.GeoCap.green
+            imageView.tintColor = UIColor.GeoCap.purple
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
             annotationView.markerTintColor = UIColor.GeoCap.blue
@@ -345,8 +345,8 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.GeoCap.green
-                renderer.strokeColor = UIColor.GeoCap.green
+                renderer.fillColor = UIColor.GeoCap.purple
+                renderer.strokeColor = UIColor.GeoCap.purple
             } else if location.owner == nil {
                 renderer.fillColor = UIColor.GeoCap.blue
                 renderer.strokeColor = UIColor.GeoCap.blue
@@ -362,8 +362,8 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.GeoCap.green
-                renderer.strokeColor = UIColor.GeoCap.green
+                renderer.fillColor = UIColor.GeoCap.purple
+                renderer.strokeColor = UIColor.GeoCap.purple
             } else if location.owner == nil {
                 renderer.fillColor = UIColor.GeoCap.blue
                 renderer.strokeColor = UIColor.GeoCap.blue
