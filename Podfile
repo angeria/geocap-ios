@@ -10,6 +10,7 @@ target 'GeoCap' do
 
   pod 'Firebase/Firestore'
   pod 'Firebase/Functions'
+  pod 'Firebase/Messaging'
 
   pod 'FirebaseUI/Auth'
   pod 'FirebaseUI/Email'

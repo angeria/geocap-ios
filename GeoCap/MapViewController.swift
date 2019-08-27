@@ -32,7 +32,6 @@ class MapViewController: UIViewController {
             mapView.delegate = self
             mapView.mapType = .mutedStandard
             mapView.showsUserLocation = true
-            // TODO: Keep compass
             mapView.showsCompass = false
         }
     }
