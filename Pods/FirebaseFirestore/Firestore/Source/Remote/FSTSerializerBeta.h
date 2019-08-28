@@ -21,6 +21,7 @@
 
 #include "Firestore/core/include/firebase/firestore/timestamp.h"
 #include "Firestore/core/src/firebase/firestore/core/field_filter.h"
+#include "Firestore/core/src/firebase/firestore/core/query.h"
 #include "Firestore/core/src/firebase/firestore/model/database_id.h"
 #include "Firestore/core/src/firebase/firestore/model/document_key.h"
 #include "Firestore/core/src/firebase/firestore/model/field_mask.h"
@@ -34,8 +35,6 @@
 @class FSTMutation;
 @class FSTMutationBatch;
 @class FSTMutationResult;
-@class FSTObjectValue;
-@class FSTQuery;
 @class FSTQueryData;
 
 @class GCFSBatchGetDocumentsResponse;
@@ -116,15 +115,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (GCFSTarget *)encodedTarget:(FSTQueryData *)queryData;
 
-- (GCFSTarget_DocumentsTarget *)encodedDocumentsTarget:(FSTQuery *)query;
-- (FSTQuery *)decodedQueryFromDocumentsTarget:(GCFSTarget_DocumentsTarget *)target;
+- (GCFSTarget_DocumentsTarget *)encodedDocumentsTarget:(const core::Query &)query;
+- (core::Query)decodedQueryFromDocumentsTarget:(GCFSTarget_DocumentsTarget *)target;
 
-- (GCFSTarget_QueryTarget *)encodedQueryTarget:(FSTQuery *)query;
-- (FSTQuery *)decodedQueryFromQueryTarget:(GCFSTarget_QueryTarget *)target;
+- (GCFSTarget_QueryTarget *)encodedQueryTarget:(const core::Query &)query;
+- (core::Query)decodedQueryFromQueryTarget:(GCFSTarget_QueryTarget *)target;
 
 - (GCFSStructuredQuery_Filter *)encodedUnaryOrFieldFilter:(const core::FieldFilter &)filter;
-- (std::shared_ptr<core::FieldFilter>)decodedFieldFilter:(GCFSStructuredQuery_FieldFilter *)proto;
-- (std::shared_ptr<core::FieldFilter>)decodedUnaryFilter:(GCFSStructuredQuery_UnaryFilter *)proto;
+- (std::shared_ptr<const core::FieldFilter>)decodedFieldFilter:
+    (GCFSStructuredQuery_FieldFilter *)proto;
+- (std::shared_ptr<const core::FieldFilter>)decodedUnaryFilter:
+    (GCFSStructuredQuery_UnaryFilter *)proto;
 
 - (std::unique_ptr<remote::WatchChange>)decodedWatchChange:(GCFSListenResponse *)watchChange;
 - (model::SnapshotVersion)versionFromListenResponse:(GCFSListenResponse *)watchChange;
@@ -133,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
                                         key:(const model::DocumentKey &)key;
 
 /**
- * Encodes an FSTObjectValue into a dictionary.
+ * Encodes an ObjectValue into a dictionary.
  * @return a new dictionary that can be assigned to a field in another proto.
  */
 - (NSMutableDictionary<NSString *, GCFSValue *> *)encodedFields:(const model::ObjectValue &)value;
