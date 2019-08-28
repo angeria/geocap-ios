@@ -13,7 +13,6 @@ class LeaderboardViewController: UITableViewController {
 
     private var userListener: ListenerRegistration?
     private lazy var db = Firestore.firestore()
-    private let user = Auth.auth().currentUser
     
     var users = [(String, Int)]()
     
@@ -84,7 +83,7 @@ class LeaderboardViewController: UITableViewController {
         let (username, count) = users[indexPath.row]
         cell.textLabel?.text = "\(indexPath.row + 1). \(username)"
         cell.detailTextLabel?.text = String(count)
-        cell.backgroundColor = (username == user?.displayName) ? UIColor.GeoCap.purple.withAlphaComponent(0.20) : .white
+        cell.backgroundColor = (username == Auth.auth().currentUser?.displayName) ? UIColor.GeoCap.purple.withAlphaComponent(0.20) : .white
         
         return cell
     }

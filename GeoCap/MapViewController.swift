@@ -35,13 +35,17 @@ class MapViewController: UIViewController {
             mapView.showsCompass = false
         }
     }
+    
     private lazy var db = Firestore.firestore()
     // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
     // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
     var locationListener: ListenerRegistration?
+    // Currently not removed at all and constantly listening for auth state updates
+    // Makes it possible to notice sign-out event in profile view and then present auth view
+    // Also prepares the map in the background after the user signed in the auth view
+    var authListener: AuthStateDidChangeListenerHandle?
+    
     private var regionIsCenteredOnUserLocation = false
-    // Dependency injection
-    var user: User!
     
     // MARK: - Life Cycle
     
@@ -50,10 +54,28 @@ class MapViewController: UIViewController {
         
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
-        fetchLocations(type: .building)
+        setupAuthListener()
         
         setupUserTrackingButton()
-        
+    }
+    
+    private func setupAuthListener() {
+        authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
+            if let user = Auth.auth().currentUser {
+                // TODO: Remove this when display name has been made mandatory
+                guard user.displayName != "", user.displayName != nil else { return }
+                self?.setupAfterUserSignedIn()
+            } else {
+                let sb = UIStoryboard(name: "Main", bundle: .main)
+                let authVC = sb.instantiateViewController(withIdentifier: "Auth")
+                self?.tabBarController?.present(authVC, animated: true)
+            }
+        }
+    }
+    
+    private func setupAfterUserSignedIn() {
+        tabBarController?.selectedIndex = 1
+        fetchLocations(type: .building)
         setupNotificationToken()
     }
     
@@ -65,6 +87,12 @@ class MapViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
+        // Auth listener is kept in memory all the time
+        // Uncomment this to deallocate it
+        // if Auth.auth().currentUser == nil {
+        //     present(authUI.authViewController(), animated: true)
+        // }
         
         // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
         // Uncomment this for proper deallocation according to delegate docs
@@ -95,13 +123,13 @@ class MapViewController: UIViewController {
             } else if let result = result {
                 let notificationToken = result.token
                 let userDefaults = UserDefaults.standard
+                guard let uid = Auth.auth().currentUser?.uid else { return }
                 guard notificationToken != userDefaults.string(forKey: "notificationToken") else { return }
                 
-                self.db.collection("users").document(self.user.uid).updateData(["notificationToken": notificationToken]) { error in
+                self.db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         print("Error setting notification token for user: \(error)")
                     } else {
-                        print("Set notification token '\(notificationToken)' for user with ID: \(self.user.uid)")
                         userDefaults.set(notificationToken, forKey: "notificationToken")
                     }
                 }
@@ -152,10 +180,11 @@ class MapViewController: UIViewController {
                     print("Error fetching locations: \(error!)")
                     return
                 }
+                guard let username = Auth.auth().currentUser?.displayName else { return }
                 
                 snapshot.documentChanges.forEach { diff in
                     guard let self = self else { return }
-                    guard let newAnnotation = Location(data: diff.document.data(), username: self.user.displayName!) else { return }
+                    guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
                     
                     if (diff.type == .added) {
                         self.mapView.addAnnotation(newAnnotation)

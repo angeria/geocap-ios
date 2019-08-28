@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="c1m-1H-Z4n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -77,7 +77,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="tab-bar-profile" selectedImage="tab-bar-profile" id="Ehp-tO-H9e"/>
                     <connections>
-                        <segue destination="c1m-1H-Z4n" kind="show" identifier="Show Auth" id="oh5-Rn-dvH"/>
+                        <outlet property="signOutButton" destination="gEq-cg-01V" id="HRI-1t-pdl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ih4-Iv-N2g" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -271,20 +271,17 @@
         <!--Auth View Controller-->
         <scene sceneID="5NX-5H-tK6">
             <objects>
-                <viewController id="c1m-1H-Z4n" customClass="AuthViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Auth" id="c1m-1H-Z4n" customClass="AuthViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hRz-wW-AZZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="WDA-Zx-Z6T"/>
                     </view>
-                    <connections>
-                        <segue destination="49e-Tb-3d3" kind="show" identifier="Show Map" id="lbu-q1-9ke"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-801" y="0.0"/>
+            <point key="canvasLocation" x="-882" y="0.0"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -295,10 +292,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="selectedImageTintColor" red="0.39461201429367065" green="0.71614712476730347" blue="0.96636945009231567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="selectedIndex">
+                            <integer key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
-                        <segue destination="SrA-5C-Dgb" kind="relationship" relationship="viewControllers" id="5Ju-JU-sSG"/>
+                        <segue destination="SrA-5C-Dgb" kind="relationship" relationship="viewControllers" id="Qvh-hd-v9z"/>
                         <segue destination="tfY-gB-Qr2" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
-                        <segue destination="e3c-V5-gWS" kind="relationship" relationship="viewControllers" id="xHN-xU-rW5"/>
+                        <segue destination="e3c-V5-gWS" kind="relationship" relationship="viewControllers" id="UXO-OJ-yp8"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>

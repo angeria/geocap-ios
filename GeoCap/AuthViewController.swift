@@ -12,30 +12,11 @@ import FirebaseUI
 
 class AuthViewController: UIViewController {
 
-    private var authListener: AuthStateDidChangeListenerHandle?
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Sometimes the closure fires two times in a row  when a user is signed in
-        // First time with user as nil and second time with a user object
-        // To prevent segues colliding, currentUser is checked again synchronously
-        authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
-            if let user = user {
-                self?.performSegue(withIdentifier: "Show Map", sender: user)
-            } else if auth.currentUser == nil {
-                if let authViewController = self?.authUI.authViewController() {
-                    self!.present(authViewController, animated: true)
-                }
-            }
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if authListener != nil {
-            Auth.auth().removeStateDidChangeListener(authListener!)
+        if Auth.auth().currentUser == nil {
+            present(authUI.authViewController(), animated: true)
         }
     }
     
@@ -50,24 +31,20 @@ class AuthViewController: UIViewController {
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         
-        guard let username = user.displayName else {
-            print("Login error: user.diplayName == nil")
-            presentLoginErrorAlert()
-            return
-        }
-        
         db.collection("users").document(user.uid).setData([
             "uid": user.uid,
-            "username": username,
+            // FIXME: Remove force unwrap
+            "username": user.displayName!,
             "capturedLocations": [],
             "capturedLocationsCount": 0,
             "latestEventId": "",
             "notificationToken": ""
-        ]) { error in
+        ]) { [weak self] error in
             if let error = error {
                 print("Error adding user: \(error)")
+                self?.presentLoginErrorAlert()
             } else {
-                print("User added with ID: \(user.uid)")
+                self?.presentingViewController?.dismiss(animated: true)
             }
         }
     }
@@ -103,20 +80,6 @@ class AuthViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let tabVC = segue.destination as? UITabBarController {
-            let mapIndex = 1
-            tabVC.selectedIndex = mapIndex
-            if let navVC = tabVC.viewControllers?[mapIndex] as? UINavigationController {
-                if let mapVC = navVC.visibleViewController as? MapViewController {
-                    if let user = sender as? User {
-                        mapVC.user = user
-                    }
-                }
-            }
-        }
-    }
-    
 }
 
 extension AuthViewController: FUIAuthDelegate {
@@ -124,8 +87,17 @@ extension AuthViewController: FUIAuthDelegate {
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         switch error {
         case .none:
-            if let user = authDataResult?.user, authDataResult?.additionalUserInfo?.isNewUser == true {
+            guard let user = authDataResult?.user else { presentLoginErrorAlert(); return }
+            guard user.displayName != "" else {
+                print("Login error: 'user.displayName' is an empty string")
+                presentLoginErrorAlert()
+                return
+            }
+            
+            if authDataResult?.additionalUserInfo?.isNewUser == true {
                 storeNewUser(user)
+            } else {
+                presentingViewController?.dismiss(animated: true)
             }
         case .some(let error):
             handleSignInError(error)
