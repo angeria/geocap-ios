@@ -10,27 +10,32 @@ import UIKit
 import Firebase
 
 class ProfileViewController: UIViewController {
-
+    
+    @IBOutlet weak var signOutButton: UIButton! {
+        didSet {
+            signOutButton.layer.cornerRadius = 10
+        }
+    }
+    
     @IBAction func signOutPressed(_ sender: UIButton) {
         let db = Firestore.firestore()
-        guard let userId = Auth.auth().currentUser?.uid else { return }
         
         // Unregister for notifications
-        db.collection("users").document(userId).updateData(["notificationToken": ""]) { [weak self] error in
-            if let error = error {
-                print("Error removing notification token from user: \(error)")
-            } else {
+        if let userId = Auth.auth().currentUser?.uid {
+            db.collection("users").document(userId).updateData(["notificationToken": ""]) { error in
+                if let error = error {
+                    print("Error removing notification token from user: \(error)")
+                }
                 UserDefaults.standard.set("", forKey: "notificationToken")
-                
-                do {
-                    try Auth.auth().signOut()
-                    self?.performSegue(withIdentifier: "Show Auth", sender: nil)
-                }
-                catch let error as NSError {
-                    if let message = error.userInfo[NSLocalizedFailureReasonErrorKey] {
-                        print("Error signing out: \(message)")
-                    }
-                }
+            }
+        }
+        
+        do {
+            try Auth.auth().signOut()
+        }
+        catch let error as NSError {
+            if let message = error.userInfo[NSLocalizedFailureReasonErrorKey] {
+                print("Error signing out: \(message)")
             }
         }
     }
