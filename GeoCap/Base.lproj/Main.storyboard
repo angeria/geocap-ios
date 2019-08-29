@@ -280,9 +280,11 @@
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
                         <outletCollection property="answerButtons" destination="o9L-qI-NsT" collectionClass="NSMutableArray" id="53O-Iu-8WI"/>
+                        <segue destination="S3A-HQ-8TI" kind="unwind" identifier="unwindSegueToMap" unwindAction="unwindToMapWithUnwindSegue:" id="pDl-ZD-cdU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgB-3b-WCv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="S3A-HQ-8TI" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer enabled="NO" id="Zeh-D3-dqF">
                     <connections>
                         <action selector="tap:" destination="XzZ-RX-21L" id="O0Y-LC-DuP"/>
