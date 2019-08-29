@@ -59,26 +59,6 @@ class MapViewController: UIViewController {
         setupUserTrackingButton()
     }
     
-    private func setupAuthListener() {
-        authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
-            if let user = Auth.auth().currentUser {
-                // TODO: Remove this when display name has been made mandatory
-                guard user.displayName != "", user.displayName != nil else { return }
-                self?.setupAfterUserSignedIn()
-            } else {
-                let sb = UIStoryboard(name: "Main", bundle: .main)
-                let authVC = sb.instantiateViewController(withIdentifier: "Auth")
-                self?.tabBarController?.present(authVC, animated: true)
-            }
-        }
-    }
-    
-    private func setupAfterUserSignedIn() {
-        tabBarController?.selectedIndex = 1
-        fetchLocations(type: .building)
-        setupNotificationToken()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -99,6 +79,49 @@ class MapViewController: UIViewController {
         // mapView.delegate = nil
     }
     
+    // MARK: - Setup
+    
+    private func setupAuthListener() {
+        authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
+            if let user = Auth.auth().currentUser {
+                // TODO: Remove this when display name has been made mandatory
+                guard user.displayName != "", user.displayName != nil else { return }
+                self?.setupAfterUserSignedIn()
+            } else {
+                let sb = UIStoryboard(name: "Main", bundle: .main)
+                let authVC = sb.instantiateViewController(withIdentifier: "Auth")
+                self?.tabBarController?.present(authVC, animated: true)
+            }
+        }
+    }
+    
+    private func setupAfterUserSignedIn() {
+        tabBarController?.selectedIndex = 1
+        fetchLocations(type: .building)
+        setupNotificationToken()
+    }
+    
+    private func setupNotificationToken() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        InstanceID.instanceID().instanceID { [weak self] (result, error) in
+            if let error = error {
+                print("Error fetching remote instance ID: \(error)")
+            } else if let result = result {
+                let notificationToken = result.token
+                guard notificationToken != UserDefaults.standard.string(forKey: "notificationToken") else { return }
+                
+                self?.db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
+                    if let error = error {
+                        print("Error setting notification token for user: \(error)")
+                    } else {
+                        UserDefaults.standard.set(notificationToken, forKey: "notificationToken")
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - User Location Button
     
     func setupUserTrackingButton() {
@@ -112,29 +135,6 @@ class MapViewController: UIViewController {
             button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
             button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
         ])
-    }
-    
-    // MARK: - Notifications
-    
-    private func setupNotificationToken() {
-        InstanceID.instanceID().instanceID { (result, error) in
-            if let error = error {
-                print("Error fetching remote instance ID: \(error)")
-            } else if let result = result {
-                let notificationToken = result.token
-                let userDefaults = UserDefaults.standard
-                guard let uid = Auth.auth().currentUser?.uid else { return }
-                guard notificationToken != userDefaults.string(forKey: "notificationToken") else { return }
-                
-                self.db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
-                    if let error = error {
-                        print("Error setting notification token for user: \(error)")
-                    } else {
-                        userDefaults.set(notificationToken, forKey: "notificationToken")
-                    }
-                }
-            }
-        }
     }
     
     // MARK: - Segmented Control (location filter)
