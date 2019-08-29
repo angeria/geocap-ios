@@ -62,7 +62,9 @@ class MapViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        requestUserLocationAuth()
+        if Auth.auth().currentUser != nil {
+            requestUserLocationAuth()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -101,6 +103,8 @@ class MapViewController: UIViewController {
         setupNotificationToken()
     }
     
+    // MARK: - Notifications
+
     private func setupNotificationToken() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -119,6 +123,41 @@ class MapViewController: UIViewController {
                     }
                 }
             }
+        }
+    }
+    
+    private func presentRequestNotificationAuthAlert() {
+        // TODO: Localize
+        
+        let title = NSLocalizedString("alert-title-request-notification-permission", comment: "Title of alert when requesting notification permission")
+        let message = NSLocalizedString("alert-message-request-notification-permission", comment: "Message of alert when requesting notification permission")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
+            guard let user = Auth.auth().currentUser else { return }
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
+                if let error = error {
+                    print("Error requesting notifications auth: ", error)
+                    return
+                } else if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                    
+                    self?.db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                        if let error = error {
+                            print("Error in setting location captured push notifications setting to enabled: ", error)
+                        }
+                    }
+                }
+                UserDefaults.standard.set(true, forKey: "notificationPromptShown")
+            }
+        }
+        alert.addAction(okAction)
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
+            self?.present(alert, animated: true)
         }
     }
     
@@ -332,8 +371,8 @@ class MapViewController: UIViewController {
                     if user(location: mapView.userLocation, isInside: annotation.overlay) {
                         return true
                     } else {
-                        presentNotInsideAreaAlert()
-                        return false
+//                        presentNotInsideAreaAlert()
+                        return true
                     }
                 }
             }
@@ -360,40 +399,6 @@ class MapViewController: UIViewController {
                     presentRequestNotificationAuthAlert()
                 }
             }
-        }
-    }
-    
-    private func presentRequestNotificationAuthAlert() {
-        // TODO: Localize
-        let title = "Notifications"
-        let message = "GeoCap would like to send notifications when someone captures your locations"
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
-            guard let user = Auth.auth().currentUser else { return }
-            
-            let authOptions: UNAuthorizationOptions = [.alert, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
-                if let error = error {
-                    print("Error requesting notifications auth: ", error)
-                    return
-                } else if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                    
-                    self?.db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
-                        if let error = error {
-                            print("Error in setting location captured push notifications setting to enabled: ", error)
-                        }
-                    }
-                }
-                UserDefaults.standard.set(true, forKey: "notificationPromptShown")
-            }
-        }
-        alert.addAction(okAction)
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
-            self?.present(alert, animated: true)
         }
     }
     
