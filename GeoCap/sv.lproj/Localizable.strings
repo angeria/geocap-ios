@@ -31,3 +31,7 @@
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
 
+/* Title of notification when someone else has captured the user's location */
+"location-lost-notification-title" = "Plats förlorad";
+/* Body of notification when someone else has captured the user's location */
+"location-lost-notification-body" = "%@ tog %@ från dig 🚩";
