@@ -18,19 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
         FirebaseApp.configure()
-
-        // Register for remote notifications. This shows a permission dialog on first run, to
-        // show the dialog at a more appropriate time move this registration accordingly.
-        // [START register_for_notifications]
-        UNUserNotificationCenter.current().delegate = self
-        
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(
-            options: authOptions,
-            completionHandler: {_, _ in })
-        
-        application.registerForRemoteNotifications()
-        // [END register_for_notifications]
         
         return true
     }

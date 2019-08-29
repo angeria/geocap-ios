@@ -351,6 +351,52 @@ class MapViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
+        if unwindSegue.identifier == "unwindSegueToMap", let quizVC = unwindSegue.source as? QuizViewController {
+            if quizVC.locationWasCaptured {
+                // Request notifications permission after first capture
+                if !(UserDefaults.standard.bool(forKey: "notificationPromptShown")) {
+                    presentRequestNotificationAuthAlert()
+                }
+            }
+        }
+    }
+    
+    private func presentRequestNotificationAuthAlert() {
+        // TODO: Localize
+        let title = "Notifications"
+        let message = "GeoCap would like to send notifications when someone captures your locations"
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
+            guard let user = Auth.auth().currentUser else { return }
+            
+            let authOptions: UNAuthorizationOptions = [.alert, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
+                if let error = error {
+                    print("Error requesting notifications auth: ", error)
+                    return
+                } else if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                    
+                    self?.db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                        if let error = error {
+                            print("Error in setting location captured push notifications setting to enabled: ", error)
+                        }
+                    }
+                }
+                UserDefaults.standard.set(true, forKey: "notificationPromptShown")
+            }
+        }
+        alert.addAction(okAction)
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
+            self?.present(alert, animated: true)
+        }
+    }
+    
 }
 
 extension MapViewController: MKMapViewDelegate {

@@ -77,10 +77,35 @@ class ProfileViewController: UIViewController {
     @IBAction func notificationsSwitchPressed(_ sender: UISwitch) {
         switch sender.isOn {
         case true:
+            if !(UserDefaults.standard.bool(forKey: "notificationPromptShown")) {
+                presentNotificationAuthRequest()
+            }
             setNotificationSettings(to: true)
         case false:
             setNotificationSettings(to: false)
         }
     }
 
+    private func presentNotificationAuthRequest() {
+        guard let uid = user?.uid else { return }
+        
+        let authOptions: UNAuthorizationOptions = [.alert, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
+            if let error = error {
+                print("Error requesting notifications auth: ", error)
+                return
+            } else if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+                
+                self?.db.collection("users").document(uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                    if let error = error {
+                        print("Error in setting location captured push notifications setting to enabled: ", error)
+                    }
+                }
+            }
+            UserDefaults.standard.set(true, forKey: "notificationPromptShown")
+        }
+    }
 }

@@ -52,6 +52,8 @@ class QuizViewController: UIViewController {
     private let numberOfQuestions = Constants.numberOfQuestions
     private var timerBarTimer: Timer?
     private var quizFailed = false
+    // Checked in the map view via the unwind segue
+    var locationWasCaptured = false
     
     // Dependency injection
     var locationName: String!
@@ -59,7 +61,7 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
         if quizFailed || questions.isEmpty {
-            presentingViewController?.dismiss(animated: true, completion: nil)
+            performSegue(withIdentifier: "unwindSegueToMap", sender: self)
         } else {
             showNextQuestion()
             nextQuestionTapRecognizer.isEnabled = false
@@ -80,6 +82,7 @@ class QuizViewController: UIViewController {
             button.scale()
             correctAnswersCount += 1
             if correctAnswersCount == numberOfQuestions {
+                locationWasCaptured = true
                 updateLocationOwner()
             }
         } else {
