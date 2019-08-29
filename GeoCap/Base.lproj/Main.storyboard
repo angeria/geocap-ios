@@ -63,7 +63,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gEq-cg-01V">
-                                <rect key="frame" x="126" y="85" width="123" height="74"/>
+                                <rect key="frame" x="134" y="58" width="106" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
                                 <state key="normal" title="Sign Out"/>
@@ -71,12 +71,35 @@
                                     <action selector="signOutPressed:" destination="SrA-5C-Dgb" eventType="touchUpInside" id="3IV-6P-5Wc"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ngZ-0V-ErN">
+                                <rect key="frame" x="218" y="205" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="onTintColor" red="0.46248555183410645" green="0.7710576057434082" blue="0.97321110963821411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="notificationsSwitchPressed:" destination="SrA-5C-Dgb" eventType="valueChanged" id="gxP-mh-ihV"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Qp-HY-yZO">
+                                <rect key="frame" x="16" y="157" width="181" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="When someone captures one of your locations" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0DT-gx-aIN">
+                                <rect key="frame" x="16" y="192" width="194" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="fUE-k9-7Rq"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="tab-bar-profile" selectedImage="tab-bar-profile" id="Ehp-tO-H9e"/>
                     <connections>
+                        <outlet property="notificationsSwitch" destination="ngZ-0V-ErN" id="mfq-zC-mdY"/>
                         <outlet property="signOutButton" destination="gEq-cg-01V" id="HRI-1t-pdl"/>
                     </connections>
                 </viewController>
