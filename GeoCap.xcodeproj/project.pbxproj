@@ -67,7 +67,7 @@
 		432DEDBE22E1F28E00DFA074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43615CAD23072E5F003FC839 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
-		43B3CED02311868B002B7F39 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		43B561B72319544400618DC3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43D0268C22E314AF00A0C255 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -518,7 +518,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				432DEDA122E1F28D00DFA074 /* Base */,
-				43B3CED02311868B002B7F39 /* sv */,
+				43B561B72319544400618DC3 /* sv */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
