@@ -1,4 +1,10 @@
 
+/* Class = "UILabel"; text = "When someone captures one of your locations"; ObjectID = "0DT-gx-aIN"; */
+"0DT-gx-aIN.text" = "När någon tar över en av dina platser";
+
+/* Class = "UILabel"; text = "Push Notifications"; ObjectID = "1Qp-HY-yZO"; */
+"1Qp-HY-yZO.text" = "Pushnotiser";
+
 /* Class = "UISegmentedControl"; 2Tx-Iz-jwz.segmentTitles[0] = "Buildings"; ObjectID = "2Tx-Iz-jwz"; */
 "2Tx-Iz-jwz.segmentTitles[0]" = "Byggnader";
 
@@ -19,6 +25,3 @@
 
 /* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
 "gEq-cg-01V.normalTitle" = "Logga ut";
-
-
-
