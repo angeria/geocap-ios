@@ -77,7 +77,7 @@ class ProfileViewController: UIViewController {
     @IBAction func notificationsSwitchPressed(_ sender: UISwitch) {
         switch sender.isOn {
         case true:
-            if !(UserDefaults.standard.bool(forKey: "notificationPromptShown")) {
+            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                 presentNotificationAuthRequest()
             }
             setNotificationSettings(to: true)
@@ -105,7 +105,7 @@ class ProfileViewController: UIViewController {
                     }
                 }
             }
-            UserDefaults.standard.set(true, forKey: "notificationPromptShown")
+            UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
         }
     }
 }
