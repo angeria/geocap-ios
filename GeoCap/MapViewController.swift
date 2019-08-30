@@ -127,8 +127,6 @@ class MapViewController: UIViewController {
     }
     
     private func presentRequestNotificationAuthAlert() {
-        // TODO: Localize
-        
         let title = NSLocalizedString("alert-title-request-notification-permission", comment: "Title of alert when requesting notification permission")
         let message = NSLocalizedString("alert-message-request-notification-permission", comment: "Message of alert when requesting notification permission")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -152,10 +150,11 @@ class MapViewController: UIViewController {
                         }
                     }
                 }
-                UserDefaults.standard.set(true, forKey: "notificationPromptShown")
+                UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
             }
         }
         alert.addAction(okAction)
+        // Had to delay the alert a bit to prevent getting "view is not in the window hierarchy" error
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
             self?.present(alert, animated: true)
         }
@@ -395,7 +394,7 @@ class MapViewController: UIViewController {
         if unwindSegue.identifier == "unwindSegueToMap", let quizVC = unwindSegue.source as? QuizViewController {
             if quizVC.locationWasCaptured {
                 // Request notifications permission after first capture
-                if !(UserDefaults.standard.bool(forKey: "notificationPromptShown")) {
+                if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                     presentRequestNotificationAuthAlert()
                 }
             }
