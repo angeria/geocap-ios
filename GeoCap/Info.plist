@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbauth2</string>
-	</array>
 	<key>FacebookAutoLogAppEventsEnabled</key>
 	<false/>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
@@ -18,6 +14,10 @@
 	<true/>
 	<key>GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED</key>
 	<string>NO</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbauth2</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
