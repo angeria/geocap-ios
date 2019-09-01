@@ -137,18 +137,11 @@
 		432DED9922E1F28D00DFA074 /* GeoCap */ = {
 			isa = PBXGroup;
 			children = (
-				43BF7BD8231C0B660007666B /* Models */,
+				43BF7BDA231C129E0007666B /* Supporting Files */,
+				43BF7BDB231C12C20007666B /* Localization */,
 				43BF7BD9231C0BAE0007666B /* Controllers */,
-				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
-				43D7A12C22F2F11900552D2C /* Extensions.swift */,
-				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
-				432DEDA822E1F28E00DFA074 /* Info.plist */,
-				4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */,
-				43109489230AC9020071F3A5 /* Localizable.strings */,
-				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
-				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
-				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
-				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
+				43BF7BD8231C0B660007666B /* Models */,
+				43BF7BDC231C14570007666B /* Views */,
 			);
 			path = GeoCap;
 			sourceTree = "<group>";
@@ -174,8 +167,8 @@
 		43BF7BD8231C0B660007666B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 				43D7A12A22F2D49700552D2C /* Question.swift */,
+				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -183,13 +176,44 @@
 		43BF7BD9231C0BAE0007666B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
-				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
+				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
+				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		43BF7BDA231C129E0007666B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
+				432DEDA822E1F28E00DFA074 /* Info.plist */,
+				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
+				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
+				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
+				43D7A12C22F2F11900552D2C /* Extensions.swift */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43BF7BDB231C12C20007666B /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				43109489230AC9020071F3A5 /* Localizable.strings */,
+				4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		43BF7BDC231C14570007666B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				432DEDA522E1F28E00DFA074 /* LaunchScreen.storyboard */,
+				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		8C06367070EC0B91C0517455 /* Frameworks */ = {
@@ -673,10 +697,10 @@
 			baseConfigurationReference = A4B70B7749D2C4F7E71E820D /* Pods-GeoCap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = GeoCap/GeoCap.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
-				INFOPLIST_FILE = GeoCap/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/GeoCap/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -694,10 +718,10 @@
 			baseConfigurationReference = B77FED62B589C3E94D6FC9FF /* Pods-GeoCap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = GeoCap/GeoCap.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
-				INFOPLIST_FILE = GeoCap/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/GeoCap/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
