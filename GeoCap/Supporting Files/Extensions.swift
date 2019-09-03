@@ -11,10 +11,10 @@ import UIKit
 
 extension UIColor {
     struct GeoCap {
-        static let green = UIColor(rgb: 0x8cda98)
-        static let blue = UIColor(rgb: 0x65b7f6)
-        static let red = UIColor(rgb: 0xfc7066)
-        static let purple = UIColor(rgb: 0xb19cd9)
+        static let green = UIColor(rgb: 0x8CDA98)
+        static let blue = UIColor(rgb: 0x71B8EE)
+        static let red = UIColor(rgb: 0xF08A82)
+        static let gray = UIColor(rgb: 0xB7B6B6)
     }
     
     convenience init(red: Int, green: Int, blue: Int) {

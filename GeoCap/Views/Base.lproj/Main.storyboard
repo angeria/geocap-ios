@@ -39,6 +39,7 @@
                                 <segment title="Buildings"/>
                                 <segment title="Areas"/>
                             </segments>
+                            <color key="tintColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="locationFilter:" destination="9pv-A4-QxB" eventType="valueChanged" id="v7y-LU-dC8"/>
                             </connections>
@@ -65,16 +66,18 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gEq-cg-01V">
                                 <rect key="frame" x="134" y="58" width="106" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
-                                <state key="normal" title="Sign Out"/>
+                                <color key="backgroundColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Sign Out">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="signOutPressed:" destination="SrA-5C-Dgb" eventType="touchUpInside" id="3IV-6P-5Wc"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ngZ-0V-ErN">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ngZ-0V-ErN">
                                 <rect key="frame" x="218" y="205" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="onTintColor" red="0.46248555183410645" green="0.7710576057434082" blue="0.97321110963821411" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="onTintColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="notificationsSwitchPressed:" destination="SrA-5C-Dgb" eventType="valueChanged" id="gxP-mh-ihV"/>
                                 </connections>
@@ -126,7 +129,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="8Mx-9u-3Gi" firstAttribute="centerY" secondItem="HeK-k0-gTl" secondAttribute="centerY" id="I8k-4e-Ybl"/>
                                 <constraint firstItem="8Mx-9u-3Gi" firstAttribute="leading" relation="lessThanOrEqual" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="247" id="YBr-mS-bwf"/>
@@ -191,7 +194,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="75"/>
-                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="75" id="Lct-Ch-auM"/>
                                         </constraints>
@@ -206,7 +209,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq">
                                         <rect key="frame" x="0.0" y="91" width="343" height="75"/>
-                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -217,7 +220,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW">
                                         <rect key="frame" x="0.0" y="182" width="343" height="75"/>
-                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -228,7 +231,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT">
                                         <rect key="frame" x="0.0" y="273" width="343" height="75"/>
-                                        <color key="backgroundColor" red="0.396078431372549" green="0.71764705882352942" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -315,7 +318,7 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="selectedImageTintColor" red="0.39461201429367065" green="0.71614712476730347" blue="0.96636945009231567" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="0.44313725490196076" green="0.72156862745098038" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="selectedIndex">
