@@ -163,6 +163,7 @@ class MapViewController: UIViewController {
     func setupUserTrackingButton() {
         let button = MKUserTrackingButton(mapView: mapView)
         button.layer.backgroundColor = UIColor(white: 1, alpha: 0.8).cgColor
+        button.tintColor = UIColor.GeoCap.blue
         button.layer.cornerRadius = 5
         button.translatesAutoresizingMaskIntoConstraints = false
         mapView.addSubview(button)
@@ -260,8 +261,8 @@ class MapViewController: UIViewController {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
         
-        annotationView.clusteringIdentifier = "location"
-        annotationView.displayPriority = .defaultLow
+//        annotationView.clusteringIdentifier = "location"
+//        annotationView.displayPriority = .defaultLow
         
         annotationView.glyphImage = UIImage(named: "marker-flag")
         annotationView.glyphTintColor = .white
@@ -278,15 +279,15 @@ class MapViewController: UIViewController {
         captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
         
         if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.GeoCap.purple
+            annotationView.markerTintColor = UIColor.GeoCap.blue
             
             let image = UIImage(named: "callout-flag")!.withRenderingMode(.alwaysTemplate)
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
-            imageView.tintColor = UIColor.GeoCap.purple
+            imageView.tintColor = UIColor.GeoCap.blue
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
-            annotationView.markerTintColor = UIColor.GeoCap.blue
+            annotationView.markerTintColor = UIColor.GeoCap.gray
             annotationView.rightCalloutAccessoryView = captureButton
         } else {
             annotationView.markerTintColor = UIColor.GeoCap.red
@@ -430,7 +431,7 @@ extension MapViewController: MKMapViewDelegate {
             return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
         } else if let clusterAnnotation = annotation as? MKClusterAnnotation {
             let clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier, for: clusterAnnotation) as! MKMarkerAnnotationView
-            clusterView.markerTintColor = UIColor.GeoCap.blue
+            clusterView.markerTintColor = UIColor.GeoCap.gray
             return clusterView
         }
         
@@ -456,11 +457,11 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.GeoCap.purple
-                renderer.strokeColor = UIColor.GeoCap.purple
-            } else if location.owner == nil {
                 renderer.fillColor = UIColor.GeoCap.blue
                 renderer.strokeColor = UIColor.GeoCap.blue
+            } else if location.owner == nil {
+                renderer.fillColor = UIColor.GeoCap.gray
+                renderer.strokeColor = UIColor.GeoCap.gray
             } else {
                 renderer.fillColor = UIColor.GeoCap.red
                 renderer.strokeColor = UIColor.GeoCap.red
@@ -473,11 +474,11 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.GeoCap.purple
-                renderer.strokeColor = UIColor.GeoCap.purple
-            } else if location.owner == nil {
                 renderer.fillColor = UIColor.GeoCap.blue
                 renderer.strokeColor = UIColor.GeoCap.blue
+            } else if location.owner == nil {
+                renderer.fillColor = UIColor.GeoCap.gray
+                renderer.strokeColor = UIColor.GeoCap.gray
             } else {
                 renderer.fillColor = UIColor.GeoCap.red
                 renderer.strokeColor = UIColor.GeoCap.red
