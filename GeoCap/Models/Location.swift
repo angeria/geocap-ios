@@ -59,10 +59,10 @@ class Location: NSObject, MKAnnotation {
         owner = newOwner
         if newOwner == username {
             isCapturedByUser = true
-            subtitle = nil
+            subtitle = NSLocalizedString("callout-subtitle-captured-by-user", comment: "Callout subtitle when location is owned by user")
         } else {
             isCapturedByUser = false
-            let format = NSLocalizedString("callout-subtitle-captured-by-username", comment:"Callout subtitle with name of owner: Captured by ‰@{username}")
+            let format = NSLocalizedString("callout-subtitle-captured-by-other-user", comment:"Callout subtitle with name of owner: Captured by ‰@{username}")
             subtitle = String.localizedStringWithFormat(format, newOwner)
         }
     }
