@@ -26,8 +26,10 @@
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Ta över";
+/* Callout subtitle when location is owned by user */
+"callout-subtitle-captured-by-user" = "Ägs av dig";
 /* Callout subtitle with name of owner: Captured by ‰@{username} */
-"callout-subtitle-captured-by-username" = "Tagen av %@";
+"callout-subtitle-captured-by-other-user" = "Ägs av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
 

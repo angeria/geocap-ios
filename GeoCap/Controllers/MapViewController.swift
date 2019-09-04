@@ -264,9 +264,6 @@ class MapViewController: UIViewController {
 //        annotationView.clusteringIdentifier = "location"
 //        annotationView.displayPriority = .defaultLow
         
-        annotationView.glyphImage = UIImage(named: "marker-flag")
-        annotationView.glyphTintColor = .white
-        
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
@@ -281,15 +278,21 @@ class MapViewController: UIViewController {
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.GeoCap.blue
             
-            let image = UIImage(named: "callout-flag")!.withRenderingMode(.alwaysTemplate)
+            annotationView.glyphImage = UIImage(named: "marker-check-mark")
+            
+            let image = UIImage(named: "callout-check-mark")!.withRenderingMode(.alwaysTemplate)
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
             imageView.tintColor = UIColor.GeoCap.blue
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
+            annotationView.glyphImage = UIImage(named: "marker-circle")
+            
             annotationView.markerTintColor = UIColor.GeoCap.gray
             annotationView.rightCalloutAccessoryView = captureButton
         } else {
+            annotationView.glyphImage = UIImage(named: "marker-flag")
+            
             annotationView.markerTintColor = UIColor.GeoCap.red
             annotationView.rightCalloutAccessoryView = captureButton
         }
