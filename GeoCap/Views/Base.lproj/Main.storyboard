@@ -169,7 +169,7 @@
                             <outlet property="delegate" destination="e3c-V5-gWS" id="o9c-no-6Gy"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Leaderboard" image="tab-bar-trophy" selectedImage="tab-bar-trophy" id="9zQ-09-F47"/>
+                    <tabBarItem key="tabBarItem" title="Leaderboard" image="tab-bar-leaderboard" selectedImage="tab-bar-leaderboard" id="9zQ-09-F47"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1V-bT-rg7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -356,8 +356,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="tab-bar-map" width="46" height="46"/>
+        <image name="tab-bar-leaderboard" width="62" height="44"/>
+        <image name="tab-bar-map" width="58" height="45"/>
         <image name="tab-bar-profile" width="46" height="46"/>
-        <image name="tab-bar-trophy" width="46" height="46"/>
     </resources>
 </document>
