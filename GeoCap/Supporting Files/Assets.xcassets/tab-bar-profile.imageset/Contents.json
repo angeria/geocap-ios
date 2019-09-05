@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "tab-bar-profile.pdf",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "tab-bar-profile@2x.pdf",
       "scale" : "2x"
     },
     {
