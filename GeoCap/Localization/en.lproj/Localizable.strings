@@ -33,7 +33,8 @@
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Not captured yet";
 
-/* Title of notification when someone else has captured the user's location */
+/* Notification title when someone else has captured a location from the user */
 "location-lost-notification-title" = "Location Lost";
-/* Body of notification when someone else has captured the user's location */
+/* Notification body ... */
 "location-lost-notification-body" = "%@ took %@ from you 🚩";
+

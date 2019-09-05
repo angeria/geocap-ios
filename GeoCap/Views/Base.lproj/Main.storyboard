@@ -356,8 +356,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="tab-bar-leaderboard" width="62" height="44"/>
-        <image name="tab-bar-map" width="58" height="45"/>
-        <image name="tab-bar-profile" width="46" height="46"/>
+        <image name="tab-bar-leaderboard" width="31" height="22"/>
+        <image name="tab-bar-map" width="29" height="23"/>
+        <image name="tab-bar-profile" width="23" height="23"/>
     </resources>
 </document>
