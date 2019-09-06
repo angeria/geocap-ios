@@ -261,9 +261,6 @@ class MapViewController: UIViewController {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
         
-//        annotationView.clusteringIdentifier = "location"
-//        annotationView.displayPriority = .defaultLow
-        
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
@@ -432,10 +429,6 @@ extension MapViewController: MKMapViewDelegate {
         
         if let locationAnnotation = annotation as? Location {
             return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
-        } else if let clusterAnnotation = annotation as? MKClusterAnnotation {
-            let clusterView = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier, for: clusterAnnotation) as! MKMarkerAnnotationView
-            clusterView.markerTintColor = UIColor.GeoCap.gray
-            return clusterView
         }
         
         return nil
