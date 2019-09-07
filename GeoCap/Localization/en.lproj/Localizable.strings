@@ -11,10 +11,15 @@
 /* Title of alert action for going to 'Settings' */
 "alert-action-title-settings" = "Settings";
 
-/* Title of alert when requesting notification permission */
-"alert-title-request-notification-permission" = "Push Notifications";
-/* Message of alert when requesting notification permission */
-"alert-message-request-notification-permission" = "GeoCap would like to send push notifications when others capture your locations";
+/* Title of alert when requesting notification authorization */
+"alert-title-request-notification-auth" = "Notifications";
+/* Message of alert when requesting notification authorization */
+"alert-message-request-notification-auth" = "GeoCap would like to send notifications when others capture your locations";
+
+/* Alert title when notification auth is off */
+"alert-title-notification-auth-off" = "Notifications Off";
+/* Alert message when notification auth is off */
+"alert-message-notification-auth-off" = "Please turn on notifications in settings first to enable them";
 
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Not Inside Area";
