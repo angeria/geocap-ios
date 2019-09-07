@@ -14,7 +14,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if locationLostNotificationsSettingsListener == nil {
+        if settingsListener == nil {
             setupLocationLostNotificationsSwitch()
         }
     }
@@ -57,12 +57,12 @@ class ProfileViewController: UIViewController {
     
     // Using a listener to use offline caching which gives a more responsive feeling compared to normal requests
     // I'm uncertain if this causes undue performance and/or network impact; keeping it for now
-    var locationLostNotificationsSettingsListener: ListenerRegistration?
+    var settingsListener: ListenerRegistration?
     private func setupLocationLostNotificationsSwitch() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
         let db = Firestore.firestore()
-        locationLostNotificationsSettingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
+        settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     print("Error fetching user: \(error!)")
                     return
@@ -75,8 +75,8 @@ class ProfileViewController: UIViewController {
     
     // Should be called from map when signing out
     func removeSettingsListener() {
-        locationLostNotificationsSettingsListener?.remove()
-        locationLostNotificationsSettingsListener = nil
+        settingsListener?.remove()
+        settingsListener = nil
     }
     
     @IBAction func notificationsSwitchPressed(_ sender: UISwitch) {
