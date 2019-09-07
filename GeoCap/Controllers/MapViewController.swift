@@ -75,7 +75,7 @@ class MapViewController: UIViewController {
         
         fetchLocations(type: .building)
         requestUserLocationAuth()
-        setupNotificationToken()
+        setupNotifications()
     }
     
     // Currently listener isn't removed at all and constantly listening for auth state updates
@@ -95,21 +95,37 @@ class MapViewController: UIViewController {
     
     // MARK: - Notifications
 
-    private func setupNotificationToken() {
+    private func setupNotifications() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
         
+        // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
                 print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
                 
-                let db = Firestore.firestore()
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         print("Error setting notification token for user: \(error)")
                     }
                 }
+            }
+        }
+        
+        // Deactivate notifications for user if notifications are disabled in app settings
+        UNUserNotificationCenter.current().getNotificationSettings() { settings in
+            switch settings.authorizationStatus {
+            case .denied:
+                db.collection("users").document(uid).updateData(["locationLostPushNotificationsEnabled": false]) { error in
+                    if let error = error {
+                        print("Error setting 'locationLostPushNotificationsEnabled' in setupNotificationToken(): ", error)
+                        print("notification authorization status: denied")
+                    }
+                }
+            default:
+                break
             }
         }
     }

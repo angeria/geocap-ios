@@ -19,7 +19,7 @@
 /* Alert title when notification auth is off */
 "alert-title-notification-auth-off" = "Notiser av";
 /* Alert message when notification auth is off */
-"alert-message-notification-auth-off" = "Var god slå på notiser i inställningarna för att kunna aktivera dom";
+"alert-message-notification-auth-off" = "Slå på notiser i inställningarna för att kunna aktivera denna funktion";
 
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Ej inom området";
