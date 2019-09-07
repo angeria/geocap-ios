@@ -83,7 +83,7 @@ class QuizViewController: UIViewController {
             correctAnswersCount += 1
             if correctAnswersCount == numberOfQuestions {
                 locationWasCaptured = true
-                updateLocationOwner()
+                captureLocation()
             }
         } else {
             button.backgroundColor = UIColor.GeoCap.red
@@ -208,32 +208,21 @@ class QuizViewController: UIViewController {
         }
     }
 
-    // I'm not 100% sure that not having [weak self] in the closure doesn't cause a retention cycle
-    private func updateLocationOwner(isRetry: Bool = false) {
-        // Sending username as an argument since 'context.auth.token.name' was unreliable in the cloud function
-        guard let username = Auth.auth().currentUser?.displayName else { print("Error in updateLocationOwner: no username"); return }
+    private func captureLocation() {
+        guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
+        guard let locationName = locationName else { return }
         
-        functions.httpsCallable("updateLocationOwner").call(["location": locationName!, "username": username, "isRetry": isRetry]) { (result, error) in
-            if let error = error as NSError? {
-                print("Error from https function updateLocationOwner()")
-                print("Message: \(error.localizedDescription)")
-                if error.domain == FunctionsErrorDomain {
-                    if let details = error.userInfo[FunctionsErrorDetailsKey] {
-                        print("Details: \(details)")
-                    }
-                    let code = FunctionsErrorCode(rawValue: error.code)
-                    if let code = code {
-                        switch code {
-                        case .internal:
-                            if !isRetry {
-                                print("Retrying...")
-                                self.updateLocationOwner(isRetry: true)
-                            }
-                        default:
-                            break
-                        }
-                    }
-                }
+        let batch = db.batch()
+        
+        let locationReference = db.collection("cities").document("uppsala").collection("locations").document(locationName)
+        batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
+        
+        let userReference = db.collection("users").document(user.uid)
+        batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+        
+        batch.commit() { err in
+            if let err = err {
+                print("Error writing batch \(err)")
             }
         }
     }
