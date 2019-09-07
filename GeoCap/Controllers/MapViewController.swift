@@ -38,26 +38,20 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        
+        setupAuthListener()
         
         if Auth.auth().currentUser != nil {
             setupAfterUserSignedIn()
         }
-        
-        setupAuthListener()
         
         setupUserTrackingButton()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
-        // Auth listener is kept in memory all the time
-        // Uncomment this to deallocate it
-        // if let authListener = self?.authListener {
-        //     Auth.auth().removeStateDidChangeListener(authListener)
-        // }
         
         // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
         // Uncomment this for proper deallocation according to delegate docs
@@ -74,23 +68,54 @@ class MapViewController: UIViewController {
         locationFilter.selectedSegmentIndex = 0
         
         fetchLocations(type: .building)
+        
         requestUserLocationAuth()
+        
+        if authListener == nil {
+            setupAuthListener()
+        }
+        
         setupNotifications()
     }
     
     // Currently listener isn't removed at all and constantly listening for auth state updates
-    // Makes it possible to notice sign-out event in profile view and present auth view
+    // Makes it possible to notice sign-out event in profile view and then present auth view
     var authListener: AuthStateDidChangeListenerHandle?
     private func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
             if user == nil {
-                self?.clearMap()
+                self?.teardownAfterUserSignedOut()
                 
                 let sb = UIStoryboard(name: "Main", bundle: .main)
                 let authVC = sb.instantiateViewController(withIdentifier: "Auth")
                 self?.tabBarController?.present(authVC, animated: true)
             }
         }
+    }
+    
+    // MARK: - Teardown
+    
+    private func teardownAfterUserSignedOut() {
+        clearMap()
+
+        if let profileVC = tabBarController?.viewControllers?[0] as? ProfileViewController {
+            profileVC.removeSettingsListener()
+        }
+        
+        locationListener?.remove()
+        locationListener = nil
+        
+        if authListener != nil {
+            Auth.auth().removeStateDidChangeListener(authListener!)
+            authListener = nil
+        }
+    }
+    
+    private func clearMap() {
+        let annotations = mapView.annotations
+        let overlays = mapView.overlays
+        mapView.removeAnnotations(annotations)
+        mapView.removeOverlays(overlays)
     }
     
     // MARK: - Notifications
@@ -117,10 +142,10 @@ class MapViewController: UIViewController {
         // Deactivate notifications for user if notifications are disabled in app settings
         UNUserNotificationCenter.current().getNotificationSettings() { settings in
             switch settings.authorizationStatus {
-            case .denied:
-                db.collection("users").document(uid).updateData(["locationLostPushNotificationsEnabled": false]) { error in
+            case .denied, .notDetermined:
+                db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
-                        print("Error setting 'locationLostPushNotificationsEnabled' in setupNotificationToken(): ", error)
+                        print("Error setting 'locationLostNotificationsEnabled' in setupNotificationToken(): ", error)
                         print("notification authorization status: denied")
                     }
                 }
@@ -149,9 +174,9 @@ class MapViewController: UIViewController {
                     }
                     
                     let db = Firestore.firestore()
-                    db.collection("users").document(user.uid).updateData(["locationLostPushNotificationsEnabled": true]) { error in
+                    db.collection("users").document(user.uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
-                            print("Error setting 'locationLostPushNotificationsEnabled' to true: ", error)
+                            print("Error setting 'locationLostNotificationsEnabled' to true: ", error)
                         }
                     }
                 }
@@ -191,18 +216,15 @@ class MapViewController: UIViewController {
         case area
     }
     
-    private func clearMap() {
-        let annotations = mapView.annotations
-        let overlays = mapView.overlays
-        mapView.removeAnnotations(annotations)
-        mapView.removeOverlays(overlays)
-    }
-    
     // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
     // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
     var locationListener: ListenerRegistration?
     private func fetchLocations(type: LocationType) {
         let db = Firestore.firestore()
+        
+        locationListener?.remove()
+        locationListener = nil
+        
         locationListener = db.collection("cities")
             .document("uppsala")
             .collection("locations")
