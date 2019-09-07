@@ -19,19 +19,6 @@ class ProfileViewController: UIViewController {
         setupLocationLostPushNotificationsSwitch()
     }
     
-    private func setupLocationLostPushNotificationsSwitch() {
-        guard let uid = user?.uid else { return }
-        
-        let db = Firestore.firestore()
-        db.collection("users").document(uid).getDocument() { [weak self] (document, error) in
-            if let error = error {
-                print("Error fetching 'locationLostPushNotificationsEnabled' setting: ", error)
-            } else if let document = document {
-                self?.locationLostPushNotificationsSwitch.isOn = document.get("locationLostPushNotificationsEnabled") as? Bool == true ? true : false
-            }
-        }
-    }
-    
     // MARK: - Sign out
     
     @IBOutlet weak var signOutButton: UIButton! {
@@ -67,14 +54,16 @@ class ProfileViewController: UIViewController {
     // MARK: - Notifications
     
     @IBOutlet weak var locationLostPushNotificationsSwitch: UISwitch!
-    
-    private func setLocationLostPushNotificationsSetting(to isEnabled: Bool) {
+    // TODO: Use listener instead?
+    private func setupLocationLostPushNotificationsSwitch() {
         guard let uid = user?.uid else { return }
         
         let db = Firestore.firestore()
-        db.collection("users").document(uid).updateData(["locationLostPushNotificationsEnabled": isEnabled]) { error in
+        db.collection("users").document(uid).getDocument() { [weak self] (document, error) in
             if let error = error {
-                print("Error setting 'locationLostPushNotificationsEnabled' setting: ", error)
+                print("Error fetching 'locationLostPushNotificationsEnabled' setting: ", error)
+            } else if let document = document {
+                self?.locationLostPushNotificationsSwitch.isOn = document.get("locationLostPushNotificationsEnabled") as? Bool == true ? true : false
             }
         }
     }
@@ -92,15 +81,24 @@ class ProfileViewController: UIViewController {
                         self?.presentNotificationAuthDisabledAlert()
                     }
                 case .notDetermined:
-                    DispatchQueue.main.async {
-                        self?.presentNotificationAuthRequest()
-                    }
+                    self?.presentNotificationAuthRequest()
                 @unknown default:
                     fatalError("Unexpected notification authorization status")
                 }
             }
         case false:
             setLocationLostPushNotificationsSetting(to: false)
+        }
+    }
+    
+    private func setLocationLostPushNotificationsSetting(to isEnabled: Bool) {
+        guard let uid = user?.uid else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("users").document(uid).updateData(["locationLostPushNotificationsEnabled": isEnabled]) { error in
+            if let error = error {
+                print("Error setting 'locationLostPushNotificationsEnabled' to: \(isEnabled)", error)
+            }
         }
     }
 
@@ -126,7 +124,9 @@ class ProfileViewController: UIViewController {
                     }
                 }
             } else {
-                self?.locationLostPushNotificationsSwitch.isOn = false
+                DispatchQueue.main.async {
+                    self?.locationLostPushNotificationsSwitch.isOn = false
+                }
             }
             UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
         }

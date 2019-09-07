@@ -19,7 +19,7 @@
 /* Alert title when notification auth is off */
 "alert-title-notification-auth-off" = "Notifications Off";
 /* Alert message when notification auth is off */
-"alert-message-notification-auth-off" = "Please turn on notifications in settings first to enable them";
+"alert-message-notification-auth-off" = "Please turn on notifications in settings to be able to activate this feature";
 
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Not Inside Area";
