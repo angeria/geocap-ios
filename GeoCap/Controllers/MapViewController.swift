@@ -25,6 +25,8 @@ extension MapViewController {
 
 class MapViewController: UIViewController {
     
+    // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
+    // Set 'mapView.delegate = nil' to be able to deallocate mapView
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
@@ -33,6 +35,8 @@ class MapViewController: UIViewController {
             mapView.showsCompass = false
         }
     }
+    
+    private var regionIsCenteredOnUserLocation = false
     
     // MARK: - Life Cycle
     
@@ -50,14 +54,6 @@ class MapViewController: UIViewController {
         setupUserTrackingButton()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
-        // Uncomment this for proper deallocation according to delegate docs
-        // mapView.delegate = nil
-    }
-    
     // MARK: - Setup
     
     private func setupAfterUserSignedIn() {
@@ -67,19 +63,19 @@ class MapViewController: UIViewController {
         // Choose "Buildings" location filter
         locationFilter.selectedSegmentIndex = 0
         
-        fetchLocations(type: .building)
-        
-        requestUserLocationAuth()
-        
         if authListener == nil {
             setupAuthListener()
         }
         
+        fetchLocations(type: .building)
+        
+        requestUserLocationAuth()
+        
         setupNotifications()
     }
     
-    // Currently listener isn't removed at all and constantly listening for auth state updates
-    // Makes it possible to notice sign-out event in profile view and then present auth view
+    // Currently listener isn't removed at all (only when singning out) and constantly listening for auth state updates
+    // Makes it possible to notice sign-out event in profile view to present auth view
     var authListener: AuthStateDidChangeListenerHandle?
     private func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
@@ -139,14 +135,13 @@ class MapViewController: UIViewController {
             }
         }
         
-        // Deactivate notifications for user if notifications are disabled in app settings
+        // Turn off notifications for user if they are disabled in app settings
         UNUserNotificationCenter.current().getNotificationSettings() { settings in
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
-                        print("Error setting 'locationLostNotificationsEnabled' in setupNotificationToken(): ", error)
-                        print("notification authorization status: denied")
+                        print("Error setting 'locationLostNotificationsEnabled' in setupNotifications(): ", error)
                     }
                 }
             default:
@@ -191,10 +186,9 @@ class MapViewController: UIViewController {
         }
     }
     
-    // MARK: - Segmented Control (location filter)
+    // MARK: - Location Filter (segmented control)
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
-    
     @IBAction func locationFilter(_ sender: UISegmentedControl) {
         clearMap()
         
@@ -209,7 +203,7 @@ class MapViewController: UIViewController {
     }
     
     
-    // MARK: - Annotations
+    // MARK: - Locations (annotations)
     
     enum LocationType: String {
         case building
@@ -217,7 +211,7 @@ class MapViewController: UIViewController {
     }
     
     // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
-    // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
+    // Makes it possible to keep the map updated in the background while other views are visible
     var locationListener: ListenerRegistration?
     private func fetchLocations(type: LocationType) {
         let db = Firestore.firestore()
@@ -356,7 +350,6 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    private var regionIsCenteredOnUserLocation = false
     func user(location: MKUserLocation, isInside overlay: MKOverlay) -> Bool {
         let coordinates = location.coordinate
         
@@ -468,7 +461,7 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let location = locationToOverlay else { return MKOverlayRenderer(overlay: overlay) }
         
-        // Duplicate code but I can't figure out how to extract it
+        // Duplicate code but I can't figure out how to extract it since they are different classes
         switch overlay {
         case let polygon as MKPolygon:
             let renderer = MKPolygonRenderer(polygon: polygon)
