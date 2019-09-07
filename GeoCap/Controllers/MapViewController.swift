@@ -396,18 +396,6 @@ class MapViewController: UIViewController {
                 if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                     presentRequestNotificationAuthAlert()
                 }
-
-                // Update the location on the map immediately before server response as a workaround of sometimes slow cold started cloud function
-                let capturedLocationName = quizVC.locationName
-                if let annotation = mapView.annotations.first(where: { $0.title == capturedLocationName }) as? Location {
-                    guard let username = Auth.auth().currentUser?.displayName else { return }
-                    
-                    mapView.removeAnnotation(annotation)
-                    mapView.removeOverlay(annotation.overlay)
-                    annotation.changeOwner(newOwner: username, username: username)
-                    mapView.addAnnotation(annotation)
-                    addLocationOverlay(annotation)
-                }
             }
         }
     }
