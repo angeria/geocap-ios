@@ -25,8 +25,6 @@ extension MapViewController {
 
 class MapViewController: UIViewController {
     
-    @IBOutlet var userTrackingButton: MKUserTrackingButton!
-    
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
@@ -36,23 +34,16 @@ class MapViewController: UIViewController {
         }
     }
     
-    private lazy var db = Firestore.firestore()
-    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
-    // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
-    var locationListener: ListenerRegistration?
-    // Currently not removed at all and constantly listening for auth state updates
-    // Makes it possible to notice sign-out event in profile view and then present auth view
-    // Also prepares the map in the background after the user signed in the auth view
-    var authListener: AuthStateDidChangeListenerHandle?
-    
-    private var regionIsCenteredOnUserLocation = false
-    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        
+        if Auth.auth().currentUser != nil {
+            setupAfterUserSignedIn()
+        }
         
         setupAuthListener()
         
@@ -64,8 +55,8 @@ class MapViewController: UIViewController {
 
         // Auth listener is kept in memory all the time
         // Uncomment this to deallocate it
-        // if Auth.auth().currentUser == nil {
-        //     present(authUI.authViewController(), animated: true)
+        // if let authListener = self?.authListener {
+        //     Auth.auth().removeStateDidChangeListener(authListener)
         // }
         
         // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
@@ -75,18 +66,24 @@ class MapViewController: UIViewController {
     
     // MARK: - Setup
     
+    private func setupAfterUserSignedIn() {
+        // Choose "Map" tab
+        tabBarController?.selectedIndex = 1
+        
+        // Choose "Buildings" location filter
+        locationFilter.selectedSegmentIndex = 0
+        
+        fetchLocations(type: .building)
+        requestUserLocationAuth()
+        setupNotificationToken()
+    }
+    
+    // Currently listener isn't removed at all and constantly listening for auth state updates
+    // Makes it possible to notice sign-out event in profile view and present auth view
+    var authListener: AuthStateDidChangeListenerHandle?
     private func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
-            if Auth.auth().currentUser != nil {
-                self?.tabBarController?.selectedIndex = 1
-                self?.locationFilter.selectedSegmentIndex = 0
-                // When a new user is created, displayName is not set immediately
-                // I had to therefore use a delay here to wait until it's set so the map can be prepared
-                Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
-                    guard let username = Auth.auth().currentUser?.displayName, username != "" else {print("Couldn't setup map, username is nil"); return }
-                    self?.setupAfterUserSignedIn()
-                }
-            } else {
+            if user == nil {
                 self?.clearMap()
                 
                 let sb = UIStoryboard(name: "Main", bundle: .main)
@@ -96,28 +93,20 @@ class MapViewController: UIViewController {
         }
     }
     
-    private func setupAfterUserSignedIn() {
-        fetchLocations(type: .building)
-        requestUserLocationAuth()
-        // Delaying this to make sure the user document has been created after sign-up
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { [weak self] _ in
-            self?.setupNotificationToken()
-        }
-    }
-    
     // MARK: - Notifications
 
     private func setupNotificationToken() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        InstanceID.instanceID().instanceID { [weak self] (result, error) in
+        InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
                 print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
                 guard notificationToken != UserDefaults.standard.string(forKey: "notificationToken") else { return }
                 
-                self?.db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
+                let db = Firestore.firestore()
+                db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         print("Error setting notification token for user: \(error)")
                     } else {
@@ -133,7 +122,7 @@ class MapViewController: UIViewController {
         let message = NSLocalizedString("alert-message-request-notification-permission", comment: "Message of alert when requesting notification permission")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
+        let okAction = UIAlertAction(title: okActionTitle, style: .default) { action in
             guard let user = Auth.auth().currentUser else { return }
             
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
@@ -146,7 +135,8 @@ class MapViewController: UIViewController {
                         UIApplication.shared.registerForRemoteNotifications()
                     }
                     
-                    self?.db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                    let db = Firestore.firestore()
+                    db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
                         if let error = error {
                             print("Error in setting location captured push notifications setting to enabled: ", error)
                         }
@@ -160,22 +150,6 @@ class MapViewController: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
             self?.present(alert, animated: true)
         }
-    }
-    
-    // MARK: - User Location Button
-    
-    func setupUserTrackingButton() {
-        let button = MKUserTrackingButton(mapView: mapView)
-        button.layer.backgroundColor = UIColor(white: 1, alpha: 0.8).cgColor
-        button.tintColor = UIColor.GeoCap.blue
-        button.layer.cornerRadius = 5
-        button.translatesAutoresizingMaskIntoConstraints = false
-        mapView.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
-            button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
-        ])
     }
     
     // MARK: - Segmented Control (location filter)
@@ -210,8 +184,11 @@ class MapViewController: UIViewController {
         mapView.removeOverlays(overlays)
     }
     
+    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
+    // Makes it possible to keep the map updated in the background while the quiz or leaderboard view is visible
+    var locationListener: ListenerRegistration?
     private func fetchLocations(type: LocationType) {
-        
+        let db = Firestore.firestore()
         locationListener = db.collection("cities")
             .document("uppsala")
             .collection("locations")
@@ -301,25 +278,6 @@ class MapViewController: UIViewController {
         return annotationView
     }
     
-    func user(location: MKUserLocation, isInside overlay: MKOverlay) -> Bool {
-        let coordinates = location.coordinate
-        
-        switch overlay {
-        case let polygon as MKPolygon:
-            let polygonRenderer = MKPolygonRenderer(polygon: polygon)
-            let mapPoint = MKMapPoint(coordinates)
-            let polygonPoint = polygonRenderer.point(for: mapPoint)
-            return polygonRenderer.path.contains(polygonPoint)
-        case let circle as MKCircle:
-            let circleRenderer = MKCircleRenderer(circle: circle)
-            let mapPoint = MKMapPoint(coordinates)
-            let circlePoint = circleRenderer.point(for: mapPoint)
-            return circleRenderer.path.contains(circlePoint)
-        default:
-            fatalError("Unexpected overlay in user(location:, isInside:)")
-        }
-    }
-    
     private func presentNotInsideAreaAlert() {
         let title = NSLocalizedString("alert-title-not-inside-area", comment: "Title of alert when user isn't inside area")
         let message = NSLocalizedString("alert-message-not-inside-area", comment: "Message of alert when user isn't inside area")
@@ -330,7 +288,7 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    // MARK: - User Location Authorization
+    // MARK: - User Location
     
     private let locationManager = CLLocationManager()
     
@@ -360,6 +318,41 @@ class MapViewController: UIViewController {
         alert.addAction(settingsAction)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+    
+    private var regionIsCenteredOnUserLocation = false
+    func user(location: MKUserLocation, isInside overlay: MKOverlay) -> Bool {
+        let coordinates = location.coordinate
+        
+        switch overlay {
+        case let polygon as MKPolygon:
+            let polygonRenderer = MKPolygonRenderer(polygon: polygon)
+            let mapPoint = MKMapPoint(coordinates)
+            let polygonPoint = polygonRenderer.point(for: mapPoint)
+            return polygonRenderer.path.contains(polygonPoint)
+        case let circle as MKCircle:
+            let circleRenderer = MKCircleRenderer(circle: circle)
+            let mapPoint = MKMapPoint(coordinates)
+            let circlePoint = circleRenderer.point(for: mapPoint)
+            return circleRenderer.path.contains(circlePoint)
+        default:
+            fatalError("Unexpected overlay in user(location:, isInside:)")
+        }
+    }
+    
+    @IBOutlet var userTrackingButton: MKUserTrackingButton!
+    func setupUserTrackingButton() {
+        let button = MKUserTrackingButton(mapView: mapView)
+        button.layer.backgroundColor = UIColor(white: 1, alpha: 0.8).cgColor
+        button.tintColor = UIColor.GeoCap.blue
+        button.layer.cornerRadius = 5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        mapView.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
+            button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
+        ])
     }
     
     // MARK: - Navigation
@@ -394,13 +387,15 @@ class MapViewController: UIViewController {
     
     
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
-        if unwindSegue.identifier == "unwindSegueToMap", let quizVC = unwindSegue.source as? QuizViewController {
+        if unwindSegue.identifier == "unwindSegueQuizToMap", let quizVC = unwindSegue.source as? QuizViewController {
             if quizVC.locationWasCaptured {
                 // Request notifications permission after first capture
                 if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                     presentRequestNotificationAuthAlert()
                 }
             }
+        } else if unwindSegue.identifier == "unwindSegueAuthToMap" {
+            setupAfterUserSignedIn()
         }
     }
     

@@ -283,7 +283,7 @@
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
                         <outletCollection property="answerButtons" destination="o9L-qI-NsT" collectionClass="NSMutableArray" id="53O-Iu-8WI"/>
-                        <segue destination="S3A-HQ-8TI" kind="unwind" identifier="unwindSegueToMap" unwindAction="unwindToMapWithUnwindSegue:" id="pDl-ZD-cdU"/>
+                        <segue destination="S3A-HQ-8TI" kind="unwind" identifier="unwindSegueQuizToMap" unwindAction="unwindToMapWithUnwindSegue:" id="pDl-ZD-cdU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgB-3b-WCv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -306,8 +306,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="WDA-Zx-Z6T"/>
                     </view>
+                    <connections>
+                        <segue destination="Hj3-NI-KAt" kind="unwind" identifier="unwindSegueAuthToMap" unwindAction="unwindToMapWithUnwindSegue:" id="uUW-AJ-OyX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Hj3-NI-KAt" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-882" y="0.0"/>
         </scene>
