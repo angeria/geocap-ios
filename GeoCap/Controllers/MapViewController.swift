@@ -103,14 +103,11 @@ class MapViewController: UIViewController {
                 print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
-                guard notificationToken != UserDefaults.standard.string(forKey: "notificationToken") else { return }
                 
                 let db = Firestore.firestore()
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         print("Error setting notification token for user: \(error)")
-                    } else {
-                        UserDefaults.standard.set(notificationToken, forKey: "notificationToken")
                     }
                 }
             }
@@ -118,8 +115,8 @@ class MapViewController: UIViewController {
     }
     
     private func presentRequestNotificationAuthAlert() {
-        let title = NSLocalizedString("alert-title-request-notification-permission", comment: "Title of alert when requesting notification permission")
-        let message = NSLocalizedString("alert-message-request-notification-permission", comment: "Message of alert when requesting notification permission")
+        let title = NSLocalizedString("alert-title-request-notification-auth", comment: "Title of alert when requesting notification authorization")
+        let message = NSLocalizedString("alert-message-request-notification-auth", comment: "Message of alert when requesting notification authorization")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
         let okAction = UIAlertAction(title: okActionTitle, style: .default) { action in
@@ -136,9 +133,9 @@ class MapViewController: UIViewController {
                     }
                     
                     let db = Firestore.firestore()
-                    db.collection("users").document(user.uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                    db.collection("users").document(user.uid).updateData(["locationLostPushNotificationsEnabled": true]) { error in
                         if let error = error {
-                            print("Error in setting location captured push notifications setting to enabled: ", error)
+                            print("Error setting 'locationLostPushNotificationsEnabled' to true: ", error)
                         }
                     }
                 }
@@ -146,6 +143,7 @@ class MapViewController: UIViewController {
             }
         }
         alert.addAction(okAction)
+        
         // Had to delay the alert a bit to prevent getting "view is not in the window hierarchy" error
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
             self?.present(alert, animated: true)
