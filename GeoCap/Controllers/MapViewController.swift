@@ -78,6 +78,8 @@ class MapViewController: UIViewController {
     private func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
             if Auth.auth().currentUser != nil {
+                self?.tabBarController?.selectedIndex = 1
+                self?.locationFilter.selectedSegmentIndex = 0
                 // When a new user is created, displayName is not set immediately
                 // I had to therefore use a delay here to wait until it's set so the map can be prepared
                 Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
@@ -85,6 +87,8 @@ class MapViewController: UIViewController {
                     self?.setupAfterUserSignedIn()
                 }
             } else {
+                self?.clearMap()
+                
                 let sb = UIStoryboard(name: "Main", bundle: .main)
                 let authVC = sb.instantiateViewController(withIdentifier: "Auth")
                 self?.tabBarController?.present(authVC, animated: true)
