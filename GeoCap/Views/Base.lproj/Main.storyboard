@@ -82,8 +82,8 @@
                                     <action selector="notificationsSwitchPressed:" destination="SrA-5C-Dgb" eventType="valueChanged" id="gxP-mh-ihV"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Push Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Qp-HY-yZO">
-                                <rect key="frame" x="16" y="157" width="181" height="28"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Qp-HY-yZO">
+                                <rect key="frame" x="16" y="157" width="126" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <nil key="textColor"/>
@@ -102,7 +102,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="tab-bar-profile" selectedImage="tab-bar-profile" id="Ehp-tO-H9e"/>
                     <connections>
-                        <outlet property="notificationsSwitch" destination="ngZ-0V-ErN" id="mfq-zC-mdY"/>
+                        <outlet property="locationLostNotificationsSwitch" destination="ngZ-0V-ErN" id="mfq-zC-mdY"/>
                         <outlet property="signOutButton" destination="gEq-cg-01V" id="HRI-1t-pdl"/>
                     </connections>
                 </viewController>
@@ -118,12 +118,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="HeK-k0-gTl">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="HeK-k0-gTl">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Captured locations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mx-9u-3Gi">
-                                    <rect key="frame" x="222" y="11.5" width="145" height="21"/>
+                                    <rect key="frame" x="222" y="45" width="145" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -283,7 +283,7 @@
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
                         <outletCollection property="answerButtons" destination="o9L-qI-NsT" collectionClass="NSMutableArray" id="53O-Iu-8WI"/>
-                        <segue destination="S3A-HQ-8TI" kind="unwind" identifier="unwindSegueToMap" unwindAction="unwindToMapWithUnwindSegue:" id="pDl-ZD-cdU"/>
+                        <segue destination="S3A-HQ-8TI" kind="unwind" identifier="unwindSegueQuizToMap" unwindAction="unwindToMapWithUnwindSegue:" id="pDl-ZD-cdU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgB-3b-WCv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -306,8 +306,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="WDA-Zx-Z6T"/>
                     </view>
+                    <connections>
+                        <segue destination="Hj3-NI-KAt" kind="unwind" identifier="unwindSegueAuthToMap" unwindAction="unwindToMapWithUnwindSegue:" id="uUW-AJ-OyX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Hj3-NI-KAt" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-882" y="0.0"/>
         </scene>

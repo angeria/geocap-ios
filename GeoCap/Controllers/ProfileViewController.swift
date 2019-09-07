@@ -11,8 +11,13 @@ import Firebase
 
 class ProfileViewController: UIViewController {
     
-    private lazy var db = Firestore.firestore()
-    private lazy var user = Auth.auth().currentUser
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if locationLostNotificationsSettingsListener == nil {
+            setupLocationLostNotificationsSwitch()
+        }
+    }
     
     // MARK: - Sign out
     
@@ -23,17 +28,19 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func signOutPressed(_ sender: UIButton) {
-        guard let uid = user?.uid else { return }
-        
-        UserDefaults.standard.set("", forKey: "notificationToken")
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         // Unregister for notifications
-        db.collection("users").document(uid).updateData(["notificationToken": ""]) { error in
+        let db = Firestore.firestore()
+        db.collection("users").document(uid).updateData(["notificationToken": ""]) { [weak self] error in
             if let error = error {
                 print("Error removing notification token from user: \(error)")
             }
+            self?.signOut()
         }
-        
+    }
+    
+    private func signOut() {
         do {
             try Auth.auth().signOut()
         }
@@ -46,48 +53,68 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Notifications
     
-    @IBOutlet weak var notificationsSwitch: UISwitch! {
-        didSet {
-            guard let uid = user?.uid else { return }
-            
-            db.collection("users").document(uid).getDocument() { [weak self] (document, error) in
-                if let error = error {
-                    print("Error fetching user notification settings: ", error)
-                } else if let document = document {
-                    if document.get("locationCapturedPushNotificationsEnabled") as? Bool == true {
-                        self?.notificationsSwitch.isOn = true
-                    }
+    @IBOutlet weak var locationLostNotificationsSwitch: UISwitch!
+    
+    // Using a listener to use offline caching which gives a more responsive feeling compared to normal requests
+    // I'm uncertain if this causes undue performance and/or network impact; keeping it for now
+    var locationLostNotificationsSettingsListener: ListenerRegistration?
+    private func setupLocationLostNotificationsSwitch() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        let db = Firestore.firestore()
+        locationLostNotificationsSettingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("Error fetching user: \(error!)")
+                    return
                 }
-            }
+                DispatchQueue.main.async {
+                    self?.locationLostNotificationsSwitch.isOn = document.get("locationLostNotificationsEnabled") as? Bool == true ? true : false
+                }
         }
     }
     
-    private func setNotificationSettings(to isEnabled: Bool) {
-        guard let uid = user?.uid else { return }
-        
-        notificationsSwitch.isOn = isEnabled
-        
-        db.collection("users").document(uid).updateData(["locationCapturedPushNotificationsEnabled": isEnabled]) { error in
-            if let error = error {
-                print("Error setting location captured push notification setting: \(error)")
-            }
-        }
+    // Should be called from map when signing out
+    func removeSettingsListener() {
+        locationLostNotificationsSettingsListener?.remove()
+        locationLostNotificationsSettingsListener = nil
     }
     
     @IBAction func notificationsSwitchPressed(_ sender: UISwitch) {
         switch sender.isOn {
         case true:
-            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
-                presentNotificationAuthRequest()
+            UNUserNotificationCenter.current().getNotificationSettings() { [weak self] settings in
+                switch settings.authorizationStatus {
+                case .authorized, .provisional:
+                    self?.setLocationLostNotificationsSetting(to: true)
+                case .denied:
+                    DispatchQueue.main.async {
+                        self?.locationLostNotificationsSwitch.isOn = false
+                        self?.presentNotificationAuthDisabledAlert()
+                    }
+                case .notDetermined:
+                    self?.presentNotificationAuthRequest()
+                @unknown default:
+                    fatalError("Unexpected notification authorization status")
+                }
             }
-            setNotificationSettings(to: true)
         case false:
-            setNotificationSettings(to: false)
+            setLocationLostNotificationsSetting(to: false)
+        }
+    }
+    
+    private func setLocationLostNotificationsSetting(to isEnabled: Bool) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
+            if let error = error {
+                print("Error setting 'locationLostNotificationsEnabled' to: \(isEnabled)", error)
+            }
         }
     }
 
     private func presentNotificationAuthRequest() {
-        guard let uid = user?.uid else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let authOptions: UNAuthorizationOptions = [.alert, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
@@ -95,17 +122,39 @@ class ProfileViewController: UIViewController {
                 print("Error requesting notifications auth: ", error)
                 return
             } else if granted {
+                self?.setLocationLostNotificationsSetting(to: true)
+                
                 DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
                 
-                self?.db.collection("users").document(uid).updateData(["locationCapturedPushNotificationsEnabled": true]) { error in
+                let db = Firestore.firestore()
+                db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                     if let error = error {
-                        print("Error in setting location captured push notifications setting to enabled: ", error)
+                        print("Error setting 'locationLostNotificationsEnabled' to true: ", error)
                     }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.locationLostNotificationsSwitch.isOn = false
                 }
             }
             UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
         }
+    }
+    
+    private func presentNotificationAuthDisabledAlert() {
+        let title = NSLocalizedString("alert-title-notification-auth-off", comment: "Alert title when notification auth is off")
+        let message = NSLocalizedString("alert-message-notification-auth-off", comment: "Alert message when notification auth is off")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        let settingsActionTitle = NSLocalizedString("alert-action-title-settings", comment: "Title of alert action for going to 'Settings'")
+        let settingsAction = UIAlertAction(title: settingsActionTitle, style: .default, handler: {action in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+        })
+        alert.addAction(settingsAction)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
 }

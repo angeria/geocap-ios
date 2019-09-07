@@ -7,14 +7,19 @@
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Platstjänster avslagna";
 /* Alert message when location services is off */
-"alert-message-location-services-off" = "Slå på platstjänster i inställningar för att tillåta GeoCap att läsa din aktuella position";
+"alert-message-location-services-off" = "Slå på platstjänster i inställningarna för att tillåta GeoCap att läsa din aktuella position";
 /* Title of alert action for going to 'Settings' */
 "alert-action-title-settings" = "Inställningar";
 
-/* Title of alert when requesting notification permission */
-"alert-title-request-notification-permission" = "Pushnotiser";
-/* Message of alert when requesting notification permission */
-"alert-message-request-notification-permission" = "GeoCap skulle vilja skicka pushnotiser när andra tar över dina platser";
+/* Title of alert when requesting notification authorization */
+"alert-title-request-notification-auth" = "Notiser";
+/* Message of alert when requesting notification authorization */
+"alert-message-request-notification-auth" = "GeoCap skulle vilja skicka notiser när andra tar över dina platser";
+
+/* Alert title when notification auth is off */
+"alert-title-notification-auth-off" = "Notiser av";
+/* Alert message when notification auth is off */
+"alert-message-notification-auth-off" = "Slå på notiser i inställningarna för att kunna aktivera denna funktion";
 
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Ej inom området";
