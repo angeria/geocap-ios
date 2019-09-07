@@ -7,7 +7,7 @@
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Platstjänster avslagna";
 /* Alert message when location services is off */
-"alert-message-location-services-off" = "Slå på platstjänster i inställningar för att tillåta GeoCap att läsa din aktuella position";
+"alert-message-location-services-off" = "Slå på platstjänster i inställningarna för att tillåta GeoCap att läsa din aktuella position";
 /* Title of alert action for going to 'Settings' */
 "alert-action-title-settings" = "Inställningar";
 

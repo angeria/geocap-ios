@@ -39,7 +39,7 @@ class AuthViewController: UIViewController {
             "capturedLocationsCount": 0,
             "latestEventId": "",
             "notificationToken": "",
-            "locationLostPushNotificationsEnabled": false
+            "locationLostNotificationsEnabled": false
         ]) { [weak self] error in
             if let error = error {
                 print("Error adding user: \(error)")
