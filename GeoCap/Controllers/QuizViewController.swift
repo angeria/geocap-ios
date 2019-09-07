@@ -61,7 +61,7 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
         if quizFailed || questions.isEmpty {
-            performSegue(withIdentifier: "unwindSegueToMap", sender: self)
+            performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
             showNextQuestion()
             nextQuestionTapRecognizer.isEnabled = false

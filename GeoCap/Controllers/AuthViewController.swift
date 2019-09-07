@@ -39,13 +39,13 @@ class AuthViewController: UIViewController {
             "capturedLocationsCount": 0,
             "latestEventId": "",
             "notificationToken": "",
-            "locationCapturedPushNotificationsEnabled": false
+            "locationLostNotificationsEnabled": false
         ]) { [weak self] error in
             if let error = error {
                 print("Error adding user: \(error)")
                 self?.presentLoginErrorAlert()
             } else {
-                self?.presentingViewController?.dismiss(animated: true)
+                self?.performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
         }
     }
@@ -80,7 +80,6 @@ class AuthViewController: UIViewController {
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-    
 }
 
 extension AuthViewController: FUIAuthDelegate {
@@ -89,8 +88,8 @@ extension AuthViewController: FUIAuthDelegate {
         switch error {
         case .none:
             guard let user = authDataResult?.user else { presentLoginErrorAlert(); return }
-            guard user.displayName != "" else {
-                print("Login error: 'user.displayName' is an empty string")
+            guard user.displayName != nil, user.displayName != "" else {
+                print("Login error: 'user.displayName' is nil or an empty string")
                 presentLoginErrorAlert()
                 return
             }
@@ -98,7 +97,7 @@ extension AuthViewController: FUIAuthDelegate {
             if authDataResult?.additionalUserInfo?.isNewUser == true {
                 storeNewUser(user)
             } else {
-                presentingViewController?.dismiss(animated: true)
+                performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
         case .some(let error):
             handleSignInError(error)
