@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
         
         // Unregister for notifications
         let db = Firestore.firestore()
-        db.collection("users").document(uid).updateData(["notificationToken": ""]) { [weak self] error in
+        db.collection("users").document(uid).updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
             if let error = error {
                 print("Error removing notification token from user: \(error)")
             }
