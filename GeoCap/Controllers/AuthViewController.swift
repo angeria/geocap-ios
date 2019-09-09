@@ -37,8 +37,6 @@ class AuthViewController: UIViewController {
             "username": user.displayName!,
             "capturedLocations": [],
             "capturedLocationsCount": 0,
-            "latestEventId": "",
-            "notificationToken": "",
             "locationLostNotificationsEnabled": false
         ]) { [weak self] error in
             if let error = error {
