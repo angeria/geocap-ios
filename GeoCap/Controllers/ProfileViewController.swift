@@ -57,16 +57,17 @@ class ProfileViewController: UIViewController {
     
     // Using a listener to use offline caching which gives a more responsive feeling compared to normal requests
     // I'm uncertain if this causes undue performance and/or network impact; keeping it for now
-    var settingsListener: ListenerRegistration?
+    private var settingsListener: ListenerRegistration?
     private func setupLocationLostNotificationsSwitch() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
         let db = Firestore.firestore()
         settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
-                    print("Error fetching user: \(error!)")
+                    print("Error fetching user document: \(error!)")
                     return
                 }
+            
                 DispatchQueue.main.async {
                     self?.locationLostNotificationsSwitch.isOn = document.get("locationLostNotificationsEnabled") as? Bool == true ? true : false
                 }
@@ -119,7 +120,10 @@ class ProfileViewController: UIViewController {
         let authOptions: UNAuthorizationOptions = [.alert, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
             if let error = error {
-                print("Error requesting notifications auth: ", error)
+                print("Error requesting notification auth: ", error)
+                DispatchQueue.main.async {
+                    self?.locationLostNotificationsSwitch.isOn = false
+                }
                 return
             } else if granted {
                 self?.setLocationLostNotificationsSetting(to: true)

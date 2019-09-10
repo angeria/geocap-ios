@@ -26,7 +26,7 @@ extension MapViewController {
 class MapViewController: UIViewController {
     
     // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
-    // Set 'mapView.delegate = nil' to be able to deallocate mapView
+    // Set 'mapView.delegate = nil' to be able to deallocate it
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
@@ -126,7 +126,6 @@ class MapViewController: UIViewController {
                 print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
-                
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         print("Error setting notification token for user: \(error)")
@@ -135,7 +134,7 @@ class MapViewController: UIViewController {
             }
         }
         
-        // Turn off notifications for user if they are disabled in app settings
+        // Turn off location lost notifications for user if setting is 'denied' or 'not determined'
         UNUserNotificationCenter.current().getNotificationSettings() { settings in
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
@@ -161,7 +160,7 @@ class MapViewController: UIViewController {
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
-                    print("Error requesting notifications auth: ", error)
+                    print("Error requesting notification auth: ", error)
                     return
                 } else if granted {
                     DispatchQueue.main.async {
@@ -181,7 +180,7 @@ class MapViewController: UIViewController {
         alert.addAction(okAction)
         
         // Had to delay the alert a bit to prevent getting "view is not in the window hierarchy" error
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { [weak self] timer in
+        Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { [weak self] timer in
             self?.present(alert, animated: true)
         }
     }
@@ -418,7 +417,7 @@ class MapViewController: UIViewController {
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
         if unwindSegue.identifier == "unwindSegueQuizToMap", let quizVC = unwindSegue.source as? QuizViewController {
             if quizVC.locationWasCaptured {
-                // Request notifications permission after first capture
+                // Request notification auth after first capture
                 if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                     presentRequestNotificationAuthAlert()
                 }
