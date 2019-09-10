@@ -12,13 +12,8 @@ import Firebase
 class LeaderboardViewController: UITableViewController {
 
     private var userListener: ListenerRegistration?
-    private lazy var db = Firestore.firestore()
     
     var users = [(String, Int)]()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -29,14 +24,14 @@ class LeaderboardViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if let userListener = userListener {
-            userListener.remove()
+        if userListener != nil {
+            userListener?.remove()
+            userListener = nil
         }
-        
-        users.removeAll()
     }
     
     private func fetchUsers() {
+        let db = Firestore.firestore()
         userListener = db.collection("users").addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 print("Error fetching users: \(error!)")
@@ -44,28 +39,18 @@ class LeaderboardViewController: UITableViewController {
             }
             
             guard let self = self else { return }
-            snapshot.documentChanges.forEach { diff in
-                guard let username = diff.document.data()["username"] as? String else { return }
-                guard let locationCount = diff.document.data()["capturedLocationsCount"] as? Int else { return }
+            
+            self.users.removeAll()
+            
+            snapshot.documents.forEach() { documentSnapshot in
+                guard let username = documentSnapshot.data()["username"] as? String else { return }
+                guard let locationCount = documentSnapshot.data()["capturedLocationsCount"] as? Int else { return }
                 
-                if (diff.type == .added) {
-                    self.users += [(username, locationCount)]
-                }
-                
-                if (diff.type == .modified) {
-                    if let index = self.users.firstIndex(where: { $0.0 == username }) {
-                        self.users[index].1 = locationCount
-                    }
-                }
-                
-                if (diff.type == .removed) {
-                    if let index = self.users.firstIndex(where: { $0.0 == username }) {
-                        self.users.remove(at: index)
-                    }
-                }
+                self.users += [(username, locationCount)]
             }
             
             self.users.sort() { $0.1 > $1.1 }
+            
             self.tableView.reloadData()
         }
     }
@@ -84,7 +69,6 @@ class LeaderboardViewController: UITableViewController {
         cell.textLabel?.text = "\(indexPath.row + 1). \(username)"
         cell.detailTextLabel?.text = String(count)
         cell.backgroundColor = (username == Auth.auth().currentUser?.displayName) ? UIColor.groupTableViewBackground.withAlphaComponent(0.50) : .white
-        
         
         return cell
     }
