@@ -118,12 +118,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="HeK-k0-gTl">
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="HeK-k0-gTl">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Captured locations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mx-9u-3Gi">
-                                    <rect key="frame" x="222" y="45" width="145" height="21"/>
+                                    <rect key="frame" x="222" y="11.5" width="145" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -248,9 +248,9 @@
                                 </constraints>
                             </stackView>
                             <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
-                                <rect key="frame" x="16" y="628" width="343" height="10"/>
+                                <rect key="frame" x="16" y="627" width="343" height="13"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="10" id="Xgj-TH-8fx"/>
+                                    <constraint firstAttribute="height" constant="13" id="Xgj-TH-8fx"/>
                                 </constraints>
                                 <color key="progressTintColor" red="0.60697394609451294" green="0.87294381856918335" blue="0.6579318642616272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </progressView>
@@ -264,10 +264,10 @@
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="nWZ-6v-edE" secondAttribute="trailing" constant="16" id="LL5-7T-dUa"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="67" id="OrT-4t-OFq"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="16" id="QRS-T8-olZ"/>
-                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="G0l-cd-InB" secondAttribute="bottom" constant="29" id="Qka-rZ-G6Z"/>
-                            <constraint firstItem="G0l-cd-InB" firstAttribute="top" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="28" id="eY3-CO-mbv"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="hEo-hZ-6Dj"/>
+                            <constraint firstItem="G0l-cd-InB" firstAttribute="top" relation="greaterThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="27" id="iAs-c5-Gc5"/>
                             <constraint firstItem="G0l-cd-InB" firstAttribute="width" secondItem="6IC-rL-MU1" secondAttribute="width" id="ibK-vO-iAN"/>
+                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" secondItem="G0l-cd-InB" secondAttribute="bottom" constant="27" id="ycf-mT-IXF"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="6IC-rL-MU1" secondAttribute="trailing" constant="16" id="z3E-LJ-JDG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2g4-CM-phi"/>
@@ -276,9 +276,9 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="countdownBar" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
                         <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>
-                        <outlet property="timer" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
                         <outletCollection property="answerButtons" destination="Glb-p3-C4Y" collectionClass="NSMutableArray" id="lrt-f9-nap"/>
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>
                         <outletCollection property="answerButtons" destination="BFK-tV-XoW" collectionClass="NSMutableArray" id="8Jc-UW-HaO"/>
