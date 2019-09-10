@@ -78,6 +78,7 @@ class AuthViewController: UIViewController {
         alert.addAction(okAction)
         present(alert, animated: true)
     }
+
 }
 
 extension AuthViewController: FUIAuthDelegate {
@@ -88,6 +89,7 @@ extension AuthViewController: FUIAuthDelegate {
             guard let user = authDataResult?.user else { presentLoginErrorAlert(); return }
             guard user.displayName != nil, user.displayName != "" else {
                 print("Login error: 'user.displayName' is nil or an empty string")
+                try? Auth.auth().signOut()
                 presentLoginErrorAlert()
                 return
             }
