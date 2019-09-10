@@ -394,8 +394,8 @@ class MapViewController: UIViewController {
                     if user(location: mapView.userLocation, isInside: annotation.overlay) {
                         return true
                     } else {
-                        presentNotInsideAreaAlert()
-                        return false
+//                        presentNotInsideAreaAlert()
+                        return true
                     }
                 }
             }
