@@ -34,23 +34,10 @@ class QuizViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var timer: UIProgressView! {
-        didSet {
-            timer.layer.cornerRadius = 5
-            timer.clipsToBounds = true
-            timer.layer.sublayers![1].cornerRadius = 5
-            timer.subviews[1].clipsToBounds = true
-        }
-    }
-    
-    private lazy var db = Firestore.firestore()
-    private lazy var functions = Functions.functions(region:"europe-west1")
-    
     private var questions = [Question]()
     private var currentQuestion: Question?
     private var correctAnswersCount = 0
     private let numberOfQuestions = Constants.numberOfQuestions
-    private var timerBarTimer: Timer?
     private var quizFailed = false
     // Checked in the map view via the unwind segue
     var locationWasCaptured = false
@@ -95,7 +82,7 @@ class QuizViewController: UIViewController {
             quizFailed = true
         }
         
-        timerBarTimer?.invalidate()
+        countdownBarTimer?.invalidate()
         nextQuestionTapRecognizer.isEnabled = true
     }
     
@@ -104,6 +91,7 @@ class QuizViewController: UIViewController {
     //
     // Every question in db has a 'random' object with randomly generated 64 bit integers
     private func fetchQuestions() {
+        let db = Firestore.firestore()
         let questionsRef = db.collection("questions")
         let shouldFetchGreater = Bool.random()
         let randomIndex = Int.random(in: 0..<Constants.locationRandomArrayCount)
@@ -182,25 +170,6 @@ class QuizViewController: UIViewController {
         startTimer()
     }
     
-    private func startTimer() {
-        timer.progress = 1
-        timer.progressTintColor = UIColor.GeoCap.green
-        
-        timerBarTimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { [weak self] timer in
-            guard let self = self else { return }
-            
-            switch self.timer.progress {
-            case ..<0:
-                self.timerBarTimer?.invalidate()
-            case ..<0.35:
-                self.timer.progressTintColor = UIColor.GeoCap.red
-                fallthrough
-            default:
-                self.timer.setProgress(self.timer.progress - 0.0005, animated: true)
-            }
-        }
-    }
-    
     private func resetButtons() {
         for button in answerButtons {
             button.isEnabled = true
@@ -212,6 +181,7 @@ class QuizViewController: UIViewController {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
         guard let locationName = locationName else { return }
         
+        let db = Firestore.firestore()
         let batch = db.batch()
         
         let locationReference = db.collection("cities").document("uppsala").collection("locations").document(locationName)
@@ -223,6 +193,42 @@ class QuizViewController: UIViewController {
         batch.commit() { err in
             if let err = err {
                 print("Error writing batch \(err)")
+            }
+        }
+    }
+    
+    // MARK: - Timer
+    
+    @IBOutlet weak var countdownBar: UIProgressView! {
+        didSet {
+            countdownBar.layer.cornerRadius = 5
+            countdownBar.clipsToBounds = true
+            countdownBar.layer.sublayers![1].cornerRadius = 5
+            countdownBar.subviews[1].clipsToBounds = true
+        }
+    }
+    
+    private var countdownBarTimer: Timer?
+    private func startTimer() {
+        countdownBar.progress = 1
+        countdownBar.progressTintColor = UIColor.GeoCap.green
+        
+        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] timer in
+            guard let self = self else { return }
+            
+            switch self.countdownBar.progress {
+            case ...0:
+                self.countdownBar.shake()
+                self.answerButtons.forEach() { $0.isEnabled = false }
+                self.countdownBarTimer?.invalidate()
+                Timer.scheduledTimer(withTimeInterval: GeoCap.Constants.shakeAnimationDuration + 0.1, repeats: false) { _ in
+                    self.presentingViewController?.dismiss(animated: true, completion: nil)
+                }
+            case 0.29...0.30:
+                self.countdownBar.progressTintColor = UIColor.GeoCap.red
+                fallthrough
+            default:
+                self.countdownBar.setProgress(self.countdownBar.progress - 0.001, animated: false)
             }
         }
     }
