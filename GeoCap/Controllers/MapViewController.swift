@@ -416,7 +416,7 @@ class MapViewController: UIViewController {
     
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
         if unwindSegue.identifier == "unwindSegueQuizToMap", let quizVC = unwindSegue.source as? QuizViewController {
-            if quizVC.locationWasCaptured {
+            if !quizVC.quizFailed {
                 // Request notification auth after first capture
                 if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
                     presentRequestNotificationAuthAlert()
