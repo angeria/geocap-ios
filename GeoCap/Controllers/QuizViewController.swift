@@ -11,20 +11,13 @@ import Firebase
 
 extension QuizViewController {
     enum Constants {
-        static let largest64BitNumber = 9223372036854775807
-        static let maximalNumberOfQuestionFetchTries = 1
-        static let locationRandomArrayCount = 3
         static let numberOfQuestions = 3
     }
 }
 
 class QuizViewController: UIViewController {
     
-    @IBOutlet weak var questionLabel: UILabel! {
-        didSet {
-            questionLabel.text = nil
-        }
-    }
+    @IBOutlet weak var questionLabel: UILabel!
     
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
@@ -34,31 +27,75 @@ class QuizViewController: UIViewController {
         }
     }
     
-    private var questions = [Question]()
+    private var correctAnswers = 0
     private var currentQuestion: Question?
-    private var correctAnswersCount = 0
-    private let numberOfQuestions = Constants.numberOfQuestions
-    private var quizFailed = false
+    private var usedIndices = [Int]()
+    
     // Checked in the map view via the unwind segue
-    var locationWasCaptured = false
+    var quizFailed = false
     
     // Dependency injection
     var locationName: String!
     
-    @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
-    @IBAction func tap(_ sender: UITapGestureRecognizer) {
-        if quizFailed || questions.isEmpty {
-            performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
-        } else {
-            showNextQuestion()
-            nextQuestionTapRecognizer.isEnabled = false
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchQuestions()
+        fetchQuestion()
+    }
+    
+    private func fetchQuestion() {
+        let db = Firestore.firestore()
+        db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
+            guard let document = documentSnapshot else {
+                print("Error fetching 'quiz/data' document: \(String(describing: error))")
+                return
+            }
+            
+            guard let self = self else { return }
+            
+            if let questionsCount = document.get("questionsCount") as? Int {
+                
+                var randomIndex: Int
+                repeat {
+                    randomIndex = Int.random(in: 0..<questionsCount)
+                } while self.usedIndices.contains(randomIndex)
+                self.usedIndices += [randomIndex]
+                print(self.usedIndices)
+                
+                db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { querySnapshot, error in
+                    guard let query = querySnapshot else {
+                        print("Error fetching question at index '\(randomIndex)': \(String(describing: error))")
+                        return
+                    }
+                    
+                    if let document = query.documents.first, let question = Question(data: document.data()) {
+                        self.currentQuestion = question
+                        self.showNext(question)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func showNext(_ question: Question) {
+        questionLabel.text = question.question
+        let alternatives = ([question.answer] + question.alternatives).shuffled()
+        for (i, alternative) in alternatives.enumerated() {
+            self.answerButtons[i].setTitle(alternative, for: .normal)
+        }
+        
+        resetButtons()
+        startTimer()
+    }
+    
+    @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
+    @IBAction func tap(_ sender: UITapGestureRecognizer) {
+        if quizFailed || correctAnswers == Constants.numberOfQuestions {
+            performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
+        } else {
+            fetchQuestion()
+            nextQuestionTapRecognizer.isEnabled = false
+        }
     }
     
     @IBAction func answerPressed(_ button: UIButton) {
@@ -67,9 +104,8 @@ class QuizViewController: UIViewController {
         if button.titleLabel?.text == currentQuestion?.answer {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
-            correctAnswersCount += 1
-            if correctAnswersCount == numberOfQuestions {
-                locationWasCaptured = true
+            correctAnswers += 1
+            if correctAnswers == Constants.numberOfQuestions {
                 captureLocation()
             }
         } else {
@@ -84,90 +120,6 @@ class QuizViewController: UIViewController {
         
         countdownBarTimer?.invalidate()
         nextQuestionTapRecognizer.isEnabled = true
-    }
-    
-    // Currently questions are recieved in random specific sets, effective since it's just one request
-    // Could be changed to fetch one question at a time which is more random but generates more reads
-    //
-    // Every question in db has a 'random' object with randomly generated 64 bit integers
-    private func fetchQuestions() {
-        let db = Firestore.firestore()
-        let questionsRef = db.collection("questions")
-        let shouldFetchGreater = Bool.random()
-        let randomIndex = Int.random(in: 0..<Constants.locationRandomArrayCount)
-        let fieldName = "random." + String(randomIndex)
-        let randomInt = Int.random(in: 0...Constants.largest64BitNumber)
-        var tries = 0
-        
-        // flow starts from switch at bottom
-        func generateQuestions(_ querySnapshot: QuerySnapshot?, _ error: Error?) {
-            if let error = error {
-                print("Error fetching questions: \(error)")
-            } else {
-                let documents = querySnapshot!.documents.shuffled()
-                for document in documents {
-                    if let question = Question(data: document.data()) {
-                        self.questions.append(question)
-                    }
-                    if self.questions.count == numberOfQuestions {
-                        self.showNextQuestion()
-                        return
-                    }
-                }
-                
-                // less than numberOfQuestions recieved
-                // edge case and should be rare
-                // if it happens, fetch again once in other direction for remaining questions
-                let remaining = numberOfQuestions - questions.count
-                tries += 1
-                if tries <= Constants.maximalNumberOfQuestionFetchTries {
-                    fetch(greater: !shouldFetchGreater, amount: remaining)
-                } else {
-                    print("Warning: missing \(remaining) questions after \(Constants.maximalNumberOfQuestionFetchTries) passes")
-                    presentingViewController?.dismiss(animated: true, completion: nil)
-                }
-            }
-        }
-        
-        func fetch(greater: Bool, amount: Int) {
-            switch greater {
-            case true:
-                questionsRef.whereField(fieldName, isGreaterThanOrEqualTo: randomInt)
-                    .order(by: fieldName)
-                    .limit(to: amount)
-                    .getDocuments() { querySnapshot, error in
-                        generateQuestions(querySnapshot, error)
-                }
-            case false:
-                questionsRef.whereField(fieldName, isLessThan: randomInt)
-                    .order(by: fieldName, descending: true)
-                    .limit(to: amount)
-                    .getDocuments() { querySnapshot, error in
-                        generateQuestions(querySnapshot, error)
-                }
-            }
-        }
-        
-        // starts here because nested functions need to be declared before
-        switch shouldFetchGreater {
-        case true:
-            fetch(greater: true, amount: numberOfQuestions)
-        case false:
-            fetch(greater: false, amount: numberOfQuestions)
-        }
-    }
-
-    private func showNextQuestion() {
-        currentQuestion = questions.removeFirst()
-        
-        questionLabel.text = currentQuestion!.question
-        let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
-        for (i, alternative) in alternatives.enumerated() {
-            self.answerButtons[i].setTitle(alternative, for: .normal)
-        }
-        
-        resetButtons()
-        startTimer()
     }
     
     private func resetButtons() {
@@ -192,7 +144,7 @@ class QuizViewController: UIViewController {
         
         batch.commit() { err in
             if let err = err {
-                print("Error writing batch \(err)")
+                print("Error writing batch: \(err)")
             }
         }
     }
