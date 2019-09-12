@@ -18,74 +18,88 @@ extension QuizViewController {
 
 class QuizViewController: UIViewController {
     
-    @IBOutlet weak var questionLabel: UILabel!
+    // MARK: - Life Cycle
     
-    @IBOutlet var answerButtons: [UIButton]! {
-        didSet {
-            answerButtons.forEach() {
-                $0.layer.cornerRadius = 10
-            }
-        }
-    }
-    
-    private var correctAnswers = 0
-    private var currentQuestion: Question?
-    private var nextQuestion: Question?
-    private var questions = [Question]()
-    private var usedIndices = [Int]()
-    
-    // Checked in the map view via the unwind segue
-    var quizFailed = false
+    let dispatchGroup = DispatchGroup()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchQuestions()
+        dispatchGroup.enter()
+        fetchTotalDatabaseQuestionCount()
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            print("notifed: entering fetchQuestions() and dispatch group")
+            self?.dispatchGroup.enter()
+            self?.fetchQuestions()
+        }
     }
     
     // MARK: - Fetching
+
+    private var totalDatabaseQuestionCount: Int?
     
-    private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
-        guard amount > 0 else { return }
-        
+    private func fetchTotalDatabaseQuestionCount() {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
-                print("Error fetching 'quiz/data' document: \(String(describing: error))")
+                print("Error fetching 'quiz/data' document snapshot: \(String(describing: error))")
+                self?.presentingViewController?.dismiss(animated: true)
                 return
             }
-            guard let self = self else { return }
             
             if let questionsCount = document.get("questionsCount") as? Int {
-                let randomIndex = self.getRandomIndex(within: questionsCount)
-                db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { querySnapshot, error in
-                    guard let query = querySnapshot else {
-                        print("Error fetching question: \(String(describing: error))")
-                        self.presentingViewController?.dismiss(animated: true)
-                        return
-                    }
-                    
-                    if let document = query.documents.first, let question = Question(data: document.data()) {
-                        self.questions += [question]
-                        if self.currentQuestion == nil {
-                            self.showNextQuestion()
-                        }
-                        self.fetchQuestions(amount: amount - 1, retryCount: retryCount)
-                    } else {
-                        print("Couldn't find a question with index '\(randomIndex)'")
-                        if retryCount < Constants.maxNumberOfRetries {
-                            print("Retrying with another index...")
-                            self.fetchQuestions(amount: amount, retryCount: retryCount + 1)
-                        } else {
-                            print("Retries exhausted: exiting back to map")
-                            self.presentingViewController?.dismiss(animated: true)
-                        }
-                        return
-                    }
+                self?.totalDatabaseQuestionCount = questionsCount
+                print("leaving dispatch group in fetchTotalDatabaseQuestionCount()")
+                self?.dispatchGroup.leave()
+            } else {
+                print("Couldn't read 'questionsCount' field")
+                self?.presentingViewController?.dismiss(animated: true)
+            }
+        }
+    }
+    
+    private var questions = [Question]()
+    
+    private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
+        guard amount > 0 else {
+            print("leaving dispatch group in fetchQuestions()")
+            self.dispatchGroup.leave()
+            return
+        }
+        
+        let db = Firestore.firestore()
+        let randomIndex = getRandomIndex(within: totalDatabaseQuestionCount!)
+        
+        db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { [weak self] querySnapshot, error in
+            guard let query = querySnapshot else {
+                print("Error fetching question query snapshot: \(String(describing: error))")
+                self?.presentingViewController?.dismiss(animated: true)
+                return
+            }
+            
+            guard let self = self else { return }
+            
+            if let document = query.documents.first, let question = Question(data: document.data()) {
+                self.questions += [question]
+                if self.currentQuestion == nil {
+                    self.showNextQuestion()
+                }
+                self.fetchQuestions(amount: amount - 1, retryCount: retryCount)
+            } else {
+                print("Couldn't find a question with index '\(randomIndex)'")
+                if retryCount < Constants.maxNumberOfRetries {
+                    print("Retrying with another index...")
+                    self.fetchQuestions(amount: amount, retryCount: retryCount + 1)
+                } else {
+                    print("Retries exhausted: exiting back to map")
+                    self.presentingViewController?.dismiss(animated: true)
                 }
             }
         }
     }
+    
+    private var usedIndices = [Int]()
     
     private func getRandomIndex(within limit: Int) -> Int {
         var randomIndex: Int
@@ -98,8 +112,24 @@ class QuizViewController: UIViewController {
     
     // MARK: - Interaction
     
+    @IBOutlet weak var questionLabel: UILabel!
+    
+    @IBOutlet var answerButtons: [UIButton]! {
+        didSet {
+            answerButtons.forEach() {
+                $0.layer.cornerRadius = 10
+            }
+        }
+    }
+
+    private var currentQuestion: Question?
+    
     private func showNextQuestion() {
-        guard questions.count > 0 else { return }
+        guard questions.count > 0 else {
+            print("UNEXPECTED BEHAVIOR: 'questions' array is empty")
+            presentingViewController?.dismiss(animated: true)
+            return
+        }
         currentQuestion = questions.removeFirst()
         
         questionLabel.text = currentQuestion!.question
@@ -112,13 +142,23 @@ class QuizViewController: UIViewController {
         startTimer()
     }
     
+    // Checked in the map view via the unwind segue
+    var quizFailed = false
+    private var correctAnswers = 0
+    
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
+    
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
         if quizFailed || correctAnswers == Constants.numberOfQuestions {
             performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
             nextQuestionTapRecognizer.isEnabled = false
-            showNextQuestion()
+            
+            // Dispatch group prevents trying to show next question before it has loaded
+            dispatchGroup.notify(queue: .main) { [weak self] in
+                print("notified: entering showNextQuestion()")
+                self?.showNextQuestion()
+            }
         }
     }
     
@@ -131,8 +171,10 @@ class QuizViewController: UIViewController {
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
                 captureLocation()
-            } else {
-                // Prefetching next question while user is on current question
+            // Prefetch question only if there's more than one left
+            } else if correctAnswers < Constants.numberOfQuestions - 1 {
+                print("prefetching and entering dispatch group")
+                dispatchGroup.enter()
                 fetchQuestions(amount: 1)
             }
         } else {
