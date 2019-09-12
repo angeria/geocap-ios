@@ -14,9 +14,13 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if settingsListener == nil {
-            setupLocationLostNotificationsSwitch()
-        }
+        setupLocationLostNotificationsSwitch()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        settingsListener?.remove()
     }
     
     // MARK: - Sign out
@@ -34,7 +38,7 @@ class ProfileViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("users").document(uid).updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
             if let error = error {
-                print("Error removing notification token from user: \(error)")
+                print("Error removing notification token from user: \(String(describing: error))")
             }
             self?.signOut()
         }
@@ -64,7 +68,7 @@ class ProfileViewController: UIViewController {
         let db = Firestore.firestore()
         settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
-                    print("Error fetching user document: \(error!)")
+                    print("Error fetching user document snapshot: \(String(describing: error))")
                     return
                 }
             
@@ -72,12 +76,6 @@ class ProfileViewController: UIViewController {
                     self?.locationLostNotificationsSwitch.isOn = document.get("locationLostNotificationsEnabled") as? Bool == true ? true : false
                 }
         }
-    }
-    
-    // Should be called from map when signing out
-    func removeSettingsListener() {
-        settingsListener?.remove()
-        settingsListener = nil
     }
     
     @IBAction func notificationsSwitchPressed(_ sender: UISwitch) {
