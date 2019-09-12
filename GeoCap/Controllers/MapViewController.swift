@@ -93,10 +93,6 @@ class MapViewController: UIViewController {
     
     private func teardownAfterUserSignedOut() {
         clearMap()
-
-        if let profileVC = tabBarController?.viewControllers?[0] as? ProfileViewController {
-            profileVC.removeSettingsListener()
-        }
         
         locationListener?.remove()
         locationListener = nil

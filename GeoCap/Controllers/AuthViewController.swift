@@ -63,7 +63,6 @@ class AuthViewController: UIViewController {
             if error.userInfo[NSUnderlyingErrorKey] != nil {
                 print("Underlying login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
             }
-            presentLoginErrorAlert()
         }
     }
     
