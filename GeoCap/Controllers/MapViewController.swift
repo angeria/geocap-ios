@@ -397,6 +397,8 @@ class MapViewController: UIViewController {
 //                        presentNotInsideAreaAlert()
                         return true
                     }
+                } else {
+                    print("Couldn't start quiz: location title is nil")
                 }
             }
         }

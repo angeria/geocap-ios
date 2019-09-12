@@ -12,6 +12,7 @@ import Firebase
 extension QuizViewController {
     enum Constants {
         static let numberOfQuestions = 3
+        static let maxNumberOfRetries = 3
     }
 }
 
@@ -34,52 +35,65 @@ class QuizViewController: UIViewController {
     // Checked in the map view via the unwind segue
     var quizFailed = false
     
-    // Dependency injection
-    var locationName: String!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         fetchQuestion()
     }
     
-    private func fetchQuestion() {
+    // MARK: - Fetching
+    
+    private func fetchQuestion(retryCount: Int = 0) {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
                 print("Error fetching 'quiz/data' document: \(String(describing: error))")
                 return
             }
-            
             guard let self = self else { return }
             
             if let questionsCount = document.get("questionsCount") as? Int {
-                
-                var randomIndex: Int
-                repeat {
-                    randomIndex = Int.random(in: 0..<questionsCount)
-                } while self.usedIndices.contains(randomIndex)
-                self.usedIndices += [randomIndex]
-                print(self.usedIndices)
-                
+                let randomIndex = self.getRandomIndex(within: questionsCount)
                 db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { querySnapshot, error in
                     guard let query = querySnapshot else {
-                        print("Error fetching question at index '\(randomIndex)': \(String(describing: error))")
+                        print("Error fetching question: \(String(describing: error))")
+                        self.presentingViewController?.dismiss(animated: true)
                         return
                     }
                     
                     if let document = query.documents.first, let question = Question(data: document.data()) {
                         self.currentQuestion = question
-                        self.showNext(question)
+                        self.show(nextQuestion: question)
+                    } else {
+                        print("Couldn't find a question with index '\(randomIndex)'")
+                        if retryCount < Constants.maxNumberOfRetries {
+                            print("Retrying with another index...")
+                            self.fetchQuestion(retryCount: retryCount + 1)
+                        } else {
+                            print("Retries exhausted: exiting back to map")
+                            self.presentingViewController?.dismiss(animated: true)
+                        }
+                        return
                     }
                 }
             }
         }
     }
     
-    private func showNext(_ question: Question) {
-        questionLabel.text = question.question
-        let alternatives = ([question.answer] + question.alternatives).shuffled()
+    private func getRandomIndex(within limit: Int) -> Int {
+        var randomIndex: Int
+        repeat {
+            randomIndex = Int.random(in: 0..<limit)
+        } while usedIndices.contains(randomIndex)
+        usedIndices += [randomIndex]
+        return randomIndex
+    }
+    
+    // MARK: - Interaction
+    
+    private func show(nextQuestion: Question) {
+        questionLabel.text = nextQuestion.question
+        let alternatives = ([nextQuestion.answer] + nextQuestion.alternatives).shuffled()
         for (i, alternative) in alternatives.enumerated() {
             self.answerButtons[i].setTitle(alternative, for: .normal)
         }
@@ -93,8 +107,8 @@ class QuizViewController: UIViewController {
         if quizFailed || correctAnswers == Constants.numberOfQuestions {
             performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
-            fetchQuestion()
             nextQuestionTapRecognizer.isEnabled = false
+            fetchQuestion()
         }
     }
     
@@ -129,6 +143,11 @@ class QuizViewController: UIViewController {
         }
     }
 
+    // MARK: - Capturing
+    
+    // Dependency injection
+    var locationName: String!
+    
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
         guard let locationName = locationName else { return }
