@@ -30,6 +30,8 @@ class QuizViewController: UIViewController {
     
     private var correctAnswers = 0
     private var currentQuestion: Question?
+    private var nextQuestion: Question?
+    private var questions = [Question]()
     private var usedIndices = [Int]()
     
     // Checked in the map view via the unwind segue
@@ -38,12 +40,14 @@ class QuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        fetchQuestion()
+        fetchQuestions()
     }
     
     // MARK: - Fetching
     
-    private func fetchQuestion(retryCount: Int = 0) {
+    private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
+        guard amount > 0 else { return }
+        
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
@@ -62,13 +66,16 @@ class QuizViewController: UIViewController {
                     }
                     
                     if let document = query.documents.first, let question = Question(data: document.data()) {
-                        self.currentQuestion = question
-                        self.show(nextQuestion: question)
+                        self.questions += [question]
+                        if self.currentQuestion == nil {
+                            self.showNextQuestion()
+                        }
+                        self.fetchQuestions(amount: amount - 1, retryCount: retryCount)
                     } else {
                         print("Couldn't find a question with index '\(randomIndex)'")
                         if retryCount < Constants.maxNumberOfRetries {
                             print("Retrying with another index...")
-                            self.fetchQuestion(retryCount: retryCount + 1)
+                            self.fetchQuestions(amount: amount, retryCount: retryCount + 1)
                         } else {
                             print("Retries exhausted: exiting back to map")
                             self.presentingViewController?.dismiss(animated: true)
@@ -91,9 +98,12 @@ class QuizViewController: UIViewController {
     
     // MARK: - Interaction
     
-    private func show(nextQuestion: Question) {
-        questionLabel.text = nextQuestion.question
-        let alternatives = ([nextQuestion.answer] + nextQuestion.alternatives).shuffled()
+    private func showNextQuestion() {
+        guard questions.count > 0 else { return }
+        currentQuestion = questions.removeFirst()
+        
+        questionLabel.text = currentQuestion!.question
+        let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
         for (i, alternative) in alternatives.enumerated() {
             self.answerButtons[i].setTitle(alternative, for: .normal)
         }
@@ -108,7 +118,7 @@ class QuizViewController: UIViewController {
             performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
             nextQuestionTapRecognizer.isEnabled = false
-            fetchQuestion()
+            showNextQuestion()
         }
     }
     
@@ -121,6 +131,9 @@ class QuizViewController: UIViewController {
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
                 captureLocation()
+            } else {
+                // Prefetching next question while user is on current question
+                fetchQuestions(amount: 1)
             }
         } else {
             button.backgroundColor = UIColor.GeoCap.red
