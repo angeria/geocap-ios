@@ -17,19 +17,18 @@ extension QuizViewController {
 }
 
 class QuizViewController: UIViewController {
+
+    private let dispatchGroup = DispatchGroup()
     
     // MARK: - Life Cycle
     
-    let dispatchGroup = DispatchGroup()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         dispatchGroup.enter()
         fetchTotalDatabaseQuestionCount()
         
         dispatchGroup.notify(queue: .main) { [weak self] in
-            print("notifed: entering fetchQuestions() and dispatch group")
             self?.dispatchGroup.enter()
             self?.fetchQuestions()
         }
@@ -50,7 +49,6 @@ class QuizViewController: UIViewController {
             
             if let questionsCount = document.get("questionsCount") as? Int {
                 self?.totalDatabaseQuestionCount = questionsCount
-                print("leaving dispatch group in fetchTotalDatabaseQuestionCount()")
                 self?.dispatchGroup.leave()
             } else {
                 print("Couldn't read 'questionsCount' field")
@@ -63,7 +61,6 @@ class QuizViewController: UIViewController {
     
     private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
         guard amount > 0 else {
-            print("leaving dispatch group in fetchQuestions()")
             self.dispatchGroup.leave()
             return
         }
@@ -149,14 +146,13 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
     
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
+        sender.isEnabled = false
+        
         if quizFailed || correctAnswers == Constants.numberOfQuestions {
             performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
-            nextQuestionTapRecognizer.isEnabled = false
-            
             // Dispatch group prevents trying to show next question before it has loaded
             dispatchGroup.notify(queue: .main) { [weak self] in
-                print("notified: entering showNextQuestion()")
                 self?.showNextQuestion()
             }
         }
@@ -173,7 +169,6 @@ class QuizViewController: UIViewController {
                 captureLocation()
             // Prefetch question only if there's more than one left
             } else if correctAnswers < Constants.numberOfQuestions - 1 {
-                print("prefetching and entering dispatch group")
                 dispatchGroup.enter()
                 fetchQuestions(amount: 1)
             }
@@ -229,11 +224,12 @@ class QuizViewController: UIViewController {
         didSet {
             countdownBar.layer.cornerRadius = 5
             countdownBar.clipsToBounds = true
-            countdownBar.layer.sublayers![1].cornerRadius = 5
-            countdownBar.subviews[1].clipsToBounds = true
+            // Uncomment to make the inner bar rounded too
+            // countdownBar.layer.sublayers![1].cornerRadius = 5
+            // countdownBar.subviews[1].clipsToBounds = true
         }
     }
-    
+
     private var countdownBarTimer: Timer?
     private func startTimer() {
         countdownBar.progress = 1
@@ -241,7 +237,7 @@ class QuizViewController: UIViewController {
         
         countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] timer in
             guard let self = self else { return }
-            
+
             switch self.countdownBar.progress {
             case ...0:
                 self.countdownBar.shake()
