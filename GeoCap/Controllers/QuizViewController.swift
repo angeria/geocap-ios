@@ -196,24 +196,37 @@ class QuizViewController: UIViewController {
     // MARK: - Capturing
     
     // Dependency injection
+    // Forced unwrapped since they are checked in shouldPrepareSegue() in mapVC before segueing
     var locationName: String!
+    var nearestCityReference: DocumentReference!
     
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        guard let locationName = locationName else { return }
         
         let db = Firestore.firestore()
         let batch = db.batch()
         
-        let locationReference = db.collection("cities").document("uppsala").collection("locations").document(locationName)
-        batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
-        
-        let userReference = db.collection("users").document(user.uid)
-        batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-        
-        batch.commit() { err in
-            if let err = err {
-                print("Error writing batch: \(err)")
+        nearestCityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
+            guard let query = querySnapshot else {
+                print("Error getting location query snapshot: \(String(describing: error))")
+                return
+            }
+            guard let self = self else { return }
+            
+            if let document = query.documents.first {
+                let locationReference = document.reference
+                batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
+                
+//                let userReference = db.collection("users").document(user.uid)
+//                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                
+                batch.commit() { err in
+                    if let err = err {
+                        print("Error writing batch: \(err)")
+                    }
+                }
+            } else {
+                print("Couldn't find a location with name '\(String(describing: self.locationName))'")
             }
         }
     }
