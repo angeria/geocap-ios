@@ -9,16 +9,9 @@
 import UIKit
 import Firebase
 
-struct userCellData {
-    var isOpened: Bool
-    let username: String
-    let locations: [String]
-    let locationCount: Int
-}
-
 class LeaderboardViewController: UITableViewController {
 
-    private var userListener: ListenerRegistration?
+    // MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -29,13 +22,20 @@ class LeaderboardViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if userListener != nil {
-            userListener?.remove()
-            userListener = nil
-        }
+        userListener?.remove()
     }
     
-    var tableViewData = [userCellData]()
+    // MARK: - Leaderboard
+    
+    struct userCellData {
+        var isOpened: Bool
+        let username: String
+        let locations: [String]
+        let locationCount: Int
+    }
+    
+    private var tableViewData = [userCellData]()
+    private var userListener: ListenerRegistration?
     
     private func setupLeaderboard() {
         let db = Firestore.firestore()
@@ -44,7 +44,6 @@ class LeaderboardViewController: UITableViewController {
                 print("Error fetching 'users' query snappshot: \(error!)")
                 return
             }
-            
             guard let self = self else { return }
             
             self.tableViewData.removeAll()
@@ -85,7 +84,7 @@ class LeaderboardViewController: UITableViewController {
             if username == Auth.auth().currentUser?.displayName {
                 cell.backgroundColor = UIColor.GeoCap.blue.withAlphaComponent(0.15)
             } else {
-                cell.backgroundColor = UIColor.groupTableViewBackground.withAlphaComponent(0.30)
+                cell.backgroundColor = UIColor.groupTableViewBackground.withAlphaComponent(0.35)
             }
             return cell
         } else {
@@ -102,11 +101,11 @@ class LeaderboardViewController: UITableViewController {
         var sectionsToReload = IndexSet()
         if let openSectionIndex = tableViewData.firstIndex(where: { $0.isOpened }), openSectionIndex != indexPath.section {
             tableViewData[openSectionIndex].isOpened = false
-            sectionsToReload.formUnion(IndexSet(integer: openSectionIndex))
+            sectionsToReload.insert(openSectionIndex)
         }
         
         tableViewData[indexPath.section].isOpened = !tableViewData[indexPath.section].isOpened
-        sectionsToReload.formUnion(IndexSet(integer: indexPath.section))
+        sectionsToReload.insert(indexPath.section)
         tableView.reloadSections(sectionsToReload, with: .automatic)
     }
 

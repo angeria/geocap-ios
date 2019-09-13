@@ -67,7 +67,7 @@ class MapViewController: UIViewController {
             setupAuthListener()
         }
         
-        fetchLocations(type: .building)
+        fetchLocations(ofType: .building)
         
         requestUserLocationAuth()
         
@@ -95,7 +95,6 @@ class MapViewController: UIViewController {
         clearMap()
         
         locationListener?.remove()
-        locationListener = nil
         
         if authListener != nil {
             Auth.auth().removeStateDidChangeListener(authListener!)
@@ -189,9 +188,9 @@ class MapViewController: UIViewController {
         
         switch sender.selectedSegmentIndex {
         case 0:
-            fetchLocations(type: .building)
+            fetchLocations(ofType: .building)
         case 1:
-            fetchLocations(type: .area)
+            fetchLocations(ofType: .area)
         default:
             fatalError("Unexpected segment index in locationFilter()")
         }
@@ -208,12 +207,11 @@ class MapViewController: UIViewController {
     // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
     // Makes it possible to keep the map updated in the background while other views are visible
     var locationListener: ListenerRegistration?
-    private func fetchLocations(type: LocationType) {
-        let db = Firestore.firestore()
+    private func fetchLocations(ofType type: LocationType) {
         
         locationListener?.remove()
-        locationListener = nil
-        
+
+        let db = Firestore.firestore()
         locationListener = db.collection("cities")
             .document("uppsala")
             .collection("locations")
