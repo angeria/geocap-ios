@@ -11,12 +11,16 @@ import Firebase
 import FirebaseUI
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        UNUserNotificationCenter.current().delegate = self
+        
         FirebaseApp.configure()
+        
         return true
     }
 
@@ -30,6 +34,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         // other URL handling goes here.
         return false
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        // Show banner when app is in foreground
+        completionHandler([.alert])
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
