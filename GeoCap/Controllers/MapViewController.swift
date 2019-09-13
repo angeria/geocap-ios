@@ -55,6 +55,39 @@ class MapViewController: UIViewController {
     }
     
     // MARK: - Setup
+
+    private var nearestCityReference: DocumentReference? {
+        didSet {
+            fetchLocations(ofType: .building)
+        }
+    }
+    
+    private func getNearestCity() {
+        let db = Firestore.firestore()
+        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
+            guard let query = querySnapshot else {
+                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
+                return
+            }
+
+            let userLocation = self?.mapView.userLocation.location
+            var closestDistanceSoFar: CLLocationDistance?
+            var nearestCitySoFar: DocumentReference?
+            
+            for document in query.documents {
+                guard let cityGeopoint = document.data()["coordinates"] as? GeoPoint else { continue }
+                let cityCoordinates = CLLocation(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
+                guard let distanceFromUser = userLocation?.distance(from: cityCoordinates) else { return }
+                
+                if self?.nearestCityReference == nil || distanceFromUser < closestDistanceSoFar! {
+                    closestDistanceSoFar = distanceFromUser
+                    nearestCitySoFar = document.reference
+                }
+            }
+            
+            self?.nearestCityReference = nearestCitySoFar
+        }
+    }
     
     private func setupAfterUserSignedIn() {
         // Choose "Map" tab
@@ -62,14 +95,14 @@ class MapViewController: UIViewController {
         
         // Choose "Buildings" location filter
         locationFilter.selectedSegmentIndex = 0
+
+        requestUserLocationAuth()
         
         if authListener == nil {
             setupAuthListener()
         }
         
-        fetchLocations(ofType: .building)
-        
-        requestUserLocationAuth()
+        // fetchLocations(ofType: .building)
         
         setupNotifications()
     }
@@ -210,13 +243,8 @@ class MapViewController: UIViewController {
     private func fetchLocations(ofType type: LocationType) {
         
         locationListener?.remove()
-
-        let db = Firestore.firestore()
-        locationListener = db.collection("cities")
-            .document("uppsala")
-            .collection("locations")
-            .whereField("type", isEqualTo: type.rawValue)
-            .addSnapshotListener { [weak self] querySnapshot, error in
+        
+        locationListener = nearestCityReference?.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     print("Error fetching locations: \(error!)")
                     return
@@ -384,15 +412,21 @@ class MapViewController: UIViewController {
         
         if identifier == "Show Quiz" {
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
-                if annotationView.annotation?.title != nil {
-                    if user(location: mapView.userLocation, isInside: annotation.overlay) {
-                        return true
+                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
+                if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
+                    if nearestCityReference != nil {
+                        if user(location: mapView.userLocation, isInside: annotation.overlay) {
+                            return true
+                        } else {
+                            // presentNotInsideAreaAlert()
+                            // return false
+                            return true
+                        }
                     } else {
-//                        presentNotInsideAreaAlert()
-                        return true
+                        print("Couldn't start quiz: 'nearestCityReference' is nil")
                     }
                 } else {
-                    print("Couldn't start quiz: location title is nil")
+                    print("Couldn't start quiz: 'locationTitle' is nil")
                 }
             }
         }
@@ -403,8 +437,12 @@ class MapViewController: UIViewController {
         super.prepare(for: segue, sender: sender)
         
         if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-            if let locationName = annotationView.annotation?.title {
-                quizVC.locationName = locationName
+            // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
+            if let locationTitle = annotationView.annotation?.title {
+                if let locationName = locationTitle, let nearestCityReference = nearestCityReference {
+                    quizVC.locationName = locationName
+                    quizVC.nearestCityReference = nearestCityReference
+                }
             }
         }
     }
@@ -429,6 +467,8 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         if !regionIsCenteredOnUserLocation {
+            getNearestCity()
+            
             let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
             regionIsCenteredOnUserLocation = true
