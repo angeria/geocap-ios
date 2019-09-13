@@ -51,9 +51,12 @@ class LeaderboardViewController: UITableViewController {
             snapshot.documents.forEach() { documentSnapshot in
                 let data = documentSnapshot.data()
                 guard let username = data["username"] as? String else {print( "Couldn't get 'username'"); return }
-                guard let locations = data["capturedLocations"] as? [String] else { print("Couldn't get 'capturedLocations'"); return }
+                guard var locations = data["capturedLocations"] as? [String] else { print("Couldn't get 'capturedLocations'"); return }
                 guard let locationCount = data["capturedLocationsCount"] as? Int else { print("Couldn't get 'capturedLocationsCount'"); return }
 
+                // Sort locations in alphabetical order
+                locations.sort(by: { $0 < $1 })
+                
                 self.tableViewData += [userCellData(isOpened: false, username: username, locations: locations, locationCount: locationCount)]
             }
             self.tableView.reloadData()
