@@ -13,7 +13,7 @@ import Firebase
 
 extension MapViewController {
     enum Constants {
-        static let zoomLevel: CLLocationDistance = 2500
+        static let zoomLevel: CLLocationDistance = 3500
         static let captureButtonWidth: Int = 90
         static let captureButtonHeight = 50
         static let calloutFlagHeight = 32
@@ -202,10 +202,27 @@ class MapViewController: UIViewController {
             loadingLocationsView.layer.cornerRadius = 15
         }
     }
+
+    private var allCities = [(name: String, reference: DocumentReference, coordinates: CLLocationCoordinate2D)]()
     
-    private var nearestCityReference: DocumentReference? {
+    private var currentCity: (name: String, reference: DocumentReference, coordinates: CLLocationCoordinate2D)? {
         didSet {
+            guard let currentCity = currentCity else { return }
+            
+            clearMap()
+            
+            let region = MKCoordinateRegion(center: currentCity.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
+            mapView.setRegion(region, animated: true)
             fetchLocations(ofType: .building)
+            
+            currentCityBarButton.title = currentCity.name
+            allCities.sort { city, _ in city.name == currentCity.name } // Put the current city first
+        }
+    }
+    
+    @IBOutlet weak var currentCityBarButton: UIBarButtonItem! {
+        didSet {
+            currentCityBarButton.title = nil
         }
     }
     
@@ -221,20 +238,37 @@ class MapViewController: UIViewController {
             
             let userLocation = self?.mapView.userLocation.location
             var closestDistanceSoFar: CLLocationDistance?
-            var nearestCitySoFar: DocumentReference?
+            // TODO: Make tuple or struct?
+            var nearestCityReference: DocumentReference?
+            var nearestCityName: String?
+            var nearestCityGeoPoint: GeoPoint?
             
             for document in query.documents {
                 guard let cityGeopoint = document.data()["coordinates"] as? GeoPoint else { continue }
                 let cityCoordinates = CLLocation(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
                 guard let distanceFromUser = userLocation?.distance(from: cityCoordinates) else { return }
                 
-                if self?.nearestCityReference == nil || distanceFromUser < closestDistanceSoFar! {
+                let coordinates2D = CLLocationCoordinate2D(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
+                self?.allCities += [(name: document.documentID.capitalized, reference: document.reference, coordinates: coordinates2D)]
+                
+                if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar ?? 0 {
                     closestDistanceSoFar = distanceFromUser
-                    nearestCitySoFar = document.reference
+                    nearestCityReference = document.reference
+                    nearestCityName = document.documentID.capitalized
+                    nearestCityGeoPoint = cityGeopoint
                 }
             }
             
-            self?.nearestCityReference = nearestCitySoFar
+            guard let cityName = nearestCityName, let cityReference = nearestCityReference else { return }
+            guard let lat = nearestCityGeoPoint?.latitude, let lng = nearestCityGeoPoint?.longitude else { return }
+            let cityCoordinates = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            
+            self?.allCities.sort { city, _ in city.name == cityName } // Put the current city first
+            
+            self?.currentCityBarButton.title = cityName
+            self?.currentCityBarButton.isEnabled = true
+            
+            self?.currentCity = (name: cityName, reference: cityReference, coordinates: cityCoordinates)
         }
     }
     
@@ -250,7 +284,7 @@ class MapViewController: UIViewController {
         
         locationListener?.remove()
         
-        locationListener = nearestCityReference?.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
+        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     print("Error fetching locations: \(error!)")
                     return
@@ -418,11 +452,12 @@ class MapViewController: UIViewController {
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
         
-        if identifier == "Show Quiz" {
+        switch identifier {
+        case "Show Quiz":
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
                 // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
                 if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
-                    if nearestCityReference != nil {
+                    if currentCity != nil {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
@@ -431,27 +466,45 @@ class MapViewController: UIViewController {
                             return true
                         }
                     } else {
-                        print("Couldn't start quiz: 'nearestCityReference' is nil")
+                        print("Couldn't start quiz: 'currentCity' == nil")
                     }
                 } else {
-                    print("Couldn't start quiz: 'locationTitle' is nil")
+                    print("Couldn't start quiz: 'locationTitle' == nil")
                 }
             }
+        case "Show Choose City Popover":
+            if !allCities.isEmpty, currentCity != nil {
+                return true
+            }
+        default:
+            break
         }
+        
         return false
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-            // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
-            if let locationTitle = annotationView.annotation?.title {
-                if let locationName = locationTitle, let nearestCityReference = nearestCityReference {
-                    quizVC.locationName = locationName
-                    quizVC.nearestCityReference = nearestCityReference
+        switch segue.identifier {
+        case "Show Quiz":
+            if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
+                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
+                if let locationTitle = annotationView.annotation?.title {
+                    if let locationName = locationTitle, let cityReference = currentCity?.reference {
+                        quizVC.locationName = locationName
+                        quizVC.cityReference = cityReference
+                    }
                 }
             }
+        case "Show Choose City Popover":
+            if let popoverVC = segue.destination as? ChooseCityPopoverViewController {
+                popoverVC.popoverPresentationController?.delegate = self
+                popoverVC.allCities = allCities
+                popoverVC.currentCity = currentCity
+            }
+        default:
+            break
         }
     }
     
@@ -466,10 +519,16 @@ class MapViewController: UIViewController {
             }
         } else if unwindSegue.identifier == "unwindSegueAuthToMap" {
             setupAfterUserSignedIn()
+        } else if unwindSegue.identifier == "unwindSegueChooseCityPopoverToMap" {
+            if let popoverVC = unwindSegue.source as? ChooseCityPopoverViewController {
+                currentCity = popoverVC.currentCity
+            }
         }
     }
     
 }
+
+// MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
     
@@ -543,6 +602,16 @@ extension MapViewController: MKMapViewDelegate {
         default:
             fatalError("Unexpected overlay in mapView(rendererFor:)")
         }
+    }
+    
+}
+
+// MARK: - UIPopoverPresentationControllerDelegate
+
+extension MapViewController: UIPopoverPresentationControllerDelegate {
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
     }
     
 }

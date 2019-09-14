@@ -109,7 +109,11 @@ class QuizViewController: UIViewController {
     
     // MARK: - Interaction
     
-    @IBOutlet weak var questionLabel: UILabel!
+    @IBOutlet weak var questionLabel: UILabel! {
+        didSet {
+            questionLabel.text = nil
+        }
+    }
     
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
@@ -198,7 +202,7 @@ class QuizViewController: UIViewController {
     // Dependency injection
     // Forced unwrapped since they are checked in shouldPrepareSegue() in mapVC before segueing
     var locationName: String!
-    var nearestCityReference: DocumentReference!
+    var cityReference: DocumentReference!
     
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
@@ -206,7 +210,7 @@ class QuizViewController: UIViewController {
         let db = Firestore.firestore()
         let batch = db.batch()
         
-        nearestCityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
+        cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
                 print("Error getting location query snapshot: \(String(describing: error))")
                 return
@@ -217,8 +221,8 @@ class QuizViewController: UIViewController {
                 let locationReference = document.reference
                 batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
                 
-//                let userReference = db.collection("users").document(user.uid)
-//                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                let userReference = db.collection("users").document(user.uid)
+                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
                 
                 batch.commit() { err in
                     if let err = err {
