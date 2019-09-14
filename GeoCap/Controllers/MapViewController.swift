@@ -282,6 +282,8 @@ class MapViewController: UIViewController {
     var locationListener: ListenerRegistration?
     private func fetchLocations(ofType type: LocationType) {
         
+        loadingLocationsView.isHidden = false
+        
         locationListener?.remove()
         
         locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
