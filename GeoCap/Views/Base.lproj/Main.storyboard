@@ -20,11 +20,43 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mYc-wv-Nm0">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                             </mapView>
+                            <view hidden="YES" alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y7U-lX-DJp">
+                                <rect key="frame" x="97.5" y="285" width="180.5" height="97.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dj3-h6-uqe">
+                                        <rect key="frame" x="16" y="16" width="148.5" height="65.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading locations..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yip-4O-GPe">
+                                                <rect key="frame" x="0.0" y="0.0" width="148.5" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="8nG-bR-Msh">
+                                                <rect key="frame" x="55.5" y="28.5" width="37" height="37"/>
+                                                <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </activityIndicatorView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="8nG-bR-Msh" firstAttribute="top" secondItem="Yip-4O-GPe" secondAttribute="bottom" constant="8" id="3Vb-mM-dlX"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="top" secondItem="Y7U-lX-DJp" secondAttribute="top" constant="16" id="28M-g5-xgR"/>
+                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="centerY" secondItem="Y7U-lX-DJp" secondAttribute="centerY" id="3Bt-CI-BVK"/>
+                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="leading" secondItem="Y7U-lX-DJp" secondAttribute="leading" constant="16" id="VyD-8k-bRF"/>
+                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="centerX" secondItem="Y7U-lX-DJp" secondAttribute="centerX" id="aO3-Vz-UcA"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="YJf-4F-yXq"/>
+                            <constraint firstItem="Y7U-lX-DJp" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="al6-0y-6ph"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="eEe-cd-WSH"/>
+                            <constraint firstItem="Y7U-lX-DJp" firstAttribute="centerY" secondItem="tsR-hK-woN" secondAttribute="centerY" id="h73-Vg-h5f"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="hKO-mg-xrp"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" id="tpg-zf-fxZ"/>
                         </constraints>
@@ -46,6 +78,7 @@
                         </segmentedControl>
                     </navigationItem>
                     <connections>
+                        <outlet property="loadingLocationsView" destination="Y7U-lX-DJp" id="dPZ-aY-b2N"/>
                         <outlet property="locationFilter" destination="2Tx-Iz-jwz" id="XeT-gb-Ema"/>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="presentation" identifier="Show Quiz" id="MeF-YK-qBM"/>

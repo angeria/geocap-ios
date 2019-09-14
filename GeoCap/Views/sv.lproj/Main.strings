@@ -25,3 +25,8 @@
 
 /* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
 "gEq-cg-01V.normalTitle" = "Logga ut";
+
+/* Class = "UILabel"; text = "Loading locations..."; ObjectID = "Yip-4O-GPe"; */
+"Yip-4O-GPe.text" = "Laddar platser...";
+
+

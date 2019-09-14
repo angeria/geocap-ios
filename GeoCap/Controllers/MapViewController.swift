@@ -55,39 +55,6 @@ class MapViewController: UIViewController {
     }
     
     // MARK: - Setup
-
-    private var nearestCityReference: DocumentReference? {
-        didSet {
-            fetchLocations(ofType: .building)
-        }
-    }
-    
-    private func getNearestCity() {
-        let db = Firestore.firestore()
-        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
-            guard let query = querySnapshot else {
-                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
-                return
-            }
-
-            let userLocation = self?.mapView.userLocation.location
-            var closestDistanceSoFar: CLLocationDistance?
-            var nearestCitySoFar: DocumentReference?
-            
-            for document in query.documents {
-                guard let cityGeopoint = document.data()["coordinates"] as? GeoPoint else { continue }
-                let cityCoordinates = CLLocation(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
-                guard let distanceFromUser = userLocation?.distance(from: cityCoordinates) else { return }
-                
-                if self?.nearestCityReference == nil || distanceFromUser < closestDistanceSoFar! {
-                    closestDistanceSoFar = distanceFromUser
-                    nearestCitySoFar = document.reference
-                }
-            }
-            
-            self?.nearestCityReference = nearestCitySoFar
-        }
-    }
     
     private func setupAfterUserSignedIn() {
         // Choose "Map" tab
@@ -101,8 +68,6 @@ class MapViewController: UIViewController {
         if authListener == nil {
             setupAuthListener()
         }
-        
-        // fetchLocations(ofType: .building)
         
         setupNotifications()
     }
@@ -230,7 +195,48 @@ class MapViewController: UIViewController {
     }
     
     
-    // MARK: - Locations (annotations)
+    // MARK: - Locations
+    
+    @IBOutlet weak var loadingLocationsView: UIView! {
+        didSet {
+            loadingLocationsView.layer.cornerRadius = 15
+        }
+    }
+    
+    private var nearestCityReference: DocumentReference? {
+        didSet {
+            fetchLocations(ofType: .building)
+        }
+    }
+    
+    private func getNearestCity() {
+        loadingLocationsView.isHidden = false
+        
+        let db = Firestore.firestore()
+        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
+            guard let query = querySnapshot else {
+                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
+                return
+            }
+            
+            let userLocation = self?.mapView.userLocation.location
+            var closestDistanceSoFar: CLLocationDistance?
+            var nearestCitySoFar: DocumentReference?
+            
+            for document in query.documents {
+                guard let cityGeopoint = document.data()["coordinates"] as? GeoPoint else { continue }
+                let cityCoordinates = CLLocation(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
+                guard let distanceFromUser = userLocation?.distance(from: cityCoordinates) else { return }
+                
+                if self?.nearestCityReference == nil || distanceFromUser < closestDistanceSoFar! {
+                    closestDistanceSoFar = distanceFromUser
+                    nearestCitySoFar = document.reference
+                }
+            }
+            
+            self?.nearestCityReference = nearestCitySoFar
+        }
+    }
     
     enum LocationType: String {
         case building
@@ -276,6 +282,8 @@ class MapViewController: UIViewController {
                         }
                     }
                 }
+            
+                self?.loadingLocationsView.isHidden = true
         }
     }
     
