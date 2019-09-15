@@ -597,6 +597,7 @@ extension MapViewController: MKMapViewDelegate {
 
 extension MapViewController: UIPopoverPresentationControllerDelegate {
     
+    // Makes popovers allowed on iPhones instead of converting them to modal presentations
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }

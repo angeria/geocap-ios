@@ -41,7 +41,7 @@ extension ChooseCityPopoverViewController: UIPickerViewDataSource, UIPickerViewD
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if allCities[row].name != currentCity?.name {
-            currentCity = allCities.first { $0.name ==  allCities[row].name }
+            currentCity = allCities.first { $0.name == allCities[row].name }
             performSegue(withIdentifier: "unwindSegueChooseCityPopoverToMap", sender: self)
         }
     }
