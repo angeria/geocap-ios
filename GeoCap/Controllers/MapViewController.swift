@@ -434,19 +434,9 @@ class MapViewController: UIViewController {
         }
     }
     
-    @IBOutlet var userTrackingButton: MKUserTrackingButton!
     func setupUserTrackingButton() {
-        let button = MKUserTrackingButton(mapView: mapView)
-        button.layer.backgroundColor = UIColor(white: 1, alpha: 0.8).cgColor
-        button.tintColor = UIColor.GeoCap.blue
-        button.layer.cornerRadius = 5
-        button.translatesAutoresizingMaskIntoConstraints = false
-        mapView.addSubview(button)
-        
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
-            button.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16)
-        ])
+        let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
+        navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
     
     // MARK: - Navigation
