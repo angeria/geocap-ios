@@ -461,4 +461,5 @@
         <image name="tab-bar-map" width="29" height="23"/>
         <image name="tab-bar-profile" width="23" height="23"/>
     </resources>
+    <color key="tintColor" red="0.443710357" green="0.71984392399999997" blue="0.93396478890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
