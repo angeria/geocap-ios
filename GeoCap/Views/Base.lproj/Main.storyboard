@@ -97,7 +97,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="hUC-gd-vDV">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" enabled="NO" title="Uppsala" id="sLm-d7-twP">
+                        <barButtonItem key="leftBarButtonItem" title="Uppsala" id="sLm-d7-twP">
                             <color key="tintColor" red="0.44371035695075989" green="0.71984392404556274" blue="0.93396478891372681" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="currentCityBarButton:" destination="9pv-A4-QxB" id="JdB-lI-d6t"/>
