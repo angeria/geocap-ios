@@ -51,7 +51,9 @@ class MapViewController: UIViewController {
             setupAfterUserSignedIn()
         }
         
-        setupUserTrackingButton()
+        // Setup user tracking bar button
+        let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
+        navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
     
     // MARK: - Setup
@@ -105,6 +107,209 @@ class MapViewController: UIViewController {
         let overlays = mapView.overlays
         mapView.removeAnnotations(annotations)
         mapView.removeOverlays(overlays)
+    }
+    
+    // MARK: - Location Filter (segmented control)
+    
+    @IBOutlet weak var locationFilter: UISegmentedControl!
+    
+    @IBAction func locationFilter(_ sender: UISegmentedControl) {
+        clearMap()
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            fetchLocations(ofType: .building)
+        case 1:
+            fetchLocations(ofType: .area)
+        default:
+            fatalError("Unexpected segment index in locationFilter()")
+        }
+    }
+
+    
+    // MARK: - Locations
+    
+    @IBOutlet weak var loadingLocationsView: UIView! {
+        didSet {
+            loadingLocationsView.layer.cornerRadius = 15
+        }
+    }
+    
+    private var allCities = [City]()
+    
+    private var currentCity: City? {
+        didSet {
+            guard let currentCity = currentCity else { return }
+            
+            clearMap()
+            
+            let region = MKCoordinateRegion(center: currentCity.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
+            mapView.setRegion(region, animated: true)
+            
+            switch locationFilter.selectedSegmentIndex {
+            case 0:
+                fetchLocations(ofType: .building)
+            case 1:
+                fetchLocations(ofType: .area)
+            default:
+                fatalError("Unexpected selected segment index in location filter")
+            }
+            
+            currentCityBarButton.title = currentCity.name
+            allCities.sort { city, _ in city.name == currentCity.name } // Put the current city first
+        }
+    }
+    
+    @IBOutlet weak var currentCityBarButton: UIBarButtonItem! {
+        didSet {
+            currentCityBarButton.title = nil
+        }
+    }
+    
+    private func setNearestCity() {
+        loadingLocationsView.isHidden = false
+        
+        let db = Firestore.firestore()
+        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
+            guard let query = querySnapshot else {
+                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
+                return
+            }
+            
+            let userLocation = self?.mapView.userLocation.location
+            var closestDistanceSoFar: CLLocationDistance?
+            var nearestCitySoFar: City?
+            
+            for cityDocument in query.documents {
+                guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else { continue }
+                let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
+                
+                guard let distanceFromUser = userLocation?.distance(from: cityLocation) else { return }
+                
+                // Add to all cities
+                let cityCoordinates = CLLocationCoordinate2D(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
+                let city = City(name: cityDocument.documentID.capitalized, coordinates: cityCoordinates, reference: cityDocument.reference)
+                self?.allCities += [city]
+                
+                if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar ?? 0 {
+                    closestDistanceSoFar = distanceFromUser
+                    nearestCitySoFar = city
+                }
+            }
+            
+            self?.currentCity = nearestCitySoFar
+        }
+    }
+    
+    enum LocationType: String {
+        case building
+        case area
+    }
+    
+    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
+    // Makes it possible to keep the map updated in the background while other views are visible
+    var locationListener: ListenerRegistration?
+    private func fetchLocations(ofType type: LocationType) {
+        
+        loadingLocationsView.isHidden = false
+        
+        locationListener?.remove()
+        
+        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
+            guard let snapshot = querySnapshot else {
+                print("Error fetching locations: \(String(describing: error))")
+                return
+            }
+            guard let username = Auth.auth().currentUser?.displayName else { return }
+            
+            snapshot.documentChanges.forEach { diff in
+                guard let self = self else { return }
+                guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
+                
+                if (diff.type == .added) {
+                    self.mapView.addAnnotation(newAnnotation)
+                    self.addLocationOverlay(newAnnotation)
+                }
+                
+                if (diff.type == .modified) {
+                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                        self.mapView.removeAnnotation(oldAnnotation)
+                        self.mapView.removeOverlay(oldAnnotation.overlay)
+                        self.mapView.addAnnotation(newAnnotation)
+                        self.addLocationOverlay(newAnnotation)
+                    }
+                }
+                
+                if (diff.type == .removed) {
+                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+                        self.mapView.removeOverlay(oldAnnotation.overlay)
+                        self.mapView.removeAnnotation(oldAnnotation)
+                    }
+                }
+            }
+            
+            self?.loadingLocationsView.isHidden = true
+        }
+    }
+    
+    // Awkward solution but used for making the affected location available to the delegate function which renders overlays
+    private var locationToOverlay: Location?
+    private func addLocationOverlay(_ location: Location) {
+        locationToOverlay = location
+        mapView.addOverlay(location.overlay)
+        locationToOverlay = nil
+    }
+    
+    // Should optimally be subclassed but I couldn't get it to work properly
+    // I wasn't able to cast the annotation to Location in the subclass init()
+    private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
+        let reuseIdentifier = NSStringFromClass(Location.self)
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
+        
+        annotationView.animatesWhenAdded = true
+        annotationView.canShowCallout = true
+        annotationView.subtitleVisibility = .hidden
+        
+        let captureButton = UIButton(type: .system)
+        let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
+        captureButton.setTitle(title, for: .normal)
+        captureButton.tintColor = .white
+        captureButton.backgroundColor = UIColor.GeoCap.blue
+        captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
+        
+        if annotation.isCapturedByUser {
+            annotationView.markerTintColor = UIColor.GeoCap.blue
+            
+            annotationView.glyphImage = UIImage(named: "marker-check-mark")
+            
+            let image = UIImage(named: "callout-check-mark")!.withRenderingMode(.alwaysTemplate)
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
+            imageView.tintColor = UIColor.GeoCap.blue
+            annotationView.rightCalloutAccessoryView = imageView
+        } else if annotation.owner == nil {
+            annotationView.glyphImage = UIImage(named: "marker-circle")
+            
+            annotationView.markerTintColor = UIColor.GeoCap.gray
+            annotationView.rightCalloutAccessoryView = captureButton
+        } else {
+            annotationView.glyphImage = UIImage(named: "marker-flag")
+            
+            annotationView.markerTintColor = UIColor.GeoCap.red
+            annotationView.rightCalloutAccessoryView = captureButton
+        }
+        
+        return annotationView
+    }
+    
+    private func presentNotInsideAreaAlert() {
+        let title = NSLocalizedString("alert-title-not-inside-area", comment: "Title of alert when user isn't inside area")
+        let message = NSLocalizedString("alert-message-not-inside-area", comment: "Message of alert when user isn't inside area")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
     // MARK: - Notifications
@@ -178,211 +383,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    // MARK: - Location Filter (segmented control)
-    
-    @IBOutlet weak var locationFilter: UISegmentedControl!
-    @IBAction func locationFilter(_ sender: UISegmentedControl) {
-        clearMap()
-        
-        switch sender.selectedSegmentIndex {
-        case 0:
-            fetchLocations(ofType: .building)
-        case 1:
-            fetchLocations(ofType: .area)
-        default:
-            fatalError("Unexpected segment index in locationFilter()")
-        }
-    }
-    
-    
-    // MARK: - Locations
-    
-    @IBOutlet weak var loadingLocationsView: UIView! {
-        didSet {
-            loadingLocationsView.layer.cornerRadius = 15
-        }
-    }
-
-    private var allCities = [(name: String, reference: DocumentReference, coordinates: CLLocationCoordinate2D)]()
-    
-    private var currentCity: (name: String, reference: DocumentReference, coordinates: CLLocationCoordinate2D)? {
-        didSet {
-            guard let currentCity = currentCity else { return }
-            
-            clearMap()
-            
-            let region = MKCoordinateRegion(center: currentCity.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
-            mapView.setRegion(region, animated: true)
-            fetchLocations(ofType: .building)
-            
-            currentCityBarButton.title = currentCity.name
-            allCities.sort { city, _ in city.name == currentCity.name } // Put the current city first
-        }
-    }
-    
-    @IBOutlet weak var currentCityBarButton: UIBarButtonItem! {
-        didSet {
-            currentCityBarButton.title = nil
-        }
-    }
-    
-    private func getNearestCity() {
-        loadingLocationsView.isHidden = false
-        
-        let db = Firestore.firestore()
-        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
-            guard let query = querySnapshot else {
-                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
-                return
-            }
-            
-            let userLocation = self?.mapView.userLocation.location
-            var closestDistanceSoFar: CLLocationDistance?
-            // TODO: Make tuple or struct?
-            var nearestCityReference: DocumentReference?
-            var nearestCityName: String?
-            var nearestCityGeoPoint: GeoPoint?
-            
-            for document in query.documents {
-                guard let cityGeopoint = document.data()["coordinates"] as? GeoPoint else { continue }
-                let cityCoordinates = CLLocation(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
-                guard let distanceFromUser = userLocation?.distance(from: cityCoordinates) else { return }
-                
-                let coordinates2D = CLLocationCoordinate2D(latitude: cityGeopoint.latitude, longitude: cityGeopoint.longitude)
-                self?.allCities += [(name: document.documentID.capitalized, reference: document.reference, coordinates: coordinates2D)]
-                
-                if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar ?? 0 {
-                    closestDistanceSoFar = distanceFromUser
-                    nearestCityReference = document.reference
-                    nearestCityName = document.documentID.capitalized
-                    nearestCityGeoPoint = cityGeopoint
-                }
-            }
-            
-            guard let cityName = nearestCityName, let cityReference = nearestCityReference else { return }
-            guard let lat = nearestCityGeoPoint?.latitude, let lng = nearestCityGeoPoint?.longitude else { return }
-            let cityCoordinates = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-            
-            self?.allCities.sort { city, _ in city.name == cityName } // Put the current city first
-            
-            self?.currentCityBarButton.title = cityName
-            self?.currentCityBarButton.isEnabled = true
-            
-            self?.currentCity = (name: cityName, reference: cityReference, coordinates: cityCoordinates)
-        }
-    }
-    
-    enum LocationType: String {
-        case building
-        case area
-    }
-    
-    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
-    // Makes it possible to keep the map updated in the background while other views are visible
-    var locationListener: ListenerRegistration?
-    private func fetchLocations(ofType type: LocationType) {
-        
-        loadingLocationsView.isHidden = false
-        
-        locationListener?.remove()
-        
-        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
-                guard let snapshot = querySnapshot else {
-                    print("Error fetching locations: \(error!)")
-                    return
-                }
-                guard let username = Auth.auth().currentUser?.displayName else { return }
-                
-                snapshot.documentChanges.forEach { diff in
-                    guard let self = self else { return }
-                    guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
-                    
-                    if (diff.type == .added) {
-                        self.mapView.addAnnotation(newAnnotation)
-                        self.addLocationOverlay(newAnnotation)
-                    }
-                    
-                    if (diff.type == .modified) {
-                        if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
-                            self.mapView.removeAnnotation(oldAnnotation)
-                            self.mapView.removeOverlay(oldAnnotation.overlay)
-                            self.mapView.addAnnotation(newAnnotation)
-                            self.addLocationOverlay(newAnnotation)
-                        }
-                    }
-                    
-                    if (diff.type == .removed) {
-                        if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
-                            self.mapView.removeOverlay(oldAnnotation.overlay)
-                            self.mapView.removeAnnotation(oldAnnotation)
-                        }
-                    }
-                }
-            
-                self?.loadingLocationsView.isHidden = true
-        }
-    }
-    
-    // Awkward solution but used for making the affected location available to the delegate function which renders overlays
-    private var locationToOverlay: Location?
-    private func addLocationOverlay(_ location: Location) {
-        locationToOverlay = location
-        mapView.addOverlay(location.overlay)
-        locationToOverlay = nil
-    }
-
-    // Should optimally be subclassed but I couldn't get it to work properly
-    // I wasn't able to cast the annotation to Location in the subclass init()
-    private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
-        let reuseIdentifier = NSStringFromClass(Location.self)
-        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
-        
-        annotationView.animatesWhenAdded = true
-        annotationView.canShowCallout = true
-        annotationView.subtitleVisibility = .hidden
-        
-        let captureButton = UIButton(type: .system)
-        let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
-        captureButton.setTitle(title, for: .normal)
-        captureButton.tintColor = .white
-        captureButton.backgroundColor = UIColor.GeoCap.blue
-        captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
-        
-        if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.GeoCap.blue
-            
-            annotationView.glyphImage = UIImage(named: "marker-check-mark")
-            
-            let image = UIImage(named: "callout-check-mark")!.withRenderingMode(.alwaysTemplate)
-            let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
-            imageView.tintColor = UIColor.GeoCap.blue
-            annotationView.rightCalloutAccessoryView = imageView
-        } else if annotation.owner == nil {
-            annotationView.glyphImage = UIImage(named: "marker-circle")
-            
-            annotationView.markerTintColor = UIColor.GeoCap.gray
-            annotationView.rightCalloutAccessoryView = captureButton
-        } else {
-            annotationView.glyphImage = UIImage(named: "marker-flag")
-            
-            annotationView.markerTintColor = UIColor.GeoCap.red
-            annotationView.rightCalloutAccessoryView = captureButton
-        }
-        
-        return annotationView
-    }
-    
-    private func presentNotInsideAreaAlert() {
-        let title = NSLocalizedString("alert-title-not-inside-area", comment: "Title of alert when user isn't inside area")
-        let message = NSLocalizedString("alert-message-not-inside-area", comment: "Message of alert when user isn't inside area")
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
-    
     // MARK: - User Location
     
     private let locationManager = CLLocationManager()
@@ -432,11 +432,6 @@ class MapViewController: UIViewController {
         default:
             fatalError("Unexpected overlay in user(location:, isInside:)")
         }
-    }
-    
-    func setupUserTrackingButton() {
-        let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
-        navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
     
     // MARK: - Navigation
@@ -526,7 +521,7 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         if !regionIsCenteredOnUserLocation {
-            getNearestCity()
+            setNearestCity()
             
             let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)

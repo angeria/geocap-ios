@@ -19,6 +19,7 @@
 		432DEDBD22E1F28E00DFA074 /* GeoCapUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DEDBC22E1F28E00DFA074 /* GeoCapUITests.swift */; };
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
+		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0268C22E314AF00A0C255 /* AuthViewController.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
@@ -70,6 +71,7 @@
 		43615CAD23072E5F003FC839 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
+		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		43B561B72319544400618DC3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		43D0268C22E314AF00A0C255 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				43D7A12A22F2D49700552D2C /* Question.swift */,
+				438C7F1C232E131700121CC6 /* City.swift */,
 				43E5CF7422E5A81B00DBED2E /* Location.swift */,
 			);
 			path = Models;
@@ -501,6 +504,7 @@
 			files = (
 				432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */,
 				43D7A12B22F2D49700552D2C /* Question.swift in Sources */,
+				438C7F1D232E131700121CC6 /* City.swift in Sources */,
 				43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */,
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,

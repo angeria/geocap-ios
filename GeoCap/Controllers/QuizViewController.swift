@@ -60,13 +60,15 @@ class QuizViewController: UIViewController {
     private var questions = [Question]()
     
     private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
+        guard let totalDatabaseQuestionCount = totalDatabaseQuestionCount else { return }
+        
         guard amount > 0 else {
             self.dispatchGroup.leave()
             return
         }
         
         let db = Firestore.firestore()
-        let randomIndex = getRandomIndex(within: totalDatabaseQuestionCount!)
+        let randomIndex = getRandomIndex(within: totalDatabaseQuestionCount)
         
         db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
@@ -127,7 +129,7 @@ class QuizViewController: UIViewController {
     
     private func showNextQuestion() {
         guard questions.count > 0 else {
-            print("UNEXPECTED BEHAVIOR: 'questions' array is empty")
+            print("ERROR: 'questions' array is empty")
             presentingViewController?.dismiss(animated: true)
             return
         }
@@ -200,17 +202,17 @@ class QuizViewController: UIViewController {
     // MARK: - Capturing
     
     // Dependency injection
-    // Forced unwrapped since they are checked in shouldPrepareSegue() in mapVC before segueing
-    var locationName: String!
-    var cityReference: DocumentReference!
+    var locationName: String?
+    var cityReference: DocumentReference?
     
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
+        guard let locationName = locationName else { return }
         
         let db = Firestore.firestore()
         let batch = db.batch()
         
-        cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
+        cityReference?.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
                 print("Error getting location query snapshot: \(String(describing: error))")
                 return
@@ -222,7 +224,7 @@ class QuizViewController: UIViewController {
                 batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
                 
                 let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
                 
                 batch.commit() { err in
                     if let err = err {
@@ -242,7 +244,7 @@ class QuizViewController: UIViewController {
             countdownBar.layer.cornerRadius = 5
             countdownBar.clipsToBounds = true
             // Uncomment to make the inner bar rounded too
-            // countdownBar.layer.sublayers![1].cornerRadius = 5
+            // countdownBar.layer.sublayers?[1].cornerRadius = 5
             // countdownBar.subviews[1].clipsToBounds = true
         }
     }

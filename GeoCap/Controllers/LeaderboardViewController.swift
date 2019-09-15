@@ -41,7 +41,7 @@ class LeaderboardViewController: UITableViewController {
         let db = Firestore.firestore()
         userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
-                print("Error fetching 'users' query snappshot: \(error!)")
+                print("Error fetching 'users' query snappshot: \(String(describing: error))")
                 return
             }
             guard let self = self else { return }
