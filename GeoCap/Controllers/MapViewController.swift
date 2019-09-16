@@ -448,9 +448,8 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-                            // presentNotInsideAreaAlert()
-                            // return false
-                            return true
+                             presentNotInsideAreaAlert()
+                             return false
                         }
                     } else {
                         print("Couldn't start quiz: 'currentCity' == nil")
@@ -494,7 +493,6 @@ class MapViewController: UIViewController {
             break
         }
     }
-    
     
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
         if unwindSegue.identifier == "unwindSegueQuizToMap", let quizVC = unwindSegue.source as? QuizViewController {
