@@ -13,7 +13,7 @@ import Firebase
 
 extension MapViewController {
     enum Constants {
-        static let zoomLevel: CLLocationDistance = 3500
+        static let zoomLevel: CLLocationDistance = 4000
         static let captureButtonWidth: Int = 90
         static let captureButtonHeight = 50
         static let calloutFlagHeight = 32
