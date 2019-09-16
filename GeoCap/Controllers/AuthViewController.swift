@@ -32,7 +32,6 @@ class AuthViewController: UIViewController {
         let db = Firestore.firestore()
         
         db.collection("users").document(user.uid).setData([
-            "uid": user.uid,
             // FIXME: Remove force unwrap
             "username": user.displayName!,
             "capturedLocations": [],
