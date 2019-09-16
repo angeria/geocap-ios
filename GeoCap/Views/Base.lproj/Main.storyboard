@@ -21,7 +21,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="150" height="80"/>
                             </pickerView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xWt-d3-umR" firstAttribute="trailing" secondItem="Bjv-OK-XFi" secondAttribute="trailing" id="fGE-u7-tB0"/>
                             <constraint firstItem="xWt-d3-umR" firstAttribute="top" secondItem="Bjv-OK-XFi" secondAttribute="top" id="gXF-0n-Sca"/>
@@ -40,7 +39,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLC-2l-wTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="IXJ-SQ-dKH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1354" y="-571"/>
+            <point key="canvasLocation" x="1353.5999999999999" y="-571.21439280359823"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="hNz-n2-bh7">
