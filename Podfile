@@ -9,7 +9,6 @@ target 'GeoCap' do
   pod 'Protobuf', :inhibit_warnings => true
 
   pod 'Firebase/Firestore'
-  pod 'Firebase/Functions'
   pod 'Firebase/Messaging'
   pod 'Firebase/Analytics'
 
