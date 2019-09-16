@@ -67,6 +67,17 @@ class MapViewController: UIViewController {
 
         requestUserLocationAuth()
         
+        if currentCity != nil {
+            switch locationFilter.selectedSegmentIndex {
+            case 0:
+                fetchLocations(ofType: .building)
+            case 1:
+                fetchLocations(ofType: .area)
+            default:
+                fatalError("Unexpected segment index in locationFilter()")
+            }
+        }
+        
         if authListener == nil {
             setupAuthListener()
         }
@@ -448,8 +459,9 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-                             presentNotInsideAreaAlert()
-                             return false
+//                            presentNotInsideAreaAlert()
+                            return true
+//                             return false
                         }
                     } else {
                         print("Couldn't start quiz: 'currentCity' == nil")
