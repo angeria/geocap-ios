@@ -197,9 +197,9 @@
 			isa = PBXGroup;
 			children = (
 				432DEDA322E1F28E00DFA074 /* Assets.xcassets */,
-				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
-				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
 				432DEDA822E1F28E00DFA074 /* Info.plist */,
+				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
+				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
@@ -261,6 +261,8 @@
 				432DED9522E1F28D00DFA074 /* Resources */,
 				9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */,
 				2FEAAB61C8058657AB7B0BB3 /* [CP] Copy Pods Resources */,
+				4304C22923333B3D00B782DF /* ShellScript */,
+				43BB34A92333458400E88B1A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -411,6 +413,41 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		4304C22923333B3D00B782DF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		43BB34A92333458400E88B1A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n";
 		};
 		9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -708,10 +745,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A4B70B7749D2C4F7E71E820D /* Pods-GeoCap.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 934788YR3T;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/GeoCap/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -729,6 +769,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B77FED62B589C3E94D6FC9FF /* Pods-GeoCap.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
