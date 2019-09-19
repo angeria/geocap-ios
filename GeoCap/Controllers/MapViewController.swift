@@ -549,7 +549,6 @@ extension MapViewController: MKMapViewDelegate {
         return nil
     }
     
-    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         mapView.deselectAnnotation(view.annotation, animated: true)
         if shouldPerformSegue(withIdentifier: "Show Quiz", sender: view) {
