@@ -38,7 +38,7 @@ extension UIView {
     func shake() {
         let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        animation.duration = GeoCap.Constants.shakeAnimationDuration
+        animation.duration = GeoCapConstants.shakeAnimationDuration
         animation.values = [-7.5, 7.5, -5.0, 5.0, -2.5, 2.5, 0.0]
         self.layer.add(animation, forKey: "shake")
     }

@@ -10,6 +10,7 @@
 		4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */; };
 		43109487230AC9020071F3A5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43109489230AC9020071F3A5 /* Localizable.strings */; };
 		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
+		4326A5E62336666000A3D1A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E52336666000A3D1A1 /* Errors.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
 		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 		43109488230AC9020071F3A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4310948A230AC9040071F3A5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
+		4326A5E52336666000A3D1A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		432DED9C22E1F28D00DFA074 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
 				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
+				4326A5E52336666000A3D1A1 /* Errors.swift */,
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
 			);
@@ -262,7 +265,6 @@
 				9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */,
 				2FEAAB61C8058657AB7B0BB3 /* [CP] Copy Pods Resources */,
 				4304C22923333B3D00B782DF /* ShellScript */,
-				43BB34A92333458400E88B1A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -432,23 +434,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
 		};
-		43BB34A92333458400E88B1A /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n";
-		};
 		9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -546,6 +531,7 @@
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
+				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,

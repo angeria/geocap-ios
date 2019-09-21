@@ -8,9 +8,7 @@
 
 import Foundation
 
-enum GeoCap {
-    enum Constants {
-        static let shakeAnimationDuration = 0.4
-        static let scaleAnimationDuration = 0.125
-    }
+enum GeoCapConstants {
+    static let shakeAnimationDuration = 0.4
+    static let scaleAnimationDuration = 0.125
 }

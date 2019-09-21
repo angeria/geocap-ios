@@ -42,6 +42,8 @@ class QuizViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
+                Crashlytics.sharedInstance().recordError(error!)
+                // TODO: os log
                 print("Error fetching 'quiz/data' document snapshot: \(String(describing: error))")
                 self?.presentingViewController?.dismiss(animated: true)
                 return
@@ -51,6 +53,7 @@ class QuizViewController: UIViewController {
                 self?.totalDatabaseQuestionCount = questionsCount
                 self?.dispatchGroup.leave()
             } else {
+                // TODO: os log
                 print("Couldn't read 'questionsCount' field")
                 self?.presentingViewController?.dismiss(animated: true)
             }
@@ -72,6 +75,8 @@ class QuizViewController: UIViewController {
         
         db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
+                Crashlytics.sharedInstance().recordError(error!)
+                // TODO: os log
                 print("Error fetching question query snapshot: \(String(describing: error))")
                 self?.presentingViewController?.dismiss(animated: true)
                 return
@@ -86,6 +91,7 @@ class QuizViewController: UIViewController {
                 }
                 self.fetchQuestions(amount: amount - 1, retryCount: retryCount)
             } else {
+                // TODO: os log
                 print("Couldn't find a question with index '\(randomIndex)'")
                 if retryCount < Constants.maxNumberOfRetries {
                     print("Retrying with another index...")
@@ -129,6 +135,7 @@ class QuizViewController: UIViewController {
     
     private func showNextQuestion() {
         guard questions.count > 0 else {
+            // TODO: os log
             print("ERROR: 'questions' array is empty")
             presentingViewController?.dismiss(animated: true)
             return
@@ -214,6 +221,8 @@ class QuizViewController: UIViewController {
         
         cityReference?.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
+                Crashlytics.sharedInstance().recordError(error!)
+                // TODO: os log
                 print("Error getting location query snapshot: \(String(describing: error))")
                 return
             }
@@ -227,11 +236,14 @@ class QuizViewController: UIViewController {
                 batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
                 
                 batch.commit() { err in
-                    if let err = err {
-                        print("Error writing batch: \(err)")
+                    if let error = error {
+                        Crashlytics.sharedInstance().recordError(error)
+                        // TODO: os log
+                        print("Error writing batch: \(error)")
                     }
                 }
             } else {
+                // TODO: os log
                 print("Couldn't find a location with name '\(String(describing: self.locationName))'")
             }
         }
@@ -262,7 +274,7 @@ class QuizViewController: UIViewController {
                 self.countdownBar.shake()
                 self.answerButtons.forEach() { $0.isEnabled = false }
                 self.countdownBarTimer?.invalidate()
-                Timer.scheduledTimer(withTimeInterval: GeoCap.Constants.shakeAnimationDuration + 0.1, repeats: false) { _ in
+                Timer.scheduledTimer(withTimeInterval: GeoCapConstants.shakeAnimationDuration + 0.1, repeats: false) { _ in
                     self.presentingViewController?.dismiss(animated: true, completion: nil)
                 }
             case 0.29...0.30:

@@ -30,7 +30,6 @@ class AuthViewController: UIViewController {
     
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
-        
         db.collection("users").document(user.uid).setData([
             // FIXME: Remove force unwrap
             "username": user.displayName!,
@@ -39,6 +38,7 @@ class AuthViewController: UIViewController {
             "locationLostNotificationsEnabled": false
         ]) { [weak self] error in
             if let error = error {
+                Crashlytics.sharedInstance().recordError(error)
                 print("Error adding user: \(error)")
                 self?.presentLoginErrorAlert()
             } else {
@@ -62,6 +62,7 @@ class AuthViewController: UIViewController {
             if error.userInfo[NSUnderlyingErrorKey] != nil {
                 print("Underlying login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
             }
+            Crashlytics.sharedInstance().recordError(error)
         }
     }
     
@@ -85,12 +86,17 @@ extension AuthViewController: FUIAuthDelegate {
         switch error {
         case .none:
             guard let user = authDataResult?.user else { presentLoginErrorAlert(); return }
+            
+            Crashlytics.sharedInstance().setUserIdentifier(user.uid)
+            
             guard user.displayName != nil, user.displayName != "" else {
-                print("Login error: 'user.displayName' is nil or an empty string")
+                print("Login error: 'user.displayName' is nil or empty string")
                 try? Auth.auth().signOut()
                 presentLoginErrorAlert()
                 return
             }
+            
+            Crashlytics.sharedInstance().setUserName(user.displayName)
             
             if authDataResult?.additionalUserInfo?.isNewUser == true {
                 storeNewUser(user)
