@@ -84,6 +84,7 @@ class QuizViewController: UIViewController {
             
             guard let self = self else { return }
             
+            Crashlytics.sharedInstance().setIntValue(Int32(randomIndex), forKey: "randomQuestionIndex")
             if let document = query.documents.first, let question = Question(data: document.data()) {
                 self.questions += [question]
                 if self.currentQuestion == nil {
@@ -94,10 +95,19 @@ class QuizViewController: UIViewController {
                 // TODO: os log
                 print("Couldn't find a question with index '\(randomIndex)'")
                 if retryCount < Constants.maxNumberOfRetries {
+                    // TODO: os log
                     print("Retrying with another index...")
                     self.fetchQuestions(amount: amount, retryCount: retryCount + 1)
                 } else {
+                    // TODO: os log
                     print("Retries exhausted: exiting back to map")
+                    let error = NSError(domain: GeoCapErrorDomain, code: GeoCapErrorCode.quizLoadFailed.rawValue, userInfo: [
+                        NSLocalizedDescriptionKey: "Couldn't load quiz",
+                        NSUnderlyingErrorKey: "Couldn't get questions after several retries with different indices",
+                        "triedIndices": String(describing: self.usedIndices),
+                        "numberOfRetries": String(Constants.maxNumberOfRetries)
+                    ])
+                    Crashlytics.sharedInstance().recordError(error)
                     self.presentingViewController?.dismiss(animated: true)
                 }
             }
@@ -133,13 +143,8 @@ class QuizViewController: UIViewController {
 
     private var currentQuestion: Question?
     
+    // PRECONDITION: questions.count > 0
     private func showNextQuestion() {
-        guard questions.count > 0 else {
-            // TODO: os log
-            print("ERROR: 'questions' array is empty")
-            presentingViewController?.dismiss(animated: true)
-            return
-        }
         currentQuestion = questions.removeFirst()
         
         questionLabel.text = currentQuestion!.question
@@ -209,21 +214,20 @@ class QuizViewController: UIViewController {
     // MARK: - Capturing
     
     // Dependency injection
-    var locationName: String?
-    var cityReference: DocumentReference?
+    var locationName: String!
+    var cityReference: DocumentReference!
     
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        guard let locationName = locationName else { return }
         
         let db = Firestore.firestore()
         let batch = db.batch()
         
-        cityReference?.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { [weak self] querySnapshot, error in
+        cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
                 Crashlytics.sharedInstance().recordError(error!)
                 // TODO: os log
-                print("Error getting location query snapshot: \(String(describing: error))")
+                print("Error getting location query snapshot: \(error!)")
                 return
             }
             guard let self = self else { return }
@@ -233,7 +237,7 @@ class QuizViewController: UIViewController {
                 batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
                 
                 let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
                 
                 batch.commit() { err in
                     if let error = error {
@@ -244,7 +248,7 @@ class QuizViewController: UIViewController {
                 }
             } else {
                 // TODO: os log
-                print("Couldn't find a location with name '\(String(describing: self.locationName))'")
+                print("Couldn't find a location with name '\(self.locationName!))'")
             }
         }
     }

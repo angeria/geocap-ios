@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Crashlytics
 
 struct Question {
     let question: String
@@ -23,8 +24,18 @@ struct Question {
         guard
             let question = data["question"] as? String,
             let answer = data["answer"] as? String,
-            let alternatives = data["alternatives"] as? [String]
-            else { print("Error in initializing Question"); return nil }
+            let alternatives = data["alternatives"] as? [String] else {
+                let error = NSError(domain: GeoCapErrorDomain, code: GeoCapErrorCode.initFailed.rawValue, userInfo: [
+                        NSDebugDescriptionErrorKey: "Failed to initialize question",
+                        "question": data["question"] as? String ?? "",
+                        "answer": data["answer"] as? String ?? "",
+                        "alternatives": String(describing: data["alternatives"] as? [String])
+                    ])
+                Crashlytics.sharedInstance().recordError(error)
+                // TODO: os log
+                print("Error in initializing Question")
+                return nil
+            }
         
         self.init(question: question, answer: answer, alternatives: alternatives)
     }

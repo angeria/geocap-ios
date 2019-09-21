@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
                 // TODO: os log
-                print("Error removing notification token from user: \(String(describing: error))")
+                print("Error removing notification token from user: \(error)")
             }
             self?.signOut()
         }
@@ -52,6 +52,7 @@ class ProfileViewController: UIViewController {
         }
         catch let error as NSError {
             Crashlytics.sharedInstance().recordError(error)
+            // TODO: os log
             if let message = error.userInfo[NSLocalizedFailureReasonErrorKey] {
                 print("Error signing out: \(message)")
             }
@@ -72,6 +73,7 @@ class ProfileViewController: UIViewController {
         settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     Crashlytics.sharedInstance().recordError(error!)
+                    // TODO: os log
                     print("Error fetching user document snapshot: \(String(describing: error))")
                     return
                 }
@@ -112,6 +114,7 @@ class ProfileViewController: UIViewController {
         db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
+                // TODO: os log
                 print("Error setting 'locationLostNotificationsEnabled' to: \(isEnabled)", error)
             }
         }
@@ -124,6 +127,7 @@ class ProfileViewController: UIViewController {
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
             if let error = error {
                 Crashlytics.sharedInstance().recordError(error)
+                // TODO: os log
                 print("Error requesting notification auth: ", error)
                 DispatchQueue.main.async {
                     self?.locationLostNotificationsSwitch.isOn = false
@@ -140,6 +144,7 @@ class ProfileViewController: UIViewController {
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                     if let error = error {
                         Crashlytics.sharedInstance().recordError(error)
+                        // TODO: os log
                         print("Error setting 'locationLostNotificationsEnabled' to true: ", error)
                     }
                 }

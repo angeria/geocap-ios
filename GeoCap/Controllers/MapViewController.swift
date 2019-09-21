@@ -51,7 +51,6 @@ class MapViewController: UIViewController {
             setupAfterUserSignedIn()
         }
         
-        // Setup user tracking bar button
         let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
         navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
@@ -77,7 +76,7 @@ class MapViewController: UIViewController {
             case 1:
                 fetchLocations(ofType: .area)
             default:
-                fatalError("Unexpected segment index in locationFilter()")
+                fatalError("Unexpected location filter segment index")
             }
         }
         
@@ -136,7 +135,7 @@ class MapViewController: UIViewController {
         case 1:
             fetchLocations(ofType: .area)
         default:
-            fatalError("Unexpected segment index in locationFilter()")
+            fatalError("Unexpected location filter segment index")
         }
     }
 
@@ -191,7 +190,10 @@ class MapViewController: UIViewController {
                 return
             }
             
-            let userLocation = self?.mapView.userLocation.location
+            guard let userLocation = self?.mapView.userLocation.location else {
+                // TODO: os log
+                return
+            }
             var closestDistanceSoFar: CLLocationDistance?
             var nearestCitySoFar: City?
             
@@ -201,11 +203,7 @@ class MapViewController: UIViewController {
                     continue
                 }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
-                
-                guard let distanceFromUser = userLocation?.distance(from: cityLocation) else {
-                    // TODO: os log
-                    return
-                }
+                let distanceFromUser = userLocation.distance(from: cityLocation)
                 
                 // Add to all cities
                 let cityCoordinates = CLLocationCoordinate2D(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
@@ -231,6 +229,10 @@ class MapViewController: UIViewController {
     // Makes it possible to keep the map updated in the background while other views are visible
     var locationListener: ListenerRegistration?
     private func fetchLocations(ofType type: LocationType) {
+        guard let username = Auth.auth().currentUser?.displayName else {
+            // TODO: os log
+            return
+        }
         
         loadingLocationsView.isHidden = false
         
@@ -243,7 +245,6 @@ class MapViewController: UIViewController {
                 print("Error fetching locations: \(error!)")
                 return
             }
-            guard let username = Auth.auth().currentUser?.displayName else { return }
             
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
@@ -462,7 +463,7 @@ class MapViewController: UIViewController {
             let circlePoint = circleRenderer.point(for: mapPoint)
             return circleRenderer.path.contains(circlePoint)
         default:
-            fatalError("Unexpected overlay in user(location:, isInside:)")
+            fatalError("Unexpected overlay")
         }
     }
     
@@ -480,14 +481,16 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-//                            presentNotInsideAreaAlert()
+                            // presentNotInsideAreaAlert()
+                            // return false
                             return true
-//                             return false
                         }
                     } else {
+                        // TODO: os log
                         print("Couldn't start quiz: 'currentCity' == nil")
                     }
                 } else {
+                    // TODO: os log
                     print("Couldn't start quiz: 'locationTitle' == nil")
                 }
             }

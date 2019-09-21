@@ -42,6 +42,7 @@ class LeaderboardViewController: UITableViewController {
         userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 Crashlytics.sharedInstance().recordError(error!)
+                // TODO: os log
                 print("Error fetching 'users' query snappshot: \(String(describing: error))")
                 return
             }

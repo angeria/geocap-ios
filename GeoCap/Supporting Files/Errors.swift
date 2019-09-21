@@ -12,4 +12,6 @@ let GeoCapErrorDomain = "GeoCapErrorDomain"
 
 enum GeoCapErrorCode: Int {
     case fieldNotFound = 0
+    case quizLoadFailed
+    case initFailed
 }
