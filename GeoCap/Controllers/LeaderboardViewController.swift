@@ -41,6 +41,7 @@ class LeaderboardViewController: UITableViewController {
         let db = Firestore.firestore()
         userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
+                Crashlytics.sharedInstance().recordError(error!)
                 print("Error fetching 'users' query snappshot: \(String(describing: error))")
                 return
             }

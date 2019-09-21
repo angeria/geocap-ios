@@ -65,6 +65,9 @@ class MapViewController: UIViewController {
         // Choose "Buildings" location filter
         locationFilter.selectedSegmentIndex = 0
 
+        Crashlytics.sharedInstance().setUserIdentifier(Auth.auth().currentUser?.uid)
+        Crashlytics.sharedInstance().setUserName(Auth.auth().currentUser?.displayName)
+        
         requestUserLocationAuth()
         
         if currentCity != nil {
@@ -183,7 +186,8 @@ class MapViewController: UIViewController {
         let db = Firestore.firestore()
         db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                print("Error getting 'cities' collection group query snapshot: \(String(describing: error))")
+                print("Error getting 'cities' collection group query snapshot: \(error!)")
+                Crashlytics.sharedInstance().recordError(error!)
                 return
             }
             
@@ -192,17 +196,23 @@ class MapViewController: UIViewController {
             var nearestCitySoFar: City?
             
             for cityDocument in query.documents {
-                guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else { continue }
+                guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else {
+                    // TODO: os log
+                    continue
+                }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
                 
-                guard let distanceFromUser = userLocation?.distance(from: cityLocation) else { return }
+                guard let distanceFromUser = userLocation?.distance(from: cityLocation) else {
+                    // TODO: os log
+                    return
+                }
                 
                 // Add to all cities
                 let cityCoordinates = CLLocationCoordinate2D(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
                 let city = City(name: cityDocument.documentID.capitalized, coordinates: cityCoordinates, reference: cityDocument.reference)
                 self?.allCities += [city]
                 
-                if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar ?? 0 {
+                if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar! {
                     closestDistanceSoFar = distanceFromUser
                     nearestCitySoFar = city
                 }
@@ -228,7 +238,9 @@ class MapViewController: UIViewController {
         
         locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
-                print("Error fetching locations: \(String(describing: error))")
+                Crashlytics.sharedInstance().recordError(error!)
+                // TODO: os log
+                print("Error fetching locations: \(error!)")
                 return
             }
             guard let username = Auth.auth().currentUser?.displayName else { return }
@@ -332,11 +344,14 @@ class MapViewController: UIViewController {
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
+                Crashlytics.sharedInstance().recordError(error)
+                // TODO: os log
                 print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
+                        Crashlytics.sharedInstance().recordError(error)
                         print("Error setting notification token for user: \(error)")
                     }
                 }
@@ -349,6 +364,8 @@ class MapViewController: UIViewController {
             case .denied, .notDetermined:
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
+                        Crashlytics.sharedInstance().recordError(error)
+                        // TODO: os log
                         print("Error setting 'locationLostNotificationsEnabled' in setupNotifications(): ", error)
                     }
                 }
@@ -369,6 +386,8 @@ class MapViewController: UIViewController {
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
+                    Crashlytics.sharedInstance().recordError(error)
+                    // TODO: os log
                     print("Error requesting notification auth: ", error)
                     return
                 } else if granted {
@@ -379,6 +398,8 @@ class MapViewController: UIViewController {
                     let db = Firestore.firestore()
                     db.collection("users").document(user.uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
+                            Crashlytics.sharedInstance().recordError(error)
+                            // TODO: os log
                             print("Error setting 'locationLostNotificationsEnabled' to true: ", error)
                         }
                     }
@@ -502,7 +523,7 @@ class MapViewController: UIViewController {
                 popoverVC.currentCity = currentCity
             }
         default:
-            break
+            fatalError("Unexpected segue identifier")
         }
     }
     
@@ -596,7 +617,7 @@ extension MapViewController: MKMapViewDelegate {
             
             return renderer
         default:
-            fatalError("Unexpected overlay in mapView(rendererFor:)")
+            fatalError("Unexpected overlay")
         }
     }
     
