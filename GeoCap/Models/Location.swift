@@ -31,9 +31,17 @@ class Location: NSObject, MKAnnotation {
     init?(data: [String:Any], username: String) {
         guard
             let name = data["name"] as? String,
-            let center = data["center"] as? GeoPoint
-            else { //TODO: os log
-                print("Error initializing Location"); return nil }
+            let center = data["center"] as? GeoPoint else {
+                let error = NSError(domain: GeoCapErrorDomain, code: GeoCapErrorCode.initFailed.rawValue, userInfo: [
+                        NSDebugDescriptionErrorKey: "Failed to initialize location",
+                        "name": data["name"] ?? "",
+                        "center": String(describing: data["center"] as? GeoPoint)
+                    ])
+                Crashlytics.sharedInstance().recordError(error)
+                //TODO: os log
+                print("Error initializing Location")
+                return nil
+        }
         
         self.name = name
         self.title = name

@@ -38,9 +38,7 @@ class AuthViewController: UIViewController {
             "locationLostNotificationsEnabled": false
         ]) { [weak self] error in
             if let error = error {
-                Crashlytics.sharedInstance().recordError(error)
-                print("Error adding user: \(error)")
-                self?.presentLoginErrorAlert()
+                fatalError(String(describing: error))
             } else {
                 self?.performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
@@ -85,15 +83,12 @@ extension AuthViewController: FUIAuthDelegate {
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         switch error {
         case .none:
-            guard let user = authDataResult?.user else { presentLoginErrorAlert(); return }
+            let user = authDataResult!.user
             
             Crashlytics.sharedInstance().setUserIdentifier(user.uid)
             
             guard user.displayName != nil, user.displayName != "" else {
-                print("Login error: 'user.displayName' is nil or empty string")
-                try? Auth.auth().signOut()
-                presentLoginErrorAlert()
-                return
+                fatalError("'displayName' is nil or empty string")
             }
             
             Crashlytics.sharedInstance().setUserName(user.displayName)
