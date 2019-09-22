@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import os.log
 
 class LeaderboardViewController: UITableViewController {
 
@@ -28,10 +29,24 @@ class LeaderboardViewController: UITableViewController {
     // MARK: - Leaderboard
     
     struct userCellData {
-        var isOpened: Bool
+        var isOpened = false
         let username: String
         let locations: [String]
         let locationCount: Int
+        
+        init?(data: [String: Any]) {
+            guard
+                let username = data["username"] as? String,
+                let locations = data["capturedLocations"] as? [String],
+                let locationCount = data["capturedLocationsCount"] as? Int
+            else {
+                return nil
+            }
+            
+            self.username = username
+            self.locations = locations.sorted()
+            self.locationCount = locationCount
+        }
     }
     
     private var tableViewData = [userCellData]()
@@ -41,9 +56,8 @@ class LeaderboardViewController: UITableViewController {
         let db = Firestore.firestore()
         userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
+                os_log("%{public}@", log: OSLog.leaderboard, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
-                // TODO: os log
-                print("Error fetching 'users' query snappshot: \(String(describing: error))")
                 return
             }
             guard let self = self else { return }
@@ -51,15 +65,11 @@ class LeaderboardViewController: UITableViewController {
             self.tableViewData.removeAll()
             
             snapshot.documents.forEach() { documentSnapshot in
-                let data = documentSnapshot.data()
-                guard let username = data["username"] as? String else {print( "Couldn't get 'username'"); return }
-                guard var locations = data["capturedLocations"] as? [String] else { print("Couldn't get 'capturedLocations'"); return }
-                guard let locationCount = data["capturedLocationsCount"] as? Int else { print("Couldn't get 'capturedLocationsCount'"); return }
-
-                // Sort locations in alphabetical order
-                locations.sort(by: { $0 < $1 })
-                
-                self.tableViewData += [userCellData(isOpened: false, username: username, locations: locations, locationCount: locationCount)]
+                guard let userCellData = userCellData(data: documentSnapshot.data()) else {
+                    os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'", log: OSLog.leaderboard, type: .error, documentSnapshot.documentID)
+                    return
+                }
+                self.tableViewData += [userCellData]
             }
             self.tableView.reloadData()
         }

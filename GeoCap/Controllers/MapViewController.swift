@@ -26,13 +26,12 @@ extension MapViewController {
 
 class MapViewController: UIViewController {
     
-    // Currently keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
-    // Set 'mapView.delegate = nil' to be able to deallocate it
+    // Keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
+    // Set 'mapView.delegate = nil' somewhere to be able to deallocate it
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
             mapView.mapType = .mutedStandard
-            mapView.showsUserLocation = true
             mapView.showsCompass = false
         }
     }
@@ -58,39 +57,10 @@ class MapViewController: UIViewController {
     
     // MARK: - Setup
     
-    private func setupAfterUserSignedIn() {
-        // Choose "Map" tab
-        tabBarController?.selectedIndex = 1
-        
-        // Choose "Buildings" location filter
-        locationFilter.selectedSegmentIndex = 0
-
-        Crashlytics.sharedInstance().setUserIdentifier(Auth.auth().currentUser?.uid)
-        Crashlytics.sharedInstance().setUserName(Auth.auth().currentUser?.displayName)
-        
-        requestUserLocationAuth()
-        
-        if currentCity != nil {
-            switch locationFilter.selectedSegmentIndex {
-            case 0:
-                fetchLocations(ofType: .building)
-            case 1:
-                fetchLocations(ofType: .area)
-            default:
-                fatalError("Unexpected location filter segment index")
-            }
-        }
-        
-        if authListener == nil {
-            setupAuthListener()
-        }
-        
-        setupNotifications()
-    }
-    
     // Currently listener isn't removed at all (only when singning out) and constantly listening for auth state updates
     // Makes it possible to notice sign-out event in profile view to present auth view
-    var authListener: AuthStateDidChangeListenerHandle?
+    private var authListener: AuthStateDidChangeListenerHandle?
+    
     private func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
             if user == nil {
@@ -103,9 +73,33 @@ class MapViewController: UIViewController {
         }
     }
     
+    private func setupAfterUserSignedIn() {
+        Crashlytics.sharedInstance().setUserIdentifier(Auth.auth().currentUser?.uid)
+        Crashlytics.sharedInstance().setUserName(Auth.auth().currentUser?.displayName)
+        
+        mapView.showsUserLocation = true
+        
+        // Choose "Map" tab
+        tabBarController?.selectedIndex = 1
+        
+        if currentCity != nil {
+            fetchLocations()
+        }
+        
+        requestUserLocationAuth()
+        
+        if authListener == nil {
+            setupAuthListener()
+        }
+        
+        setupNotifications()
+    }
+    
     // MARK: - Teardown
     
     private func teardownAfterUserSignedOut() {
+        mapView.showsUserLocation = false
+        
         clearMap()
         
         locationListener?.remove()
@@ -129,17 +123,8 @@ class MapViewController: UIViewController {
     
     @IBAction func locationFilter(_ sender: UISegmentedControl) {
         clearMap()
-        
-        switch sender.selectedSegmentIndex {
-        case 0:
-            fetchLocations(ofType: .building)
-        case 1:
-            fetchLocations(ofType: .area)
-        default:
-            fatalError("Unexpected location filter segment index")
-        }
+        fetchLocations()
     }
-
     
     // MARK: - Locations
     
@@ -157,17 +142,10 @@ class MapViewController: UIViewController {
             
             clearMap()
             
+            fetchLocations()
+            
             let region = MKCoordinateRegion(center: currentCity.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
-            
-            switch locationFilter.selectedSegmentIndex {
-            case 0:
-                fetchLocations(ofType: .building)
-            case 1:
-                fetchLocations(ofType: .area)
-            default:
-                fatalError("Unexpected selected segment index in location filter")
-            }
             
             currentCityBarButton.title = currentCity.name
             allCities.sort { city, _ in city.name == currentCity.name } // Put the current city first
@@ -186,21 +164,19 @@ class MapViewController: UIViewController {
         let db = Firestore.firestore()
         db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                print("Error getting 'cities' collection group query snapshot: \(error!)")
+                os_log("%{public}@", log: OSLog.map, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
+            guard let self = self else { return }
             
-            guard let userLocation = self?.mapView.userLocation.location else {
-                // TODO: os log
-                return
-            }
+            let userLocation = self.mapView.userLocation.location!
             var closestDistanceSoFar: CLLocationDistance?
             var nearestCitySoFar: City?
             
             for cityDocument in query.documents {
                 guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else {
-                    // TODO: os log
+                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.map, type: .error, cityDocument.documentID)
                     continue
                 }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
@@ -209,47 +185,58 @@ class MapViewController: UIViewController {
                 // Add to all cities
                 let cityCoordinates = CLLocationCoordinate2D(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
                 let city = City(name: cityDocument.documentID.capitalized, coordinates: cityCoordinates, reference: cityDocument.reference)
-                self?.allCities += [city]
-                
+                self.allCities += [city]
+
+                // Set to nearest city if closer
                 if closestDistanceSoFar == nil || distanceFromUser < closestDistanceSoFar! {
                     closestDistanceSoFar = distanceFromUser
                     nearestCitySoFar = city
                 }
             }
             
-            self?.currentCity = nearestCitySoFar
+            self.currentCity = nearestCitySoFar
         }
     }
     
-    enum LocationType: String {
+    private enum LocationType: String {
         case building
         case area
     }
     
-    // Currently not removed at all and constantly listening for updates on locations (even while map is not visible)
+    // Listener not removed at all (only when signing out) and constantly listening for updates on locations even while map is not visible
     // Makes it possible to keep the map updated in the background while other views are visible
-    var locationListener: ListenerRegistration?
-    private func fetchLocations(ofType type: LocationType) {
-        guard let username = Auth.auth().currentUser?.displayName else {
-            // TODO: os log
-            return
-        }
+    private var locationListener: ListenerRegistration?
+    
+    private func fetchLocations() {
+        guard let username = Auth.auth().currentUser?.displayName else { return }
         
         loadingLocationsView.isHidden = false
         
         locationListener?.remove()
         
-        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: type.rawValue).addSnapshotListener { [weak self] querySnapshot, error in
+        var locationType: String
+        switch locationFilter.selectedSegmentIndex {
+        case 0:
+            locationType = LocationType.building.rawValue
+        case 1:
+            locationType = LocationType.area.rawValue
+        default:
+            fatalError("Unexpected selected segment index in location filter")
+        }
+        
+        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: locationType).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
+                os_log("%{public}@", log: OSLog.map, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
-                // TODO: os log
-                print("Error fetching locations: \(error!)")
                 return
             }
             
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
-                guard let newAnnotation = Location(data: diff.document.data(), username: username) else { return }
+                guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
+                    os_log("Couldn't initialize location with id %{public}@", log: OSLog.map, type: .error, diff.document.documentID)
+                    return
+                }
                 
                 if (diff.type == .added) {
                     self.mapView.addAnnotation(newAnnotation)
@@ -346,15 +333,14 @@ class MapViewController: UIViewController {
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
+                os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
-                // TODO: os log
-                print("Error fetching remote instance ID: \(error)")
             } else if let result = result {
                 let notificationToken = result.token
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
+                        os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
-                        print("Error setting notification token for user: \(error)")
                     }
                 }
             }
@@ -366,9 +352,8 @@ class MapViewController: UIViewController {
             case .denied, .notDetermined:
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
+                        os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
-                        // TODO: os log
-                        print("Error setting 'locationLostNotificationsEnabled' in setupNotifications(): ", error)
                     }
                 }
             default:
@@ -388,9 +373,8 @@ class MapViewController: UIViewController {
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
+                    os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
                     Crashlytics.sharedInstance().recordError(error)
-                    // TODO: os log
-                    print("Error requesting notification auth: ", error)
                     return
                 } else if granted {
                     DispatchQueue.main.async {
@@ -400,9 +384,8 @@ class MapViewController: UIViewController {
                     let db = Firestore.firestore()
                     db.collection("users").document(user.uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
+                            os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
                             Crashlytics.sharedInstance().recordError(error)
-                            // TODO: os log
-                            print("Error setting 'locationLostNotificationsEnabled' to true: ", error)
                         }
                     }
                 }
@@ -487,12 +470,10 @@ class MapViewController: UIViewController {
                             return true
                         }
                     } else {
-                        // TODO: os log
-                        print("Couldn't start quiz: 'currentCity' == nil")
+                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.map, type: .error)
                     }
                 } else {
-                    // TODO: os log
-                    print("Couldn't start quiz: 'locationTitle' == nil")
+                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.map, type: .error)
                 }
             }
         case "Show Choose City Popover":
@@ -500,7 +481,7 @@ class MapViewController: UIViewController {
                 return true
             }
         default:
-            break
+            fatalError("Unexpected segue identifier")
         }
         
         return false
@@ -532,19 +513,24 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
-        if unwindSegue.identifier == "unwindSegueQuizToMap", let quizVC = unwindSegue.source as? QuizViewController {
-            if !quizVC.quizFailed {
-                // Request notification auth after first capture
-                if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
-                    presentRequestNotificationAuthAlert()
+        switch unwindSegue.identifier {
+        case "unwindSegueQuizToMap":
+            if let quizVC = unwindSegue.source as? QuizViewController {
+                if !quizVC.quizFailed {
+                    // Request notification auth after first capture
+                    if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+                        presentRequestNotificationAuthAlert()
+                    }
                 }
             }
-        } else if unwindSegue.identifier == "unwindSegueAuthToMap" {
+        case "unwindSegueAuthToMap":
             setupAfterUserSignedIn()
-        } else if unwindSegue.identifier == "unwindSegueChooseCityPopoverToMap" {
+        case "unwindSegueChooseCityPopoverToMap":
             if let popoverVC = unwindSegue.source as? ChooseCityPopoverViewController {
                 currentCity = popoverVC.currentCity
             }
+        default:
+            fatalError("Unexpected unwind segue identifier")
         }
     }
     
@@ -575,7 +561,6 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        
         mapView.deselectAnnotation(view.annotation, animated: true)
         if shouldPerformSegue(withIdentifier: "Show Quiz", sender: view) {
             performSegue(withIdentifier: "Show Quiz", sender: view)
