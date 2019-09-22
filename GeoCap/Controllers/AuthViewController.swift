@@ -69,7 +69,7 @@ extension AuthViewController: FUIAuthDelegate {
                 performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
         case .some(let error as NSError):
-            os_log("%{public}@", log: OSLog.auth, type: .error, error)
+            os_log("%{public}@", log: OSLog.Auth, type: .error, error)
             Crashlytics.sharedInstance().recordError(error)
         }
     }

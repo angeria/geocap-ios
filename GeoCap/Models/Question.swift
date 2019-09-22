@@ -34,7 +34,7 @@ struct Question {
                     "alternatives": String(describing: data["alternatives"] as? [String]),
                     "index": data["index"] as? Int ?? -1
                 ])
-            os_log("Failed to initialize question", log: OSLog.quiz, type: .error, error)
+            os_log("Failed to initialize question", log: OSLog.Quiz, type: .error, error)
             Crashlytics.sharedInstance().recordError(error)
             return nil
         }

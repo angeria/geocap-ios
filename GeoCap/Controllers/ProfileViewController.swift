@@ -39,7 +39,7 @@ class ProfileViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("users").document(uid).updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
             if let error = error {
-                os_log("%{public}@", log: OSLog.profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
             }
             self?.signOut()
@@ -51,7 +51,7 @@ class ProfileViewController: UIViewController {
             try Auth.auth().signOut()
         }
         catch let error as NSError {
-            os_log("%{public}@", log: OSLog.profile, type: .error, error)
+            os_log("%{public}@", log: OSLog.Profile, type: .error, error)
             Crashlytics.sharedInstance().recordError(error)
         }
     }
@@ -69,7 +69,7 @@ class ProfileViewController: UIViewController {
         let db = Firestore.firestore()
         settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
-                    os_log("%{public}@", log: OSLog.profile, type: .error, error! as NSError)
+                    os_log("%{public}@", log: OSLog.Profile, type: .error, error! as NSError)
                     Crashlytics.sharedInstance().recordError(error!)
                     return
                 }
@@ -109,7 +109,7 @@ class ProfileViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
             if let error = error {
-                os_log("%{public}@", log: OSLog.profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
             }
         }
@@ -121,7 +121,7 @@ class ProfileViewController: UIViewController {
         let authOptions: UNAuthorizationOptions = [.alert, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
             if let error = error {
-                os_log("%{public}@", log: OSLog.profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     self?.locationLostNotificationsSwitch.isOn = false
@@ -137,7 +137,7 @@ class ProfileViewController: UIViewController {
                 let db = Firestore.firestore()
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.profile, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }

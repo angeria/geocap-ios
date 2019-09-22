@@ -164,7 +164,7 @@ class MapViewController: UIViewController {
         let db = Firestore.firestore()
         db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.map, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -176,7 +176,7 @@ class MapViewController: UIViewController {
             
             for cityDocument in query.documents {
                 guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else {
-                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.map, type: .error, cityDocument.documentID)
+                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.Map, type: .error, cityDocument.documentID)
                     continue
                 }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
@@ -226,7 +226,7 @@ class MapViewController: UIViewController {
         
         locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: locationType).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
-                os_log("%{public}@", log: OSLog.map, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -234,7 +234,7 @@ class MapViewController: UIViewController {
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
                 guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
-                    os_log("Couldn't initialize location with id %{public}@", log: OSLog.map, type: .error, diff.document.documentID)
+                    os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .error, diff.document.documentID)
                     return
                 }
                 
@@ -333,13 +333,13 @@ class MapViewController: UIViewController {
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
-                os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
             } else if let result = result {
                 let notificationToken = result.token
                 db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }
@@ -352,7 +352,7 @@ class MapViewController: UIViewController {
             case .denied, .notDetermined:
                 db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }
@@ -373,7 +373,7 @@ class MapViewController: UIViewController {
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
-                    os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
+                    os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                     Crashlytics.sharedInstance().recordError(error)
                     return
                 } else if granted {
@@ -384,7 +384,7 @@ class MapViewController: UIViewController {
                     let db = Firestore.firestore()
                     db.collection("users").document(user.uid).updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
-                            os_log("%{public}@", log: OSLog.map, type: .error, error as NSError)
+                            os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                             Crashlytics.sharedInstance().recordError(error)
                         }
                     }
@@ -470,10 +470,10 @@ class MapViewController: UIViewController {
                             return true
                         }
                     } else {
-                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.map, type: .error)
+                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.Map, type: .error)
                     }
                 } else {
-                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.map, type: .error)
+                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.Map, type: .error)
                 }
             }
         case "Show Choose City Popover":
@@ -617,7 +617,7 @@ extension MapViewController: MKMapViewDelegate {
 
 extension MapViewController: UIPopoverPresentationControllerDelegate {
     
-    // Makes popovers allowed on iPhones instead of converting them to modal presentations
+    // Allow popovers on iPhones instead of converting them to modal presentations
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }
