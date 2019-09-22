@@ -31,11 +31,7 @@ class Location: NSObject, MKAnnotation {
     init?(data: [String:Any], username: String) {
         guard
             let name = data["name"] as? String,
-            let center = data["center"] as? GeoPoint else {
-                //TODO: os log
-                print("Error initializing Location")
-                return nil
-        }
+            let center = data["center"] as? GeoPoint else { return nil }
         
         self.name = name
         self.title = name

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import os.log
 
 extension QuizViewController {
     enum Constants {
@@ -42,9 +43,8 @@ class QuizViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
+                os_log("%{public}@", log: OSLog.quiz, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
-                // TODO: os log
-                print("Error fetching 'quiz/data' document snapshot: \(String(describing: error))")
                 self?.presentingViewController?.dismiss(animated: true)
                 return
             }
@@ -53,8 +53,7 @@ class QuizViewController: UIViewController {
                 self?.totalDatabaseQuestionCount = questionsCount
                 self?.dispatchGroup.leave()
             } else {
-                // TODO: os log
-                print("Couldn't read 'questionsCount' field")
+                os_log("Couldn't get 'questionsCount'", log: OSLog.quiz, type: .error)
                 self?.presentingViewController?.dismiss(animated: true)
             }
         }
@@ -75,9 +74,8 @@ class QuizViewController: UIViewController {
         
         db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
+                os_log("%{public}@", log: OSLog.quiz, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
-                // TODO: os log
-                print("Error fetching question query snapshot: \(String(describing: error))")
                 self?.presentingViewController?.dismiss(animated: true)
                 return
             }
@@ -92,21 +90,19 @@ class QuizViewController: UIViewController {
                 }
                 self.fetchQuestions(amount: amount - 1, retryCount: retryCount)
             } else {
-                // TODO: os log
-                print("Couldn't find a question with index '\(randomIndex)'")
+                os_log("Couldn't find a question with index '%d'", log: OSLog.quiz, type: .default, randomIndex)
                 if retryCount < Constants.maxNumberOfRetries {
-                    // TODO: os log
-                    print("Retrying with another index...")
+                    os_log("Retrying with another index...", log: OSLog.quiz, type: .default)
                     self.fetchQuestions(amount: amount, retryCount: retryCount + 1)
                 } else {
-                    // TODO: os log
-                    print("Retries exhausted: exiting back to map")
+                    os_log("Retries exhausted: exiting back to map", log: OSLog.quiz, type: .default)
                     let error = NSError(domain: GeoCapErrorDomain, code: GeoCapErrorCode.quizLoadFailed.rawValue, userInfo: [
                         NSLocalizedDescriptionKey: "Couldn't load quiz",
-                        NSUnderlyingErrorKey: "Couldn't get questions after several retries with different indices",
+                        NSDebugDescriptionErrorKey: "Couldn't get questions after several retries with different indices",
                         "triedIndices": String(describing: self.usedIndices),
                         "numberOfRetries": String(Constants.maxNumberOfRetries)
                     ])
+                    os_log("%{public}@", log: OSLog.quiz, type: .error, error)
                     Crashlytics.sharedInstance().recordError(error)
                     self.presentingViewController?.dismiss(animated: true)
                 }
@@ -225,9 +221,8 @@ class QuizViewController: UIViewController {
         
         cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
+                os_log("%{public}@", log: OSLog.quiz, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
-                // TODO: os log
-                print("Error getting location query snapshot: \(error!)")
                 return
             }
             guard let self = self else { return }
@@ -241,14 +236,10 @@ class QuizViewController: UIViewController {
                 
                 batch.commit() { err in
                     if let error = error {
+                        os_log("%{public}@", log: OSLog.quiz, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
-                        // TODO: os log
-                        print("Error writing batch: \(error)")
                     }
                 }
-            } else {
-                // TODO: os log
-                print("Couldn't find a location with name '\(self.locationName!))'")
             }
         }
     }
