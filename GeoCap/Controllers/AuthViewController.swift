@@ -9,9 +9,10 @@
 import UIKit
 import Firebase
 import FirebaseUI
+import os.log
 
 class AuthViewController: UIViewController {
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -31,49 +32,18 @@ class AuthViewController: UIViewController {
     private func storeNewUser(_ user: User) {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            // FIXME: Remove force unwrap
             "username": user.displayName!,
             "capturedLocations": [],
             "capturedLocationsCount": 0,
             "locationLostNotificationsEnabled": false
-        ]) { [weak self] error in
+        ])
+        { [weak self] error in
             if let error = error {
                 fatalError(String(describing: error))
             } else {
                 self?.performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
         }
-    }
-    
-    private func handleSignInError(_ error: Error) {
-        let error = error as NSError
-        let errorCode = FUIAuthErrorCode(rawValue: UInt(error.code))
-        
-        switch errorCode {
-        case .some where errorCode == .userCancelledSignIn:
-            break
-        case .some where errorCode == .providerError:
-            print("Login error from provider: \(error.userInfo[FUIAuthErrorUserInfoProviderIDKey]!)")
-            fallthrough
-        default:
-            print("Login error description: \(error.localizedDescription)")
-            if error.userInfo[NSUnderlyingErrorKey] != nil {
-                print("Underlying login error: \(error.userInfo[NSUnderlyingErrorKey]!)")
-            }
-            Crashlytics.sharedInstance().recordError(error)
-        }
-    }
-    
-    private func presentLoginErrorAlert() {
-        let title = NSLocalizedString("alert-action-title-sign-in-failed", comment: "Title of alert when sign-in failed")
-        let message = NSLocalizedString("alert-action-message-sign-in-failed", comment: "Message of alert when sign-in failed")
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default) { [weak self] action in
-            self?.present(self!.authUI.authViewController(), animated: true)
-        }
-        alert.addAction(okAction)
-        present(alert, animated: true)
     }
 
 }
@@ -88,18 +58,19 @@ extension AuthViewController: FUIAuthDelegate {
             Crashlytics.sharedInstance().setUserIdentifier(user.uid)
             
             guard user.displayName != nil, user.displayName != "" else {
-                fatalError("'displayName' is nil or empty string")
+                fatalError("'user.displayName' is nil or empty string")
             }
             
             Crashlytics.sharedInstance().setUserName(user.displayName)
             
-            if authDataResult?.additionalUserInfo?.isNewUser == true {
+            if authDataResult!.additionalUserInfo?.isNewUser == true {
                 storeNewUser(user)
             } else {
                 performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
             }
-        case .some(let error):
-            handleSignInError(error)
+        case .some(let error as NSError):
+            os_log("%{public}@", log: OSLog.auth, type: .error, error)
+            Crashlytics.sharedInstance().recordError(error)
         }
     }
 
