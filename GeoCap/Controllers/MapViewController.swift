@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
+import os.log
 
 extension MapViewController {
     enum Constants {
@@ -574,6 +575,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
         mapView.deselectAnnotation(view.annotation, animated: true)
         if shouldPerformSegue(withIdentifier: "Show Quiz", sender: view) {
             performSegue(withIdentifier: "Show Quiz", sender: view)

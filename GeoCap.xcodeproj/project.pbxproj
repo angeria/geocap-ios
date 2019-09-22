@@ -11,6 +11,7 @@
 		43109487230AC9020071F3A5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43109489230AC9020071F3A5 /* Localizable.strings */; };
 		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
 		4326A5E62336666000A3D1A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E52336666000A3D1A1 /* Errors.swift */; };
+		4326A5E823368FC200A3D1A1 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E723368FC200A3D1A1 /* Logging.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
 		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
@@ -57,6 +58,7 @@
 		4310948A230AC9040071F3A5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		4326A5E52336666000A3D1A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		4326A5E723368FC200A3D1A1 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		432DED9C22E1F28D00DFA074 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				4326A5E52336666000A3D1A1 /* Errors.swift */,
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
+				4326A5E723368FC200A3D1A1 /* Logging.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
 			);
 			path = "Supporting Files";
@@ -527,6 +530,7 @@
 				432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */,
 				43D7A12B22F2D49700552D2C /* Question.swift in Sources */,
 				438C7F1D232E131700121CC6 /* City.swift in Sources */,
+				4326A5E823368FC200A3D1A1 /* Logging.swift in Sources */,
 				43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */,
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,

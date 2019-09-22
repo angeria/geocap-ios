@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import os.log
 
 extension UIColor {
     struct GeoCap {
@@ -53,4 +54,3 @@ extension UIView {
         }
     }
 }
-
