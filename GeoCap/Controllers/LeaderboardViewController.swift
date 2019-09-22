@@ -56,7 +56,7 @@ class LeaderboardViewController: UITableViewController {
         let db = Firestore.firestore()
         userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
-                os_log("%{public}@", log: OSLog.leaderboard, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Leaderboard, type: .error, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -66,7 +66,7 @@ class LeaderboardViewController: UITableViewController {
             
             snapshot.documents.forEach() { documentSnapshot in
                 guard let userCellData = userCellData(data: documentSnapshot.data()) else {
-                    os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'", log: OSLog.leaderboard, type: .error, documentSnapshot.documentID)
+                    os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'", log: OSLog.Leaderboard, type: .error, documentSnapshot.documentID)
                     return
                 }
                 self.tableViewData += [userCellData]

@@ -12,9 +12,9 @@ import os.log
 extension OSLog {
     private static let subsystem = Bundle.main.bundleIdentifier!
 
-    static let auth = OSLog(subsystem: subsystem, category: "auth")
-    static let map = OSLog(subsystem: subsystem, category: "map")
-    static let leaderboard = OSLog(subsystem: subsystem, category: "leaderboard")
-    static let profile = OSLog(subsystem: subsystem, category: "profile")
-    static let quiz = OSLog(subsystem: subsystem, category: "quiz")
+    static let Auth = OSLog(subsystem: subsystem, category: "Auth")
+    static let Map = OSLog(subsystem: subsystem, category: "Map")
+    static let Leaderboard = OSLog(subsystem: subsystem, category: "Leaderboard")
+    static let Profile = OSLog(subsystem: subsystem, category: "Profile")
+    static let Quiz = OSLog(subsystem: subsystem, category: "Quiz")
 }
