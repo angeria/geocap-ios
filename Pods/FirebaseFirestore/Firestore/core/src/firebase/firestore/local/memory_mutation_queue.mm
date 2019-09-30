@@ -18,11 +18,10 @@
 
 #include <utility>
 
-#import "Firestore/Protos/objc/firestore/local/Mutation.pbobjc.h"
-#import "Firestore/Source/Local/FSTLocalSerializer.h"
 #import "Firestore/Source/Local/FSTMemoryPersistence.h"
 
 #include "Firestore/core/src/firebase/firestore/local/document_key_reference.h"
+#include "Firestore/core/src/firebase/firestore/local/sizer.h"
 #include "Firestore/core/src/firebase/firestore/model/mutation_batch.h"
 #include "Firestore/core/src/firebase/firestore/model/resource_path.h"
 #include "Firestore/core/src/firebase/firestore/util/hard_assert.h"
@@ -212,7 +211,7 @@ MemoryMutationQueue::NextMutationBatchAfterBatchId(BatchId batch_id) {
   // The requested batchID may still be out of range so normalize it to the
   // start of the queue.
   int raw_index = IndexOfBatchId(next_batch_id);
-  int index = raw_index < 0 ? 0 : raw_index;
+  size_t index = raw_index < 0 ? 0 : static_cast<size_t>(raw_index);
   if (queue_.size() <= index) {
     return absl::nullopt;
   }
@@ -231,7 +230,7 @@ absl::optional<MutationBatch> MemoryMutationQueue::LookupMutationBatch(
   }
 
   int index = IndexOfBatchId(batch_id);
-  if (index < 0 || index >= queue_.size()) {
+  if (index < 0 || static_cast<size_t>(index) >= queue_.size()) {
     return absl::nullopt;
   }
 
@@ -257,10 +256,10 @@ bool MemoryMutationQueue::ContainsKey(const model::DocumentKey& key) {
   return begin != range.end() && begin->key() == key;
 }
 
-size_t MemoryMutationQueue::CalculateByteSize(FSTLocalSerializer* serializer) {
-  size_t count = 0;
+int64_t MemoryMutationQueue::CalculateByteSize(const Sizer& sizer) {
+  int64_t count = 0;
   for (const auto& batch : queue_) {
-    count += [[serializer encodedMutationBatch:batch] serializedSize];
+    count += sizer.CalculateByteSize(batch);
   };
   return count;
 }
