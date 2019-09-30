@@ -8,8 +8,8 @@ target 'GeoCap' do
   # Pods for GeoCap
   pod 'Protobuf', :inhibit_warnings => true
 
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Messaging'
+  pod 'Firebase/Firestore', :inhibit_warnings => true
+  pod 'Firebase/Messaging', :inhibit_warnings => true
   pod 'Firebase/Analytics'
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
