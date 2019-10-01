@@ -34,8 +34,7 @@ class AuthViewController: UIViewController {
         db.collection("users").document(user.uid).setData([
             "username": user.displayName!,
             "capturedLocations": [],
-            "capturedLocationsCount": 0,
-            "locationLostNotificationsEnabled": false
+            "capturedLocationsCount": 0
         ])
         { [weak self] error in
             if let error = error {

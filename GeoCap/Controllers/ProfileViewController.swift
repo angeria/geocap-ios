@@ -37,7 +37,7 @@ class ProfileViewController: UIViewController {
         
         // Unregister for notifications
         let db = Firestore.firestore()
-        db.collection("users").document(uid).updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
+        db.collection("users").document(uid).collection("private").document("data").updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
             if let error = error {
                 os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
@@ -67,7 +67,7 @@ class ProfileViewController: UIViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
         let db = Firestore.firestore()
-        settingsListener = db.collection("users").document(uid).addSnapshotListener { [weak self] documentSnapshot, error in
+        settingsListener = db.collection("users").document(uid).collection("private").document("data").addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
                     os_log("%{public}@", log: OSLog.Profile, type: .error, error! as NSError)
                     Crashlytics.sharedInstance().recordError(error!)
@@ -107,7 +107,7 @@ class ProfileViewController: UIViewController {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let db = Firestore.firestore()
-        db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
+        db.collection("users").document(uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
             if let error = error {
                 os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
@@ -135,7 +135,7 @@ class ProfileViewController: UIViewController {
                 }
                                 
                 let db = Firestore.firestore()
-                db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": true]) { error in
+                db.collection("users").document(uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": true]) { error in
                     if let error = error {
                         os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
