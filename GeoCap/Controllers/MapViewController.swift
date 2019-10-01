@@ -338,7 +338,7 @@ class MapViewController: UIViewController {
                 Crashlytics.sharedInstance().recordError(error)
             } else if let result = result {
                 let notificationToken = result.token
-                db.collection("users").document(uid).updateData(["notificationToken": notificationToken]) { error in
+                db.collection("users").document(uid).collection("private").document("data").updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
@@ -351,7 +351,7 @@ class MapViewController: UIViewController {
         UNUserNotificationCenter.current().getNotificationSettings() { settings in
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
-                db.collection("users").document(uid).updateData(["locationLostNotificationsEnabled": false]) { error in
+                db.collection("users").document(uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
                         os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
@@ -383,7 +383,7 @@ class MapViewController: UIViewController {
                     }
                     
                     let db = Firestore.firestore()
-                    db.collection("users").document(user.uid).updateData(["locationLostNotificationsEnabled": true]) { error in
+                    db.collection("users").document(user.uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
                             os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                             Crashlytics.sharedInstance().recordError(error)
