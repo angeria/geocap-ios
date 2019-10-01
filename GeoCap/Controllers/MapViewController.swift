@@ -33,6 +33,7 @@ class MapViewController: UIViewController {
             mapView.delegate = self
             mapView.mapType = .mutedStandard
             mapView.showsCompass = false
+            mapView.isPitchEnabled = false
         }
     }
     
