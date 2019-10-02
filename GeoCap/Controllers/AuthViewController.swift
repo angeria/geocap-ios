@@ -36,11 +36,20 @@ class AuthViewController: UIViewController {
             "capturedLocations": [],
             "capturedLocationsCount": 0
         ])
-        { [weak self] error in
+        { error in
             if let error = error {
                 fatalError(String(describing: error))
             } else {
-                self?.performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
+                db.collection("users").document(user.uid).collection("private").document("data").setData([
+                    "latestEventId": ""
+                ])
+                { [weak self] error in
+                    if let error = error {
+                        fatalError(String(describing: error))
+                    }
+                    
+                    self?.performSegue(withIdentifier: "unwindSegueAuthToMap", sender: self)
+                }
             }
         }
     }
