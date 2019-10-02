@@ -44,6 +44,7 @@ class ProfileViewController: UIViewController {
                 Crashlytics.sharedInstance().recordError(error)
                 return
             }
+            self?.settingsListener?.remove()
             self?.signOut()
         }
     }
