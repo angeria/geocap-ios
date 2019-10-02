@@ -468,9 +468,9 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-                            presentNotInsideAreaAlert()
-                            return false
-                            // return true
+                            // presentNotInsideAreaAlert()
+                            // return false
+                            return true
                         }
                     } else {
                         os_log("Couldn't start quiz: currentCity == nil", log: OSLog.Map, type: .error)
