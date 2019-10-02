@@ -330,6 +330,7 @@ class MapViewController: UIViewController {
     private func setupNotifications() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
+        let ref = db.collection("users").document(uid).collection("private").document("data")
         
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
@@ -338,7 +339,7 @@ class MapViewController: UIViewController {
                 Crashlytics.sharedInstance().recordError(error)
             } else if let result = result {
                 let notificationToken = result.token
-                db.collection("users").document(uid).collection("private").document("data").updateData(["notificationToken": notificationToken]) { error in
+                ref.updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
                         os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
@@ -351,7 +352,7 @@ class MapViewController: UIViewController {
         UNUserNotificationCenter.current().getNotificationSettings() { settings in
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
-                db.collection("users").document(uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": false]) { error in
+                ref.updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
                         os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
@@ -383,7 +384,8 @@ class MapViewController: UIViewController {
                     }
                     
                     let db = Firestore.firestore()
-                    db.collection("users").document(user.uid).collection("private").document("data").updateData(["locationLostNotificationsEnabled": true]) { error in
+                    let ref = db.collection("users").document(user.uid).collection("private").document("data")
+                    ref.updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
                             os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
                             Crashlytics.sharedInstance().recordError(error)
