@@ -14,14 +14,49 @@ import os.log
 
 class EmailSignInViewController: UIViewController {
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        emailTextField.becomeFirstResponder()
+    }
+    
+    // MARK: - Email
+    
     @IBOutlet weak var emailTextField: UITextField! {
         didSet {
             emailTextField.delegate = self
-            emailTextField.leftViewMode = .always
-            let profileImage = UIImage(named: "tab-bar-profile")!
-            emailTextField.leftView = UIImageView(image: profileImage)
         }
     }
+    
+    private var emailExists = false
+    
+    private func checkIfEmailIsValidAndExists(_ textField: UITextField) {
+        Auth.auth().fetchSignInMethods(forEmail: textField.text!) { [weak self] signInMethods, error in
+            if let error = error as NSError?, let errorCode = AuthErrorCode(rawValue: error.code) {
+                if errorCode == .invalidEmail {
+                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                    return
+                }
+            }
+            
+            if signInMethods != nil, signInMethods!.contains("password") {
+                self?.emailExists = true
+                self?.passwordTextField.returnKeyType = .done
+            }
+        
+            self?.passwordTextField.becomeFirstResponder()
+        }
+    }
+    
+    private func emailTextFieldDidEndEditing() {
+        emailTextField.isEnabled = false
+        passwordTextField.isHidden = false
+        if !emailExists {
+            usernameTextField.isHidden = false
+        }
+    }
+    
+    // MARK: - Password
     
     @IBOutlet weak var passwordTextField: UITextField! {
         didSet {
@@ -29,65 +64,95 @@ class EmailSignInViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var passwordLabel: UILabel!
+    
+    private func passwordTextFieldDidEndEditing(_ textField: UITextField) {
+        if usernameTextField.isHidden {
+            signIn(withEmail: emailTextField.text!, password: textField.text!)
+        } else {
+            usernameTextField.becomeFirstResponder()
+        }
+    }
+    
+    // MARK: - Username
+    
     @IBOutlet weak var usernameTextField: UITextField! {
         didSet {
             usernameTextField.delegate = self
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    @IBOutlet weak var usernameLabel: UILabel!
+    
+    private func usernameTextFieldDidEndEditing(_ username: String) {
+        if username.count < 2 || username.count > 24 {
+            usernameLabel.isHidden = false
+            usernameLabel.text = "Username must be between 2 to 24 characters"
+            return
+        }
         
-        emailTextField.becomeFirstResponder()
+        createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, username: username)
     }
     
-    private func emailTextFieldDidEndEditing(_ textField: UITextField) {
-        guard let email = textField.text else { return }
-        
-        Auth.auth().fetchSignInMethods(forEmail: email) { [weak self] signInMethods, error in
-//            if let error = error as NSError? {
-//                if let errCode = AuthErrorCode(rawValue: error.code) {
-//                    if errCode == .invalidEmail {
-//                        print("Invalid email format")
-//                    }
-//                }
-//
-//                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-//                return
-//            }
-
-            self?.passwordTextField.isHidden = false
-            if signInMethods == nil {
-                self?.usernameTextField.isHidden = false
+    // MARK: - Sign-in
+    
+    private func signIn(withEmail email: String, password: String) {
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] user, error in
+            if let error = error as NSError? {
+                self?.handleSignInError(error)
+                return
+            }
+            
+            self?.passwordTextField.resignFirstResponder()
+            self?.navigationController?.popToRootViewController(animated: true)
+            
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let mapVC = storyBoard.instantiateViewController(withIdentifier: "Map") as! UITabBarController
+            self?.view.window?.rootViewController? = mapVC
+        }
+    }
+    
+    private func handleSignInError(_ error: NSError) {
+        if let errorCode = AuthErrorCode(rawValue: error.code) {
+            switch errorCode {
+            case .wrongPassword:
+                passwordLabel.isHidden = false
+                passwordLabel.text = "Wrong password"
+            default:
+                // TODO: Log
+                break
             }
         }
     }
     
-    private func passwordTextFieldDidEndEditing(_ textField: UITextField) {
-        if usernameTextField.isHidden {
-            signIn(withEmail: emailTextField.text!, password: textField.text!)
-        }
-    }
-    
-    private func usernameTextFieldDidEndEditing(_ textField: UITextField) {
-        createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, username: textField.text!)
-    }
-    
-    private func signIn(withEmail email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] user, error in
-            guard error == nil else { return }
-            
-            self?.performSegue(withIdentifier: "Show Map", sender: nil)
-        }
-    }
-    
     private func createUser(withEmail email: String, password: String, username: String) {
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+        Auth.auth().createUser(withEmail: email, password: password) { [weak self] authResult, error in
+            if let error = error as NSError? {
+                self?.handleCreateUserError(error)
+                return
+            }
+            self?.usernameTextField.resignFirstResponder()
+            
             let changeRequest = authResult?.user.createProfileChangeRequest()
             changeRequest?.displayName = username
             changeRequest?.commitChanges { (error) in
                 print("Username set to \(username)")
               // TODO: Implement
+                
+                self?.performSegue(withIdentifier: "Show Map", sender: nil)
+            }
+        }
+    }
+    
+    private func handleCreateUserError(_ error: NSError) {
+        if let errorCode = AuthErrorCode(rawValue: error.code) {
+            switch errorCode {
+            case .weakPassword:
+                passwordLabel.isHidden = false
+                passwordLabel.text = "Password must be at least six characters"
+            default:
+                // TODO: Log
+                break
             }
         }
     }
@@ -97,24 +162,18 @@ class EmailSignInViewController: UIViewController {
 extension EmailSignInViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         textField.text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard textField.text != nil else { return false }
         
         switch textField {
         case emailTextField:
-            if textField.isEmail() {
-                return true
-            } else {
-                textField.shake()
-                return false
-            }
+            checkIfEmailIsValidAndExists(emailTextField)
+            return true
         case passwordTextField:
+            passwordTextFieldDidEndEditing(passwordTextField)
             return true
         case usernameTextField:
+            usernameTextFieldDidEndEditing(usernameTextField.text!)
             return true
         default:
             fatalError("Unexpected text field")
@@ -122,14 +181,15 @@ extension EmailSignInViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        
         switch textField {
         case emailTextField:
-            emailTextField.isEnabled = false
-            emailTextFieldDidEndEditing(textField)
+            emailTextFieldDidEndEditing()
         case passwordTextField:
-            passwordTextFieldDidEndEditing(textField)
+            break
         case usernameTextField:
-            usernameTextFieldDidEndEditing(textField)
+            break
         default:
             fatalError("Unexpected text field")
         }
