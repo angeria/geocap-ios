@@ -28,7 +28,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var signOutButton: UIButton! {
         didSet {
-            signOutButton.layer.cornerRadius = 10
+            signOutButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
     

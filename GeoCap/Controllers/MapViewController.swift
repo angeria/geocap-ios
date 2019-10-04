@@ -131,7 +131,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var loadingLocationsView: UIView! {
         didSet {
-            loadingLocationsView.layer.cornerRadius = 15
+            loadingLocationsView.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
     
