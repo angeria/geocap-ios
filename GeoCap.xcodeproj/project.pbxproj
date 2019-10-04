@@ -24,8 +24,9 @@
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
-		43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0268C22E314AF00A0C255 /* AuthViewController.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
+		43D628C22345F6A900263E6C /* EmailSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D628C12345F6A900263E6C /* EmailSignInViewController.swift */; };
+		43D628C42345F78400263E6C /* AuthPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D628C32345F78400263E6C /* AuthPickerViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
 		43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12C22F2F11900552D2C /* Extensions.swift */; };
 		43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E5CF7422E5A81B00DBED2E /* Location.swift */; };
@@ -80,8 +81,9 @@
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		43B561B72319544400618DC3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		43D0268C22E314AF00A0C255 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
+		43D628C12345F6A900263E6C /* EmailSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSignInViewController.swift; sourceTree = "<group>"; };
+		43D628C32345F78400263E6C /* AuthPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthPickerViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		43D7A12C22F2F11900552D2C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		43E5CF7422E5A81B00DBED2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -190,9 +192,9 @@
 		43BF7BD9231C0BAE0007666B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				43D628C02345F68200263E6C /* Auth */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
-				43D0268C22E314AF00A0C255 /* AuthViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
 				432DED9C22E1F28D00DFA074 /* MapViewController.swift */,
 				4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */,
@@ -232,6 +234,15 @@
 				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		43D628C02345F68200263E6C /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				43D628C32345F78400263E6C /* AuthPickerViewController.swift */,
+				43D628C12345F6A900263E6C /* EmailSignInViewController.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		8C06367070EC0B91C0517455 /* Frameworks */ = {
@@ -543,8 +554,9 @@
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
+				43D628C22345F6A900263E6C /* EmailSignInViewController.swift in Sources */,
+				43D628C42345F78400263E6C /* AuthPickerViewController.swift in Sources */,
 				43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */,
-				43D0268D22E314AF00A0C255 /* AuthViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,7 +756,7 @@
 				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 9;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 934788YR3T;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/GeoCap/Supporting Files/Info.plist";

@@ -132,7 +132,7 @@ class QuizViewController: UIViewController {
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
             answerButtons.forEach() {
-                $0.layer.cornerRadius = 10
+                $0.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
             }
         }
     }
