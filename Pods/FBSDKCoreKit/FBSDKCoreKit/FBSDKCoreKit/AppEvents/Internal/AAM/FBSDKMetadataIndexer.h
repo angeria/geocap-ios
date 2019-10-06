@@ -20,56 +20,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- FBSDKFeature enum
- Defines features in SDK
+@interface FBSDKMetadataIndexer : NSObject
 
- Sample:
- FBSDKFeatureAppEvents = 0x000100,
-                            ^ ^ ^
-                            | | |
-                          kit | |
-                        feature |
-                      sub-feature
- 1st byte: kit
- 2nd byte: feature
- 3rd byte: sub-feature
- */
-typedef NS_ENUM(NSUInteger, FBSDKFeature)
-{
-  // Features in CoreKit
-  /** Essential of CoreKit */
-  FBSDKFeatureCore = 0x000000,
-
-  FBSDKFeatureAppEvents = 0x000100,
-  FBSDKFeatureCodelessEvents,
-  FBSDKFeatureRestrictiveDataFiltering,
-  FBSDKFeatureAAM,
-  FBSDKFeatureInstrument = 0x000200,
-  FBSDKFeatureCrashReport,
-  FBSDKFeatureErrorReport,
-
-
-  // Features in LoginKit
-  /** Essential of LoginKit */
-  FBSDKFeatureLogin = 0x010000,
-
-  // Features in ShareKit
-  /** Essential of ShareKit */
-  FBDSDKFeatureShare = 0x020000,
-
-  // Features in PlacesKit
-  /** Essential of PlacesKit */
-  FBSDKFeaturePlaces = 0x030000,
-
-} NS_SWIFT_NAME(SDKFeature);
-
-typedef void (^FBSDKFeatureManagerBlock)(BOOL enabled);
-
-@interface FBSDKFeatureManager : NSObject
-
-+ (void)checkFeature:(FBSDKFeature)feature
-     completionBlock:(FBSDKFeatureManagerBlock)completionBlock;
++ (void)setupWithRules:(NSDictionary<NSString *, id> *)rules;
 
 @end
 
