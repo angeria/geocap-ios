@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 class AuthPickerViewController: UIViewController {
     
@@ -24,7 +25,12 @@ class AuthPickerViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if animationNotShown {
+        if Auth.auth().currentUser != nil {
+            let sb = UIStoryboard.init(name: "Main", bundle: .main)
+            let mapVC = sb.instantiateViewController(withIdentifier: "Map")
+            mapVC.modalPresentationStyle = .fullScreen
+            present(mapVC, animated: true)
+        } else if animationNotShown {
             animate()
         }
     }

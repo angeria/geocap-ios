@@ -28,31 +28,25 @@ class EmailSignInViewController: UIViewController {
         }
     }
     
-    private var emailExists = false
+    @IBOutlet weak var emailLabel: UILabel!
     
-    private func checkIfEmailIsValidAndExists(_ textField: UITextField) {
-        Auth.auth().fetchSignInMethods(forEmail: textField.text!) { [weak self] signInMethods, error in
-            if let error = error as NSError?, let errorCode = AuthErrorCode(rawValue: error.code) {
-                if errorCode == .invalidEmail {
-                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                    return
-                }
+    private func checkIfEmailIsValidAndExists() {
+        Auth.auth().fetchSignInMethods(forEmail: emailTextField.text!) { [weak self] signInMethods, error in
+            if let error = error as NSError? {
+                self?.handleError(error)
+                return
             }
             
-            if signInMethods != nil, signInMethods!.contains("password") {
-                self?.emailExists = true
-                self?.passwordTextField.returnKeyType = .done
-            }
-        
+            self?.emailLabel.isHidden = true
+            self?.emailTextField.isEnabled = false
+            self?.passwordTextField.isHidden = false
             self?.passwordTextField.becomeFirstResponder()
-        }
-    }
-    
-    private func emailTextFieldDidEndEditing() {
-        emailTextField.isEnabled = false
-        passwordTextField.isHidden = false
-        if !emailExists {
-            usernameTextField.isHidden = false
+            
+            if signInMethods != nil, signInMethods!.contains("password") {
+                self?.passwordTextField.returnKeyType = .done
+            } else {
+                self?.usernameTextField.isHidden = false
+            }
         }
     }
     
@@ -66,9 +60,9 @@ class EmailSignInViewController: UIViewController {
     
     @IBOutlet weak var passwordLabel: UILabel!
     
-    private func passwordTextFieldDidEndEditing(_ textField: UITextField) {
+    private func passwordTextFieldDidEndEditing() {
         if usernameTextField.isHidden {
-            signIn(withEmail: emailTextField.text!, password: textField.text!)
+            signIn()
         } else {
             usernameTextField.becomeFirstResponder()
         }
@@ -84,74 +78,102 @@ class EmailSignInViewController: UIViewController {
     
     @IBOutlet weak var usernameLabel: UILabel!
     
-    private func usernameTextFieldDidEndEditing(_ username: String) {
+    private func usernameTextFieldDidEndEditing() {
+        let username = usernameTextField.text!
         if username.count < 2 || username.count > 24 {
             usernameLabel.isHidden = false
             usernameLabel.text = "Username must be between 2 to 24 characters"
             return
         }
         
-        createUser(withEmail: emailTextField.text!, password: passwordTextField.text!, username: username)
+        usernameLabel.isHidden = true
+        
+        createUser()
     }
     
-    // MARK: - Sign-in
+    // MARK: - Sign-in and user creation
     
-    private func signIn(withEmail email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] user, error in
+    private func signIn() {
+        Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { [weak self] user, error in
             if let error = error as NSError? {
-                self?.handleSignInError(error)
+                self?.handleError(error)
                 return
             }
             
+            self?.passwordLabel.isHidden = true
             self?.passwordTextField.resignFirstResponder()
             self?.navigationController?.popToRootViewController(animated: true)
-            
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let mapVC = storyBoard.instantiateViewController(withIdentifier: "Map") as! UITabBarController
-            self?.view.window?.rootViewController? = mapVC
         }
     }
     
-    private func handleSignInError(_ error: NSError) {
+    private func createUser() {
+        Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { [weak self] authResult, error in
+            guard let self = self else { return }
+            
+            if let error = error as NSError? {
+                self.handleError(error)
+                return
+            }
+            
+            self.usernameTextField.resignFirstResponder()
+            
+            let changeRequest = authResult!.user.createProfileChangeRequest()
+            changeRequest.displayName = self.usernameTextField.text!
+            changeRequest.commitChanges { error in
+                if let error = error as NSError? {
+                    os_log("%{public}@", log: OSLog.Auth, type: .error, error)
+                    Crashlytics.sharedInstance().recordError(error)
+                    return
+                }
+
+                self.writeUserToDb(uid: authResult!.user.uid)
+            }
+        }
+    }
+    
+    private func writeUserToDb(uid: String) {
+        let db = Firestore.firestore()
+        db.collection("users").document(uid).setData([
+            "username": usernameTextField.text!,
+            "capturedLocations": [],
+            "capturedLocationsCount": 0
+        ]) { [weak self] error in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Auth, type: .error, error)
+                Crashlytics.sharedInstance().recordError(error)
+                return
+            }
+
+            db.collection("users").document(uid).collection("private").document("data").setData([
+                "latestEventId": ""
+            ]) { [weak self] error in
+                if let error = error as NSError? {
+                    os_log("%{public}@", log: OSLog.Auth, type: .error, error)
+                    Crashlytics.sharedInstance().recordError(error)
+                    return
+                }
+                
+                self?.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+    }
+    
+    // MARK: - Error handling
+    
+    private func handleError(_ error: NSError) {
         if let errorCode = AuthErrorCode(rawValue: error.code) {
             switch errorCode {
             case .wrongPassword:
                 passwordLabel.isHidden = false
                 passwordLabel.text = "Wrong password"
-            default:
-                // TODO: Log
-                break
-            }
-        }
-    }
-    
-    private func createUser(withEmail email: String, password: String, username: String) {
-        Auth.auth().createUser(withEmail: email, password: password) { [weak self] authResult, error in
-            if let error = error as NSError? {
-                self?.handleCreateUserError(error)
-                return
-            }
-            self?.usernameTextField.resignFirstResponder()
-            
-            let changeRequest = authResult?.user.createProfileChangeRequest()
-            changeRequest?.displayName = username
-            changeRequest?.commitChanges { (error) in
-                print("Username set to \(username)")
-              // TODO: Implement
-                
-                self?.performSegue(withIdentifier: "Show Map", sender: nil)
-            }
-        }
-    }
-    
-    private func handleCreateUserError(_ error: NSError) {
-        if let errorCode = AuthErrorCode(rawValue: error.code) {
-            switch errorCode {
             case .weakPassword:
                 passwordLabel.isHidden = false
                 passwordLabel.text = "Password must be at least six characters"
+            case .invalidEmail:
+                emailLabel.isHidden = false
+                emailLabel.text = "Invalid email"
             default:
-                // TODO: Log
+                // TODO: Log / extend
                 break
             }
         }
@@ -162,57 +184,21 @@ class EmailSignInViewController: UIViewController {
 extension EmailSignInViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         guard textField.text != nil else { return false }
+        textField.text = textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         switch textField {
         case emailTextField:
-            checkIfEmailIsValidAndExists(emailTextField)
-            return true
+            checkIfEmailIsValidAndExists()
         case passwordTextField:
-            passwordTextFieldDidEndEditing(passwordTextField)
-            return true
+            passwordTextFieldDidEndEditing()
         case usernameTextField:
-            usernameTextFieldDidEndEditing(usernameTextField.text!)
-            return true
+            usernameTextFieldDidEndEditing()
         default:
             fatalError("Unexpected text field")
         }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text else { return }
         
-        switch textField {
-        case emailTextField:
-            emailTextFieldDidEndEditing()
-        case passwordTextField:
-            break
-        case usernameTextField:
-            break
-        default:
-            fatalError("Unexpected text field")
-        }
+        return true
     }
     
-}
-
-// MARK: - Email Validation
-
-private let __firstpart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"
-private let __serverpart = "([A-Z0-9a-z]([A-Z0-9a-z-]{0,30}[A-Z0-9a-z])?\\.){1,5}"
-private let __emailRegex = __firstpart + "@" + __serverpart + "[A-Za-z]{2,8}"
-private let __emailPredicate = NSPredicate(format: "SELF MATCHES %@", __emailRegex)
-
-private extension String {
-    func isEmail() -> Bool {
-        return __emailPredicate.evaluate(with: self)
-    }
-}
-
-private extension UITextField {
-    func isEmail() -> Bool {
-        guard let text = self.text else { return false }
-        return text.isEmail()
-    }
 }
