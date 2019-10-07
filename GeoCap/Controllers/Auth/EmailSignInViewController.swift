@@ -7,10 +7,9 @@
 //
 
 import Foundation
-
 import UIKit
-import Firebase
 import os.log
+import Firebase
 
 class EmailSignInViewController: UIViewController {
     
@@ -29,6 +28,12 @@ class EmailSignInViewController: UIViewController {
     }
     
     @IBOutlet weak var emailLabel: UILabel!
+    
+    @IBOutlet weak var continueButton: UIButton! {
+        didSet {
+            continueButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
+        }
+    }
     
     private func checkIfEmailIsValidAndExists() {
         Auth.auth().fetchSignInMethods(forEmail: emailTextField.text!) { [weak self] signInMethods, error in
@@ -82,6 +87,7 @@ class EmailSignInViewController: UIViewController {
         let username = usernameTextField.text!
         if username.count < 2 || username.count > 24 {
             usernameLabel.isHidden = false
+            usernameTextField.shake()
             usernameLabel.text = "Username must be between 2 to 24 characters"
             return
         }
@@ -166,15 +172,19 @@ class EmailSignInViewController: UIViewController {
             case .wrongPassword:
                 passwordLabel.isHidden = false
                 passwordLabel.text = "Wrong password"
+                passwordTextField.shake()
             case .weakPassword:
                 passwordLabel.isHidden = false
                 passwordLabel.text = "Password must be at least six characters"
+                passwordTextField.shake()
             case .invalidEmail:
                 emailLabel.isHidden = false
                 emailLabel.text = "Invalid email"
+                emailTextField.shake()
             default:
-                // TODO: Log / extend
-                break
+                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                Crashlytics.sharedInstance().recordError(error)
+                return
             }
         }
     }

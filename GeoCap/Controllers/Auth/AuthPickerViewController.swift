@@ -12,16 +12,6 @@ import Firebase
 
 class AuthPickerViewController: UIViewController {
     
-    @IBOutlet weak var appIcon: UIImageView!
-    
-    @IBOutlet weak var signInWithEmailButton: UIButton! {
-        didSet {
-            signInWithEmailButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
-        }
-    }
-    
-    private var animationNotShown = true
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -34,6 +24,16 @@ class AuthPickerViewController: UIViewController {
             animate()
         }
     }
+    
+    @IBOutlet weak var signInWithEmailButton: UIButton! {
+        didSet {
+            signInWithEmailButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
+        }
+    }
+    
+    @IBOutlet weak var appIcon: UIImageView!
+    
+    private var animationNotShown = true
     
     private func animate() {
         UIView.animate(withDuration: 0.5, delay: 0.15, options: .curveEaseInOut, animations: {
