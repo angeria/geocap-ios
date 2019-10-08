@@ -38,7 +38,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLC-2l-wTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="IXJ-SQ-dKH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1353.5999999999999" y="-571.21439280359823"/>
+            <point key="canvasLocation" x="1306" y="-581"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="hNz-n2-bh7">
@@ -414,7 +414,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch-screen-app-icon" translatesAutoresizingMaskIntoConstraints="NO" id="ueV-vH-1N9">
-                                <rect key="frame" x="82" y="114" width="250" height="250"/>
+                                <rect key="frame" x="82" y="144" width="250" height="250"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="250" id="5Ad-R1-bSV"/>
                                     <constraint firstAttribute="width" constant="250" id="5Qx-ej-ZMg"/>
@@ -438,59 +438,79 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="continue" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                             </textField>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="QBJ-Z2-Mpa">
+                                <rect key="frame" x="188.5" y="595" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Signing in..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HoG-mY-iaB">
+                                <rect key="frame" x="20" y="640" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9qt-FR-8jD" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="77O-gV-3me"/>
+                            <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="top" secondItem="ueV-vH-1N9" secondAttribute="bottom" constant="201" id="E7c-4i-0rl"/>
+                            <constraint firstItem="WDA-Zx-Z6T" firstAttribute="bottom" secondItem="XSX-lP-dRJ" secondAttribute="bottom" constant="20" id="ECH-o9-UfS"/>
+                            <constraint firstItem="HoG-mY-iaB" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="Gk2-O4-Okz"/>
                             <constraint firstItem="XSX-lP-dRJ" firstAttribute="top" secondItem="9qt-FR-8jD" secondAttribute="bottom" constant="16" id="HMf-fq-m00"/>
-                            <constraint firstItem="WDA-Zx-Z6T" firstAttribute="bottom" secondItem="XSX-lP-dRJ" secondAttribute="bottom" constant="20" id="Uqd-R0-uJq"/>
                             <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="9qt-FR-8jD" secondAttribute="trailing" constant="20" id="X19-zN-bOR"/>
-                            <constraint firstItem="ueV-vH-1N9" firstAttribute="top" secondItem="WDA-Zx-Z6T" secondAttribute="top" constant="70" id="ath-Fd-Qvt"/>
+                            <constraint firstItem="ueV-vH-1N9" firstAttribute="top" secondItem="WDA-Zx-Z6T" secondAttribute="top" constant="100" id="ath-Fd-Qvt"/>
+                            <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="HoG-mY-iaB" secondAttribute="trailing" constant="20" id="dhh-rr-Dsw"/>
                             <constraint firstItem="ueV-vH-1N9" firstAttribute="centerX" secondItem="WDA-Zx-Z6T" secondAttribute="centerX" id="hdV-Rd-q5u"/>
                             <constraint firstItem="XSX-lP-dRJ" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="lGS-rz-b7A"/>
+                            <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="centerX" secondItem="WDA-Zx-Z6T" secondAttribute="centerX" id="ls8-AO-lbU"/>
                             <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="XSX-lP-dRJ" secondAttribute="trailing" constant="20" id="o6C-q5-Tqg"/>
+                            <constraint firstItem="HoG-mY-iaB" firstAttribute="top" secondItem="QBJ-Z2-Mpa" secondAttribute="bottom" constant="8" id="wYN-Cf-Axo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WDA-Zx-Z6T"/>
                     </view>
                     <connections>
                         <outlet property="appIcon" destination="ueV-vH-1N9" id="SWy-XT-BFW"/>
-                        <outlet property="bottomConstraint" destination="Uqd-R0-uJq" id="pef-s7-aJ8"/>
+                        <outlet property="bottomConstraint" destination="ECH-o9-UfS" id="7Uv-a5-8ga"/>
                         <outlet property="continueButton" destination="XSX-lP-dRJ" id="NsI-lp-3V9"/>
                         <outlet property="emailTextField" destination="9qt-FR-8jD" id="Skt-fG-I7j"/>
-                        <segue destination="49e-Tb-3d3" kind="presentation" identifier="Show Map" modalPresentationStyle="fullScreen" id="sjy-Ge-HtV"/>
-                        <segue destination="sO0-mT-HJF" kind="presentation" identifier="Show Pending Sign In" modalPresentationStyle="fullScreen" id="1m3-G5-LjG"/>
+                        <outlet property="iconToTopConstraint" destination="ath-Fd-Qvt" id="WBq-v9-CgS"/>
+                        <outlet property="signingInLabel" destination="HoG-mY-iaB" id="q24-ni-8Sm"/>
+                        <outlet property="spinner" destination="QBJ-Z2-Mpa" id="eQc-Za-xK3"/>
+                        <segue destination="sO0-mT-HJF" kind="show" identifier="Show Pending Sign In" id="1m3-G5-LjG"/>
+                        <segue destination="49e-Tb-3d3" kind="presentation" identifier="Show Map" modalPresentationStyle="fullScreen" id="O2W-Y2-eZo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NPn-ba-71e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-874" y="0.0"/>
+            <point key="canvasLocation" x="-1100" y="0.0"/>
         </scene>
         <!--Pending Sign In View Controller-->
         <scene sceneID="nmS-Cp-m47">
             <objects>
                 <viewController id="sO0-mT-HJF" customClass="PendingSignInViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J2N-tg-n7V">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Check your email" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="McC-ua-Zhx">
-                                <rect key="frame" x="20" y="627" width="374" height="36"/>
+                                <rect key="frame" x="20" y="568" width="374" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="To confirm your email, tap the button in the email we sent to xipcake@icloud.com" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zyS-yw-LAv">
-                                <rect key="frame" x="20" y="670" width="374" height="54"/>
+                                <rect key="frame" x="20" y="611" width="374" height="54"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZT-lJ-opy">
-                                <rect key="frame" x="152" y="772" width="110" height="30"/>
+                                <rect key="frame" x="20" y="690" width="374" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Open Email App"/>
+                                <color key="backgroundColor" red="0.443710357" green="0.71984392399999997" blue="0.93396478890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Open email app">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="openEmailButtonPressed:" destination="sO0-mT-HJF" eventType="touchUpInside" id="QdL-ZF-iYF"/>
                                 </connections>
@@ -506,7 +526,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a5X-yE-82D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="38" y="-380"/>
+            <point key="canvasLocation" x="-100" y="-396"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
