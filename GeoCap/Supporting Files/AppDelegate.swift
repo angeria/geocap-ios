@@ -16,28 +16,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         UNUserNotificationCenter.current().delegate = self
-        
         FirebaseApp.configure()
-        
         return true
     }
-
-    // Not sure if this is needed for handling FB and Google sign-in (seems to work without it)
-    // Firebase docs says it's needed, so keeping it just in case
-    func application(_ app: UIApplication, open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        let sourceApplication = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String?
-        if FUIAuth.defaultAuthUI()?.handleOpen(url, sourceApplication: sourceApplication) ?? false {
-            return true
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if let url = userActivity.webpageURL {
+            return handleEmailLinkSignIn(withURL: url)
         }
-        // other URL handling goes here.
+        return false
+    }
+    
+    func handleEmailLinkSignIn(withURL url: URL) -> Bool {
+        let link = url.absoluteString
+        if Auth.auth().isSignIn(withEmailLink: link) {
+            if let authVC = window?.rootViewController as? AuthViewController {
+                authVC.signInWithLink(link)
+                return true
+            }
+        }
+        
         return false
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
         // Show banner when app is in foreground
         completionHandler([.alert])
     }
