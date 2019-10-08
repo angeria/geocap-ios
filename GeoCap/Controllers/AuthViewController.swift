@@ -43,6 +43,7 @@ class AuthViewController: UIViewController {
     }
     
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var iconToTopConstraint: NSLayoutConstraint!
     
     @objc func keyboardDidChange(notification: Notification) {
         let userInfo = notification.userInfo! as [AnyHashable: Any]
@@ -53,8 +54,10 @@ class AuthViewController: UIViewController {
         // Prevents iPad undocked keyboard
         if endFrame.height != 0, view.frame.height == endFrame.height + endFrame.origin.y {
             bottomConstraint.constant = view.frame.height - endFrame.origin.y
+            iconToTopConstraint.constant = (view.frame.height - endFrame.origin.y) / 6
         } else {
             bottomConstraint.constant = 20
+            iconToTopConstraint.constant = 100
         }
         
         UIView.setAnimationCurve(UIView.AnimationCurve(rawValue: animationCurve.intValue)!)
@@ -125,9 +128,31 @@ class AuthViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var signingInLabel: UILabel!
+    
+    func prepareViewForSignIn() {
+        emailTextField.isHidden = true
+        continueButton.isHidden = true
+        signingInLabel.isHidden = false
+        spinner.isHidden = false
+        spinner.startAnimating()
+    }
+    
     func signInWithLink(_ link: String) {
         if let email = UserDefaults.standard.string(forKey: "Email") {
             Auth.auth().signIn(withEmail: email, link: link) { [weak self] authResult, error in
+                self?.spinner.stopAnimating()
+                self?.signingInLabel.isHidden = true
+                
+                if let error = error as NSError? {
+                    self?.emailTextField.isHidden = false
+                    self?.continueButton.isHidden = false
+                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                    Crashlytics.sharedInstance().recordError(error)
+                    return
+                }
+                
                 UserDefaults.standard.set(nil, forKey: "Link")
                 self?.performSegue(withIdentifier: "Show Map", sender: nil)
             }
