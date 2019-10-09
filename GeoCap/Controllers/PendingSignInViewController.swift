@@ -16,6 +16,12 @@ class PendingSignInViewController: UIViewController {
             textLabel.text = "To confirm your email, tap the button in the email we sent to \(email)"
         }
     }
+
+    @IBOutlet weak var openEmailButton: UIButton! {
+        didSet {
+            openEmailButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
+        }
+    }
     
     @IBAction func openEmailButtonPressed(_ sender: UIButton) {
         let mailURL = URL(string: "message://")!
