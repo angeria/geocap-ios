@@ -6,18 +6,11 @@ target 'GeoCap' do
   use_frameworks!
 
   # Pods for GeoCap
-  pod 'Protobuf', :inhibit_warnings => true
-
-  pod 'Firebase/Firestore', :inhibit_warnings => true
-  pod 'Firebase/Messaging', :inhibit_warnings => true
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Messaging'
   pod 'Firebase/Analytics'
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
-
-  pod 'FirebaseUI/Auth'
-  pod 'FirebaseUI/Email'
-  pod 'FirebaseUI/Facebook'
-  pod 'FirebaseUI/Google'
 
   target 'GeoCapTests' do
     inherit! :search_paths
