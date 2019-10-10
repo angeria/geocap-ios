@@ -276,7 +276,6 @@
 				432DED9422E1F28D00DFA074 /* Frameworks */,
 				432DED9522E1F28D00DFA074 /* Resources */,
 				9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */,
-				2FEAAB61C8058657AB7B0BB3 /* [CP] Copy Pods Resources */,
 				4304C22923333B3D00B782DF /* ShellScript */,
 			);
 			buildRules = (
@@ -412,23 +411,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2FEAAB61C8058657AB7B0BB3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4304C22923333B3D00B782DF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
