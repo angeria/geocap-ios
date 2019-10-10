@@ -23,6 +23,10 @@ class ChooseUsernameViewController: UIViewController {
         }
     }
     
+    @IBAction func letsGoButton(_ sender: Any) {
+        let _ = usernameTextFieldDidEndEditing()
+    }
+    
     @IBOutlet weak var infoLabel: UILabel!
     
     private func usernameTextFieldDidEndEditing() -> Bool {
@@ -39,7 +43,9 @@ class ChooseUsernameViewController: UIViewController {
         UserDefaults.standard.set(username, forKey: "Username")
         
         usernameTextField.resignFirstResponder()
-        performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
+        
+        let authVC = presentingViewController as! AuthViewController
+        authVC.sendSignInLink()
         return true
     }
     

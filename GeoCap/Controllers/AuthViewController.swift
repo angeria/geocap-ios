@@ -142,7 +142,7 @@ class AuthViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private func sendSignInLink() {
+    func sendSignInLink() {
         let actionCodeSettings = ActionCodeSettings()
         actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com")
         actionCodeSettings.handleCodeInApp = true
@@ -237,10 +237,10 @@ class AuthViewController: UIViewController {
             }
                 
             Crashlytics.sharedInstance().setUserIdentifier(authResult?.user.uid)
-            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
+//            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
             
             if authResult?.additionalUserInfo?.isNewUser == true {
-                self?.writeUserToDb(withUID: authResult!.user.uid)
+                self?.writeUserToDb(authResult!.user)
                 return
             }
 
@@ -250,35 +250,55 @@ class AuthViewController: UIViewController {
         }
     }
     
-    private func writeUserToDb(withUID uid: String) {
+    private func writeUserToDb(_ user: User) {
         let db = Firestore.firestore()
-        db.collection("users").document(uid).setData([
+        db.collection("users").document(user.uid).setData([
             "username": UserDefaults.standard.string(forKey: "Username")!,
             "capturedLocations": [],
             "capturedLocationsCount": 0
             ]) { [weak self] error in
                 if let error = error as NSError? {
-                    self?.emailTextField.isHidden = false
                     self?.continueButton.isHidden = false
                     os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                     Crashlytics.sharedInstance().recordError(error)
                     return
                 }
                 
-                db.collection("users").document(uid).collection("private").document("data").setData([:]) { error in
+                db.collection("users").document(user.uid).collection("private").document("data").setData([:]) { error in
                     if let error = error as NSError? {
-                        self?.emailTextField.isHidden = false
                         self?.continueButton.isHidden = false
                         os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                         Crashlytics.sharedInstance().recordError(error)
                         return
                     }
                     
-                    self?.spinner.stopAnimating()
-                    self?.statusLabel.isHidden = true
-                    self?.performSegue(withIdentifier: "Show Map", sender: nil)
+                    self?.setUsername(forUser: user)
                 }
             }
+    }
+    
+    private func setUsername(forUser user: User) {
+        let profileChangeRequest = user.createProfileChangeRequest()
+        profileChangeRequest.displayName = UserDefaults.standard.string(forKey: "Username")
+        profileChangeRequest.commitChanges { [weak self] error in
+            if let error = error as NSError? {
+                self?.continueButton.isHidden = false
+                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                Crashlytics.sharedInstance().recordError(error)
+                return
+            }
+            
+            self?.spinner.stopAnimating()
+            self?.statusLabel.isHidden = true
+            self?.performSegue(withIdentifier: "Show Map", sender: nil)
+        }
+        
+    }
+    
+    // MARK: - Navigation
+    
+    @IBAction func unwindToAuth(unwindSegue: UIStoryboardSegue) {
+        continueButton.isHidden = false
     }
     
 }

@@ -59,7 +59,7 @@ class ProfileViewController: UIViewController {
             
             try Auth.auth().signOut()
             
-            view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+            performSegue(withIdentifier: "unwindSegueProfileToAuth", sender: nil)
         }
         catch let error as NSError {
             os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
