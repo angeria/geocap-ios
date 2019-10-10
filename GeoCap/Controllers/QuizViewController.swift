@@ -43,7 +43,7 @@ class QuizViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
             guard let document = documentSnapshot else {
-                os_log("%{public}@", log: OSLog.Quiz, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 self?.presentingViewController?.dismiss(animated: true)
                 return
@@ -53,7 +53,7 @@ class QuizViewController: UIViewController {
                 self?.totalDatabaseQuestionCount = questionsCount
                 self?.dispatchGroup.leave()
             } else {
-                os_log("Couldn't get 'questionsCount'", log: OSLog.Quiz, type: .error)
+                os_log("Couldn't get 'questionsCount'", log: OSLog.Quiz, type: .debug)
                 self?.presentingViewController?.dismiss(animated: true)
             }
         }
@@ -74,7 +74,7 @@ class QuizViewController: UIViewController {
         
         db.collection("quiz").document("data").collection("questions").whereField("index", isEqualTo: randomIndex).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Quiz, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 self?.presentingViewController?.dismiss(animated: true)
                 return
@@ -102,7 +102,7 @@ class QuizViewController: UIViewController {
                         "triedIndices": String(describing: self.usedIndices),
                         "numberOfRetries": String(Constants.maxNumberOfRetries)
                     ])
-                    os_log("%{public}@", log: OSLog.Quiz, type: .error, error)
+                    os_log("%{public}@", log: OSLog.Quiz, type: .debug, error)
                     Crashlytics.sharedInstance().recordError(error)
                     self.presentingViewController?.dismiss(animated: true)
                 }
@@ -221,7 +221,7 @@ class QuizViewController: UIViewController {
         
         cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Quiz, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -236,7 +236,7 @@ class QuizViewController: UIViewController {
                 
                 batch.commit() { err in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.Quiz, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Quiz, type: .debug, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }

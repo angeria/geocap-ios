@@ -31,13 +31,14 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView! {
         didSet {
             mapView.delegate = self
+            mapView.showsUserLocation = true
             mapView.mapType = .mutedStandard
             mapView.showsCompass = false
             mapView.isPitchEnabled = false
         }
     }
     
-    private var regionIsCenteredOnUserLocation = false
+    private var regionHasNotBeenCenteredOnUserLocation = true
     
     // MARK: - Life Cycle
     
@@ -46,78 +47,20 @@ class MapViewController: UIViewController {
     
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         
-        setupAuthListener()
+        fetchLocations()
+
+        requestUserLocationAuth()
         
-        if Auth.auth().currentUser != nil {
-            setupAfterUserSignedIn()
-        }
+        setupNotifications()
         
         let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
         navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
     
-    // MARK: - Setup
-    
-    // Currently listener isn't removed at all (only when singning out) and constantly listening for auth state updates
-    // Makes it possible to notice sign-out event in profile view to present auth view
-    private var authListener: AuthStateDidChangeListenerHandle?
-    
-    private func setupAuthListener() {
-        authListener = Auth.auth().addStateDidChangeListener() { [weak self] auth, user in
-            if user == nil {
-                self?.teardownAfterUserSignedOut()
-                
-                let sb = UIStoryboard(name: "Main", bundle: .main)
-                let authVC = sb.instantiateViewController(withIdentifier: "Auth")
-                self?.tabBarController?.present(authVC, animated: true)
-            }
-        }
-    }
-    
-    private func setupAfterUserSignedIn() {
-        Crashlytics.sharedInstance().setUserIdentifier(Auth.auth().currentUser?.uid)
-        Crashlytics.sharedInstance().setUserName(Auth.auth().currentUser?.displayName)
-        
-        mapView.showsUserLocation = true
-        
-        // Choose "Map" tab
-        tabBarController?.selectedIndex = 1
-        
-        if currentCity != nil {
-            fetchLocations()
-        }
-        
-        requestUserLocationAuth()
-        
-        if authListener == nil {
-            setupAuthListener()
-        }
-        
-        setupNotifications()
-    }
-    
-    // MARK: - Teardown
-    
-    private func teardownAfterUserSignedOut() {
-        mapView.showsUserLocation = false
-        
-        clearMap()
-        
+    func teardown() {
         locationListener?.remove()
-        
-        if authListener != nil {
-            Auth.auth().removeStateDidChangeListener(authListener!)
-            authListener = nil
-        }
     }
-    
-    private func clearMap() {
-        let annotations = mapView.annotations
-        let overlays = mapView.overlays
-        mapView.removeAnnotations(annotations)
-        mapView.removeOverlays(overlays)
-    }
-    
+
     // MARK: - Location Filter (segmented control)
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
@@ -165,7 +108,7 @@ class MapViewController: UIViewController {
         let db = Firestore.firestore()
         db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Map, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -177,7 +120,7 @@ class MapViewController: UIViewController {
             
             for cityDocument in query.documents {
                 guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else {
-                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.Map, type: .error, cityDocument.documentID)
+                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.Map, type: .debug, cityDocument.documentID)
                     continue
                 }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
@@ -227,7 +170,7 @@ class MapViewController: UIViewController {
         
         locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: locationType).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Map, type: .error, error! as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -235,7 +178,7 @@ class MapViewController: UIViewController {
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
                 guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
-                    os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .error, diff.document.documentID)
+                    os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .debug, diff.document.documentID)
                     return
                 }
                 
@@ -263,6 +206,13 @@ class MapViewController: UIViewController {
             
             self?.loadingLocationsView.isHidden = true
         }
+    }
+    
+    private func clearMap() {
+        let annotations = mapView.annotations
+        let overlays = mapView.overlays
+        mapView.removeAnnotations(annotations)
+        mapView.removeOverlays(overlays)
     }
     
     // Awkward solution but used for making the affected location available to the delegate function which renders overlays
@@ -335,13 +285,13 @@ class MapViewController: UIViewController {
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
-                os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
             } else if let result = result {
                 let notificationToken = result.token
                 ref.updateData(["notificationToken": notificationToken]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }
@@ -354,7 +304,7 @@ class MapViewController: UIViewController {
             case .denied, .notDetermined:
                 ref.updateData(["locationLostNotificationsEnabled": false]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }
@@ -375,7 +325,7 @@ class MapViewController: UIViewController {
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
-                    os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
+                    os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                     Crashlytics.sharedInstance().recordError(error)
                     return
                 } else if granted {
@@ -387,7 +337,7 @@ class MapViewController: UIViewController {
                     let ref = db.collection("users").document(user.uid).collection("private").document("data")
                     ref.updateData(["locationLostNotificationsEnabled": true]) { error in
                         if let error = error {
-                            os_log("%{public}@", log: OSLog.Map, type: .error, error as NSError)
+                            os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                             Crashlytics.sharedInstance().recordError(error)
                         }
                     }
@@ -473,10 +423,10 @@ class MapViewController: UIViewController {
                             return true
                         }
                     } else {
-                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.Map, type: .error)
+                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.Map, type: .debug)
                     }
                 } else {
-                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.Map, type: .error)
+                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.Map, type: .debug)
                 }
             }
         case "Show Choose City Popover":
@@ -526,8 +476,6 @@ class MapViewController: UIViewController {
                     }
                 }
             }
-        case "unwindSegueAuthToMap":
-            setupAfterUserSignedIn()
         case "unwindSegueChooseCityPopoverToMap":
             if let popoverVC = unwindSegue.source as? ChooseCityPopoverViewController {
                 currentCity = popoverVC.currentCity
@@ -544,12 +492,12 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if !regionIsCenteredOnUserLocation {
+        if regionHasNotBeenCenteredOnUserLocation {
             setNearestCity()
             
             let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
-            regionIsCenteredOnUserLocation = true
+            regionHasNotBeenCenteredOnUserLocation = false
         }
     }
     
