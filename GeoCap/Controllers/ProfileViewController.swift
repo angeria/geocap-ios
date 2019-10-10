@@ -40,21 +40,29 @@ class ProfileViewController: UIViewController {
         let ref = db.collection("users").document(uid).collection("private").document("data")
         ref.updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
             if let error = error {
-                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
                 return
             }
-            self?.settingsListener?.remove()
             self?.signOut()
         }
     }
     
     private func signOut() {
         do {
+            // Removing listeners here also to not get "Missing or insufficient permissions" error after signing out
+            let navVC = tabBarController!.viewControllers![1] as! UINavigationController
+            let mapVC = navVC.viewControllers[0] as! MapViewController
+            mapVC.teardown()
+            
+            settingsListener?.remove()
+            
             try Auth.auth().signOut()
+            
+            view.window?.rootViewController?.dismiss(animated: true, completion: nil)
         }
         catch let error as NSError {
-            os_log("%{public}@", log: OSLog.Profile, type: .error, error)
+            os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
             Crashlytics.sharedInstance().recordError(error)
         }
     }
@@ -73,7 +81,7 @@ class ProfileViewController: UIViewController {
         let ref = db.collection("users").document(uid).collection("private").document("data")
         settingsListener = ref.addSnapshotListener { [weak self] documentSnapshot, error in
                 guard let document = documentSnapshot else {
-                    os_log("%{public}@", log: OSLog.Profile, type: .error, error! as NSError)
+                    os_log("%{public}@", log: OSLog.Profile, type: .debug, error! as NSError)
                     Crashlytics.sharedInstance().recordError(error!)
                     return
                 }
@@ -114,7 +122,7 @@ class ProfileViewController: UIViewController {
         let ref = db.collection("users").document(uid).collection("private").document("data")
         ref.updateData(["locationLostNotificationsEnabled": isEnabled]) { error in
             if let error = error {
-                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
             }
         }
@@ -126,7 +134,7 @@ class ProfileViewController: UIViewController {
         let authOptions: UNAuthorizationOptions = [.alert, .sound]
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { [weak self] (granted, error) in
             if let error = error {
-                os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
                 DispatchQueue.main.async {
                     self?.locationLostNotificationsSwitch.isOn = false
@@ -143,7 +151,7 @@ class ProfileViewController: UIViewController {
                 let ref = db.collection("users").document(uid).collection("private").document("data")
                 ref.updateData(["locationLostNotificationsEnabled": true]) { error in
                     if let error = error {
-                        os_log("%{public}@", log: OSLog.Profile, type: .error, error as NSError)
+                        os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }

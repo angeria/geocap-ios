@@ -20,14 +20,12 @@ class AuthViewController: UIViewController {
         
         // Close keyboard when tapping outside of it
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(AuthViewController.keyboardDidChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(AuthViewController.keyboardDidChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     private var isStartup = true
@@ -41,6 +39,12 @@ class AuthViewController: UIViewController {
             continueButton.isHidden = false
             isStartup = false
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
     private var bottomConstraintConstantInStoryboard: CGFloat?
@@ -163,6 +167,7 @@ class AuthViewController: UIViewController {
         statusLabel.isHidden = false
         statusLabel.text = "Thinking..."
         spinner.isHidden = false
+        spinner.startAnimating()
         
         Auth.auth().fetchSignInMethods(forEmail: emailTextField.text!) { [weak self] signInMethods, error in
             if let error = error as NSError? {
@@ -213,6 +218,7 @@ class AuthViewController: UIViewController {
         statusLabel.text = "Signing in..."
         statusLabel.isHidden = false
         spinner.isHidden = false
+        spinner.startAnimating()
     }
     
     func signInWithLink(_ link: String) {
@@ -229,6 +235,9 @@ class AuthViewController: UIViewController {
                 self?.statusLabel.isHidden = true
                 return
             }
+                
+            Crashlytics.sharedInstance().setUserIdentifier(authResult?.user.uid)
+            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
             
             if authResult?.additionalUserInfo?.isNewUser == true {
                 self?.writeUserToDb(withUID: authResult!.user.uid)
