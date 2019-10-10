@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import FirebaseUI
+import FirebaseAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
