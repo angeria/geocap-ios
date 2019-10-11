@@ -23,12 +23,12 @@
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
-		439745A3234BAA7200317A50 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439745A2234BAA7200317A50 /* AuthViewController.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
 		43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12C22F2F11900552D2C /* Extensions.swift */; };
 		43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E5CF7422E5A81B00DBED2E /* Location.swift */; };
+		43E6D1E0235070B100CF4075 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6D1DF235070B000CF4075 /* AuthViewController.swift */; };
 		43E815F4234D9D4E007EAF3F /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */; };
 		43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */; };
 		43F8CFEE22F8064000824778 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43F8CFED22F8064000824778 /* GoogleService-Info.plist */; };
@@ -80,13 +80,13 @@
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
-		439745A2234BAA7200317A50 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthViewController.swift; path = GeoCap/Controllers/AuthViewController.swift; sourceTree = SOURCE_ROOT; };
 		43B561B72319544400618DC3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		43D7A12C22F2F11900552D2C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		43E5CF7422E5A81B00DBED2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		43E6D1DF235070B000CF4075 /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthViewController.swift; path = GeoCap/Controllers/AuthViewController.swift; sourceTree = SOURCE_ROOT; };
 		43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseUsernameViewController.swift; sourceTree = "<group>"; };
 		43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSignInViewController.swift; sourceTree = "<group>"; };
 		43F8CFED22F8064000824778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -181,6 +181,16 @@
 			path = GeoCapUITests;
 			sourceTree = "<group>";
 		};
+		434E938F2350704E00C89A8B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */,
+				43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */,
+				43E6D1DF235070B000CF4075 /* AuthViewController.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		43BF7BD8231C0B660007666B /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,9 +204,7 @@
 		43BF7BD9231C0BAE0007666B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */,
-				43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */,
-				439745A2234BAA7200317A50 /* AuthViewController.swift */,
+				434E938F2350704E00C89A8B /* Auth */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -527,7 +535,7 @@
 				43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */,
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
-				439745A3234BAA7200317A50 /* AuthViewController.swift in Sources */,
+				43E6D1E0235070B100CF4075 /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
