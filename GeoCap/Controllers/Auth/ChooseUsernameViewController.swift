@@ -38,6 +38,7 @@ class ChooseUsernameViewController: UIViewController {
             bottomToButtonConstraintConstantInStoryboard = bottomToButtonConstraint.constant
         }
     }
+    
     @IBOutlet weak var buttonToUsernameTextFieldConstraint: NSLayoutConstraint!
     
     @objc func keyboardDidChange(notification: Notification) {
@@ -114,11 +115,13 @@ class ChooseUsernameViewController: UIViewController {
             }
             
             self?.infoLabel.isHidden = true
-            self?.spinner.stopAnimating()
             self?.usernameTextField.resignFirstResponder()
             UserDefaults.standard.set(username, forKey: "Username")
             let authVC = self?.presentingViewController as! AuthViewController
-            authVC.sendSignInLink()
+            authVC.sendSignInLink() { [weak self] in
+                self?.spinner.stopAnimating()
+                self?.letsGoButton.isEnabled = true
+            }
         }
     }
     
