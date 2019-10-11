@@ -13,7 +13,7 @@ class PendingSignInViewController: UIViewController {
     @IBOutlet weak var textLabel: UILabel! {
         didSet {
             guard let email = UserDefaults.standard.string(forKey: "Email") else { return }
-            textLabel.text = "To confirm your email, tap the button in the email we sent to \(email)"
+            textLabel.text = "To sign in, tap the button in the email we sent to \(email)"
         }
     }
 
