@@ -49,7 +49,10 @@ class AuthViewController: UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
-        setupAuthListener()
+        // Listens for sign out in the background of the other views, after signing out
+        if Auth.auth().currentUser != nil {
+            setupAuthListener()
+        }
     }
     
     private func setup() {
@@ -86,6 +89,8 @@ class AuthViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var iconHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var continueButtonHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonToTextFieldConstraint: NSLayoutConstraint!
     
     @objc func keyboardDidChange(notification: Notification) {
@@ -94,14 +99,15 @@ class AuthViewController: UIViewController {
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
         let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber
         var hideEmailTextField = true
-        var buttonTitle = "Continue with Your Email"
+        var buttonTitle = ""
         
         // Prevents iPad undocked keyboard
         if endFrame.height != 0, view.frame.height == endFrame.height + endFrame.origin.y {
             hideEmailTextField = false
             buttonTitle = "Let's Go"
             bottomConstraint.constant = view.frame.height - endFrame.origin.y - view.safeAreaInsets.bottom + buttonToTextFieldConstraint.constant
-            iconToTopConstraint.constant = (view.frame.height - endFrame.origin.y) / 6
+            let topToEmailTextField = endFrame.origin.y - view.safeAreaInsets.bottom - buttonToTextFieldConstraint.constant - continueButtonHeightConstraint.constant - buttonToTextFieldConstraint.constant - emailTextField.frame.height
+            iconToTopConstraint.constant = (topToEmailTextField - iconHeightConstraint.constant) / 2
         } else {
             infoLabel.isHidden = true
             hideEmailTextField = true
@@ -165,27 +171,6 @@ class AuthViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    func sendSignInLink() {
-        let actionCodeSettings = ActionCodeSettings()
-        actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com")
-        actionCodeSettings.handleCodeInApp = true
-
-        let email = emailTextField.text!
-        Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { [weak self] error in
-            self?.statusLabel.isHidden = true
-            self?.spinner.stopAnimating()
-            
-            if let error = error as NSError? {
-                // TODO: Show error to user
-                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                return
-            }
-
-            UserDefaults.standard.set(email, forKey: "Email")
-            self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
-        }
-    }
-    
     private func checkIfEmailExists() {
         statusLabel.isHidden = false
         statusLabel.text = "Thinking..."
@@ -204,7 +189,30 @@ class AuthViewController: UIViewController {
                 return
             }
             
+            self?.spinner.stopAnimating()
+            self?.statusLabel.isHidden = true
             self?.performSegue(withIdentifier: "Show Choose Username", sender: nil)
+        }
+    }
+    
+    func sendSignInLink() {
+        let actionCodeSettings = ActionCodeSettings()
+        actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com")
+        actionCodeSettings.handleCodeInApp = true
+
+        let email = emailTextField.text!
+        Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { [weak self] error in
+            if let error = error as NSError? {
+                self?.handleError(error)
+                return
+            }
+            
+            UserDefaults.standard.set(email, forKey: "Email")
+            
+            self?.statusLabel.isHidden = true
+            self?.spinner.stopAnimating()
+            
+            self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
         }
     }
     
@@ -214,6 +222,7 @@ class AuthViewController: UIViewController {
         statusLabel.isHidden = true
         spinner.stopAnimating()
         
+        setup()
         emailTextField.becomeFirstResponder()
         
         os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
@@ -222,13 +231,14 @@ class AuthViewController: UIViewController {
         guard let errorCode = AuthErrorCode(rawValue: error.code) else { return }
         switch errorCode {
         case .invalidEmail:
-            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { _ in
                 self.emailTextField.shake()
             }
             infoLabel.isHidden = false
             infoLabel.text = "Invalid email"
         default:
-            break
+            infoLabel.isHidden = false
+            infoLabel.text = "Something went wrong, please try again"
         }
     }
     
@@ -249,11 +259,7 @@ class AuthViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: email, link: link) { [weak self] authResult, error in
             if let error = error as NSError? {
-                self?.setup()
-                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                Crashlytics.sharedInstance().recordError(error)
-                self?.spinner.stopAnimating()
-                self?.statusLabel.isHidden = true
+                self?.handleError(error)
                 return
             }
                 
@@ -279,17 +285,13 @@ class AuthViewController: UIViewController {
             "capturedLocationsCount": 0
             ]) { [weak self] error in
                 if let error = error as NSError? {
-                    self?.setup()
-                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                    Crashlytics.sharedInstance().recordError(error)
+                    self?.handleError(error)
                     return
                 }
                 
                 db.collection("users").document(user.uid).collection("private").document("data").setData([:]) { error in
                     if let error = error as NSError? {
-                        self?.setup()
-                        os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                        Crashlytics.sharedInstance().recordError(error)
+                        self?.handleError(error)
                         return
                     }
                     
@@ -303,9 +305,7 @@ class AuthViewController: UIViewController {
         profileChangeRequest.displayName = UserDefaults.standard.string(forKey: "Username")
         profileChangeRequest.commitChanges { [weak self] error in
             if let error = error as NSError? {
-                self?.setup()
-                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-                Crashlytics.sharedInstance().recordError(error)
+                self?.handleError(error)
                 return
             }
             
