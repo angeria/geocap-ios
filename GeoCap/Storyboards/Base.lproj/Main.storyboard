@@ -632,17 +632,17 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="message-sent-cat" translatesAutoresizingMaskIntoConstraints="NO" id="Mit-po-ZUi">
-                                <rect key="frame" x="20" y="273.5" width="374" height="261"/>
+                                <rect key="frame" x="40" y="273.5" width="334" height="261"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="saB-j7-d2p" firstAttribute="trailing" secondItem="mZT-lJ-opy" secondAttribute="trailing" constant="20" id="3sm-Aq-bs0"/>
-                            <constraint firstItem="Mit-po-ZUi" firstAttribute="leading" secondItem="saB-j7-d2p" secondAttribute="leading" constant="20" id="47q-gV-RWO"/>
+                            <constraint firstItem="Mit-po-ZUi" firstAttribute="leading" secondItem="saB-j7-d2p" secondAttribute="leading" constant="40" id="47q-gV-RWO"/>
                             <constraint firstItem="zyS-yw-LAv" firstAttribute="leading" secondItem="saB-j7-d2p" secondAttribute="leading" constant="20" id="7Oz-OS-57a"/>
                             <constraint firstItem="saB-j7-d2p" firstAttribute="bottom" secondItem="mZT-lJ-opy" secondAttribute="bottom" constant="50" id="D1U-9E-qmc"/>
                             <constraint firstItem="mZT-lJ-opy" firstAttribute="top" secondItem="zyS-yw-LAv" secondAttribute="bottom" constant="20" id="PsT-eo-ZGc"/>
-                            <constraint firstItem="saB-j7-d2p" firstAttribute="trailing" secondItem="Mit-po-ZUi" secondAttribute="trailing" constant="20" id="UqY-Dr-Kxl"/>
+                            <constraint firstItem="saB-j7-d2p" firstAttribute="trailing" secondItem="Mit-po-ZUi" secondAttribute="trailing" constant="40" id="UqY-Dr-Kxl"/>
                             <constraint firstItem="zyS-yw-LAv" firstAttribute="top" secondItem="McC-ua-Zhx" secondAttribute="bottom" constant="8" id="WYU-jq-nUR"/>
                             <constraint firstItem="saB-j7-d2p" firstAttribute="trailing" secondItem="McC-ua-Zhx" secondAttribute="trailing" constant="20" id="dF2-0t-Nok"/>
                             <constraint firstItem="Mit-po-ZUi" firstAttribute="centerY" secondItem="saB-j7-d2p" secondAttribute="centerY" id="i7v-IU-ge1"/>

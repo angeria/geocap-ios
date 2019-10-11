@@ -46,7 +46,7 @@ class AuthViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+     
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
         // Listens for sign out in the background of the other views, after signing out
@@ -195,7 +195,7 @@ class AuthViewController: UIViewController {
         }
     }
     
-    func sendSignInLink() {
+    func sendSignInLink(completion: (() -> Void)? = nil) {
         let actionCodeSettings = ActionCodeSettings()
         actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com")
         actionCodeSettings.handleCodeInApp = true
@@ -211,6 +211,8 @@ class AuthViewController: UIViewController {
             
             self?.statusLabel.isHidden = true
             self?.spinner.stopAnimating()
+         
+            completion?()
             
             self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
         }
