@@ -13,8 +13,10 @@ import Firebase
 import FirebaseAuth
 
 class AuthViewController: UIViewController {
-    
+
     @IBOutlet weak var appIcon: UIImageView!
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +39,7 @@ class AuthViewController: UIViewController {
         if Auth.auth().currentUser != nil {
             performSegue(withIdentifier: "Show Map", sender: nil)
         } else if isStartup {
-            continueButton.isHidden = false
+            setup()
             isStartup = false
         }
     }
@@ -46,7 +48,25 @@ class AuthViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        setupAuthListener()
     }
+    
+    private func setup() {
+        continueButton.isHidden = false
+    }
+    
+    private var authListener: AuthStateDidChangeListenerHandle?
+    private func setupAuthListener() {
+        authListener = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
+            if Auth.auth().currentUser == nil {
+                self?.setup()
+                self?.dismiss(animated: true)
+            }
+        }
+    }
+    
+    // MARK: - Keyboard
     
     private var bottomConstraintConstantInStoryboard: CGFloat?
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint! {
@@ -97,6 +117,8 @@ class AuthViewController: UIViewController {
             self.continueButton.setTitle(buttonTitle, for: .normal)
         }
     }
+    
+    // MARK: - Auth
     
     @IBOutlet weak var emailTextField: UITextField! {
         didSet {
@@ -200,7 +222,7 @@ class AuthViewController: UIViewController {
         guard let errorCode = AuthErrorCode(rawValue: error.code) else { return }
         switch errorCode {
         case .invalidEmail:
-            Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false) { _ in
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                 self.emailTextField.shake()
             }
             infoLabel.isHidden = false
@@ -227,9 +249,7 @@ class AuthViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: email, link: link) { [weak self] authResult, error in
             if let error = error as NSError? {
-                // TODO: Handle error
-                self?.emailTextField.isHidden = false
-                self?.continueButton.isHidden = false
+                self?.setup()
                 os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                 Crashlytics.sharedInstance().recordError(error)
                 self?.spinner.stopAnimating()
@@ -237,10 +257,10 @@ class AuthViewController: UIViewController {
                 return
             }
                 
-            Crashlytics.sharedInstance().setUserIdentifier(authResult?.user.uid)
-//            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
+            Crashlytics.sharedInstance().setUserIdentifier(authResult!.user.uid)
+            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
             
-            if authResult?.additionalUserInfo?.isNewUser == true {
+            if authResult!.additionalUserInfo?.isNewUser == true {
                 self?.writeUserToDb(authResult!.user)
                 return
             }
@@ -259,7 +279,7 @@ class AuthViewController: UIViewController {
             "capturedLocationsCount": 0
             ]) { [weak self] error in
                 if let error = error as NSError? {
-                    self?.continueButton.isHidden = false
+                    self?.setup()
                     os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                     Crashlytics.sharedInstance().recordError(error)
                     return
@@ -267,7 +287,7 @@ class AuthViewController: UIViewController {
                 
                 db.collection("users").document(user.uid).collection("private").document("data").setData([:]) { error in
                     if let error = error as NSError? {
-                        self?.continueButton.isHidden = false
+                        self?.setup()
                         os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                         Crashlytics.sharedInstance().recordError(error)
                         return
@@ -283,7 +303,7 @@ class AuthViewController: UIViewController {
         profileChangeRequest.displayName = UserDefaults.standard.string(forKey: "Username")
         profileChangeRequest.commitChanges { [weak self] error in
             if let error = error as NSError? {
-                self?.continueButton.isHidden = false
+                self?.setup()
                 os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                 Crashlytics.sharedInstance().recordError(error)
                 return
@@ -294,12 +314,6 @@ class AuthViewController: UIViewController {
             self?.performSegue(withIdentifier: "Show Map", sender: nil)
         }
         
-    }
-    
-    // MARK: - Navigation
-    
-    @IBAction func unwindToAuth(unwindSegue: UIStoryboardSegue) {
-        continueButton.isHidden = false
     }
     
 }

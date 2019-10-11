@@ -59,8 +59,6 @@ class ProfileViewController: UIViewController {
             settingsListener?.remove()
             
             try Auth.auth().signOut()
-            
-            performSegue(withIdentifier: "unwindSegueProfileToAuth", sender: nil)
         }
         catch let error as NSError {
             os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
