@@ -1,8 +1,61 @@
+/*
+GENERAL
+*/
 
-/* Title of alert when sign-in failed */
-"alert-action-title-sign-in-failed" = "Sign-In Failed";
-/* Message of alert when sign-in failed */
-"alert-action-message-sign-in-failed" = "Something went wrong when signing in, please try again";
+/* Title of alert action 'No' */
+"alert-action-title-no" = "No";
+/* Title of alert action 'Yes' */
+"alert-action-title-yes" = "Yes";
+
+/* Title of alert action OK */
+"alert-action-title-OK" = "OK";
+
+/*
+AUTH - SIGN IN VIEW
+ */
+
+/* Text shown when the user inputs an invalid email */
+"auth-email-text-field-info-label-invalid-email" = "Invalid email";
+/* Text shown when something went wrong with using the inputed email */
+"auth-email-text-field-info-label-error" = "Something went wrong, please try again";
+
+/* Text on button below email text field to confirm input */
+"auth-email-button-continue" = "Continue";
+/* Text on button below email text field to continue and show the email text field */
+"auth-email-button-continue-with-email" = "Continue with Your Email";
+
+/* Title of email confirmation alert */
+"auth-email-confirmation-title" = "Confirm Email";
+/* Message of email confirmation alert */
+"auth-email-confirmation-message" = "Is this your email?\n%@";
+
+/* Text below spinner in auth view when loading */
+"auth-spinner-thinking" = "Thinking...";
+/* Text below spinner when signing in */
+"auth-spinner-signing-in" = "Signing in...";
+
+/*
+AUTH - CHOOSE USERNAME
+ */
+
+/* Error message for choose username text field when inputed username is invalid length */
+"auth-choose-username-invalid-length" = "Name must be between %d to %d characters";
+/* Error message for choose username text field */
+"auth-choose-username-error" = "Something went wrong, please try again or with another name";
+
+/* Error message when username is already taken */
+"auth-choose-username-already-taken" = "Name is already taken";
+
+/*
+ AUTH - PENDING SIGN IN
+ */
+
+/* Message telling user to check email */
+"auth-pending-sign-in-message" = "To sign in, tap the link in the email we sent to %@";
+
+/*
+OTHER VIEWS
+ */
 
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Locations Services Off";
@@ -25,9 +78,6 @@
 "alert-title-not-inside-area" = "Not Inside Area";
 /* Message of alert when user isn't inside area */
 "alert-message-not-inside-area" = "You have to be inside the area of the location to capture it";
-
-/* Title of alert action OK */
-"alert-action-title-OK" = "OK";
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Capture";

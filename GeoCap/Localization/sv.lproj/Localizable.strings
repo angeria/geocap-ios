@@ -1,8 +1,62 @@
 
-/* Title of alert when sign-in failed */
-"alert-action-title-sign-in-failed" = "Inloggningen misslyckades";
-/* Message of alert when sign-in failed */
-"alert-action-message-sign-in-failed" = "Någonting gick fel under inloggningen, var god försök igen";
+/*
+GENERAL
+*/
+
+/* Title of alert action 'No' */
+"alert-action-title-no" = "Nej";
+/* Title of alert action 'Yes' */
+"alert-action-title-yes" = "Ja";
+
+/* Title of alert action OK */
+"alert-action-title-OK" = "OK";
+
+/*
+AUTH - SIGN IN VIEW
+ */
+
+/* Text shown when the user inputs an invalid email */
+"auth-email-text-field-info-label-invalid-email" = "Ogiltig e-post";
+/* Text shown when something went wrong with using the inputed email */
+"auth-email-text-field-info-label-error" = "Något gick fel, testa igen";
+
+/* Text on button below email text field to confirm input */
+"auth-email-button-continue" = "Fortsätt";
+/* Text on button below email text field to continue and show the email text field */
+"auth-email-button-continue-with-email" = "Fortsätt med din e-post";
+
+/* Title of email confirmation alert */
+"auth-email-confirmation-title" = "Bekräfta e-post";
+/* Message of email confirmation alert */
+"auth-email-confirmation-message" = "Är det här din e-post?\n%@";
+
+/* Text below spinner in auth view when loading */
+"auth-spinner-thinking" = "Tänker...";
+/* Text below spinner when signing in */
+"auth-spinner-signing-in" = "Loggar in...";
+
+/*
+AUTH - CHOOSE USERNAME
+ */
+
+/* Error message for choose username text field when inputed username is invalid length */
+"auth-choose-username-invalid-length" = "Namnet måste vara mellan %d och %d tecken";
+/* Error message for choose username text field */
+"auth-choose-username-error" = "Något gick fel, testa igen eller med ett annat namn";
+
+/* Error message when username is already taken */
+"auth-choose-username-already-taken" = "Namnet är redan taget";
+
+/*
+ AUTH - PENDING SIGN IN
+ */
+
+/* Message telling user to check email */
+"auth-pending-sign-in-message" = "För att logga in, klicka på länken vi skickade till %@";
+
+/*
+OTHER VIEWS
+ */
 
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Platstjänster avslagna";
@@ -25,9 +79,6 @@
 "alert-title-not-inside-area" = "Ej inom området";
 /* Message of alert when user isn't inside area */
 "alert-message-not-inside-area" = "Du måste befinna dig inom området för att kunna ta över det";
-
-/* Title of alert action OK */
-"alert-action-title-OK" = "OK";
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Ta över";

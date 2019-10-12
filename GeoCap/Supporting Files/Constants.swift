@@ -13,4 +13,6 @@ enum GeoCapConstants {
     static let shakeAnimationDuration = 0.4
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
+    static let minimumUsernameLength = 3
+    static let maximumUsernameLength = 20
 }

@@ -81,11 +81,16 @@ class ChooseUsernameViewController: UIViewController {
         letsGoButton.isEnabled = false
         
         usernameTextField.text = usernameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let username = usernameTextField.text else { return }
-        guard username.count >= 2 && username.count <= 20 else {
+        guard
+            let username = usernameTextField.text,
+                username != "",
+                username.count >= GeoCapConstants.minimumUsernameLength,
+                username.count <= GeoCapConstants.maximumUsernameLength
+        else {
             infoLabel.isHidden = false
-            infoLabel.text = "Username must be between 2 to 20 characters"
-            infoLabel.shake()
+            let format = NSLocalizedString("auth-choose-username-invalid-length", comment: "Error message for choose username text field when inputed username is invalid length")
+            infoLabel.text = String(format: format, GeoCapConstants.minimumUsernameLength, GeoCapConstants.maximumUsernameLength)
+            usernameTextField.shake()
             letsGoButton.isEnabled = true
             return
         }
@@ -97,7 +102,7 @@ class ChooseUsernameViewController: UIViewController {
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] querySnapshot, error in
             if let error = error as NSError? {
                 self?.infoLabel.isHidden = false
-                self?.infoLabel.text = "Something went wrong, please try another username"
+                self?.infoLabel.text = NSLocalizedString("auth-choose-username-error", comment: "Error message for choose username text field")
                 os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                 Crashlytics.sharedInstance().recordError(error)
                 self?.letsGoButton.isEnabled = true
@@ -107,7 +112,7 @@ class ChooseUsernameViewController: UIViewController {
             
             if querySnapshot?.count != 0 {
                 self?.infoLabel.isHidden = false
-                self?.infoLabel.text = "Username is already taken"
+                self?.infoLabel.text = NSLocalizedString("auth-choose-username-already-taken", comment: "Error message when username is already taken")
                 self?.usernameTextField.shake()
                 self?.letsGoButton.isEnabled = true
                 self?.spinner.stopAnimating()
@@ -117,6 +122,7 @@ class ChooseUsernameViewController: UIViewController {
             self?.infoLabel.isHidden = true
             self?.usernameTextField.resignFirstResponder()
             UserDefaults.standard.set(username, forKey: "Username")
+            
             let authVC = self?.presentingViewController as! AuthViewController
             authVC.sendSignInLink() { [weak self] in
                 self?.spinner.stopAnimating()

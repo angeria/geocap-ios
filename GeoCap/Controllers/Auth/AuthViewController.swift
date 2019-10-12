@@ -104,14 +104,14 @@ class AuthViewController: UIViewController {
         // Prevents iPad undocked keyboard
         if endFrame.height != 0, view.frame.height == endFrame.height + endFrame.origin.y {
             hideEmailTextField = false
-            buttonTitle = "Let's Go"
+            buttonTitle = NSLocalizedString("auth-email-button-continue", comment: "Text on button below email text field to confirm input")
             bottomConstraint.constant = view.frame.height - endFrame.origin.y - view.safeAreaInsets.bottom + buttonToTextFieldConstraint.constant
             let topToEmailTextField = endFrame.origin.y - view.safeAreaInsets.bottom - buttonToTextFieldConstraint.constant - continueButtonHeightConstraint.constant - buttonToTextFieldConstraint.constant - emailTextField.frame.height
             iconToTopConstraint.constant = (topToEmailTextField - iconHeightConstraint.constant) / 2
         } else {
             infoLabel.isHidden = true
             hideEmailTextField = true
-            buttonTitle = "Continue with Your Email"
+            buttonTitle = NSLocalizedString("auth-email-button-continue-with-email", comment: "Text on button below email text field to continue and show the email text field")
             bottomConstraint.constant = bottomConstraintConstantInStoryboard!
             iconToTopConstraint.constant = iconToTopConstraintConstantInStoryboard!
         }
@@ -159,11 +159,18 @@ class AuthViewController: UIViewController {
     }
     
     private func presentConfirmEmailAlert() {
-        let title = "Confirm Email"
-        let message = "Is this your email?\n\(emailTextField.text!)"
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let noAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
-        let yesAction = UIAlertAction(title: "Yes", style: .default) { [weak self] _ in
+        let title = NSLocalizedString("auth-email-confirmation-title", comment: "Title of email confirmation alert")
+        
+        let message = NSLocalizedString("auth-email-confirmation-message", comment: "Message of email confirmation alert")
+        let formatedMessage = String.localizedStringWithFormat(message, emailTextField.text!)
+        
+        let alert = UIAlertController(title: title, message: formatedMessage, preferredStyle: .alert)
+        
+        let noActionTitle = NSLocalizedString("alert-action-title-no", comment: "Title of alert action 'No'")
+        let noAction = UIAlertAction(title: noActionTitle, style: .cancel, handler: nil)
+        
+        let yesActionTitle = NSLocalizedString("alert-action-title-yes", comment: "Title of alert action 'Yes'")
+        let yesAction = UIAlertAction(title: yesActionTitle, style: .default) { [weak self] _ in
             self?.checkIfEmailExists()
         }
         alert.addAction(noAction)
@@ -173,25 +180,29 @@ class AuthViewController: UIViewController {
 
     private func checkIfEmailExists() {
         statusLabel.isHidden = false
-        statusLabel.text = "Thinking..."
+        statusLabel.text = NSLocalizedString("auth-spinner-thinking", comment: "Text below spinner when loading")
         spinner.isHidden = false
         spinner.startAnimating()
         
         Auth.auth().fetchSignInMethods(forEmail: emailTextField.text!) { [weak self] signInMethods, error in
+            guard let self = self else { return }
+            
             if let error = error as NSError? {
-                self?.handleError(error)
+                self.handleError(error)
                 return
             }
-            self?.infoLabel.isHidden = true
+            self.infoLabel.isHidden = true
+            
+            UserDefaults.standard.set(self.emailTextField.text!, forKey: "Email")
             
             if signInMethods != nil, !signInMethods!.isEmpty {
-                self?.sendSignInLink()
+                self.sendSignInLink()
                 return
             }
             
-            self?.spinner.stopAnimating()
-            self?.statusLabel.isHidden = true
-            self?.performSegue(withIdentifier: "Show Choose Username", sender: nil)
+            self.spinner.stopAnimating()
+            self.statusLabel.isHidden = true
+            self.performSegue(withIdentifier: "Show Choose Username", sender: nil)
         }
     }
     
@@ -206,8 +217,6 @@ class AuthViewController: UIViewController {
                 self?.handleError(error)
                 return
             }
-            
-            UserDefaults.standard.set(email, forKey: "Email")
             
             self?.statusLabel.isHidden = true
             self?.spinner.stopAnimating()
@@ -237,10 +246,10 @@ class AuthViewController: UIViewController {
                 self.emailTextField.shake()
             }
             infoLabel.isHidden = false
-            infoLabel.text = "Invalid email"
+            infoLabel.text = NSLocalizedString("auth-email-text-field-info-label-invalid-email", comment: "Text shown when the user inputs an invalid email")
         default:
             infoLabel.isHidden = false
-            infoLabel.text = "Something went wrong, please try again"
+            infoLabel.text = NSLocalizedString("auth-email-text-field-info-label-error", comment: "Text shown when something went wrong with using the inputed email")
         }
     }
     
@@ -250,7 +259,7 @@ class AuthViewController: UIViewController {
     func prepareViewForSignIn() {
         emailTextField.isHidden = true
         continueButton.isHidden = true
-        statusLabel.text = "Signing in..."
+        statusLabel.text = NSLocalizedString("auth-spinner-signing-in", comment: "Text below spinner when signing in")
         statusLabel.isHidden = false
         spinner.isHidden = false
         spinner.startAnimating()
