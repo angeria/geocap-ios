@@ -2,6 +2,9 @@
 /* Class = "UILabel"; text = "When someone captures one of your locations"; ObjectID = "0DT-gx-aIN"; */
 "0DT-gx-aIN.text" = "När någon tar över en av dina platser";
 
+/* Class = "UIButton"; normalTitle = "Let's Go"; ObjectID = "0mc-FV-NT0"; */
+"0mc-FV-NT0.normalTitle" = "Fortsätt";
+
 /* Class = "UILabel"; text = "Notifications"; ObjectID = "1Qp-HY-yZO"; */
 "1Qp-HY-yZO.text" = "Notiser";
 
@@ -14,19 +17,44 @@
 /* Class = "UILabel"; text = "Captured locations"; ObjectID = "8Mx-9u-3Gi"; */
 "8Mx-9u-3Gi.text" = "Tagna platser";
 
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "9qt-FR-8jD"; */
+"9qt-FR-8jD.placeholder" = "E-post";
+
 /* Class = "UITabBarItem"; title = "Leaderboard"; ObjectID = "9zQ-09-F47"; */
 "9zQ-09-F47.title" = "Leaderboard";
-
-/* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
-"acW-dT-cKf.title" = "Karta";
 
 /* Class = "UITabBarItem"; title = "Profile"; ObjectID = "Ehp-tO-H9e"; */
 "Ehp-tO-H9e.title" = "Profil";
 
-/* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
-"gEq-cg-01V.normalTitle" = "Logga ut";
+/* Class = "UILabel"; text = "Signing in..."; ObjectID = "HoG-mY-iaB"; */
+"HoG-mY-iaB.text" = "Loggar in...";
+
+/* Class = "UILabel"; text = "Check your email"; ObjectID = "McC-ua-Zhx"; */
+"McC-ua-Zhx.text" = "Kolla din e-post";
+
+/* Class = "UITextField"; placeholder = "Username"; ObjectID = "WDq-Go-11h"; */
+"WDq-Go-11h.placeholder" = "Namn";
+
+/* Class = "UIButton"; normalTitle = "Continue with Your Email"; ObjectID = "XSX-lP-dRJ"; */
+"XSX-lP-dRJ.normalTitle" = "Fortsätt med din e-post";
 
 /* Class = "UILabel"; text = "Loading locations..."; ObjectID = "Yip-4O-GPe"; */
 "Yip-4O-GPe.text" = "Laddar platser...";
 
+/* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
+"acW-dT-cKf.title" = "Karta";
 
+/* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
+"gEq-cg-01V.normalTitle" = "Logga ut";
+
+/* Class = "UILabel"; text = "It will be shown to other players and can be your own name or something funky 😸"; ObjectID = "jLz-YK-k1P"; */
+"jLz-YK-k1P.text" = "Det kommer visas till andra spelare och kan vara ditt vanliga namn eller nått kul 😸";
+
+/* Class = "UIButton"; normalTitle = "Open Email App"; ObjectID = "mZT-lJ-opy"; */
+"mZT-lJ-opy.normalTitle" = "Öppna e-postappen";
+
+/* Class = "UILabel"; text = "Choose a username"; ObjectID = "mlX-iX-fpz"; */
+"mlX-iX-fpz.text" = "Välj ett namn";
+
+/* Class = "UILabel"; text = "To sign in, tap the button in the email we sent to benjamin.angeria@icloud.com"; ObjectID = "zyS-yw-LAv"; */
+"zyS-yw-LAv.text" = "För att logga in, klicka på länken vi skickade till E-POST SAKNAS";

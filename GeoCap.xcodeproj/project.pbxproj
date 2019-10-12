@@ -81,7 +81,7 @@
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		4397786C235072D30044808F /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
-		43B561B72319544400618DC3 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		439DC1022351A2060057E6BB /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -599,7 +599,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				432DEDA122E1F28D00DFA074 /* Base */,
-				43B561B72319544400618DC3 /* sv */,
+				439DC1022351A2060057E6BB /* sv */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
