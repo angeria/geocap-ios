@@ -228,9 +228,11 @@ class AuthViewController: UIViewController {
             self?.statusLabel.isHidden = true
             self?.spinner.stopAnimating()
          
-            completion?(nil)
-            
-            self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
+            if let completion = completion {
+                completion(nil)
+            } else {
+                self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
+            }
         }
     }
     
@@ -254,6 +256,8 @@ class AuthViewController: UIViewController {
                 self.emailTextField.shake()
             }
             errorMessage = NSLocalizedString("auth-email-text-field-info-label-invalid-email", comment: "Text shown when the user inputs an invalid email")
+        case .invalidActionCode:
+            errorMessage = NSLocalizedString("auth-email-text-field-info-label-invalid-action-code", comment: "Error message when the user tries to use an old email sign in link")
         default:
             Crashlytics.sharedInstance().recordError(error)
             errorMessage = NSLocalizedString("auth-email-text-field-info-label-error", comment: "Text shown when something went wrong with using the inputed email")
@@ -266,6 +270,7 @@ class AuthViewController: UIViewController {
     @IBOutlet weak var statusLabel: UILabel!
     
     func prepareViewForSignIn() {
+        emailTextField.resignFirstResponder()
         emailTextField.isHidden = true
         continueButton.isHidden = true
         statusLabel.text = NSLocalizedString("auth-spinner-signing-in", comment: "Text below spinner when signing in")

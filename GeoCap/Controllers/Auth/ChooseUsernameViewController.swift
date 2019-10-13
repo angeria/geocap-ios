@@ -130,7 +130,9 @@ class ChooseUsernameViewController: UIViewController {
                 if let errorMessage = errorMessage {
                     self?.infoLabel.text = errorMessage
                     self?.infoLabel.isHidden = false
+                    return
                 }
+                self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
             }
         }
     }
