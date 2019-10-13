@@ -414,14 +414,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQg-mp-qR0">
-                                <rect key="frame" x="20" y="394" width="374" height="314"/>
+                                <rect key="frame" x="20" y="394" width="374" height="368"/>
                                 <subviews>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="QBJ-Z2-Mpa">
-                                        <rect key="frame" x="168.5" y="138.5" width="37" height="37"/>
+                                        <rect key="frame" x="168.5" y="165.5" width="37" height="37"/>
                                         <color key="color" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     </activityIndicatorView>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Signing in..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HoG-mY-iaB">
-                                        <rect key="frame" x="0.0" y="183.5" width="374" height="21"/>
+                                        <rect key="frame" x="0.0" y="211" width="374" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -429,11 +429,11 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="centerY" secondItem="YQg-mp-qR0" secondAttribute="centerY" id="M05-WL-TOw"/>
-                                    <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="centerX" secondItem="YQg-mp-qR0" secondAttribute="centerX" id="hcG-Yk-0lC"/>
-                                    <constraint firstItem="HoG-mY-iaB" firstAttribute="top" secondItem="QBJ-Z2-Mpa" secondAttribute="bottom" constant="8" id="pn7-lM-h3s"/>
-                                    <constraint firstItem="HoG-mY-iaB" firstAttribute="leading" secondItem="YQg-mp-qR0" secondAttribute="leading" id="qyN-7B-4kE"/>
-                                    <constraint firstAttribute="trailing" secondItem="HoG-mY-iaB" secondAttribute="trailing" id="zcx-MD-0Hx"/>
+                                    <constraint firstAttribute="trailing" secondItem="HoG-mY-iaB" secondAttribute="trailing" id="4Po-Zs-hkS"/>
+                                    <constraint firstItem="HoG-mY-iaB" firstAttribute="top" secondItem="QBJ-Z2-Mpa" secondAttribute="bottom" constant="8" id="EUk-Qn-urX"/>
+                                    <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="centerX" secondItem="YQg-mp-qR0" secondAttribute="centerX" id="Pkl-mH-bKf"/>
+                                    <constraint firstItem="QBJ-Z2-Mpa" firstAttribute="centerY" secondItem="YQg-mp-qR0" secondAttribute="centerY" id="h7S-Ne-NSI"/>
+                                    <constraint firstItem="HoG-mY-iaB" firstAttribute="leading" secondItem="YQg-mp-qR0" secondAttribute="leading" id="iwD-xI-gkk"/>
                                 </constraints>
                             </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch-screen-app-icon" translatesAutoresizingMaskIntoConstraints="NO" id="ueV-vH-1N9">
@@ -474,14 +474,14 @@
                             <constraint firstItem="9qt-FR-8jD" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="77O-gV-3me"/>
                             <constraint firstItem="WDA-Zx-Z6T" firstAttribute="bottom" secondItem="XSX-lP-dRJ" secondAttribute="bottom" constant="50" id="ECH-o9-UfS"/>
                             <constraint firstItem="XSX-lP-dRJ" firstAttribute="top" secondItem="9qt-FR-8jD" secondAttribute="bottom" constant="20" id="HMf-fq-m00"/>
-                            <constraint firstItem="9qt-FR-8jD" firstAttribute="top" secondItem="YQg-mp-qR0" secondAttribute="bottom" id="IOp-0j-1gW"/>
-                            <constraint firstItem="YQg-mp-qR0" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="InU-fN-cLx"/>
-                            <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="YQg-mp-qR0" secondAttribute="trailing" constant="20" id="Pdr-wC-6do"/>
+                            <constraint firstItem="YQg-mp-qR0" firstAttribute="top" secondItem="ueV-vH-1N9" secondAttribute="bottom" id="OuH-OJ-555"/>
                             <constraint firstItem="9qt-FR-8jD" firstAttribute="top" secondItem="yTG-ge-S7g" secondAttribute="bottom" constant="8" id="Plj-kh-3GR"/>
+                            <constraint firstItem="XSX-lP-dRJ" firstAttribute="top" secondItem="YQg-mp-qR0" secondAttribute="bottom" id="QZI-Es-Z48"/>
                             <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="yTG-ge-S7g" secondAttribute="trailing" constant="20" id="R0z-YW-bEE"/>
-                            <constraint firstItem="YQg-mp-qR0" firstAttribute="top" secondItem="ueV-vH-1N9" secondAttribute="bottom" id="Uy5-0v-mdH"/>
+                            <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="YQg-mp-qR0" secondAttribute="trailing" constant="20" id="Rwg-Dw-OJj"/>
                             <constraint firstItem="WDA-Zx-Z6T" firstAttribute="trailing" secondItem="9qt-FR-8jD" secondAttribute="trailing" constant="20" id="X19-zN-bOR"/>
                             <constraint firstItem="ueV-vH-1N9" firstAttribute="top" secondItem="WDA-Zx-Z6T" secondAttribute="top" constant="100" id="ath-Fd-Qvt"/>
+                            <constraint firstItem="YQg-mp-qR0" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="eim-3j-2Uo"/>
                             <constraint firstItem="ueV-vH-1N9" firstAttribute="centerX" secondItem="WDA-Zx-Z6T" secondAttribute="centerX" id="hdV-Rd-q5u"/>
                             <constraint firstItem="XSX-lP-dRJ" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="lGS-rz-b7A"/>
                             <constraint firstItem="yTG-ge-S7g" firstAttribute="leading" secondItem="WDA-Zx-Z6T" secondAttribute="leading" constant="20" id="m4V-jF-Mtc"/>
@@ -715,7 +715,7 @@
         <image name="tab-bar-profile" width="23" height="23"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="CNR-td-l7V"/>
+        <segue reference="1m3-G5-LjG"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.443710357" green="0.71984392399999997" blue="0.93396478890000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
