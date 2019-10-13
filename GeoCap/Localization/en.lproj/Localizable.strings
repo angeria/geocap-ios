@@ -1,3 +1,4 @@
+
 /*
 GENERAL
 */
@@ -9,6 +10,11 @@ GENERAL
 
 /* Title of alert action OK */
 "alert-action-title-OK" = "OK";
+
+/* Title of alert action 'Allow' */
+"alert-action-title-allow" = "Allow";
+/* Title of alert action 'Don't Allow' */
+"alert-action-title-dont-allow" = "Don't Allow";
 
 /*
 AUTH - SIGN IN VIEW
