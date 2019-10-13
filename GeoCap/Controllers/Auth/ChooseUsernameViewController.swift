@@ -124,9 +124,13 @@ class ChooseUsernameViewController: UIViewController {
             UserDefaults.standard.set(username, forKey: "Username")
             
             let authVC = self?.presentingViewController as! AuthViewController
-            authVC.sendSignInLink() { [weak self] in
+            authVC.sendSignInLink() { [weak self] errorMessage in
                 self?.spinner.stopAnimating()
                 self?.letsGoButton.isEnabled = true
+                if let errorMessage = errorMessage {
+                    self?.infoLabel.text = errorMessage
+                    self?.infoLabel.isHidden = false
+                }
             }
         }
     }

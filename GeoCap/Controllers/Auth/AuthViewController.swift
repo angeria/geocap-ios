@@ -188,7 +188,10 @@ class AuthViewController: UIViewController {
             guard let self = self else { return }
             
             if let error = error as NSError? {
-                self.handleError(error)
+                if let errorMessage = self.handleError(error) {
+                    self.infoLabel.text = errorMessage
+                    self.infoLabel.isHidden = false
+                }
                 return
             }
             self.infoLabel.isHidden = true
@@ -206,7 +209,7 @@ class AuthViewController: UIViewController {
         }
     }
     
-    func sendSignInLink(completion: (() -> Void)? = nil) {
+    func sendSignInLink(completion: ((String?) -> Void)? = nil) {
         let actionCodeSettings = ActionCodeSettings()
         actionCodeSettings.url = URL(string: "https://geocap-backend.firebaseapp.com")
         actionCodeSettings.handleCodeInApp = true
@@ -214,14 +217,18 @@ class AuthViewController: UIViewController {
         let email = emailTextField.text!
         Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { [weak self] error in
             if let error = error as NSError? {
-                self?.handleError(error)
+                if let errorMessage = self?.handleError(error) {
+                    self?.infoLabel.text = errorMessage
+                    self?.infoLabel.isHidden = false
+                    completion?(errorMessage)
+                }
                 return
             }
             
             self?.statusLabel.isHidden = true
             self?.spinner.stopAnimating()
          
-            completion?()
+            completion?(nil)
             
             self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
         }
@@ -229,7 +236,7 @@ class AuthViewController: UIViewController {
     
     @IBOutlet weak var infoLabel: UILabel!
     
-    private func handleError(_ error: NSError) {
+    private func handleError(_ error: NSError) -> String? {
         statusLabel.isHidden = true
         spinner.stopAnimating()
         
@@ -237,20 +244,22 @@ class AuthViewController: UIViewController {
         emailTextField.becomeFirstResponder()
         
         os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
-        Crashlytics.sharedInstance().recordError(error)
         
-        guard let errorCode = AuthErrorCode(rawValue: error.code) else { return }
+        guard let errorCode = AuthErrorCode(rawValue: error.code) else { return nil }
+        var errorMessage: String?
+        
         switch errorCode {
         case .invalidEmail:
             Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { _ in
                 self.emailTextField.shake()
             }
-            infoLabel.isHidden = false
-            infoLabel.text = NSLocalizedString("auth-email-text-field-info-label-invalid-email", comment: "Text shown when the user inputs an invalid email")
+            errorMessage = NSLocalizedString("auth-email-text-field-info-label-invalid-email", comment: "Text shown when the user inputs an invalid email")
         default:
-            infoLabel.isHidden = false
-            infoLabel.text = NSLocalizedString("auth-email-text-field-info-label-error", comment: "Text shown when something went wrong with using the inputed email")
+            Crashlytics.sharedInstance().recordError(error)
+            errorMessage = NSLocalizedString("auth-email-text-field-info-label-error", comment: "Text shown when something went wrong with using the inputed email")
         }
+        
+        return errorMessage
     }
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -270,7 +279,10 @@ class AuthViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: email, link: link) { [weak self] authResult, error in
             if let error = error as NSError? {
-                self?.handleError(error)
+                if let errorMessage = self?.handleError(error) {
+                    self?.infoLabel.text = errorMessage
+                    self?.infoLabel.isHidden = false
+                }
                 return
             }
                 
@@ -296,13 +308,19 @@ class AuthViewController: UIViewController {
             "capturedLocationsCount": 0
             ]) { [weak self] error in
                 if let error = error as NSError? {
-                    self?.handleError(error)
+                    if let errorMessage = self?.handleError(error) {
+                        self?.infoLabel.text = errorMessage
+                        self?.infoLabel.isHidden = false
+                    }
                     return
                 }
                 
                 db.collection("users").document(user.uid).collection("private").document("data").setData([:]) { error in
                     if let error = error as NSError? {
-                        self?.handleError(error)
+                        if let errorMessage = self?.handleError(error) {
+                            self?.infoLabel.text = errorMessage
+                            self?.infoLabel.isHidden = false
+                        }
                         return
                     }
                     
@@ -316,7 +334,10 @@ class AuthViewController: UIViewController {
         profileChangeRequest.displayName = UserDefaults.standard.string(forKey: "Username")
         profileChangeRequest.commitChanges { [weak self] error in
             if let error = error as NSError? {
-                self?.handleError(error)
+                if let errorMessage = self?.handleError(error) {
+                    self?.infoLabel.text = errorMessage
+                    self?.infoLabel.isHidden = false
+                }
                 return
             }
             
