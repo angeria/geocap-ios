@@ -47,6 +47,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
+        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(MKUserLocation.self))
         
         fetchLocations()
 
@@ -230,6 +231,7 @@ class MapViewController: UIViewController {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
         
+        annotationView.displayPriority = .required
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
@@ -492,6 +494,14 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MKMapViewDelegate {
     
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        for view in views {
+            if view.annotation is MKUserLocation {
+                view.canShowCallout = false
+            }
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         if regionHasNotBeenCenteredOnUserLocation {
             setNearestCity()
@@ -503,12 +513,12 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
-        
         if let locationAnnotation = annotation as? Location {
             return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
+        } else if let userLocationAnnotation = annotation as? MKUserLocation {
+            let userLocationAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: NSStringFromClass(MKUserLocation.self), for: userLocationAnnotation)
+            userLocationAnnotationView.canShowCallout = false
         }
-        
         return nil
     }
     

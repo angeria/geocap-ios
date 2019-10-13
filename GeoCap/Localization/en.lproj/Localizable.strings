@@ -18,6 +18,9 @@ AUTH - SIGN IN VIEW
 "auth-email-text-field-info-label-invalid-email" = "Invalid email";
 /* Text shown when something went wrong with using the inputed email */
 "auth-email-text-field-info-label-error" = "Something went wrong, please try again";
+/* Error message when the user tries to use an invalid or old email sign in link */
+"auth-email-text-field-info-label-invalid-action-code" = "Invalid or old email link, please sign in again";
+
 
 /* Text on button below email text field to confirm input */
 "auth-email-button-continue" = "Continue";

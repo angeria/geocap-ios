@@ -33,14 +33,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         if Auth.auth().isSignIn(withEmailLink: link) {
             if let authVC = window?.rootViewController as? AuthViewController {
                 authVC.prepareViewForSignIn()
-                // Dismisses PendingSignInVC so it doesn't stay in memory
-                authVC.dismiss(animated: true) {
+                if authVC.presentedViewController == nil {
                     authVC.signInWithLink(link)
+                } else {
+                    authVC.dismiss(animated: true) {
+                        authVC.signInWithLink(link)
+                    }
                 }
                 return true
             }
         }
-        
         return false
     }
     
