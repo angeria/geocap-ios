@@ -321,8 +321,15 @@ class MapViewController: UIViewController {
         let title = NSLocalizedString("alert-title-request-notification-auth", comment: "Title of alert when requesting notification authorization")
         let message = NSLocalizedString("alert-message-request-notification-auth", comment: "Message of alert when requesting notification authorization")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default) { action in
+
+        let dontAllowActionTitle = NSLocalizedString("alert-action-title-dont-allow", comment: "Title of alert action 'Don't Allow'")
+        let dontAllowAction = UIAlertAction(title: dontAllowActionTitle, style: .default) { _ in
+            UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
+        }
+        alert.addAction(dontAllowAction)
+        
+        let allowActionTitle = NSLocalizedString("alert-action-title-allow", comment: "Title of alert action 'Allow'")
+        let allowAction = UIAlertAction(title: allowActionTitle, style: .default) { _ in
             guard let user = Auth.auth().currentUser else { return }
             
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
@@ -339,8 +346,8 @@ class MapViewController: UIViewController {
                     let db = Firestore.firestore()
                     let ref = db.collection("users").document(user.uid).collection("private").document("data")
                     ref.updateData(["locationLostNotificationsEnabled": true]) { error in
-                        if let error = error {
-                            os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
+                        if let error = error as NSError? {
+                            os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                             Crashlytics.sharedInstance().recordError(error)
                         }
                     }
@@ -348,7 +355,7 @@ class MapViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
             }
         }
-        alert.addAction(okAction)
+        alert.addAction(allowAction)
         
         // Had to delay the alert a bit to prevent getting "view is not in the window hierarchy" error
         Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { [weak self] timer in

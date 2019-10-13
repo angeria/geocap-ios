@@ -11,6 +11,11 @@ GENERAL
 /* Title of alert action OK */
 "alert-action-title-OK" = "OK";
 
+/* Title of alert action 'Allow' */
+"alert-action-title-allow" = "Tillåt";
+/* Title of alert action 'Don't Allow' */
+"alert-action-title-dont-allow" = "Tillåt inte";
+
 /*
 AUTH - SIGN IN VIEW
  */
