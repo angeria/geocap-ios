@@ -39,8 +39,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    private var regionHasNotBeenCenteredOnUserLocation = true
-    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -510,12 +508,8 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if regionHasNotBeenCenteredOnUserLocation {
+        if currentCity == nil {
             setNearestCity()
-            
-            let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
-            mapView.setRegion(region, animated: true)
-            regionHasNotBeenCenteredOnUserLocation = false
         }
     }
     
