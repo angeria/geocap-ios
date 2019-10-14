@@ -100,7 +100,7 @@ class LeaderboardViewController: UITableViewController {
             if username == Auth.auth().currentUser?.displayName {
                 cell.backgroundColor = UIColor.GeoCap.blue.withAlphaComponent(0.15)
             } else {
-                cell.backgroundColor = UIColor.groupTableViewBackground.withAlphaComponent(0.35)
+                cell.backgroundColor = UIColor.groupTableViewBackground
             }
             return cell
         } else {
