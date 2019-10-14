@@ -22,14 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if let url = userActivity.webpageURL {
-            return handleEmailLinkSignIn(withURL: url)
+        if let link = userActivity.webpageURL?.absoluteString {
+            return handleEmailLinkSignIn(withLink: link)
         }
         return false
     }
     
-    func handleEmailLinkSignIn(withURL url: URL) -> Bool {
-        let link = url.absoluteString
+    func handleEmailLinkSignIn(withLink link: String) -> Bool {
         if Auth.auth().isSignIn(withEmailLink: link) {
             if let authVC = window?.rootViewController as? AuthViewController {
                 authVC.prepareViewForSignIn()

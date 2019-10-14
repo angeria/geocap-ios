@@ -26,7 +26,8 @@ class PendingSignInViewController: UIViewController {
     }
     
     @IBAction func openEmailButtonPressed(_ sender: UIButton) {
-        let actionSheet = UIAlertController(title: "Choose email app", message: nil, preferredStyle: .actionSheet)
+        let actionTitle = NSLocalizedString("auth-choose-email-app-action-sheet-title", comment: "Title of choose email app action sheet alert")
+        let actionSheet = UIAlertController(title: actionTitle, message: nil, preferredStyle: .actionSheet)
         
         // Native mail app
         let mailURL = URL(string: "message://")!
@@ -48,7 +49,16 @@ class PendingSignInViewController: UIViewController {
             }
         }
         
-        present(actionSheet, animated: true)
+        present(actionSheet, animated: true) { [weak self] in
+            // Dismiss email app chooser when tapping outside of it
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self?.dismissEmailAppChooser))
+            actionSheet.view.superview?.subviews[0].isUserInteractionEnabled = true
+            actionSheet.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        }
+    }
+    
+    @objc func dismissEmailAppChooser() {
+        dismiss(animated: true, completion: nil)
     }
 
 }
