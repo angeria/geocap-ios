@@ -37,9 +37,11 @@ class QuizViewController: UIViewController {
             self?.fetchQuestions()
         }
     }
-    
+
+    // Dismiss quiz immediately if view resigns active to prevent cheating
     @objc private func willResignActive() {
-        dismiss(animated: true, completion: nil)
+        countdownBarTimer?.invalidate()
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Fetching
