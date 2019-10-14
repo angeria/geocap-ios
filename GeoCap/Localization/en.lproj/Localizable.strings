@@ -62,6 +62,9 @@ AUTH - CHOOSE USERNAME
 /* Message telling user to check email */
 "auth-pending-sign-in-message" = "To sign in, tap the link in the email we sent to %@";
 
+/* Title of choose email app action sheet alert */
+"auth-choose-email-app-action-sheet-title" = "Choose email app";
+
 /*
 OTHER VIEWS
  */
