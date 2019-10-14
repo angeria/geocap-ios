@@ -26,7 +26,9 @@ class QuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(QuizViewController.willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        
         dispatchGroup.enter()
         fetchTotalDatabaseQuestionCount()
         
@@ -34,6 +36,10 @@ class QuizViewController: UIViewController {
             self?.dispatchGroup.enter()
             self?.fetchQuestions()
         }
+    }
+    
+    @objc private func willResignActive() {
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Fetching

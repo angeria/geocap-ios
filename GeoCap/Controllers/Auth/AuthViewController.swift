@@ -93,7 +93,7 @@ class AuthViewController: UIViewController {
     @IBOutlet weak var continueButtonHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonToTextFieldConstraint: NSLayoutConstraint!
     
-    @objc func keyboardDidChange(notification: Notification) {
+    @objc private func keyboardDidChange(notification: Notification) {
         let userInfo = notification.userInfo! as [AnyHashable: Any]
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
