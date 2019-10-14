@@ -23,6 +23,8 @@
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
+		4392C76A23545BB500A58CBF /* ThirdPartyMailClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */; };
+		4392C76B23545BB500A58CBF /* ThirdPartyMailer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
@@ -80,6 +82,8 @@
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartyMailClient.swift; sourceTree = "<group>"; };
+		4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartyMailer.swift; sourceTree = "<group>"; };
 		4397786C235072D30044808F /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		439DC1022351A2060057E6BB /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 		432DED9922E1F28D00DFA074 /* GeoCap */ = {
 			isa = PBXGroup;
 			children = (
+				4392C76E23545C2000A58CBF /* Libraries */,
 				43BF7BDA231C129E0007666B /* Supporting Files */,
 				43BF7BDB231C12C20007666B /* Localization */,
 				43BF7BD9231C0BAE0007666B /* Controllers */,
@@ -184,11 +189,28 @@
 		434E938F2350704E00C89A8B /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				4397786C235072D30044808F /* AuthViewController.swift */,
 				43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */,
 				43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */,
-				4397786C235072D30044808F /* AuthViewController.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		4392C76C23545BDF00A58CBF /* ThirdPartyMailer */ = {
+			isa = PBXGroup;
+			children = (
+				4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */,
+				4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */,
+			);
+			path = ThirdPartyMailer;
+			sourceTree = "<group>";
+		};
+		4392C76E23545C2000A58CBF /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				4392C76C23545BDF00A58CBF /* ThirdPartyMailer */,
+			);
+			path = Libraries;
 			sourceTree = "<group>";
 		};
 		43BF7BD8231C0B660007666B /* Models */ = {
@@ -291,6 +313,8 @@
 			dependencies = (
 			);
 			name = GeoCap;
+			packageProductDependencies = (
+			);
 			productName = GeoCap;
 			productReference = 432DED9722E1F28D00DFA074 /* GeoCap.app */;
 			productType = "com.apple.product-type.application";
@@ -377,6 +401,8 @@
 				sv,
 			);
 			mainGroup = 432DED8E22E1F28D00DFA074;
+			packageReferences = (
+			);
 			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -537,7 +563,9 @@
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				4397786D235072D30044808F /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
+				4392C76B23545BB500A58CBF /* ThirdPartyMailer.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
+				4392C76A23545BB500A58CBF /* ThirdPartyMailClient.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
@@ -737,7 +765,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A4B70B7749D2C4F7E71E820D /* Pods-GeoCap.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -754,7 +782,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.angeria.geocap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -762,7 +790,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B77FED62B589C3E94D6FC9FF /* Pods-GeoCap.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "GeoCap/Supporting Files/GeoCap.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -777,7 +805,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.angeria.geocap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
