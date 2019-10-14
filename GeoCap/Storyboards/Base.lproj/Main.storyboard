@@ -210,8 +210,8 @@
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Captured locations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mx-9u-3Gi">
-                                    <rect key="frame" x="247" y="11.5" width="159" height="21"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Captured locations" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mx-9u-3Gi">
+                                    <rect key="frame" x="8" y="11.5" width="386" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -220,8 +220,8 @@
                             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="8Mx-9u-3Gi" firstAttribute="centerY" secondItem="HeK-k0-gTl" secondAttribute="centerY" id="I8k-4e-Ybl"/>
-                                <constraint firstItem="8Mx-9u-3Gi" firstAttribute="leading" relation="lessThanOrEqual" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="247" id="YBr-mS-bwf"/>
-                                <constraint firstAttribute="trailing" secondItem="8Mx-9u-3Gi" secondAttribute="trailing" constant="8" id="kJl-Gp-78P"/>
+                                <constraint firstItem="8Mx-9u-3Gi" firstAttribute="leading" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="8" id="cj7-RU-ed8"/>
+                                <constraint firstAttribute="trailing" secondItem="8Mx-9u-3Gi" secondAttribute="trailing" constant="20" id="kJl-Gp-78P"/>
                             </constraints>
                         </view>
                         <prototypes>
