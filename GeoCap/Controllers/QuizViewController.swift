@@ -187,6 +187,8 @@ class QuizViewController: UIViewController {
         if button.titleLabel?.text == currentQuestion?.answer {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
                 captureLocation()
