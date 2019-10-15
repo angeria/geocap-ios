@@ -11,14 +11,60 @@ import Firebase
 import FirebaseAuth
 import os.log
 
+import AVFoundation
+
 class LeaderboardViewController: UITableViewController {
 
     // MARK: - Life Cycle
     
+    func displaySoundsAlert() {
+        let alert = UIAlertController(title: "Play Sound", message: nil, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "\(1052)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1052))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1053)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1053))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1054)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1054))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1057)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1057))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1103)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1103))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1104)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1104))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1105)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1105))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "\(1306)", style: .default, handler: {_ in
+            AudioServicesPlayAlertSound(UInt32(1306))
+            self.displaySoundsAlert()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+            
         setupLeaderboard()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        displaySoundsAlert()
     }
     
     override func viewDidDisappear(_ animated: Bool) {

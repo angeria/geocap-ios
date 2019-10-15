@@ -293,7 +293,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="343" placeholderIntrinsicHeight="216" text="Which city has the largest population?" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nWZ-6v-edE">
-                                <rect key="frame" x="16" y="0.0" width="382" height="377"/>
+                                <rect key="frame" x="16" y="48.5" width="382" height="336.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -363,19 +363,28 @@
                                 </constraints>
                                 <color key="progressTintColor" red="0.60697394609451294" green="0.87294381856918335" blue="0.6579318642616272" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </progressView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1/3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dd4-dp-ZEj">
+                                <rect key="frame" x="16" y="20" width="382" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" id="2DU-63-3jQ"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="8WB-hr-ywK"/>
+                            <constraint firstItem="dd4-dp-ZEj" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" constant="20" id="9kK-2Q-WFH"/>
+                            <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="dd4-dp-ZEj" secondAttribute="bottom" constant="8" id="DF8-mr-tK9"/>
                             <constraint firstItem="G0l-cd-InB" firstAttribute="centerX" secondItem="Z6d-1K-Ooa" secondAttribute="centerX" id="I7f-tp-tD7"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="nWZ-6v-edE" secondAttribute="trailing" constant="16" id="LL5-7T-dUa"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="67" id="OrT-4t-OFq"/>
-                            <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="16" id="QRS-T8-olZ"/>
+                            <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="8" id="QRS-T8-olZ"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="hEo-hZ-6Dj"/>
+                            <constraint firstItem="dd4-dp-ZEj" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="huh-ZP-uqs"/>
                             <constraint firstItem="G0l-cd-InB" firstAttribute="top" relation="greaterThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="27" id="iAs-c5-Gc5"/>
                             <constraint firstItem="G0l-cd-InB" firstAttribute="width" secondItem="6IC-rL-MU1" secondAttribute="width" id="ibK-vO-iAN"/>
+                            <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="dd4-dp-ZEj" secondAttribute="trailing" constant="16" id="toV-X2-dnM"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" secondItem="G0l-cd-InB" secondAttribute="bottom" constant="27" id="ycf-mT-IXF"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="6IC-rL-MU1" secondAttribute="trailing" constant="16" id="z3E-LJ-JDG"/>
                         </constraints>
@@ -387,6 +396,7 @@
                     <connections>
                         <outlet property="countdownBar" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
                         <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
+                        <outlet property="questionCountLabel" destination="dd4-dp-ZEj" id="i3s-av-wM0"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>
                         <outletCollection property="answerButtons" destination="Glb-p3-C4Y" collectionClass="NSMutableArray" id="lrt-f9-nap"/>
                         <outletCollection property="answerButtons" destination="EbP-Pn-hmq" collectionClass="NSMutableArray" id="7zk-cT-TnP"/>

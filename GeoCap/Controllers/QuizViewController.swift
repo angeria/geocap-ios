@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import os.log
+import AVFoundation
 
 extension QuizViewController {
     enum Constants {
@@ -47,7 +48,7 @@ class QuizViewController: UIViewController {
     // MARK: - Fetching
 
     private var totalDatabaseQuestionCount: Int?
-    
+
     private func fetchTotalDatabaseQuestionCount() {
         let db = Firestore.firestore()
         db.collection("quiz").document("data").getDocument() { [weak self] documentSnapshot, error in
@@ -138,6 +139,14 @@ class QuizViewController: UIViewController {
         }
     }
     
+    private var currentQuestionNumber = 0 {
+        didSet {
+            questionCountLabel.text = "\(currentQuestionNumber)/\(Constants.numberOfQuestions)"
+        }
+    }
+    
+    @IBOutlet weak var questionCountLabel: UILabel!
+    
     @IBOutlet var answerButtons: [UIButton]! {
         didSet {
             answerButtons.forEach() {
@@ -151,6 +160,7 @@ class QuizViewController: UIViewController {
     // PRECONDITION: questions.count > 0
     private func showNextQuestion() {
         currentQuestion = questions.removeFirst()
+        currentQuestionNumber += 1
         
         questionLabel.text = currentQuestion!.question
         let alternatives = ([currentQuestion!.answer] + currentQuestion!.alternatives).shuffled()
@@ -181,13 +191,15 @@ class QuizViewController: UIViewController {
         }
     }
     
+    let feedbackGenerator = UINotificationFeedbackGenerator()
+    
     @IBAction func answerPressed(_ button: UIButton) {
         answerButtons.forEach() { $0.isEnabled = false }
         
         if button.titleLabel?.text == currentQuestion?.answer {
             button.backgroundColor = UIColor.GeoCap.green
             button.scale()
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            feedbackGenerator.notificationOccurred(.success)
             
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
