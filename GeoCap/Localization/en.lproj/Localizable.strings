@@ -69,6 +69,11 @@ AUTH - CHOOSE USERNAME
 OTHER VIEWS
  */
 
+/* Title of quiz timeout alert */
+"quiz-timeout-alert-title" = "Timeout";
+/* Message of quiz timeout alert */
+"quiz-timeout-alert-message" = "You have to wait %d seconds between failed capture attempts";
+
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Locations Services Off";
 /* Alert message when location services is off */
