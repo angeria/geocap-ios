@@ -41,8 +41,9 @@ class QuizViewController: UIViewController {
 
     // Dismiss quiz immediately if view resigns active to prevent cheating
     @objc private func willResignActive() {
+        quizFailed = true
         countdownBarTimer?.invalidate()
-        presentingViewController?.dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
     }
     
     // MARK: - Fetching
@@ -293,7 +294,8 @@ class QuizViewController: UIViewController {
                 self.answerButtons.forEach() { $0.isEnabled = false }
                 self.countdownBarTimer?.invalidate()
                 Timer.scheduledTimer(withTimeInterval: GeoCapConstants.shakeAnimationDuration + 0.1, repeats: false) { _ in
-                    self.presentingViewController?.dismiss(animated: true, completion: nil)
+                    self.quizFailed = true
+                    self.performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
                 }
             case 0.29...0.30:
                 self.countdownBar.progressTintColor = UIColor.GeoCap.red

@@ -22,6 +22,7 @@ extension MapViewController {
         static let calloutFlagWidth = 32
         static let overlayAlpha: CGFloat = 0.45
         static let overlayLineWidth: CGFloat = 1
+        static let quizTimeoutInterval = 10.0
     }
 }
 
@@ -414,11 +415,41 @@ class MapViewController: UIViewController {
     
     // MARK: - Navigation
     
+    private var quizTimeoutIsActive = false {
+        willSet {
+            if newValue == true {
+                startQuizTimeout()
+            }
+        }
+    }
+    
+    private func startQuizTimeout() {
+        Timer.scheduledTimer(withTimeInterval: Constants.quizTimeoutInterval, repeats: false) { [weak self] _ in
+            self?.quizTimeoutIsActive = false
+        }
+    }
+    
+    private func presentQuizTimeoutAlert() {
+        let title = NSLocalizedString("quiz-timeout-alert-title", comment: "Title of quiz timeout alert")
+        let messageFormat = NSLocalizedString("quiz-timeout-alert-message", comment: "Message of quiz timeout alert")
+        let message = String(format: messageFormat, Int(Constants.quizTimeoutInterval))
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
         
         switch identifier {
         case "Show Quiz":
+            if quizTimeoutIsActive{
+                presentQuizTimeoutAlert()
+                return false
+            }
+            
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
                 // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
                 if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
@@ -457,6 +488,7 @@ class MapViewController: UIViewController {
                 // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
                 if let locationTitle = annotationView.annotation?.title {
                     if let locationName = locationTitle, let cityReference = currentCity?.reference {
+                        quizVC.presentationController?.delegate = self
                         quizVC.locationName = locationName
                         quizVC.cityReference = cityReference
                     }
@@ -477,12 +509,7 @@ class MapViewController: UIViewController {
         switch unwindSegue.identifier {
         case "unwindSegueQuizToMap":
             if let quizVC = unwindSegue.source as? QuizViewController {
-                if !quizVC.quizFailed {
-                    // Request notification auth after first capture
-                    if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
-                        presentRequestNotificationAuthAlert()
-                    }
-                }
+                handleQuizDismiss(quizVC: quizVC)
             }
         case "unwindSegueChooseCityPopoverToMap":
             if let popoverVC = unwindSegue.source as? ChooseCityPopoverViewController {
@@ -490,6 +517,25 @@ class MapViewController: UIViewController {
             }
         default:
             fatalError("Unexpected unwind segue identifier")
+        }
+    }
+    
+    private func handleQuizDismiss(quizVC: QuizViewController) {
+        if quizVC.quizFailed {
+            quizTimeoutIsActive = true
+        } else {
+            // Request notification auth after first capture
+            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+                presentRequestNotificationAuthAlert()
+            }
+        }
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        print("here")
+        if let quizVC = presentationController.presentedViewController as? QuizViewController {
+            print("in here 2")
+            handleQuizDismiss(quizVC: quizVC)
         }
     }
     
