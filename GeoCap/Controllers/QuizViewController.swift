@@ -41,7 +41,7 @@ class QuizViewController: UIViewController {
 
     // Dismiss quiz immediately if view resigns active to prevent cheating
     @objc private func willResignActive() {
-        quizFailed = true
+        quizLost = true
         countdownBarTimer?.invalidate()
         performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
     }
@@ -173,8 +173,10 @@ class QuizViewController: UIViewController {
         startTimer()
     }
     
-    // Checked in the map view via the unwind segue
-    var quizFailed = false
+    // Checked in the map vc after the quiz is dismissed
+    var quizWon = false
+    
+    private var quizLost = false
     private var correctAnswers = 0
     
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
@@ -182,7 +184,7 @@ class QuizViewController: UIViewController {
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
         sender.isEnabled = false
         
-        if quizFailed || correctAnswers == Constants.numberOfQuestions {
+        if quizLost || quizWon {
             performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
         } else {
             // Dispatch group prevents trying to show next question before it has loaded
@@ -204,6 +206,7 @@ class QuizViewController: UIViewController {
             
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
+                quizWon = true
                 captureLocation()
             // Prefetch question only if there's more than one left
             } else if correctAnswers < Constants.numberOfQuestions - 1 {
@@ -217,7 +220,7 @@ class QuizViewController: UIViewController {
             let correctAnswerButton = answerButtons.first() { $0.titleLabel?.text == currentQuestion?.answer }
             correctAnswerButton?.backgroundColor = UIColor.GeoCap.green
             
-            quizFailed = true
+            quizLost = true
         }
         
         countdownBarTimer?.invalidate()
@@ -294,7 +297,7 @@ class QuizViewController: UIViewController {
                 self.answerButtons.forEach() { $0.isEnabled = false }
                 self.countdownBarTimer?.invalidate()
                 Timer.scheduledTimer(withTimeInterval: GeoCapConstants.shakeAnimationDuration + 0.1, repeats: false) { _ in
-                    self.quizFailed = true
+                    self.quizLost = true
                     self.performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
                 }
             case 0.29...0.30:
