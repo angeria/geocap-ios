@@ -282,11 +282,15 @@ class MapViewController: UIViewController {
     // MARK: - Quiz
     
     private func handleQuizDismissal(quizVC: QuizViewController) {
-        if !quizVC.quizWon {
-            quizTimeoutIsActive = true
-        } else if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+        if quizVC.quizWon {
+            captureLocation()
+            
             // Request notification auth after first capture
-            presentRequestNotificationAuthAlert()
+            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+                presentRequestNotificationAuthAlert()
+            }
+        } else {
+            quizTimeoutIsActive = true
         }
     }
     
@@ -313,6 +317,39 @@ class MapViewController: UIViewController {
         let okAction = UIAlertAction(title: okActionTitle, style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+    
+    private var attemptedCaptureLocation: String?
+    
+    private func captureLocation() {
+        guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
+        guard let locationName = attemptedCaptureLocation else { return }
+        
+        let db = Firestore.firestore()
+        let batch = db.batch()
+        
+        currentCity?.reference.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { querySnapshot, error in
+            guard let query = querySnapshot else {
+                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
+                Crashlytics.sharedInstance().recordError(error!)
+                return
+            }
+            
+            if let document = query.documents.first {
+                let locationReference = document.reference
+                batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
+                
+                let userReference = db.collection("users").document(user.uid)
+                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                
+                batch.commit() { err in
+                    if let error = error as NSError? {
+                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                        Crashlytics.sharedInstance().recordError(error)
+                    }
+                }
+            }
+        }
     }
     
     // MARK: - Notifications
@@ -500,10 +537,9 @@ class MapViewController: UIViewController {
             if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
                 // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
                 if let locationTitle = annotationView.annotation?.title {
-                    if let locationName = locationTitle, let cityReference = currentCity?.reference {
+                    if let locationName = locationTitle {
                         quizVC.presentationController?.delegate = self
-                        quizVC.locationName = locationName
-                        quizVC.cityReference = cityReference
+                        attemptedCaptureLocation = locationName
                     }
                 }
             }

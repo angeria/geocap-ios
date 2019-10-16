@@ -207,7 +207,6 @@ class QuizViewController: UIViewController {
             correctAnswers += 1
             if correctAnswers == Constants.numberOfQuestions {
                 quizWon = true
-                captureLocation()
             // Prefetch question only if there's more than one left
             } else if correctAnswers < Constants.numberOfQuestions - 1 {
                 dispatchGroup.enter()
@@ -231,43 +230,6 @@ class QuizViewController: UIViewController {
         for button in answerButtons {
             button.isEnabled = true
             button.backgroundColor = UIColor.GeoCap.blue
-        }
-    }
-
-    // MARK: - Capturing
-    
-    // Dependency injection
-    var locationName: String!
-    var cityReference: DocumentReference!
-    
-    private func captureLocation() {
-        guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        
-        let db = Firestore.firestore()
-        let batch = db.batch()
-        
-        cityReference.collection("locations").whereField("name", isEqualTo: locationName!).getDocuments() { [weak self] querySnapshot, error in
-            guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
-                Crashlytics.sharedInstance().recordError(error!)
-                return
-            }
-            guard let self = self else { return }
-            
-            if let document = query.documents.first {
-                let locationReference = document.reference
-                batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
-                
-                let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([self.locationName!]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-                
-                batch.commit() { err in
-                    if let error = error {
-                        os_log("%{public}@", log: OSLog.Quiz, type: .debug, error as NSError)
-                        Crashlytics.sharedInstance().recordError(error)
-                    }
-                }
-            }
         }
     }
     
