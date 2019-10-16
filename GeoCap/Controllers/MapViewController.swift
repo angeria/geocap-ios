@@ -28,6 +28,8 @@ extension MapViewController {
 
 class MapViewController: UIViewController {
     
+    var currentCityIsNotSet = true
+    
     // Keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
     // Set 'mapView.delegate = nil' somewhere to be able to deallocate it
     @IBOutlet weak var mapView: MKMapView! {
@@ -277,6 +279,42 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    // MARK: - Quiz
+    
+    private func handleQuizDismissal(quizVC: QuizViewController) {
+        if !quizVC.quizWon {
+            quizTimeoutIsActive = true
+        } else if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+            // Request notification auth after first capture
+            presentRequestNotificationAuthAlert()
+        }
+    }
+    
+    private var quizTimeoutIsActive = false {
+        willSet {
+            if newValue == true {
+                startQuizTimeout()
+            }
+        }
+    }
+    
+    private func startQuizTimeout() {
+        Timer.scheduledTimer(withTimeInterval: Constants.quizTimeoutInterval, repeats: false) { [weak self] _ in
+            self?.quizTimeoutIsActive = false
+        }
+    }
+    
+    private func presentQuizTimeoutAlert() {
+        let title = NSLocalizedString("quiz-timeout-alert-title", comment: "Title of quiz timeout alert")
+        let messageFormat = NSLocalizedString("quiz-timeout-alert-message", comment: "Message of quiz timeout alert")
+        let message = String(format: messageFormat, Int(Constants.quizTimeoutInterval))
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
+        let okAction = UIAlertAction(title: okActionTitle, style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+    
     // MARK: - Notifications
 
     private func setupNotifications() {
@@ -415,31 +453,6 @@ class MapViewController: UIViewController {
     
     // MARK: - Navigation
     
-    private var quizTimeoutIsActive = false {
-        willSet {
-            if newValue == true {
-                startQuizTimeout()
-            }
-        }
-    }
-    
-    private func startQuizTimeout() {
-        Timer.scheduledTimer(withTimeInterval: Constants.quizTimeoutInterval, repeats: false) { [weak self] _ in
-            self?.quizTimeoutIsActive = false
-        }
-    }
-    
-    private func presentQuizTimeoutAlert() {
-        let title = NSLocalizedString("quiz-timeout-alert-title", comment: "Title of quiz timeout alert")
-        let messageFormat = NSLocalizedString("quiz-timeout-alert-message", comment: "Message of quiz timeout alert")
-        let message = String(format: messageFormat, Int(Constants.quizTimeoutInterval))
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
-        let okAction = UIAlertAction(title: okActionTitle, style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
-    
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
         
@@ -509,7 +522,7 @@ class MapViewController: UIViewController {
         switch unwindSegue.identifier {
         case "unwindSegueQuizToMap":
             if let quizVC = unwindSegue.source as? QuizViewController {
-                handleQuizDismiss(quizVC: quizVC)
+                handleQuizDismissal(quizVC: quizVC)
             }
         case "unwindSegueChooseCityPopoverToMap":
             if let popoverVC = unwindSegue.source as? ChooseCityPopoverViewController {
@@ -520,22 +533,9 @@ class MapViewController: UIViewController {
         }
     }
     
-    private func handleQuizDismiss(quizVC: QuizViewController) {
-        if quizVC.quizFailed {
-            quizTimeoutIsActive = true
-        } else {
-            // Request notification auth after first capture
-            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
-                presentRequestNotificationAuthAlert()
-            }
-        }
-    }
-    
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        print("here")
         if let quizVC = presentationController.presentedViewController as? QuizViewController {
-            print("in here 2")
-            handleQuizDismiss(quizVC: quizVC)
+            handleQuizDismissal(quizVC: quizVC)
         }
     }
     
@@ -552,9 +552,10 @@ extension MapViewController: MKMapViewDelegate {
             }
         }
     }
-    
+
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        if currentCity == nil {
+        if currentCityIsNotSet {
+            currentCityIsNotSet = false
             setNearestCity()
         }
     }
