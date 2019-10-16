@@ -330,7 +330,7 @@ class MapViewController: UIViewController {
         
         currentCity?.reference.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { querySnapshot, error in
             guard let query = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Quiz, type: .debug, error! as NSError)
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
@@ -511,11 +511,7 @@ class MapViewController: UIViewController {
                             // return false
                             return true
                         }
-                    } else {
-                        os_log("Couldn't start quiz: currentCity == nil", log: OSLog.Map, type: .debug)
                     }
-                } else {
-                    os_log("Couldn't start quiz: locationTitle == nil", log: OSLog.Map, type: .debug)
                 }
             }
         case "Show Choose City Popover":

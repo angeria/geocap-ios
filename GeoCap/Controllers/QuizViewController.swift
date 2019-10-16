@@ -48,7 +48,7 @@ class QuizViewController: UIViewController {
     
     // MARK: - Fetching
 
-    private var totalDatabaseQuestionCount: Int?
+    private var totalDatabaseQuestionCount: Int!
 
     private func fetchTotalDatabaseQuestionCount() {
         let db = Firestore.firestore()
@@ -73,8 +73,6 @@ class QuizViewController: UIViewController {
     private var questions = [Question]()
     
     private func fetchQuestions(amount: Int = 2, retryCount: Int = 0) {
-        guard let totalDatabaseQuestionCount = totalDatabaseQuestionCount else { return }
-        
         guard amount > 0 else {
             self.dispatchGroup.leave()
             return
