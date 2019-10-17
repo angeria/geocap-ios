@@ -22,10 +22,16 @@ class LeaderboardViewController: UITableViewController {
             
         setupLeaderboard()
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        feedbackGenerator.prepare()
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+
         userListener?.remove()
     }
     
@@ -112,10 +118,14 @@ class LeaderboardViewController: UITableViewController {
             return cell
         }
     }
+
+    let feedbackGenerator = UISelectionFeedbackGenerator()
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        feedbackGenerator.selectionChanged()
+        
         guard tableViewData[indexPath.section].locationCount > 0 else { return }
-     
+        
         var sectionsToReload = IndexSet()
         if let openSectionIndex = tableViewData.firstIndex(where: { $0.isOpened }), openSectionIndex != indexPath.section {
             tableViewData[openSectionIndex].isOpened = false

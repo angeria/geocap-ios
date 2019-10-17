@@ -195,7 +195,6 @@ class QuizViewController: UIViewController {
     let feedbackGenerator = UINotificationFeedbackGenerator()
     
     @IBAction func answerPressed(_ button: UIButton) {
-        SoundManager.shared.playSound(withName: SoundManager.Sounds.buttonPressed)
         answerButtons.forEach() { $0.isEnabled = false }
         
         if button.titleLabel?.text == currentQuestion?.answer {

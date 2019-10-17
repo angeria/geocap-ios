@@ -69,7 +69,10 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
     
+    let feedbackGenerator = UISelectionFeedbackGenerator()
+    
     @IBAction func locationFilter(_ sender: UISegmentedControl) {
+        feedbackGenerator.selectionChanged()
         clearMap()
         fetchLocations()
     }
