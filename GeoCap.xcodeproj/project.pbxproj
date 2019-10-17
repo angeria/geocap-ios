@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,9 +23,9 @@
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
-		4392C76A23545BB500A58CBF /* ThirdPartyMailClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */; };
-		4392C76B23545BB500A58CBF /* ThirdPartyMailer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
+		43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* ThirdPartyMailer */; };
+		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
@@ -82,10 +82,9 @@
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
-		4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartyMailClient.swift; sourceTree = "<group>"; };
-		4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdPartyMailer.swift; sourceTree = "<group>"; };
 		4397786C235072D30044808F /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		439DC1022351A2060057E6BB /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		43A7502823582CDB00053B62 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -110,6 +109,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */,
+				43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */,
 				870886EF1D0A0A8EEC8A68FA /* Pods_GeoCap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,7 +158,6 @@
 		432DED9922E1F28D00DFA074 /* GeoCap */ = {
 			isa = PBXGroup;
 			children = (
-				4392C76E23545C2000A58CBF /* Libraries */,
 				43BF7BDA231C129E0007666B /* Supporting Files */,
 				43BF7BDB231C12C20007666B /* Localization */,
 				43BF7BD9231C0BAE0007666B /* Controllers */,
@@ -196,23 +195,6 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		4392C76C23545BDF00A58CBF /* ThirdPartyMailer */ = {
-			isa = PBXGroup;
-			children = (
-				4392C76823545BB100A58CBF /* ThirdPartyMailClient.swift */,
-				4392C76923545BB500A58CBF /* ThirdPartyMailer.swift */,
-			);
-			path = ThirdPartyMailer;
-			sourceTree = "<group>";
-		};
-		4392C76E23545C2000A58CBF /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				4392C76C23545BDF00A58CBF /* ThirdPartyMailer */,
-			);
-			path = Libraries;
-			sourceTree = "<group>";
-		};
 		43BF7BD8231C0B660007666B /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +230,7 @@
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				4326A5E723368FC200A3D1A1 /* Logging.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
+				43A7502823582CDB00053B62 /* SoundManager.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -314,6 +297,7 @@
 			);
 			name = GeoCap;
 			packageProductDependencies = (
+				43A7502623581E2E00053B62 /* ThirdPartyMailer */,
 			);
 			productName = GeoCap;
 			productReference = 432DED9722E1F28D00DFA074 /* GeoCap.app */;
@@ -402,6 +386,7 @@
 			);
 			mainGroup = 432DED8E22E1F28D00DFA074;
 			packageReferences = (
+				43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */,
 			);
 			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
 			projectDirPath = "";
@@ -563,14 +548,13 @@
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				4397786D235072D30044808F /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
-				4392C76B23545BB500A58CBF /* ThirdPartyMailer.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
-				4392C76A23545BB500A58CBF /* ThirdPartyMailClient.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
 				43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */,
+				43A7502923582CDB00053B62 /* SoundManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +919,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vtourraine/ThirdPartyMailer.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		43A7502623581E2E00053B62 /* ThirdPartyMailer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */;
+			productName = ThirdPartyMailer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 432DED8F22E1F28D00DFA074 /* Project object */;
 }

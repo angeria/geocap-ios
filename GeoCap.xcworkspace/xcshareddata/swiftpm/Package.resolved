@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ThirdPartyMailer",
+        "repositoryURL": "https://github.com/vtourraine/ThirdPartyMailer.git",
+        "state": {
+          "branch": "master",
+          "revision": "61a2d0da201def05e771694e770741453a84358d",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
