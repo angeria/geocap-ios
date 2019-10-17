@@ -12,6 +12,7 @@ import CoreLocation
 import Firebase
 import FirebaseAuth
 import os.log
+import AVFoundation
 
 extension MapViewController {
     enum Constants {
@@ -283,6 +284,7 @@ class MapViewController: UIViewController {
     
     private func handleQuizDismissal(quizVC: QuizViewController) {
         if quizVC.quizWon {
+            SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
             captureLocation()
             
             // Request notification auth after first capture
@@ -572,6 +574,8 @@ class MapViewController: UIViewController {
     }
     
 }
+
+var audioPlayer: AVAudioPlayer?
 
 // MARK: - MKMapViewDelegate
 
