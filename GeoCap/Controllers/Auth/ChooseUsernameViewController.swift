@@ -12,8 +12,17 @@ import os.log
 
 class ChooseUsernameViewController: UIViewController {
     
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if isUsernameChange {
+            titleLabel.text = "Choose a new name"
+            subtitleLabel.text = "Choose carefully, you won't be able to change it again before seven days"
+            continueButton.setTitle("Confirm", for: .normal)
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChooseUsernameViewController.keyboardDidChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
@@ -48,7 +57,7 @@ class ChooseUsernameViewController: UIViewController {
         let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber
 
         bottomToButtonConstraint.constant = endFrame.height - view.safeAreaInsets.bottom + buttonToUsernameTextFieldConstraint.constant
-
+        
         UIView.setAnimationCurve(UIView.AnimationCurve(rawValue: animationCurve.intValue)!)
         UIView.animate(withDuration: animationDuration.doubleValue) {
             self.view.layoutIfNeeded()
@@ -65,20 +74,24 @@ class ChooseUsernameViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var letsGoButton: UIButton! {
+    @IBOutlet weak var continueButton: UIButton! {
         didSet {
-            letsGoButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
+            continueButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
     
-    @IBAction func letsGoButtonPressed(_ sender: Any) {
+    @IBAction func continueButtonPressed(_ sender: Any) {
+        if usernameWasChanged {
+            navigationController?.popViewController(animated: true)
+        }
+        
         usernameTextFieldDidEndEditing()
     }
     
     @IBOutlet weak var infoLabel: UILabel!
     
     private func usernameTextFieldDidEndEditing() {
-        letsGoButton.isEnabled = false
+        continueButton.isEnabled = false
         
         usernameTextField.text = usernameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         guard
@@ -91,13 +104,17 @@ class ChooseUsernameViewController: UIViewController {
             let format = NSLocalizedString("auth-choose-username-invalid-length", comment: "Error message for choose username text field when inputed username is invalid length")
             infoLabel.text = String(format: format, GeoCapConstants.minimumUsernameLength, GeoCapConstants.maximumUsernameLength)
             usernameTextField.shake()
-            letsGoButton.isEnabled = true
+            continueButton.isEnabled = true
             return
         }
         
         spinner.isHidden = false
         spinner.startAnimating()
-        
+
+        chooseUsername(username)
+    }
+    
+    private func chooseUsername(_ username: String) {
         let db = Firestore.firestore()
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] querySnapshot, error in
             if let error = error as NSError? {
@@ -105,7 +122,7 @@ class ChooseUsernameViewController: UIViewController {
                 self?.infoLabel.text = NSLocalizedString("auth-choose-username-error", comment: "Error message for choose username text field")
                 os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
                 Crashlytics.sharedInstance().recordError(error)
-                self?.letsGoButton.isEnabled = true
+                self?.continueButton.isEnabled = true
                 self?.spinner.stopAnimating()
                 return
             }
@@ -114,7 +131,7 @@ class ChooseUsernameViewController: UIViewController {
                 self?.infoLabel.isHidden = false
                 self?.infoLabel.text = NSLocalizedString("auth-choose-username-already-taken", comment: "Error message when username is already taken")
                 self?.usernameTextField.shake()
-                self?.letsGoButton.isEnabled = true
+                self?.continueButton.isEnabled = true
                 self?.spinner.stopAnimating()
                 return
             }
@@ -123,10 +140,15 @@ class ChooseUsernameViewController: UIViewController {
             self?.usernameTextField.resignFirstResponder()
             UserDefaults.standard.set(username, forKey: "Username")
             
+            if self?.isUsernameChange == true {
+                self?.changeUsername(to: username)
+                return
+            }
+            
             let authVC = self?.presentingViewController as! AuthViewController
             authVC.sendSignInLink() { [weak self] errorMessage in
                 self?.spinner.stopAnimating()
-                self?.letsGoButton.isEnabled = true
+                self?.continueButton.isEnabled = true
                 if let errorMessage = errorMessage {
                     self?.infoLabel.text = errorMessage
                     self?.infoLabel.isHidden = false
@@ -134,6 +156,44 @@ class ChooseUsernameViewController: UIViewController {
                 }
                 self?.performSegue(withIdentifier: "Show Pending Sign In", sender: nil)
             }
+        }
+    }
+    
+    var isUsernameChange = false
+    private var usernameWasChanged = false
+    lazy private var functions = Functions.functions(region:"europe-west1")
+    @IBOutlet weak var subtitleToTitleTopConstraint: NSLayoutConstraint!
+    
+    private func changeUsername(to newUsername: String) {
+        functions.httpsCallable("modifyUsername").call(["newName": newUsername]) { [weak self] (result, error) in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                Crashlytics.sharedInstance().recordError(error)
+                return
+            }
+            
+            if let usernameWasChanged = (result?.data as? [String: Any])?["result"] as? Bool {
+                if usernameWasChanged {
+                    if let newConstraint = self?.titleLabel.bottomAnchor.constraint(equalTo: self!.usernameTextField.topAnchor, constant: -20.0) {
+                        UIView.animate(withDuration: 0.4, animations: {
+                            self!.subtitleToTitleTopConstraint.isActive = false
+                            newConstraint.isActive = true
+                            self?.usernameWasChanged = true
+                            self?.usernameTextField.isEnabled = false
+                            self?.continueButton.setTitle("Done", for: .normal)
+                            self?.titleLabel.text = "Successfully changed name 😎"
+                            self?.subtitleLabel.isHidden = true
+                            self?.view.layoutIfNeeded()
+                        })
+                    }
+                } else {
+                    self?.infoLabel.text = "Not enough time since last change"
+                    self?.infoLabel.isHidden = false
+                }
+            }
+            
+            self?.spinner.stopAnimating()
+            self?.continueButton.isEnabled = true
         }
     }
     

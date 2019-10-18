@@ -10,6 +10,7 @@ target 'GeoCap' do
   pod 'Firebase/Messaging'
   pod 'Firebase/Auth'
   pod 'Firebase/Analytics'
+  pod 'Firebase/Functions'
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
 
