@@ -205,7 +205,7 @@ class AuthViewController: UIViewController {
             
             self.spinner.stopAnimating()
             self.statusLabel.isHidden = true
-            self.performSegue(withIdentifier: "Show Choose Username", sender: nil)
+            self.performSegue(withIdentifier: "Choose Username", sender: nil)
         }
     }
     

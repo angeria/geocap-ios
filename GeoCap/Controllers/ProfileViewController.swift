@@ -178,4 +178,12 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let usernameVC = segue.destination as? ChooseUsernameViewController {
+            usernameVC.isUsernameChange = true
+        }
+    }
+    
 }
