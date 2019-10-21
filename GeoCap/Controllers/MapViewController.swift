@@ -158,7 +158,7 @@ class MapViewController: UIViewController {
     // Makes it possible to keep the map updated in the background while other views are visible
     private var locationListener: ListenerRegistration?
     
-    private func fetchLocations() {
+    func fetchLocations() {
         guard let username = Auth.auth().currentUser?.displayName else { return }
         
         loadingLocationsView.isHidden = false
@@ -215,7 +215,7 @@ class MapViewController: UIViewController {
         }
     }
     
-    private func clearMap() {
+    func clearMap() {
         let annotations = mapView.annotations
         let overlays = mapView.overlays
         mapView.removeAnnotations(annotations)

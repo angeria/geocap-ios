@@ -30,14 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func handleEmailLinkSignIn(withLink link: String) -> Bool {
         if Auth.auth().isSignIn(withEmailLink: link) {
-            if let authVC = window?.rootViewController as? AuthViewController {
+            if let navVC = window?.rootViewController as? UINavigationController, let authVC = navVC.viewControllers[0] as? AuthViewController {
                 authVC.prepareViewForSignIn()
-                if authVC.presentedViewController == nil {
+                if navVC.visibleViewController is AuthViewController {
                     authVC.signInWithLink(link)
                 } else {
-                    authVC.dismiss(animated: true) {
-                        authVC.signInWithLink(link)
-                    }
+                    navVC.popToRootViewController(animated: true)
+                    authVC.signInWithLink(link)
                 }
                 return true
             }

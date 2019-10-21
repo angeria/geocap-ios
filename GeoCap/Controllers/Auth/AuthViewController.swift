@@ -107,7 +107,7 @@ class AuthViewController: UIViewController {
             buttonTitle = NSLocalizedString("auth-email-button-continue", comment: "Text on button below email text field to confirm input")
             bottomConstraint.constant = view.frame.height - endFrame.origin.y - view.safeAreaInsets.bottom + buttonToTextFieldConstraint.constant
             let topToEmailTextField = endFrame.origin.y - view.safeAreaInsets.bottom - buttonToTextFieldConstraint.constant - continueButtonHeightConstraint.constant - buttonToTextFieldConstraint.constant - emailTextField.frame.height
-            iconToTopConstraint.constant = (topToEmailTextField - iconHeightConstraint.constant) / 2
+            iconToTopConstraint.constant = (topToEmailTextField - view.safeAreaInsets.top - iconHeightConstraint.constant) / 2
         } else {
             infoLabel.isHidden = true
             hideEmailTextField = true
