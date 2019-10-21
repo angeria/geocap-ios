@@ -51,7 +51,9 @@ class MapViewController: UIViewController {
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(MKUserLocation.self))
         
-        fetchLocations()
+        if let lastCity = UserDefaults.standard.data(forKey: "lastCity"), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
+            currentCity = lastCityDecoded
+        }
 
         requestUserLocationAuth()
         
@@ -69,7 +71,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
     
-    let feedbackGenerator = UISelectionFeedbackGenerator()
+    private let feedbackGenerator = UISelectionFeedbackGenerator()
     
     @IBAction func locationFilter(_ sender: UISegmentedControl) {
         feedbackGenerator.selectionChanged()
@@ -89,17 +91,14 @@ class MapViewController: UIViewController {
     
     private var currentCity: City? {
         didSet {
-            guard let currentCity = currentCity else { return }
-            
             clearMap()
-            
             fetchLocations()
             
-            let region = MKCoordinateRegion(center: currentCity.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
+            let region = MKCoordinateRegion(center: currentCity!.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
             
-            currentCityBarButton.title = currentCity.name
-            allCities.sort { city, _ in city.name == currentCity.name } // Put the current city first
+            currentCityBarButton.title = currentCity!.name
+            allCities.sort { city, _ in city.name == currentCity!.name } // Put the current city first
         }
     }
     
@@ -110,7 +109,9 @@ class MapViewController: UIViewController {
     }
     
     private func setNearestCity() {
-        loadingLocationsView.isHidden = false
+        if UserDefaults.standard.object(forKey: "lastCity") == nil {
+            loadingLocationsView.isHidden = false
+        }
         
         let db = Firestore.firestore()
         db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
@@ -145,7 +146,15 @@ class MapViewController: UIViewController {
                 }
             }
             
-            self.currentCity = nearestCitySoFar
+            // Update only if the nearest city is not the same as the last cached city
+            if let lastCity = UserDefaults.standard.data(forKey: "lastCity"), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
+                if nearestCitySoFar != lastCityDecoded {
+                    self.currentCity = nearestCitySoFar
+                    if let encoded = try? JSONEncoder().encode(nearestCitySoFar) {
+                        UserDefaults.standard.set(encoded, forKey: "lastCity")
+                    }
+                }
+            }
         }
     }
     
