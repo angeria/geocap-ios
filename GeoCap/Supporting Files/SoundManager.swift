@@ -16,7 +16,6 @@ class SoundManager {
     
     enum Sounds {
         static let quizWon = "quiz-won"
-        static let buttonPressed = "button-pressed"
         static let quizTimerAlert = "quiz-timer-alert"
     }
     
