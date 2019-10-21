@@ -44,8 +44,11 @@
 /* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
 "acW-dT-cKf.title" = "Karta";
 
-/* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "gEq-cg-01V"; */
-"gEq-cg-01V.normalTitle" = "Logga ut";
+/* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "iNu-9N-5VV"; */
+"iNu-9N-5VV.normalTitle" = "Logga ut";
+
+/* Class = "UIButton"; normalTitle = "Change Name"; ObjectID = "nzg-G2-pGe"; */
+"nzg-G2-pGe.normalTitle" = "Byt namn";
 
 /* Class = "UILabel"; text = "It will be shown to other players and can be your own name or something funky 😸"; ObjectID = "jLz-YK-k1P"; */
 "jLz-YK-k1P.text" = "Det kommer visas till andra spelare och kan vara ditt vanliga namn eller nått kul 😸";

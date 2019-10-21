@@ -19,9 +19,10 @@ class ChooseUsernameViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if isUsernameChange {
-            titleLabel.text = "Choose a new name"
-            subtitleLabel.text = "Choose carefully, you won't be able to change it again before seven days"
-            continueButton.setTitle("Confirm", for: .normal)
+            titleLabel.text = NSLocalizedString("auth-choose-new-username-title", comment: "Title for choose new username view")
+            subtitleLabel.text = NSLocalizedString("auth-choose-new-username-subtitle", comment: "Subtitle for choose new username view")
+            let confirmTitle = NSLocalizedString("button-title-confirm", comment: "Title on confirm button")
+            continueButton.setTitle(confirmTitle, for: .normal)
             usernameTextField.returnKeyType = .done
         }
         
@@ -194,8 +195,9 @@ class ChooseUsernameViewController: UIViewController {
                         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                             self?.usernameWasChanged = true
                             self?.usernameTextField.isEnabled = false
-                            self?.continueButton.setTitle("Done", for: .normal)
-                            self?.titleLabel.text = "Successfully changed name 😎"
+                            let titleDone = NSLocalizedString("button-title-done", comment: "Title on 'Done' button")
+                            self?.continueButton.setTitle(titleDone, for: .normal)
+                            self?.titleLabel.text = NSLocalizedString("auth-choose-new-username-success-title", comment: "Title in choose new username view when change is successful")
                             self?.subtitleLabel.alpha = 0
                             
                             self?.subtitleToTitleTopConstraint.isActive = false
@@ -207,7 +209,9 @@ class ChooseUsernameViewController: UIViewController {
                         self?.continueButton.isEnabled = true
                     })
                 } else {
-                    self?.infoLabel.text = "Not enough time since last change"
+                    self?.spinner.stopAnimating()
+                    self?.continueButton.isEnabled = true
+                    self?.infoLabel.text = NSLocalizedString("auth-choose-new-username-not-enough-time", comment: "Info label when not enough has passed since last name change")
                     self?.infoLabel.isHidden = false
                 }
             }

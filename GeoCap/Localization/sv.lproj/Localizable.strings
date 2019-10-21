@@ -16,6 +16,12 @@ GENERAL
 /* Title of alert action 'Don't Allow' */
 "alert-action-title-dont-allow" = "Tillåt inte";
 
+/* Title on confirm button */
+"button-title-confirm" = "Bekräfta";
+
+/* Title on 'Done' button */
+"button-title-done" = "Klar";
+
 /*
 AUTH - SIGN IN VIEW
  */
@@ -53,6 +59,15 @@ AUTH - CHOOSE USERNAME
 
 /* Error message when username is already taken */
 "auth-choose-username-already-taken" = "Namnet är redan taget";
+
+/* Title for choose new username view */
+"auth-choose-new-username-title" = "Välj ett nytt namn";
+/* Subtitle for choose new username view */
+"auth-choose-new-username-subtitle" = "Välj noga, du kommer inte kunna ändra det igen förrän efter sju dagar";
+/* Title in choose new username view when change is successful */
+"auth-choose-new-username-success-title" = "Namnbytet lyckades 😎";
+/* Info label when not enough has passed since last name change */
+"auth-choose-new-username-not-enough-time" = "Ej nog med tid sedan senaste bytet";
 
 /*
  AUTH - PENDING SIGN IN
