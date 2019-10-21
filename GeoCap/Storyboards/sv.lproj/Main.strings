@@ -1,6 +1,12 @@
 
+/* Class = "UINavigationItem"; text = "Profile"; ObjectID = "wdK-01-Jwl"; */
+"wdK-01-Jwl.title" = "Profil";
+
 /* Class = "UILabel"; text = "When someone captures one of your locations"; ObjectID = "0DT-gx-aIN"; */
 "0DT-gx-aIN.text" = "När någon tar över en av dina platser";
+
+/* Class = "UILabel"; text = "Sound effects"; ObjectID = "ygB-Wv-MSx"; */
+"ygB-Wv-MSx.text" = "Ljudeffekter";
 
 /* Class = "UIButton"; normalTitle = "Let's Go"; ObjectID = "0mc-FV-NT0"; */
 "0mc-FV-NT0.normalTitle" = "Fortsätt";
