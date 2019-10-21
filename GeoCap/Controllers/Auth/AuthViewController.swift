@@ -23,6 +23,10 @@ class AuthViewController: UIViewController {
         
         // Close keyboard when tapping outside of it
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
+        
+        if UserDefaults.standard.object(forKey: "soundsAreEnabled") == nil {
+           UserDefaults.standard.set(true, forKey: "soundsAreEnabled")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
