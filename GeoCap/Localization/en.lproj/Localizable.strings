@@ -16,6 +16,12 @@ GENERAL
 /* Title of alert action 'Don't Allow' */
 "alert-action-title-dont-allow" = "Don't Allow";
 
+/* Title on confirm button */
+"button-title-confirm" = "Confirm";
+
+/* Title on 'Done' button */
+"button-title-done" = "Done";
+
 /*
 AUTH - SIGN IN VIEW
  */
@@ -54,6 +60,15 @@ AUTH - CHOOSE USERNAME
 
 /* Error message when username is already taken */
 "auth-choose-username-already-taken" = "Name is already taken";
+
+/* Title for choose new username view */
+"auth-choose-new-username-title" = "Choose a new name";
+/* Subtitle for choose new username view */
+"auth-choose-new-username-subtitle" = "Choose carefully, you won't be able to change it again before seven days";
+/* Title in choose new username view when change is successful */
+"auth-choose-new-username-success-title" = "Name changed successfully 😎";
+/* Info label when not enough has passed since last name change */
+"auth-choose-new-username-not-enough-time" = "Not enough time since last change";
 
 /*
  AUTH - PENDING SIGN IN
