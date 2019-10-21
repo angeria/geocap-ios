@@ -22,6 +22,7 @@ class ChooseUsernameViewController: UIViewController {
             titleLabel.text = "Choose a new name"
             subtitleLabel.text = "Choose carefully, you won't be able to change it again before seven days"
             continueButton.setTitle("Confirm", for: .normal)
+            usernameTextField.returnKeyType = .done
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(ChooseUsernameViewController.keyboardDidChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
@@ -145,7 +146,7 @@ class ChooseUsernameViewController: UIViewController {
                 return
             }
             
-            let authVC = self?.presentingViewController as! AuthViewController
+            let authVC = self?.navigationController?.viewControllers[0] as! AuthViewController
             authVC.sendSignInLink() { [weak self] errorMessage in
                 self?.spinner.stopAnimating()
                 self?.continueButton.isEnabled = true
@@ -167,33 +168,49 @@ class ChooseUsernameViewController: UIViewController {
     private func changeUsername(to newUsername: String) {
         functions.httpsCallable("modifyUsername").call(["newName": newUsername]) { [weak self] (result, error) in
             if let error = error as NSError? {
-                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
                 Crashlytics.sharedInstance().recordError(error)
                 return
             }
             
-            if let usernameWasChanged = (result?.data as? [String: Any])?["result"] as? Bool {
-                if usernameWasChanged {
-                    if let newConstraint = self?.titleLabel.bottomAnchor.constraint(equalTo: self!.usernameTextField.topAnchor, constant: -20.0) {
-                        UIView.animate(withDuration: 0.4, animations: {
-                            self!.subtitleToTitleTopConstraint.isActive = false
-                            newConstraint.isActive = true
+            if let usernameChangedSuccessfully = (result?.data as? [String: Any])?["result"] as? Bool {
+                if usernameChangedSuccessfully {
+                    Auth.auth().currentUser?.reload(completion: { [weak self] (error) in
+                        if let error = error as NSError? {
+                            os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
+                            Crashlytics.sharedInstance().recordError(error)
+                            return
+                        }
+
+                        // Refresh all locations to update pins to new username
+                        if let navVC = self?.navigationController?.tabBarController?.viewControllers?[1] as? UINavigationController {
+                            if let mapVC = navVC.viewControllers[0] as? MapViewController {
+                                mapVC.clearMap()
+                                mapVC.fetchLocations()
+                            }
+                        }
+                        
+                        let newConstraint = self?.titleLabel.bottomAnchor.constraint(equalTo: self!.usernameTextField!.topAnchor, constant: -20.0)
+                        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
                             self?.usernameWasChanged = true
                             self?.usernameTextField.isEnabled = false
                             self?.continueButton.setTitle("Done", for: .normal)
                             self?.titleLabel.text = "Successfully changed name 😎"
-                            self?.subtitleLabel.isHidden = true
+                            self?.subtitleLabel.alpha = 0
+                            
+                            self?.subtitleToTitleTopConstraint.isActive = false
+                            newConstraint?.isActive = true
                             self?.view.layoutIfNeeded()
                         })
-                    }
+                        
+                        self?.spinner.stopAnimating()
+                        self?.continueButton.isEnabled = true
+                    })
                 } else {
                     self?.infoLabel.text = "Not enough time since last change"
                     self?.infoLabel.isHidden = false
                 }
             }
-            
-            self?.spinner.stopAnimating()
-            self?.continueButton.isEnabled = true
         }
     }
     
