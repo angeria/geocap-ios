@@ -48,6 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Show notification banners when app is in foreground
         completionHandler([.alert])
     }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+    }
 
 }
 

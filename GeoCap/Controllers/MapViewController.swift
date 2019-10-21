@@ -342,7 +342,11 @@ class MapViewController: UIViewController {
             
             if let document = query.documents.first {
                 let locationReference = document.reference
-                batch.updateData(["owner": username, "ownerId": user.uid], forDocument: locationReference)
+                batch.updateData([
+                    "owner": username,
+                    "ownerId": user.uid,
+                    "captureTimestamp": FieldValue.serverTimestamp()
+                ], forDocument: locationReference)
                 
                 let userReference = db.collection("users").document(user.uid)
                 batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
