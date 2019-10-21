@@ -578,8 +578,6 @@ class MapViewController: UIViewController {
     
 }
 
-var audioPlayer: AVAudioPlayer?
-
 // MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
