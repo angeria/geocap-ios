@@ -38,7 +38,7 @@ class QuizViewController: UIViewController {
             self?.fetchQuestions()
         }
     }
-
+    
     // Dismiss quiz immediately if view resigns active to prevent cheating
     @objc private func willResignActive() {
         quizLost = true
