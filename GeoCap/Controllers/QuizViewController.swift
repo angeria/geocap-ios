@@ -243,6 +243,7 @@ class QuizViewController: UIViewController {
         }
     }
 
+    private var shortnessOfTimeModeNotActivated = true
     private var countdownBarTimer: Timer?
     private func startTimer() {
         countdownBar.progress = 1
@@ -261,7 +262,11 @@ class QuizViewController: UIViewController {
                     self.performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
                 }
             case 0.29...0.30:
-                self.countdownBar.progressTintColor = UIColor.GeoCap.red
+                if self.shortnessOfTimeModeNotActivated {
+                    self.shortnessOfTimeModeNotActivated = false
+                    SoundManager.shared.playSound(withName: SoundManager.Sounds.quizTimerAlert)
+                    self.countdownBar.progressTintColor = UIColor.GeoCap.red
+                }
                 fallthrough
             default:
                 self.countdownBar.setProgress(self.countdownBar.progress - 0.001, animated: false)

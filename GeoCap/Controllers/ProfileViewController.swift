@@ -178,6 +178,24 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    // MARK: - Sound setting
+    
+    @IBOutlet weak var soundSettingSwitch: UISwitch! {
+        didSet {
+            soundSettingSwitch.isOn = UserDefaults.standard.bool(forKey: "soundsAreEnabled")
+        }
+    }
+    
+    
+    @IBAction func soundSettingSwitch(_ sender: UISwitch) {
+        switch sender.isOn {
+        case true:
+            UserDefaults.standard.set(true, forKey: "soundsAreEnabled")
+        case false:
+            UserDefaults.standard.set(false, forKey: "soundsAreEnabled")
+        }
+    }
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

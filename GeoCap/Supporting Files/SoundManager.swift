@@ -17,6 +17,7 @@ class SoundManager {
     enum Sounds {
         static let quizWon = "quiz-won"
         static let buttonPressed = "button-pressed"
+        static let quizTimerAlert = "quiz-timer-alert"
     }
     
     private init() {
@@ -27,7 +28,8 @@ class SoundManager {
     
     func playSound(withName soundName: String) {
         guard !AVAudioSession.sharedInstance().isOtherAudioPlaying else { return }
-
+        guard UserDefaults.standard.bool(forKey: "soundsAreEnabled") else { return }
+        
         let sound = NSDataAsset(name: soundName)!
         audioPlayer = try! AVAudioPlayer(data: sound.data)
         audioPlayer!.play()
