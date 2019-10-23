@@ -98,7 +98,6 @@ class MapViewController: UIViewController {
             mapView.setRegion(region, animated: true)
             
             currentCityBarButton.title = currentCity!.name
-            allCities.sort { city, _ in city.name == currentCity!.name } // Put the current city first
         }
     }
     
@@ -145,6 +144,7 @@ class MapViewController: UIViewController {
                     nearestCitySoFar = city
                 }
             }
+            self.allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
             
             // Update only if the nearest city is not the same as the last cached city
             if let lastCity = UserDefaults.standard.data(forKey: "lastCity") {
@@ -535,9 +535,9 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-                            // presentNotInsideAreaAlert()
-                            // return false
-                            return true
+                            presentNotInsideAreaAlert()
+                            return false
+//                            return true
                         }
                     }
                 }
