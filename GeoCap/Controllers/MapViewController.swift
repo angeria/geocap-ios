@@ -147,13 +147,23 @@ class MapViewController: UIViewController {
             }
             
             // Update only if the nearest city is not the same as the last cached city
-            if let lastCity = UserDefaults.standard.data(forKey: "lastCity"), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
-                if nearestCitySoFar != lastCityDecoded {
-                    self.currentCity = nearestCitySoFar
-                    if let encoded = try? JSONEncoder().encode(nearestCitySoFar) {
-                        UserDefaults.standard.set(encoded, forKey: "lastCity")
+            if let lastCity = UserDefaults.standard.data(forKey: "lastCity") {
+                do {
+                    let lastCityDecoded = try JSONDecoder().decode(City.self, from: lastCity)
+                    if nearestCitySoFar != lastCityDecoded {
+                        self.currentCity = nearestCitySoFar
+                        do {
+                            let nearestCityEncoded = try JSONEncoder().encode(nearestCitySoFar)
+                            UserDefaults.standard.set(nearestCityEncoded, forKey: "lastCity")
+                        } catch  {
+                            os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
+                        }
                     }
+                } catch {
+                    os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                 }
+            } else {
+                self.currentCity = nearestCitySoFar
             }
         }
     }
