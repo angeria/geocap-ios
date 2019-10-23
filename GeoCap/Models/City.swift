@@ -22,12 +22,6 @@ struct City: Equatable, Codable {
       self.reference = reference
     }
     
-    init(name: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, referencePath: String) { // default struct initializer
-       self.name = name
-       self.coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-       self.reference = Firestore.firestore().document(referencePath)
-     }
-    
     static func == (lhs: City, rhs: City) -> Bool {
         return lhs.coordinates.latitude == rhs.coordinates.latitude
             && lhs.coordinates.longitude == rhs.coordinates.longitude
@@ -51,12 +45,16 @@ struct City: Equatable, Codable {
     }
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self) // defining our (keyed) container
-        let name: String = try container.decode(String.self, forKey: .name) // extracting the data
-        let latitude: CLLocationDegrees = try container.decode(CLLocationDegrees.self, forKey: .latitude) // extracting the data
-        let longitude: CLLocationDegrees = try container.decode(CLLocationDegrees.self, forKey: .longitude) // extracting the data
-        let referencePath: String = try container.decode(String.self, forKey: .referencePath) // extracting the data
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self.init(name: name, latitude: latitude, longitude: longitude, referencePath: referencePath)
+        let name = try container.decode(String.self, forKey: .name)
+        let latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
+        let longitude = try container.decode(CLLocationDegrees.self, forKey: .longitude)
+        let referencePath = try container.decode(String.self, forKey: .referencePath)
+        
+        let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let reference = Firestore.firestore().document(referencePath)
+        
+        self.init(name: name, coordinates: coordinates, reference: reference)
     }
 }
