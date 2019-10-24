@@ -13,7 +13,7 @@ class PendingSignInViewController: UIViewController {
 
     @IBOutlet weak var textLabel: UILabel! {
         didSet {
-            guard let email = UserDefaults.standard.string(forKey: "Email") else { return }
+            guard let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email) else { return }
             let format = NSLocalizedString("auth-pending-sign-in-message", comment: "Message telling user to check email")
             textLabel.text = String(format: format, email)
         }

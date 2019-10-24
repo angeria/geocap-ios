@@ -27,7 +27,7 @@ class SoundManager {
     
     func playSound(withName soundName: String) {
         guard !AVAudioSession.sharedInstance().isOtherAudioPlaying else { return }
-        guard UserDefaults.standard.bool(forKey: "soundsAreEnabled") else { return }
+        guard UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled) else { return }
         
         let sound = NSDataAsset(name: soundName)!
         audioPlayer = try! AVAudioPlayer(data: sound.data)

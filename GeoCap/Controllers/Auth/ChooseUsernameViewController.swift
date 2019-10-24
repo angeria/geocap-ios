@@ -140,7 +140,7 @@ class ChooseUsernameViewController: UIViewController {
             
             self?.infoLabel.isHidden = true
             self?.usernameTextField.resignFirstResponder()
-            UserDefaults.standard.set(username, forKey: "Username")
+            UserDefaults.standard.set(username, forKey: GeoCapConstants.UserDefaultsKeys.username)
             
             if self?.isUsernameChange == true {
                 self?.changeUsername(to: username)
