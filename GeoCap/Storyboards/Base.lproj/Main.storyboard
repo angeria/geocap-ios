@@ -38,7 +38,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLC-2l-wTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="IXJ-SQ-dKH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3150.7246376811595" y="-781.47321428571422"/>
+            <point key="canvasLocation" x="3150.0000000000005" y="-781.47321428571422"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="hNz-n2-bh7">
@@ -297,11 +297,11 @@
                             <outlet property="delegate" destination="e3c-V5-gWS" id="o9c-no-6Gy"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Leaderboard" image="star.fill" selectedImage="star.fill" id="9zQ-09-F47"/>
+                    <tabBarItem key="tabBarItem" title="Leaderboard" image="star.fill" catalog="system" selectedImage="star.fill" id="9zQ-09-F47"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1V-bT-rg7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3600.0000000000005" y="368.97321428571428"/>
+            <point key="canvasLocation" x="3613" y="360"/>
         </scene>
         <!--Quiz View Controller-->
         <scene sceneID="JwK-ng-cbg">
@@ -721,7 +721,7 @@
         <scene sceneID="9va-T4-Eji">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tfY-gB-Qr2" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" image="map.fill" selectedImage="map.fill" catalog="system" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map.fill" catalog="system" selectedImage="map.fill" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8o9-am-ZGJ">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -740,7 +740,7 @@
         <scene sceneID="aAe-oi-Obf">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Svs-4s-6vG" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="person.fill" selectedImage="person.fill" catalog="system" id="Ehp-tO-H9e"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="person.fill" catalog="system" selectedImage="person.fill" id="Ehp-tO-H9e"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zcI-6s-cId">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -777,11 +777,9 @@
     <resources>
         <image name="email-sent-astronaut" width="1100" height="912"/>
         <image name="launch-screen-app-icon" width="512" height="512"/>
-        <image name="map.fill" width="64" height="56"/>
         <image name="map.fill" catalog="system" width="64" height="56"/>
-        <image name="person.fill" width="64" height="60"/>
         <image name="person.fill" catalog="system" width="64" height="60"/>
-        <image name="star.fill" width="64" height="58"/>
+        <image name="star.fill" catalog="system" width="64" height="58"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="CNR-td-l7V"/>
