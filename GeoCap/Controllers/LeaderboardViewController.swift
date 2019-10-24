@@ -106,9 +106,10 @@ class LeaderboardViewController: UITableViewController {
             cell.textLabel?.text = "\(indexPath.section + 1). \(username)"
             cell.detailTextLabel?.text = String(locationCount)
             if username == Auth.auth().currentUser?.displayName {
-                cell.backgroundColor = UIColor.GeoCap.blue.withAlphaComponent(0.15)
+                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
             } else {
-                cell.backgroundColor = UIColor.groupTableViewBackground
+                // TODO: Change to system color
+                cell.backgroundColor = .groupTableViewBackground
             }
             return cell
         } else {
