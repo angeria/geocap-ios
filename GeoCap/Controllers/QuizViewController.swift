@@ -198,7 +198,7 @@ class QuizViewController: UIViewController {
         answerButtons.forEach() { $0.isEnabled = false }
         
         if button.titleLabel?.text == currentQuestion?.answer {
-            button.backgroundColor = UIColor.GeoCap.green
+            button.backgroundColor = .systemGreen
             button.scale()
             feedbackGenerator.notificationOccurred(.success)
             
@@ -211,11 +211,11 @@ class QuizViewController: UIViewController {
                 fetchQuestions(amount: 1)
             }
         } else {
-            button.backgroundColor = UIColor.GeoCap.red
+            button.backgroundColor = .systemRed
             button.shake()
             
             let correctAnswerButton = answerButtons.first() { $0.titleLabel?.text == currentQuestion?.answer }
-            correctAnswerButton?.backgroundColor = UIColor.GeoCap.green
+            correctAnswerButton?.backgroundColor = .systemGreen
             
             quizLost = true
         }
@@ -227,7 +227,7 @@ class QuizViewController: UIViewController {
     private func resetButtons() {
         for button in answerButtons {
             button.isEnabled = true
-            button.backgroundColor = UIColor.GeoCap.blue
+            button.backgroundColor = .systemBlue
         }
     }
     
@@ -247,7 +247,7 @@ class QuizViewController: UIViewController {
     private var countdownBarTimer: Timer?
     private func startTimer() {
         countdownBar.progress = 1
-        countdownBar.progressTintColor = UIColor.GeoCap.green
+        countdownBar.progressTintColor = .systemGreen
         
         countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] timer in
             guard let self = self else { return }
@@ -265,7 +265,7 @@ class QuizViewController: UIViewController {
                 if self.shortnessOfTimeModeNotActivated {
                     self.shortnessOfTimeModeNotActivated = false
                     SoundManager.shared.playSound(withName: SoundManager.Sounds.quizTimerAlert)
-                    self.countdownBar.progressTintColor = UIColor.GeoCap.red
+                    self.countdownBar.progressTintColor = .systemRed
                 }
                 fallthrough
             default:
