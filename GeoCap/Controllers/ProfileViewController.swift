@@ -159,7 +159,7 @@ class ProfileViewController: UIViewController {
                     self?.locationLostNotificationsSwitch.isOn = false
                 }
             }
-            UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
+            UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)
         }
     }
     
@@ -182,7 +182,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var soundSettingSwitch: UISwitch! {
         didSet {
-            soundSettingSwitch.isOn = UserDefaults.standard.bool(forKey: "soundsAreEnabled")
+            soundSettingSwitch.isOn = UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled)
         }
     }
     
@@ -190,9 +190,9 @@ class ProfileViewController: UIViewController {
     @IBAction func soundSettingSwitch(_ sender: UISwitch) {
         switch sender.isOn {
         case true:
-            UserDefaults.standard.set(true, forKey: "soundsAreEnabled")
+            UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled)
         case false:
-            UserDefaults.standard.set(false, forKey: "soundsAreEnabled")
+            UserDefaults.standard.set(false, forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled)
         }
     }
     

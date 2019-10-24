@@ -15,4 +15,12 @@ enum GeoCapConstants {
     static let defaultCornerRadius: CGFloat = 10
     static let minimumUsernameLength = 3
     static let maximumUsernameLength = 20
+    
+    enum UserDefaultsKeys {
+        static let soundsAreEnabled = "soundsAreEnabled"
+        static let email = "email"
+        static let username = "username"
+        static let notificationAuthRequestShown = "notificationAuthRequestShown"
+        static let lastCity = "lastCity"
+    }
 }

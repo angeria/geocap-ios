@@ -24,8 +24,8 @@ class AuthViewController: UIViewController {
         // Close keyboard when tapping outside of it
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
         
-        if UserDefaults.standard.object(forKey: "soundsAreEnabled") == nil {
-           UserDefaults.standard.set(true, forKey: "soundsAreEnabled")
+        if UserDefaults.standard.object(forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled) == nil {
+           UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled)
         }
     }
     
@@ -134,7 +134,7 @@ class AuthViewController: UIViewController {
         didSet {
             emailTextField.delegate = self
             
-            if let email = UserDefaults.standard.string(forKey: "Email") {
+            if let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email) {
                 emailTextField.text = email
             }
         }
@@ -200,7 +200,7 @@ class AuthViewController: UIViewController {
             }
             self.infoLabel.isHidden = true
             
-            UserDefaults.standard.set(self.emailTextField.text!, forKey: "Email")
+            UserDefaults.standard.set(self.emailTextField.text!, forKey: GeoCapConstants.UserDefaultsKeys.email)
             
             if signInMethods != nil, !signInMethods!.isEmpty {
                 self.sendSignInLink()
@@ -284,7 +284,7 @@ class AuthViewController: UIViewController {
     }
     
     func signInWithLink(_ link: String) {
-        guard let email = UserDefaults.standard.string(forKey: "Email") else { return }
+        guard let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email) else { return }
         
         Auth.auth().signIn(withEmail: email, link: link) { [weak self] authResult, error in
             if let error = error as NSError? {
@@ -296,7 +296,7 @@ class AuthViewController: UIViewController {
             }
                 
             Crashlytics.sharedInstance().setUserIdentifier(authResult!.user.uid)
-            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: "Username"))
+            Crashlytics.sharedInstance().setUserName(UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.username))
             
             if authResult!.additionalUserInfo?.isNewUser == true {
                 self?.writeUserToDb(authResult!.user)
@@ -312,7 +312,7 @@ class AuthViewController: UIViewController {
     private func writeUserToDb(_ user: User) {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
-            "username": UserDefaults.standard.string(forKey: "Username")!,
+            "username": UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.username)!,
             "capturedLocations": [],
             "capturedLocationsCount": 0
             ]) { [weak self] error in
@@ -340,7 +340,7 @@ class AuthViewController: UIViewController {
     
     private func setUsername(forUser user: User) {
         let profileChangeRequest = user.createProfileChangeRequest()
-        profileChangeRequest.displayName = UserDefaults.standard.string(forKey: "Username")
+        profileChangeRequest.displayName = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.username)
         profileChangeRequest.commitChanges { [weak self] error in
             if let error = error as NSError? {
                 if let errorMessage = self?.handleError(error) {

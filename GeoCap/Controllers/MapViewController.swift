@@ -51,7 +51,7 @@ class MapViewController: UIViewController {
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
         mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(MKUserLocation.self))
         
-        if let lastCity = UserDefaults.standard.data(forKey: "lastCity"), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
+        if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
             currentCity = lastCityDecoded
         }
 
@@ -108,7 +108,7 @@ class MapViewController: UIViewController {
     }
     
     private func setNearestCity() {
-        if UserDefaults.standard.object(forKey: "lastCity") == nil {
+        if UserDefaults.standard.object(forKey: GeoCapConstants.UserDefaultsKeys.lastCity) == nil {
             loadingLocationsView.isHidden = false
         }
         
@@ -147,14 +147,14 @@ class MapViewController: UIViewController {
             self.allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
             
             // Update only if the nearest city is not the same as the last cached city
-            if let lastCity = UserDefaults.standard.data(forKey: "lastCity") {
+            if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity) {
                 do {
                     let lastCityDecoded = try JSONDecoder().decode(City.self, from: lastCity)
                     if nearestCitySoFar != lastCityDecoded {
                         self.currentCity = nearestCitySoFar
                         do {
                             let nearestCityEncoded = try JSONEncoder().encode(nearestCitySoFar)
-                            UserDefaults.standard.set(nearestCityEncoded, forKey: "lastCity")
+                            UserDefaults.standard.set(nearestCityEncoded, forKey: GeoCapConstants.UserDefaultsKeys.lastCity)
                         } catch  {
                             os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                         }
@@ -310,7 +310,7 @@ class MapViewController: UIViewController {
             captureLocation()
             
             // Request notification auth after first capture
-            if !(UserDefaults.standard.bool(forKey: "notificationAuthRequestShown")) {
+            if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
             }
         } else {
@@ -426,7 +426,7 @@ class MapViewController: UIViewController {
 
         let dontAllowActionTitle = NSLocalizedString("alert-action-title-dont-allow", comment: "Title of alert action 'Don't Allow'")
         let dontAllowAction = UIAlertAction(title: dontAllowActionTitle, style: .default) { _ in
-            UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
+            UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)
         }
         alert.addAction(dontAllowAction)
         
@@ -454,7 +454,7 @@ class MapViewController: UIViewController {
                         }
                     }
                 }
-                UserDefaults.standard.set(true, forKey: "notificationAuthRequestShown")
+                UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)
             }
         }
         alert.addAction(allowAction)
@@ -524,8 +524,8 @@ class MapViewController: UIViewController {
         switch identifier {
         case "Show Quiz":
             if quizTimeoutIsActive{
-                presentQuizTimeoutAlert()
-                return false
+//                presentQuizTimeoutAlert()
+//                return false
             }
             
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
@@ -535,9 +535,9 @@ class MapViewController: UIViewController {
                         if user(location: mapView.userLocation, isInside: annotation.overlay) {
                             return true
                         } else {
-                            presentNotInsideAreaAlert()
-                            return false
-//                            return true
+//                            presentNotInsideAreaAlert()
+//                            return false
+                            return true
                         }
                     }
                 }
