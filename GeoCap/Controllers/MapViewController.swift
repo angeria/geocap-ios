@@ -17,8 +17,6 @@ import AVFoundation
 extension MapViewController {
     enum Constants {
         static let zoomLevel: CLLocationDistance = 4000
-        static let captureButtonWidth: Int = 90
-        static let captureButtonHeight = 50
         static let calloutImageHeight = 32
         static let calloutImageWidth = 32
         static let overlayAlpha: CGFloat = 0.45
@@ -26,9 +24,74 @@ extension MapViewController {
         static let overlayLineWidth: CGFloat = 1
         static let quizTimeoutInterval = 10.0
     }
+    
 }
 
 class MapViewController: UIViewController {
+    
+    // Couldn't figure out a way to get the callout size dynamically so had to hard code values that looked good
+    private var captureButtonWidth: Int {
+        switch traitCollection.preferredContentSizeCategory {
+        case .extraSmall:
+            return 75
+        case .small:
+            return 80
+        case .medium:
+            return 85
+        case .large, .unspecified:
+            return 90
+        case .extraLarge:
+            return 100
+        case .extraExtraLarge:
+            return 100
+        case .extraExtraExtraLarge:
+            return 105
+        case .accessibilityMedium:
+            return 110
+        case .accessibilityLarge:
+            return 130
+        case .accessibilityExtraLarge:
+            return 150
+        case .accessibilityExtraExtraLarge:
+            return 170
+        case .accessibilityExtraExtraExtraLarge:
+            return 190
+        default:
+            return 90
+        }
+    }
+    
+    // Couldn't figure out a way to get the callout size dynamically so had to hard code values that looked good
+    private var captureButtonHeight: Int {
+        switch traitCollection.preferredContentSizeCategory {
+        case .extraSmall:
+            return 43
+        case .small:
+            return 45
+        case .medium:
+            return 46
+        case .large, .unspecified:
+            return 50
+        case .extraLarge:
+            return 54
+        case .extraExtraLarge:
+            return 59
+        case .extraExtraExtraLarge:
+            return 65
+        case .accessibilityMedium:
+            return 78
+        case .accessibilityLarge:
+            return 90
+        case .accessibilityExtraLarge:
+            return 109
+        case .accessibilityExtraExtraLarge:
+            return 127
+        case .accessibilityExtraExtraExtraLarge:
+            return 141
+        default:
+            return 50
+        }
+    }
     
     var currentCityIsNotSet = true
     
@@ -264,9 +327,10 @@ class MapViewController: UIViewController {
         let captureButton = UIButton(type: .system)
         let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
         captureButton.setTitle(title, for: .normal)
+        captureButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
         captureButton.tintColor = .white
         captureButton.backgroundColor = .systemBlue
-        captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
+        captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
         
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
