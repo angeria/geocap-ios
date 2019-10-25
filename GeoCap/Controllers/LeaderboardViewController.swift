@@ -14,7 +14,7 @@ import os.log
 import AVFoundation
 
 class LeaderboardViewController: UITableViewController {
-
+    
     // MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,10 +106,9 @@ class LeaderboardViewController: UITableViewController {
             cell.textLabel?.text = "\(indexPath.section + 1). \(username)"
             cell.detailTextLabel?.text = String(locationCount)
             if username == Auth.auth().currentUser?.displayName {
-                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.15)
+                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.20)
             } else {
-                // TODO: Change to system color
-                cell.backgroundColor = .groupTableViewBackground
+                cell.backgroundColor = .secondarySystemBackground
             }
             return cell
         } else {

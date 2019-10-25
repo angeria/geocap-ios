@@ -101,7 +101,8 @@ class AuthViewController: UIViewController {
         let userInfo = notification.userInfo! as [AnyHashable: Any]
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
-        let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber
+        let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).uintValue
+        let curveAnimationOption = UIView.AnimationOptions(rawValue: animationCurve << 16)
         var hideEmailTextField = true
         var buttonTitle = ""
         
@@ -120,12 +121,11 @@ class AuthViewController: UIViewController {
             iconToTopConstraint.constant = iconToTopConstraintConstantInStoryboard!
         }
         
-        UIView.setAnimationCurve(UIView.AnimationCurve(rawValue: animationCurve.intValue)!)
-        UIView.animate(withDuration: animationDuration.doubleValue) {
-            self.view.layoutIfNeeded()
+        UIView.animate(withDuration: animationDuration.doubleValue, delay: 0, options: [curveAnimationOption], animations: {
             self.emailTextField.isHidden = hideEmailTextField
             self.continueButton.setTitle(buttonTitle, for: .normal)
-        }
+            self.view.layoutIfNeeded()
+        })
     }
     
     // MARK: - Auth
