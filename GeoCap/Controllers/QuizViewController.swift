@@ -150,6 +150,9 @@ class QuizViewController: UIViewController {
         didSet {
             answerButtons.forEach() {
                 $0.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
+                if traitCollection.userInterfaceStyle == .dark {
+                    $0.alpha = 0.9
+                }
             }
         }
     }
@@ -240,6 +243,9 @@ class QuizViewController: UIViewController {
             // Uncomment to make the inner bar rounded too
             // countdownBar.layer.sublayers?[1].cornerRadius = 5
             // countdownBar.subviews[1].clipsToBounds = true
+            if traitCollection.userInterfaceStyle == .dark {
+                countdownBar.alpha = 0.9
+            }
         }
     }
 
