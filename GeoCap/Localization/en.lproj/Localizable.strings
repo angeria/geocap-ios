@@ -84,11 +84,6 @@ AUTH - CHOOSE USERNAME
 OTHER VIEWS
  */
 
-/* Title of quiz timeout alert */
-"quiz-timeout-alert-title" = "Timeout";
-/* Message of quiz timeout alert */
-"quiz-timeout-alert-message" = "You have to wait %d seconds between failed capture attempts";
-
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Locations Services Off";
 /* Alert message when location services is off */
@@ -106,6 +101,27 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Please turn on notifications in settings to be able to activate this feature";
 
+/* Notification title when someone else has captured a location from the user */
+"location-lost-notification-title" = "Location Lost";
+/* Notification body ... */
+"location-lost-notification-body" = "%@ took %@ from you 🚩";
+
+/*
+MAP
+*/
+
+/* Title for map tab */
+"tab-bar-map" = "Map";
+/* Title for profile tab */
+"tab-bar-profile" = "Profile";
+/* Title for leaderboard tab */
+"tab-bar-leaderboard" = "Leaderboard";
+
+/* Title of quiz timeout alert */
+"quiz-timeout-alert-title" = "Timeout";
+/* Message of quiz timeout alert */
+"quiz-timeout-alert-message" = "You have to wait %d seconds between failed capture attempts";
+
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Not Inside Area";
 /* Message of alert when user isn't inside area */
@@ -119,9 +135,3 @@ OTHER VIEWS
 "callout-subtitle-captured-by-other-user" = "Owned by %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Not captured yet";
-
-/* Notification title when someone else has captured a location from the user */
-"location-lost-notification-title" = "Location Lost";
-/* Notification body ... */
-"location-lost-notification-body" = "%@ took %@ from you 🚩";
-

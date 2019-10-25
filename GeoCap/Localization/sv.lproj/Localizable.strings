@@ -83,11 +83,6 @@ AUTH - CHOOSE USERNAME
 OTHER VIEWS
  */
 
-/* Title of quiz timeout alert */
-"quiz-timeout-alert-title" = "Timeout";
-/* Message of quiz timeout alert */
-"quiz-timeout-alert-message" = "Du måste vänta %d sekunder mellan misslyckade försök";
-
 /* Alert title when location services is off */
 "alert-title-location-services-off" = "Platstjänster avslagna";
 /* Alert message when location services is off */
@@ -105,6 +100,29 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Slå på notiser i inställningarna för att kunna aktivera denna funktion";
 
+/* Notification title when someone else has captured a location from the user */
+"location-lost-notification-title" = "Plats förlorad";
+/* Notification body ... */
+"location-lost-notification-body" = "%@ tog %@ ifrån dig 🚩";
+
+/*
+MAP
+*/
+
+/* Title for map tab */
+"tab-bar-map" = "Karta";
+
+/* Title for profile tab */
+"tab-bar-profile" = "Profil";
+
+/* Title for leaderboard tab */
+"tab-bar-leaderboard" = "Leaderboard";
+
+/* Title of quiz timeout alert */
+"quiz-timeout-alert-title" = "Timeout";
+/* Message of quiz timeout alert */
+"quiz-timeout-alert-message" = "Du måste vänta %d sekunder mellan misslyckade försök";
+
 /* Title of alert when user isn't inside area */
 "alert-title-not-inside-area" = "Ej inom området";
 /* Message of alert when user isn't inside area */
@@ -118,8 +136,3 @@ OTHER VIEWS
 "callout-subtitle-captured-by-other-user" = "Tagen av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
-
-/* Notification title when someone else has captured a location from the user */
-"location-lost-notification-title" = "Plats förlorad";
-/* Notification body ... */
-"location-lost-notification-body" = "%@ tog %@ ifrån dig 🚩";

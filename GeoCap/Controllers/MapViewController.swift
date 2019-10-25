@@ -19,9 +19,10 @@ extension MapViewController {
         static let zoomLevel: CLLocationDistance = 4000
         static let captureButtonWidth: Int = 90
         static let captureButtonHeight = 50
-        static let calloutFlagHeight = 32
-        static let calloutFlagWidth = 32
+        static let calloutImageHeight = 32
+        static let calloutImageWidth = 32
         static let overlayAlpha: CGFloat = 0.45
+        static let markerAlpha: CGFloat = 0.75
         static let overlayLineWidth: CGFloat = 1
         static let quizTimeoutInterval = 10.0
     }
@@ -49,7 +50,6 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
-        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(MKUserLocation.self))
         
         if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
             currentCity = lastCityDecoded
@@ -66,7 +66,7 @@ class MapViewController: UIViewController {
     func teardown() {
         locationListener?.remove()
     }
-
+    
     // MARK: - Location Filter (segmented control)
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
@@ -269,24 +269,21 @@ class MapViewController: UIViewController {
         captureButton.frame = CGRect(x: 0, y: 0, width: Constants.captureButtonWidth, height: Constants.captureButtonHeight)
         
         if annotation.isCapturedByUser {
-            annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(0.70)
+            annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
+            annotationView.glyphImage = UIImage(systemName: "checkmark")
             
-            annotationView.glyphImage = UIImage(named: "marker-check-mark")
-            
-            let image = UIImage(named: "callout-check-mark")!.withRenderingMode(.alwaysTemplate)
+            let image = UIImage(systemName: "checkmark.circle")
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutFlagWidth, height: Constants.calloutFlagHeight)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
             imageView.tintColor = .systemBlue
             annotationView.rightCalloutAccessoryView = imageView
         } else if annotation.owner == nil {
-            annotationView.glyphImage = UIImage(named: "marker-circle")
-            
-            annotationView.markerTintColor = UIColor.systemGray.withAlphaComponent(0.70)
+            annotationView.glyphImage = UIImage(systemName: "circle")
+            annotationView.markerTintColor = UIColor.systemGray.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
         } else {
-            annotationView.glyphImage = UIImage(named: "marker-flag")
-            
-            annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(0.70)
+            annotationView.glyphImage = UIImage(systemName: "flag.fill")
+            annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
         }
         
@@ -624,9 +621,6 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let locationAnnotation = annotation as? Location {
             return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
-        } else if let userLocationAnnotation = annotation as? MKUserLocation {
-            let userLocationAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: NSStringFromClass(MKUserLocation.self), for: userLocationAnnotation)
-            userLocationAnnotationView.canShowCallout = false
         }
         return nil
     }
@@ -649,13 +643,13 @@ extension MapViewController: MKMapViewDelegate {
             renderer.lineWidth = Constants.overlayLineWidth
             
             if location.isCapturedByUser {
-                renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.40)
+                renderer.fillColor = .systemBlue
                 renderer.strokeColor = .systemBlue
             } else if location.owner == nil {
-                renderer.fillColor = UIColor.systemGray.withAlphaComponent(0.40)
+                renderer.fillColor = .systemGray
                 renderer.strokeColor = .systemGray
             } else {
-                renderer.fillColor = UIColor.systemRed.withAlphaComponent(0.40)
+                renderer.fillColor = .systemRed
                 renderer.strokeColor = .systemRed
             }
             
