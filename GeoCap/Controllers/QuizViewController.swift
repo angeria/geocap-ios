@@ -244,7 +244,7 @@ class QuizViewController: UIViewController {
             countdownBar.layer.sublayers?[1].cornerRadius = countdownBarHeightConstraint.constant / 2
             countdownBar.subviews[1].clipsToBounds = true
             if traitCollection.userInterfaceStyle == .dark {
-                countdownBar.alpha = Constants.darkModeAlpha + 0.2
+                countdownBar.alpha = Constants.darkModeAlpha + 0.1
             }
         }
     }
