@@ -232,22 +232,20 @@ class QuizViewController: UIViewController {
             button.isEnabled = true
             button.backgroundColor = .systemBlue
         }
-    }
+    }   
     
     // MARK: - Timer
     
-    @IBOutlet weak var countdownBar: UIProgressView! {
+    @IBOutlet weak var countdownBarHeightConstraint: NSLayoutConstraint! {
         didSet {
-            countdownBar.layer.cornerRadius = 5
+            countdownBar.layer.cornerRadius = countdownBarHeightConstraint.constant / 2
             countdownBar.clipsToBounds = true
-            // Uncomment to make the inner bar rounded too
-            // countdownBar.layer.sublayers?[1].cornerRadius = 5
-            // countdownBar.subviews[1].clipsToBounds = true
-            if traitCollection.userInterfaceStyle == .dark {
-                countdownBar.alpha = 0.9
-            }
+            countdownBar.layer.sublayers?[1].cornerRadius = countdownBarHeightConstraint.constant / 2
+            countdownBar.subviews[1].clipsToBounds = true
         }
     }
+    
+    @IBOutlet weak var countdownBar: UIProgressView!
 
     private var shortnessOfTimeModeNotActivated = true
     private var countdownBarTimer: Timer?
@@ -255,7 +253,7 @@ class QuizViewController: UIViewController {
         countdownBar.progress = 1
         countdownBar.progressTintColor = .systemGreen
         
-        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] timer in
+        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.0075, repeats: true) { [weak self] timer in
             guard let self = self else { return }
 
             switch self.countdownBar.progress {
@@ -275,7 +273,7 @@ class QuizViewController: UIViewController {
                 }
                 fallthrough
             default:
-                self.countdownBar.setProgress(self.countdownBar.progress - 0.001, animated: false)
+                self.countdownBar.setProgress(self.countdownBar.progress - 0.0005, animated: false)
             }
         }
     }

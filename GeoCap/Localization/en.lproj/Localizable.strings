@@ -54,7 +54,7 @@ AUTH - CHOOSE USERNAME
  */
 
 /* Error message for choose username text field when inputed username is invalid length */
-"auth-choose-username-invalid-length" = "Name must be between %d to %d characters";
+"auth-choose-username-invalid-length" = "The name must be between %d to %d characters";
 /* Error message for choose username text field */
 "auth-choose-username-error" = "Something went wrong, please try again or with another name";
 

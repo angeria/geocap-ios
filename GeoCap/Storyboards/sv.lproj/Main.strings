@@ -57,7 +57,7 @@
 "nzg-G2-pGe.normalTitle" = "Byt namn";
 
 /* Class = "UILabel"; text = "It will be shown to other players and can be your own name or something funky 😸"; ObjectID = "jLz-YK-k1P"; */
-"jLz-YK-k1P.text" = "Det kommer visas till andra spelare och kan vara ditt vanliga namn eller nått kul 😸";
+"jLz-YK-k1P.text" = "Det kommer visas till andra spelare och kan t.ex. vara ditt vanliga namn eller nått kul 😸";
 
 /* Class = "UIButton"; normalTitle = "Open Email App"; ObjectID = "mZT-lJ-opy"; */
 "mZT-lJ-opy.normalTitle" = "Öppna e-postappen";
