@@ -16,6 +16,7 @@ extension QuizViewController {
     enum Constants {
         static let numberOfQuestions = 3
         static let maxNumberOfRetries = 3
+        static let darkModeAlpha: CGFloat = 0.7
     }
 }
 
@@ -151,7 +152,7 @@ class QuizViewController: UIViewController {
             answerButtons.forEach() {
                 $0.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
                 if traitCollection.userInterfaceStyle == .dark {
-                    $0.alpha = 0.9
+                    $0.alpha = Constants.darkModeAlpha
                 }
             }
         }
@@ -242,6 +243,9 @@ class QuizViewController: UIViewController {
             countdownBar.clipsToBounds = true
             countdownBar.layer.sublayers?[1].cornerRadius = countdownBarHeightConstraint.constant / 2
             countdownBar.subviews[1].clipsToBounds = true
+            if traitCollection.userInterfaceStyle == .dark {
+                countdownBar.alpha = Constants.darkModeAlpha + 0.2
+            }
         }
     }
     
@@ -253,7 +257,7 @@ class QuizViewController: UIViewController {
         countdownBar.progress = 1
         countdownBar.progressTintColor = .systemGreen
         
-        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.0075, repeats: true) { [weak self] timer in
+        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] timer in
             guard let self = self else { return }
 
             switch self.countdownBar.progress {
@@ -273,7 +277,7 @@ class QuizViewController: UIViewController {
                 }
                 fallthrough
             default:
-                self.countdownBar.setProgress(self.countdownBar.progress - 0.0005, animated: false)
+                self.countdownBar.setProgress(self.countdownBar.progress - 0.001, animated: false)
             }
         }
     }
