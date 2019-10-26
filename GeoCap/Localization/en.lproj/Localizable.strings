@@ -64,7 +64,7 @@ AUTH - CHOOSE USERNAME
 /* Title for choose new username view */
 "auth-choose-new-username-title" = "Choose a new name";
 /* Subtitle for choose new username view */
-"auth-choose-new-username-subtitle" = "Choose carefully, you won't be able to change it again before seven days";
+"auth-choose-new-username-subtitle" = "Choose carefully, you won't be able to change it again for seven days";
 /* Title in choose new username view when change is successful */
 "auth-choose-new-username-success-title" = "Name changed successfully 😎";
 /* Info label when not enough has passed since last name change */

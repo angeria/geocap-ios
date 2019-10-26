@@ -63,7 +63,7 @@ AUTH - CHOOSE USERNAME
 /* Title for choose new username view */
 "auth-choose-new-username-title" = "Välj ett nytt namn";
 /* Subtitle for choose new username view */
-"auth-choose-new-username-subtitle" = "Välj noga, du kommer inte kunna ändra det igen förrän efter sju dagar";
+"auth-choose-new-username-subtitle" = "Välj noga, du kommer inte kunna ändra det igen på sju dagar";
 /* Title in choose new username view when change is successful */
 "auth-choose-new-username-success-title" = "Namnbytet lyckades 😎";
 /* Info label when not enough has passed since last name change */
