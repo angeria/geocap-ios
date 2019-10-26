@@ -142,6 +142,14 @@ class MapViewController: UIViewController {
         fetchLocations()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if let selectedAnnotation = mapView.selectedAnnotations.first {
+            mapView.deselectAnnotation(selectedAnnotation, animated: true)
+        }
+        clearMap()
+        fetchLocations()
+    }
+    
     // MARK: - Locations
     
     @IBOutlet weak var loadingLocationsView: UIView! {

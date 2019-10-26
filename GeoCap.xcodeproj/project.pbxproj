@@ -23,6 +23,7 @@
 		433EFFAD235E0B9700027C81 /* notification-sound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 433EFFAC235E0B9700027C81 /* notification-sound.caf */; };
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
+		437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F0A8F236474AB005582E3 /* UIButtonRounded.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
 		43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* ThirdPartyMailer */; };
@@ -83,6 +84,7 @@
 		43615CAD23072E5F003FC839 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
+		437F0A8F236474AB005582E3 /* UIButtonRounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonRounded.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		4397786C235072D30044808F /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		439DC1022351A2060057E6BB /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				4326A5E723368FC200A3D1A1 /* Logging.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
 				43A7502823582CDB00053B62 /* SoundManager.swift */,
+				437F0A8F236474AB005582E3 /* UIButtonRounded.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				4397786D235072D30044808F /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
+				437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,

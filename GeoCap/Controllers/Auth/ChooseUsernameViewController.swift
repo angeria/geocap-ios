@@ -76,11 +76,7 @@ class ChooseUsernameViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var continueButton: UIButton! {
-        didSet {
-            continueButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
-        }
-    }
+    @IBOutlet weak var continueButton: UIButton!
     
     @IBAction func continueButtonPressed(_ sender: Any) {
         if usernameWasChanged {
