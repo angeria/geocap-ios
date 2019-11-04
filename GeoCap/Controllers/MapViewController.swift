@@ -60,8 +60,7 @@ class MapViewController: UIViewController {
             return 90
         }
     }
-    
-    // Couldn't figure out a way to get the callout size dynamically so had to hard code values that looked good
+
     private var captureButtonHeight: Int {
         switch traitCollection.preferredContentSizeCategory {
         case .extraSmall:
@@ -130,22 +129,22 @@ class MapViewController: UIViewController {
         locationListener?.remove()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if let selectedAnnotation = mapView.selectedAnnotations.first {
+            mapView.deselectAnnotation(selectedAnnotation, animated: true)
+        }
+        clearMap()
+        fetchLocations()
+    }
+    
     // MARK: - Location Filter (segmented control)
     
     @IBOutlet weak var locationFilter: UISegmentedControl!
     
     private let feedbackGenerator = UISelectionFeedbackGenerator()
     
-    @IBAction func locationFilter(_ sender: UISegmentedControl) {
+    @IBAction func locationFilterWasPressed(_ sender: UISegmentedControl) {
         feedbackGenerator.selectionChanged()
-        clearMap()
-        fetchLocations()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        if let selectedAnnotation = mapView.selectedAnnotations.first {
-            mapView.deselectAnnotation(selectedAnnotation, animated: true)
-        }
         clearMap()
         fetchLocations()
     }
@@ -307,10 +306,8 @@ class MapViewController: UIViewController {
     }
     
     func clearMap() {
-        let annotations = mapView.annotations
-        let overlays = mapView.overlays
-        mapView.removeAnnotations(annotations)
-        mapView.removeOverlays(overlays)
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.removeOverlays(mapView.overlays)
     }
     
     // Awkward solution but used for making the affected location available to the delegate function which renders overlays
