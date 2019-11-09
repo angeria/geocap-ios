@@ -151,8 +151,9 @@ class MapViewController: UIViewController {
     
     // MARK: - Locations
     
-    @IBOutlet weak var loadingLocationsView: UIView! {
+    @IBOutlet weak var loadingLocationsView: UIVisualEffectView! {
         didSet {
+            loadingLocationsView.clipsToBounds = true
             loadingLocationsView.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
