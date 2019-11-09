@@ -319,7 +319,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="6IC-rL-MU1">
                                 <rect key="frame" x="16" y="393" width="382" height="348"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
+                                    <button opaque="NO" alpha="0.75" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Glb-p3-C4Y" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="75"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -336,7 +336,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="sjN-Wc-KDn"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
+                                    <button opaque="NO" alpha="0.75" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-Pn-hmq" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="91" width="382" height="75"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
@@ -350,7 +350,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="QaP-7f-53X"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
+                                    <button opaque="NO" alpha="0.75" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFK-tV-XoW" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="182" width="382" height="75"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
@@ -364,7 +364,7 @@
                                             <action selector="answerPressed:" destination="XzZ-RX-21L" eventType="touchUpInside" id="VWP-us-tjw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
+                                    <button opaque="NO" alpha="0.75" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9L-qI-NsT" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="273" width="382" height="75"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
@@ -394,7 +394,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7q-Td-mWu">
                                 <rect key="frame" x="16" y="741" width="382" height="67"/>
                                 <subviews>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
+                                    <progressView opaque="NO" alpha="0.65000000000000002" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
                                         <rect key="frame" x="0.0" y="26" width="382" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="15" id="rd0-CR-rzT"/>
