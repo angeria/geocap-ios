@@ -824,7 +824,7 @@
     </scenes>
     <resources>
         <image name="email-sent-astronaut" width="1100" height="912"/>
-        <image name="launch-screen-app-icon" width="391" height="403"/>
+        <image name="launch-screen-app-icon" width="200" height="200"/>
         <image name="map.fill" catalog="system" width="64" height="56"/>
         <image name="person.fill" catalog="system" width="64" height="60"/>
         <image name="star.fill" catalog="system" width="64" height="58"/>
