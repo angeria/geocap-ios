@@ -16,7 +16,6 @@ extension QuizViewController {
     enum Constants {
         static let numberOfQuestions = 3
         static let maxNumberOfRetries = 3
-        static let darkModeAlpha: CGFloat = 0.7
     }
 }
 
@@ -151,9 +150,6 @@ class QuizViewController: UIViewController {
         didSet {
             answerButtons.forEach() {
                 $0.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
-                if traitCollection.userInterfaceStyle == .dark {
-                    $0.alpha = Constants.darkModeAlpha
-                }
             }
         }
     }
@@ -243,9 +239,6 @@ class QuizViewController: UIViewController {
             countdownBar.clipsToBounds = true
             countdownBar.layer.sublayers?[1].cornerRadius = countdownBarHeightConstraint.constant / 2
             countdownBar.subviews[1].clipsToBounds = true
-            if traitCollection.userInterfaceStyle == .dark {
-                countdownBar.alpha = Constants.darkModeAlpha + 0.1
-            }
         }
     }
     
