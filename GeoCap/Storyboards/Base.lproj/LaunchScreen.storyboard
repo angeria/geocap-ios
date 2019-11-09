@@ -16,17 +16,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch-screen-app-icon" translatesAutoresizingMaskIntoConstraints="NO" id="lW2-Sd-gV8">
-                                <rect key="frame" x="107" y="188" width="200" height="200"/>
+                                <rect key="frame" x="79.5" y="161" width="255" height="255"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="ZCb-Gu-NNf"/>
-                                    <constraint firstAttribute="width" constant="200" id="uN9-I9-bbZ"/>
+                                    <constraint firstAttribute="height" constant="255" id="ZCb-Gu-NNf"/>
+                                    <constraint firstAttribute="width" constant="255" id="uN9-I9-bbZ"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="lW2-Sd-gV8" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="yJ9-aQ-TUq"/>
-                            <constraint firstItem="lW2-Sd-gV8" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="144" id="zni-Xg-IdQ"/>
+                            <constraint firstItem="lW2-Sd-gV8" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="117" id="zni-Xg-IdQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -37,6 +37,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch-screen-app-icon" width="195.5" height="201.5"/>
+        <image name="launch-screen-app-icon" width="200" height="200"/>
     </resources>
 </document>
