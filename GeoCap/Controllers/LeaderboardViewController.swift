@@ -11,8 +11,6 @@ import Firebase
 import FirebaseAuth
 import os.log
 
-import AVFoundation
-
 class LeaderboardViewController: UITableViewController {
     
     // MARK: - Life Cycle
@@ -22,17 +20,11 @@ class LeaderboardViewController: UITableViewController {
             
         setupLeaderboard()
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        feedbackGenerator.prepare()
-    }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        userListener?.remove()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        leaderboardListener?.remove()
     }
     
     // MARK: - Leaderboard
@@ -59,11 +51,13 @@ class LeaderboardViewController: UITableViewController {
     }
     
     private var tableViewData = [userCellData]()
-    private var userListener: ListenerRegistration?
+    private var leaderboardListener: ListenerRegistration?
     
     private func setupLeaderboard() {
+        leaderboardListener?.remove()
+        
         let db = Firestore.firestore()
-        userListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
+        leaderboardListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Leaderboard, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
@@ -106,7 +100,7 @@ class LeaderboardViewController: UITableViewController {
             cell.textLabel?.text = "\(indexPath.section + 1). \(username)"
             cell.detailTextLabel?.text = String(locationCount)
             if username == Auth.auth().currentUser?.displayName {
-                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.20)
+                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.50)
             } else {
                 cell.backgroundColor = .secondarySystemBackground
             }
