@@ -11,6 +11,7 @@ import UIKit
 import os.log
 import Firebase
 import FirebaseAuth
+import FirebaseRemoteConfig
 
 class AuthViewController: UIViewController {
 
@@ -20,6 +21,8 @@ class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupRemoteConfig()
         
         // Close keyboard when tapping outside of it
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:))))
@@ -71,6 +74,30 @@ class AuthViewController: UIViewController {
                 self?.dismiss(animated: true)
             }
         }
+    }
+    
+    private func setupRemoteConfig() {
+        let remoteConfig = RemoteConfig.remoteConfig()
+        remoteConfig.setDefaults(GeoCapConstants.RemoteConfig.Defaults)
+        
+        // FIXME: Change to commented out variation before production
+        remoteConfig.fetch(withExpirationDuration: 0) { (RemoteConfigFetchStatus, error) in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+            }
+            
+            remoteConfig.activate { (error) in
+                if let error = error as NSError? {
+                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                }
+            }
+        }
+        
+//        remoteConfig.fetchAndActivate { (RemoteConfigFetchAndActivateStatus, error) in
+//            if let error = error as NSError? {
+//                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+//            }
+//        }
     }
     
     // MARK: - Keyboard

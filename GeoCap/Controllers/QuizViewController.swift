@@ -11,10 +11,10 @@ import Firebase
 import FirebaseAuth
 import os.log
 import AVFoundation
+import FirebaseRemoteConfig
 
 extension QuizViewController {
     enum Constants {
-        static let numberOfQuestions = 3
         static let maxNumberOfRetries = 3
     }
 }
@@ -22,6 +22,8 @@ extension QuizViewController {
 class QuizViewController: UIViewController {
 
     private let dispatchGroup = DispatchGroup()
+
+    private let numberOfQuestions = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestions].numberValue!)
     
     // MARK: - Life Cycle
     
@@ -140,7 +142,7 @@ class QuizViewController: UIViewController {
     
     private var currentQuestionNumber = 0 {
         didSet {
-            questionCountLabel.text = "\(currentQuestionNumber)/\(Constants.numberOfQuestions)"
+            questionCountLabel.text = "\(currentQuestionNumber)/\(numberOfQuestions)"
         }
     }
     
@@ -206,10 +208,10 @@ class QuizViewController: UIViewController {
             feedbackGenerator.notificationOccurred(.success)
             
             correctAnswers += 1
-            if correctAnswers == Constants.numberOfQuestions {
+            if correctAnswers == numberOfQuestions {
                 quizWon = true
             // Prefetch question only if there's more than one left
-            } else if correctAnswers < Constants.numberOfQuestions - 1 {
+            } else if correctAnswers < numberOfQuestions - 1 {
                 dispatchGroup.enter()
                 fetchQuestions(amount: 1)
             }
