@@ -82,6 +82,7 @@ class AuthViewController: UIViewController {
         remoteConfig.fetchAndActivate { (RemoteConfigFetchAndActivateStatus, error) in
             if let error = error as NSError? {
                 os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+                return
             }
         }
         
@@ -89,11 +90,13 @@ class AuthViewController: UIViewController {
 //        remoteConfig.fetch(withExpirationDuration: 0) { (RemoteConfigFetchStatus, error) in
 //            if let error = error as NSError? {
 //                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+//                return
 //            }
 //
 //            remoteConfig.activate { (error) in
 //                if let error = error as NSError? {
 //                    os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
+//                    return
 //                }
 //            }
 //        }

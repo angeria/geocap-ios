@@ -16,6 +16,23 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
+	<key>CFBundleURLSchemes</key>
+	<array>
+		<string>geocap</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Snap Kit</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>geocap</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED</key>
@@ -35,11 +52,22 @@
 		<string>airmail</string>
 		<string>ms-outlook</string>
 		<string>ymail</string>
+		<string>snapchat</string>
+		<string>bitmoji-sdk</string>
+		<string>itms-apps</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is needed to determine if you're near specific places</string>
+	<string>Your location is needed to determine if you&apos;re near specific places</string>
+	<key>SCSDKClientId</key>
+	<string>7972d8fb-dbc0-499c-a477-624f170164c0</string>
+	<key>SCSDKRedirectUrl</key>
+	<string>geocap://snapkit/auth</string>
+	<key>SCSDKScopes</key>
+	<array>
+		<string>https://auth.snapchat.com/oauth2/api/user.bitmoji.avatar</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
