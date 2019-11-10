@@ -154,7 +154,13 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - PINCache (2.3)
+  - PINOperation (1.1.2)
   - Protobuf (3.10.0)
+  - SnapSDK/SCSDKBitmojiKit (1.3.3):
+    - PINCache (< 3.1, >= 2.3)
+    - PINOperation (~> 1.1)
+  - SnapSDK/SCSDKLoginKit (1.3.3)
 
 DEPENDENCIES:
   - Crashlytics (~> 3.14.0)
@@ -165,6 +171,8 @@ DEPENDENCIES:
   - Firebase/Functions
   - Firebase/Messaging
   - Firebase/RemoteConfig
+  - SnapSDK/SCSDKBitmojiKit
+  - SnapSDK/SCSDKLoginKit
 
 SPEC REPOS:
   trunk:
@@ -194,7 +202,10 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - PINCache
+    - PINOperation
     - Protobuf
+    - SnapSDK
 
 SPEC CHECKSUMS:
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
@@ -223,8 +234,11 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+  PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
   Protobuf: a4dc852ad69c027ca2166ed287b856697814375b
+  SnapSDK: e0642fe1b670cfffc45801d31ca36f5c3e07297f
 
-PODFILE CHECKSUM: 7699ec69967326e677eaeb524e73d0306617e4b7
+PODFILE CHECKSUM: dcaeafa27bf143582ba7c4f0fb168a8f77d72d02
 
 COCOAPODS: 1.8.3

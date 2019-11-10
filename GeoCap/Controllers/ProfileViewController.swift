@@ -10,8 +10,16 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import os.log
+import SCSDKLoginKit
+import SCSDKBitmojiKit
 
 class ProfileViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setupSnapchatLoginButton()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -196,12 +204,45 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    
+    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let usernameVC = segue.destination as? ChooseUsernameViewController {
             usernameVC.isUsernameChange = true
         }
+    }
+    
+    // MARK: - Snapchat
+    
+    private var bitmojiIconView: UIView!
+}
+
+
+
+extension ProfileViewController: SCSDKLoginButtonDelegate {
+    func loginButtonDidTap() {
+        print("did tap")
+    }
+    
+    private func setupSnapchatLoginButton() {
+        let scLoginButton = SCSDKLoginButton { (success, error) in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                return
+            }
+        }!
+        scLoginButton.delegate = self
+        
+        scLoginButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scLoginButton)
+        NSLayoutConstraint.activate([
+            scLoginButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 40),
+            scLoginButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            scLoginButton.widthAnchor.constraint(equalToConstant: 230),
+            scLoginButton.heightAnchor.constraint(equalToConstant: 60),
+        ])
     }
     
 }
