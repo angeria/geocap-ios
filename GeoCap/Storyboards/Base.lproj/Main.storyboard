@@ -50,59 +50,48 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="mYc-wv-Nm0">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                             </mapView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2kl-cs-Qis">
-                                <rect key="frame" x="113" y="398" width="188.5" height="105.5"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cti-K6-paj">
-                                    <rect key="frame" x="0.0" y="0.0" width="188.5" height="105.5"/>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-1y-Q0W">
+                                <rect key="frame" x="113" y="397.5" width="188.5" height="106"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="c2L-wJ-CC7">
+                                    <rect key="frame" x="0.0" y="0.0" width="189" height="106"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yao-To-rHc">
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="b1R-lY-CU9">
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </view>
-                                            <vibrancyEffect>
-                                                <blurEffect style="regular"/>
-                                            </vibrancyEffect>
-                                        </visualEffectView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dj3-h6-uqe">
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KTf-tR-Fot">
                                             <rect key="frame" x="20" y="20" width="148.5" height="65.5"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading locations..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yip-4O-GPe">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading locations..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LoQ-Zi-zhH">
                                                     <rect key="frame" x="0.0" y="0.0" width="148.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="8nG-bR-Msh">
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="MN3-M9-4Gq">
                                                     <rect key="frame" x="55.5" y="28.5" width="37" height="37"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="8nG-bR-Msh" firstAttribute="top" secondItem="Yip-4O-GPe" secondAttribute="bottom" constant="8" id="3Vb-mM-dlX"/>
+                                                <constraint firstItem="MN3-M9-4Gq" firstAttribute="top" secondItem="LoQ-Zi-zhH" secondAttribute="bottom" constant="8" id="HrX-fo-m1Y"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="dj3-h6-uqe" firstAttribute="top" secondItem="cti-K6-paj" secondAttribute="top" constant="20" id="JvO-NO-nsz"/>
-                                        <constraint firstItem="dj3-h6-uqe" firstAttribute="leading" secondItem="cti-K6-paj" secondAttribute="leading" constant="20" id="ojx-sF-Daq"/>
+                                        <constraint firstItem="KTf-tR-Fot" firstAttribute="centerX" secondItem="c2L-wJ-CC7" secondAttribute="centerX" id="EsG-2Q-7ef"/>
+                                        <constraint firstItem="KTf-tR-Fot" firstAttribute="leading" secondItem="c2L-wJ-CC7" secondAttribute="leading" constant="20" id="bQe-5c-jCT"/>
+                                        <constraint firstItem="KTf-tR-Fot" firstAttribute="top" secondItem="c2L-wJ-CC7" secondAttribute="top" constant="20" id="l63-nf-uVH"/>
+                                        <constraint firstItem="KTf-tR-Fot" firstAttribute="centerY" secondItem="c2L-wJ-CC7" secondAttribute="centerY" id="oaG-Le-uXP"/>
                                     </constraints>
                                 </view>
-                                <constraints>
-                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="centerY" secondItem="2kl-cs-Qis" secondAttribute="centerY" id="iCR-bC-c4L"/>
-                                    <constraint firstItem="dj3-h6-uqe" firstAttribute="centerX" secondItem="2kl-cs-Qis" secondAttribute="centerX" id="uaZ-Q0-U2v"/>
-                                </constraints>
-                                <blurEffect style="systemChromeMaterial"/>
+                                <blurEffect style="systemUltraThinMaterial"/>
                             </visualEffectView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="2kl-cs-Qis" firstAttribute="centerX" secondItem="mYc-wv-Nm0" secondAttribute="centerX" id="1F3-S6-3hg"/>
-                            <constraint firstItem="2kl-cs-Qis" firstAttribute="centerY" secondItem="mYc-wv-Nm0" secondAttribute="centerY" id="VNw-5o-ikt"/>
+                            <constraint firstItem="Yce-1y-Q0W" firstAttribute="centerY" secondItem="mYc-wv-Nm0" secondAttribute="centerY" id="Xrl-Gb-NHq"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="leading" secondItem="PQr-Ze-W5v" secondAttribute="leading" id="YJf-4F-yXq"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="trailing" secondItem="PQr-Ze-W5v" secondAttribute="trailing" id="eEe-cd-WSH"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="hKO-mg-xrp"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" id="tpg-zf-fxZ"/>
+                            <constraint firstItem="Yce-1y-Q0W" firstAttribute="centerX" secondItem="mYc-wv-Nm0" secondAttribute="centerX" id="vlV-OQ-rfe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
@@ -130,13 +119,33 @@
                     </navigationItem>
                     <connections>
                         <outlet property="currentCityBarButton" destination="sLm-d7-twP" id="aOu-W3-6xA"/>
-                        <outlet property="loadingLocationsView" destination="2kl-cs-Qis" id="uwj-uj-pCc"/>
+                        <outlet property="loadingLocationsView" destination="Yce-1y-Q0W" id="5dr-yL-dbA"/>
                         <outlet property="locationFilter" destination="2Tx-Iz-jwz" id="XeT-gb-Ema"/>
                         <outlet property="mapView" destination="mYc-wv-Nm0" id="pd0-Ob-Zi9"/>
                         <segue destination="XzZ-RX-21L" kind="presentation" identifier="Show Quiz" id="MeF-YK-qBM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
+                <visualEffectView opaque="NO" contentMode="scaleToFill" id="CdA-CC-EZj">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Xby-Mh-DjG">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lth-Ug-INj">
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="eES-Yf-qCn">
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <vibrancyEffect>
+                                    <blurEffect style="regular"/>
+                                </vibrancyEffect>
+                            </visualEffectView>
+                        </subviews>
+                    </view>
+                    <blurEffect style="regular"/>
+                </visualEffectView>
             </objects>
             <point key="canvasLocation" x="3613.04347826087" y="-370.3125"/>
         </scene>
