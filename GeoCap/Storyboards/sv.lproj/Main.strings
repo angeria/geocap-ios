@@ -44,8 +44,8 @@
 /* Class = "UIButton"; normalTitle = "Continue with Your Email"; ObjectID = "XSX-lP-dRJ"; */
 "XSX-lP-dRJ.normalTitle" = "Fortsätt med din e-post";
 
-/* Class = "UILabel"; text = "Loading locations..."; ObjectID = "Yip-4O-GPe"; */
-"Yip-4O-GPe.text" = "Laddar platser...";
+/* Class = "UILabel"; text = "Loading locations..."; ObjectID = "LoQ-Zi-zhH"; */
+"LoQ-Zi-zhH.text" = "Laddar platser...";
 
 /* Class = "UITabBarItem"; title = "Map"; ObjectID = "acW-dT-cKf"; */
 "acW-dT-cKf.title" = "Karta";

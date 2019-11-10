@@ -9,8 +9,12 @@
 import UIKit
 import Firebase
 import os.log
+import FirebaseRemoteConfig
 
 class ChooseUsernameViewController: UIViewController {
+    
+    private let maximumUsernameLength = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.maximumUsernameLength].numberValue!)
+    private let minimumUsernameLength = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.minimumUsernameLength].numberValue!)
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -95,12 +99,12 @@ class ChooseUsernameViewController: UIViewController {
         guard
             let username = usernameTextField.text,
                 username != "",
-                username.count >= GeoCapConstants.minimumUsernameLength,
-                username.count <= GeoCapConstants.maximumUsernameLength
+                username.count >= minimumUsernameLength,
+                username.count <= maximumUsernameLength
         else {
             infoLabel.isHidden = false
             let format = NSLocalizedString("auth-choose-username-invalid-length", comment: "Error message for choose username text field when inputed username is invalid length")
-            infoLabel.text = String(format: format, GeoCapConstants.minimumUsernameLength, GeoCapConstants.maximumUsernameLength)
+            infoLabel.text = String(format: format, minimumUsernameLength, maximumUsernameLength)
             usernameTextField.shake()
             continueButton.isEnabled = true
             return
