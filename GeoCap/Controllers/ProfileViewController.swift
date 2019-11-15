@@ -216,33 +216,52 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Snapchat
     
-    private var bitmojiIconView: UIView!
-}
-
-
-
-extension ProfileViewController: SCSDKLoginButtonDelegate {
-    func loginButtonDidTap() {
-        print("did tap")
-    }
-    
     private func setupSnapchatLoginButton() {
-        let scLoginButton = SCSDKLoginButton { (success, error) in
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        if let loginButton = SCSDKLoginButton(completion: { (success, error) in
             if let error = error as NSError? {
                 os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 return
             }
-        }!
-        scLoginButton.delegate = self
-        
-        scLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scLoginButton)
-        NSLayoutConstraint.activate([
-            scLoginButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 40),
-            scLoginButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            scLoginButton.widthAnchor.constraint(equalToConstant: 230),
-            scLoginButton.heightAnchor.constraint(equalToConstant: 60),
-        ])
+            
+            SCSDKBitmojiClient.fetchAvatarURL { (avatarURL, error) in
+                if let error = error as NSError? {
+                    os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                    return
+                }
+                
+                let url = URL(string: avatarURL!)!
+                URLSession.shared.dataTask(with: url) { (bitmojiData, response, error) in
+                    if let error = error as NSError? {
+                        os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                        return
+                    }
+                    
+                    
+                    let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(uid)/snapchat_bitmoji.png")
+                    let metadata = StorageMetadata()
+                    metadata.contentType = "image/png"
+                    let _ = ref.putData(bitmojiData!, metadata: metadata) { (metadata, error) in
+                        if let error = error as NSError? {
+                            os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                            return
+                        }
+                        
+                        print("Successfully uploaded bitmoji to storage")
+                    }
+                }.resume()
+            }
+        }) {
+            loginButton.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(loginButton)
+            NSLayoutConstraint.activate([
+                loginButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 40),
+                loginButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+                loginButton.widthAnchor.constraint(equalToConstant: 230),
+                loginButton.heightAnchor.constraint(equalToConstant: 60),
+            ])
+        }
     }
-    
+
 }
