@@ -356,9 +356,35 @@ class MapViewController: UIViewController {
             annotationView.glyphImage = UIImage(systemName: "flag.fill")
             annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
+            fetchAndSetBitmoji(forUser: annotation.owner!, annotationView: annotationView)
         }
         
         return annotationView
+    }
+    
+    private func fetchAndSetBitmoji(forUser username: String, annotationView: MKAnnotationView) {
+        let db = Firestore.firestore()
+        db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] (snapshot, error) in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                return
+            }
+            if let user = snapshot?.documents.first {
+                let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
+                
+                ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                    if let error = error as NSError? {
+                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                        return
+                    }
+
+                    let bitmoji = UIImage(data: data!)
+                    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: (self?.captureButtonHeight ?? 0) - 10, height: (self?.captureButtonHeight ?? 0) - 10))
+                    imageView.image = bitmoji
+                    annotationView.leftCalloutAccessoryView = imageView
+                }
+            }
+        }
     }
     
     private func presentNotInsideAreaAlert() {
