@@ -103,7 +103,7 @@ OTHER VIEWS
 /* Notification title when someone else has captured a location from the user */
 "location-lost-notification-title" = "Plats förlorad";
 /* Notification body ... */
-"location-lost-notification-body" = "%@ tog %@ ifrån dig 🚩";
+"location-lost-notification-body" = "%@ tog %@ från dig 🚩";
 
 /*
 MAP
