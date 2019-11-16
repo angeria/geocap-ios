@@ -206,33 +206,57 @@
                                     <action selector="soundSettingSwitch:" destination="SrA-5C-Dgb" eventType="valueChanged" id="SGd-4B-vHd"/>
                                 </connections>
                             </switch>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ck3-jU-1CL">
+                                <rect key="frame" x="20" y="430" width="125" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Unlink Snapchat"/>
+                                <connections>
+                                    <action selector="unlinkSnapchatPressed:" destination="SrA-5C-Dgb" eventType="touchUpInside" id="2yg-ha-BQW"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use your Bitmoji as your avatar by connecting to Snapchat" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DIE-R7-3e4">
+                                <rect key="frame" x="20" y="471" width="374" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="iay-t3-Wog"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="iNu-9N-5VV" firstAttribute="top" secondItem="nzg-G2-pGe" secondAttribute="bottom" constant="40" id="4IZ-VG-aW7"/>
                             <constraint firstItem="0DT-gx-aIN" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="5Qb-zv-wh3"/>
+                            <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" secondItem="DIE-R7-3e4" secondAttribute="trailing" constant="20" id="8XL-Su-HVN"/>
                             <constraint firstItem="1Qp-HY-yZO" firstAttribute="top" secondItem="fUE-k9-7Rq" secondAttribute="top" constant="20" id="Bgc-2r-3S3"/>
                             <constraint firstItem="4Ct-JB-pAg" firstAttribute="centerX" secondItem="ngZ-0V-ErN" secondAttribute="centerX" id="H32-xN-P3U"/>
+                            <constraint firstItem="Ck3-jU-1CL" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="IAZ-9P-SkX"/>
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="1Qp-HY-yZO" secondAttribute="trailing" constant="233" id="Lcn-pf-5ty"/>
                             <constraint firstItem="nzg-G2-pGe" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="OMP-FW-Tfg"/>
                             <constraint firstItem="ngZ-0V-ErN" firstAttribute="leading" secondItem="0DT-gx-aIN" secondAttribute="trailing" constant="8" id="ORQ-il-aUX"/>
                             <constraint firstItem="nzg-G2-pGe" firstAttribute="top" secondItem="ygB-Wv-MSx" secondAttribute="bottom" constant="40" id="PfW-VG-YCS"/>
                             <constraint firstItem="4Ct-JB-pAg" firstAttribute="leading" secondItem="ygB-Wv-MSx" secondAttribute="trailing" constant="8" id="QGD-Wv-rfd"/>
                             <constraint firstItem="ygB-Wv-MSx" firstAttribute="top" secondItem="0DT-gx-aIN" secondAttribute="bottom" constant="80" id="Udb-KX-9EM"/>
+                            <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Ck3-jU-1CL" secondAttribute="trailing" constant="269" id="Wwn-Zw-aJr"/>
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="nzg-G2-pGe" secondAttribute="trailing" constant="300" id="cU9-NT-QOY"/>
+                            <constraint firstItem="Ck3-jU-1CL" firstAttribute="top" secondItem="iNu-9N-5VV" secondAttribute="bottom" constant="8" id="eWv-RM-wUd"/>
                             <constraint firstItem="4Ct-JB-pAg" firstAttribute="centerY" secondItem="ygB-Wv-MSx" secondAttribute="centerY" id="evc-3L-SDg"/>
                             <constraint firstItem="ngZ-0V-ErN" firstAttribute="centerY" secondItem="0DT-gx-aIN" secondAttribute="centerY" id="fEN-kL-sTh"/>
+                            <constraint firstItem="DIE-R7-3e4" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="m3W-Bt-3m0"/>
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="iNu-9N-5VV" secondAttribute="trailing" constant="338" id="no2-tN-egz"/>
                             <constraint firstItem="0DT-gx-aIN" firstAttribute="top" secondItem="1Qp-HY-yZO" secondAttribute="bottom" constant="8" id="oDR-vT-L7O"/>
                             <constraint firstItem="iNu-9N-5VV" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="qCA-UG-Xcc"/>
                             <constraint firstItem="ygB-Wv-MSx" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="s8g-6X-PF2"/>
                             <constraint firstItem="1Qp-HY-yZO" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="sOD-mr-Xb4"/>
+                            <constraint firstItem="DIE-R7-3e4" firstAttribute="top" secondItem="Ck3-jU-1CL" secondAttribute="bottom" constant="8" id="tJB-rN-y5Q"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fUE-k9-7Rq"/>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" largeTitleDisplayMode="always" id="wdK-01-Jwl"/>
                     <connections>
                         <outlet property="locationLostNotificationsSwitch" destination="ngZ-0V-ErN" id="mfq-zC-mdY"/>
+                        <outlet property="scLabel" destination="DIE-R7-3e4" id="WTi-XM-tXG"/>
                         <outlet property="signOutButton" destination="iNu-9N-5VV" id="h27-ye-6tP"/>
                         <outlet property="soundSettingSwitch" destination="4Ct-JB-pAg" id="0XK-15-Qtz"/>
                     </connections>
