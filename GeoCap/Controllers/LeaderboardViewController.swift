@@ -34,6 +34,7 @@ class LeaderboardViewController: UITableViewController {
         let username: String
         let locations: [String]
         let locationCount: Int
+        var bitmoji: UIImage?
         
         init?(data: [String: Any]) {
             guard
@@ -50,7 +51,12 @@ class LeaderboardViewController: UITableViewController {
         }
     }
     
-    private var tableViewData = [userCellData]()
+    private var tableViewData = [userCellData]() {
+        didSet {
+            tableViewData.sort(by: { $0.locationCount > $1.locationCount })
+        }
+    }
+    
     private var leaderboardListener: ListenerRegistration?
     
     private func setupLeaderboard() {
@@ -72,9 +78,40 @@ class LeaderboardViewController: UITableViewController {
                     os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'", log: OSLog.Leaderboard, type: .debug, documentSnapshot.documentID)
                     return
                 }
-                self.tableViewData += [userCellData]
+                
+                self.fetchAndSetBitmoji(for: userCellData)
             }
-            self.tableView.reloadData()
+        }
+    }
+    
+    private func fetchAndSetBitmoji(for userCellData: userCellData) {
+        var cellData = userCellData
+        
+        let db = Firestore.firestore()
+        db.collection("users").whereField("username", isEqualTo: cellData.username).getDocuments { [weak self] (snapshot, error) in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                return
+            }
+            
+            if let user = snapshot?.documents.first {
+                let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
+                ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                    if let error = error as NSError? {
+                        self?.tableViewData += [cellData]
+                        self?.tableView.reloadData()
+                        
+                        let storageError = StorageErrorCode(rawValue: error.code)!
+                        if storageError == .objectNotFound { return }
+                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                        return
+                    }
+
+                    cellData.bitmoji = UIImage(data: data!)
+                    self?.tableViewData += [cellData]
+                    self?.tableView.reloadData()
+                }
+            }
         }
     }
     
@@ -92,6 +129,10 @@ class LeaderboardViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
@@ -99,6 +140,14 @@ class LeaderboardViewController: UITableViewController {
             let locationCount = tableViewData[indexPath.section].locationCount
             cell.textLabel?.text = "\(indexPath.section + 1). \(username)"
             cell.detailTextLabel?.text = String(locationCount)
+            if let bitmoji = tableViewData[indexPath.section].bitmoji {
+                cell.imageView?.image = bitmoji.addImagePadding(x: 0, y: 50)
+                print(bitmoji.size)
+            } else {
+                let icon = UIImage(systemName: "person.crop.circle")?.resized(to: CGSize(width: 144, height: 144)).addImagePadding(x: 0, y: 50)
+                cell.imageView?.image = icon
+            }
+            
             if username == Auth.auth().currentUser?.displayName {
                 cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.50)
             } else {
@@ -112,7 +161,7 @@ class LeaderboardViewController: UITableViewController {
             return cell
         }
     }
-
+    
     let feedbackGenerator = UISelectionFeedbackGenerator()
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -131,4 +180,26 @@ class LeaderboardViewController: UITableViewController {
         tableView.reloadSections(sectionsToReload, with: .automatic)
     }
 
+}
+
+extension UIImage {
+
+    func addImagePadding(x: CGFloat, y: CGFloat) -> UIImage? {
+        let width: CGFloat = size.width + x
+        let height: CGFloat = size.height + y
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0)
+        let origin: CGPoint = CGPoint(x: (width - size.width) / 2, y: (height - size.height) / 2)
+        draw(at: origin)
+        let imageWithPadding = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return imageWithPadding
+    }
+    
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+    
 }
