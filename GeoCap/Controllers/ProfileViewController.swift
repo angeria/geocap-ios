@@ -216,10 +216,12 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Snapchat
     
+    @IBOutlet weak var scLabel: UILabel!
+    
     private func setupSnapchatLoginButton() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        if let loginButton = SCSDKLoginButton(completion: { (success, error) in
+        if let loginButton = SCSDKLoginButton(completion: { [weak self] (success, error) in
             if let error = error as NSError? {
                 os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 return
@@ -238,7 +240,6 @@ class ProfileViewController: UIViewController {
                         return
                     }
                     
-                    
                     let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(uid)/snapchat_bitmoji.png")
                     let metadata = StorageMetadata()
                     metadata.contentType = "image/png"
@@ -248,7 +249,13 @@ class ProfileViewController: UIViewController {
                             return
                         }
                         
-                        print("Successfully uploaded bitmoji to storage")
+                        // Refresh all locations to add user's bitmoji
+                        if let navVC = self?.navigationController?.tabBarController?.viewControllers?[1] as? UINavigationController {
+                            if let mapVC = navVC.viewControllers[0] as? MapViewController {
+                                mapVC.clearMap()
+                                mapVC.fetchLocations()
+                            }
+                        }
                     }
                 }.resume()
             }
@@ -256,12 +263,35 @@ class ProfileViewController: UIViewController {
             loginButton.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(loginButton)
             NSLayoutConstraint.activate([
-                loginButton.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 40),
+                loginButton.topAnchor.constraint(equalTo: scLabel.bottomAnchor, constant: 8),
                 loginButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                loginButton.widthAnchor.constraint(equalToConstant: 230),
+                loginButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
                 loginButton.heightAnchor.constraint(equalToConstant: 60),
             ])
         }
     }
-
+    
+    @IBAction func unlinkSnapchatPressed(_ sender: UIButton) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        SCSDKLoginClient.unlinkAllSessions() { [weak self] success in
+            if success {
+                let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(uid)/snapchat_bitmoji.png")
+                ref.delete { error in
+                    if let error = error as NSError? {
+                        os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                    }
+                    
+                    // Refresh all locations to remove user's bitmoji
+                    if let navVC = self?.navigationController?.tabBarController?.viewControllers?[1] as? UINavigationController {
+                        if let mapVC = navVC.viewControllers[0] as? MapViewController {
+                            mapVC.clearMap()
+                            mapVC.fetchLocations()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }

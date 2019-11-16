@@ -89,7 +89,7 @@ class LeaderboardViewController: UITableViewController {
                 self.tableViewData += [userCellData]
                 self.tableView.reloadData()
                 
-                // Fetch the bitmoji async and add it later
+                // Fetch bitmoji async
                 self.fetchAndSetBitmoji(for: userCellData)
             }
         }

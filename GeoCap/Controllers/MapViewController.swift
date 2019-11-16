@@ -383,7 +383,7 @@ class MapViewController: UIViewController {
                     }
 
                     let bitmoji = UIImage(data: data!)
-                    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: (self?.captureButtonHeight ?? 0) - 10, height: (self?.captureButtonHeight ?? 0) - 10))
+                    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: (self?.captureButtonHeight ?? 0) - 12, height: (self?.captureButtonHeight ?? 0) - 12))
                     imageView.image = bitmoji
                     annotationView.leftCalloutAccessoryView = imageView
                     return
