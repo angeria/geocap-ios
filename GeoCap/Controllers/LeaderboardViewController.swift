@@ -13,6 +13,13 @@ import os.log
 
 class LeaderboardViewController: UITableViewController {
     
+    struct Constants {
+        static let imageHeightPadding: CGFloat = 50
+        static let approxBitmojiSize: CGFloat = 150
+        static let userCellOpacity: CGFloat = 0.50
+        static let maxDownloadSize: Int64 =  1 * 1024 * 1024 // 1 MB
+    }
+    
     // MARK: - Life Cycle
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +86,10 @@ class LeaderboardViewController: UITableViewController {
                     return
                 }
                 
+                self.tableViewData += [userCellData]
+                self.tableView.reloadData()
+                
+                // Fetch the bitmoji async and add it later
                 self.fetchAndSetBitmoji(for: userCellData)
             }
         }
@@ -96,11 +107,8 @@ class LeaderboardViewController: UITableViewController {
             
             if let user = snapshot?.documents.first {
                 let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
-                ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
+                ref.getData(maxSize: Constants.maxDownloadSize) { data, error in
                     if let error = error as NSError? {
-                        self?.tableViewData += [cellData]
-                        self?.tableView.reloadData()
-                        
                         let storageError = StorageErrorCode(rawValue: error.code)!
                         if storageError == .objectNotFound { return }
                         os_log("%{public}@", log: OSLog.Map, type: .debug, error)
@@ -108,7 +116,11 @@ class LeaderboardViewController: UITableViewController {
                     }
 
                     cellData.bitmoji = UIImage(data: data!)
-                    self?.tableViewData += [cellData]
+                    if let existingCellIndex = self?.tableViewData.firstIndex(where: { $0.username == cellData.username }) {
+                        self?.tableViewData[existingCellIndex] = cellData
+                    } else {
+                        self?.tableViewData += [cellData]
+                    }
                     self?.tableView.reloadData()
                 }
             }
@@ -130,7 +142,7 @@ class LeaderboardViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 60
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -141,15 +153,13 @@ class LeaderboardViewController: UITableViewController {
             cell.textLabel?.text = "\(indexPath.section + 1). \(username)"
             cell.detailTextLabel?.text = String(locationCount)
             if let bitmoji = tableViewData[indexPath.section].bitmoji {
-                cell.imageView?.image = bitmoji.addImagePadding(x: 0, y: 50)
-                print(bitmoji.size)
+                cell.imageView?.image = bitmoji.addImagePadding(x: 0, y: Constants.imageHeightPadding)
             } else {
-                let icon = UIImage(systemName: "person.crop.circle")?.resized(to: CGSize(width: 144, height: 144)).addImagePadding(x: 0, y: 50)
-                cell.imageView?.image = icon
+                cell.imageView?.image = UIImage(systemName: "person.crop.circle")?.resized(to: CGSize(width: Constants.approxBitmojiSize, height: Constants.approxBitmojiSize)).addImagePadding(x: 0, y: Constants.imageHeightPadding)
             }
             
             if username == Auth.auth().currentUser?.displayName {
-                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.50)
+                cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(Constants.userCellOpacity)
             } else {
                 cell.backgroundColor = .secondarySystemBackground
             }
@@ -180,26 +190,4 @@ class LeaderboardViewController: UITableViewController {
         tableView.reloadSections(sectionsToReload, with: .automatic)
     }
 
-}
-
-extension UIImage {
-
-    func addImagePadding(x: CGFloat, y: CGFloat) -> UIImage? {
-        let width: CGFloat = size.width + x
-        let height: CGFloat = size.height + y
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0)
-        let origin: CGPoint = CGPoint(x: (width - size.width) / 2, y: (height - size.height) / 2)
-        draw(at: origin)
-        let imageWithPadding = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return imageWithPadding
-    }
-    
-    func resized(to size: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
-        }
-    }
-    
 }
