@@ -319,7 +319,7 @@ class MapViewController: UIViewController {
         mapView.addOverlay(location.overlay)
         locationToOverlay = nil
     }
-    
+
     // Should optimally be subclassed but I couldn't get it to work properly
     // I wasn't able to cast the annotation to Location in the subclass init()
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
@@ -348,32 +348,36 @@ class MapViewController: UIViewController {
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
             imageView.tintColor = .systemBlue
             annotationView.rightCalloutAccessoryView = imageView
+            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
         } else if annotation.owner == nil {
             annotationView.glyphImage = UIImage(systemName: "circle")
             annotationView.markerTintColor = UIColor.systemGray.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
+            annotationView.leftCalloutAccessoryView = nil
         } else {
             annotationView.glyphImage = UIImage(systemName: "flag.fill")
             annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
-            fetchAndSetBitmoji(forUser: annotation.owner!, annotationView: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
         }
         
         return annotationView
     }
     
-    private func fetchAndSetBitmoji(forUser username: String, annotationView: MKAnnotationView) {
+    private func fetchAndSetBitmoji(forUser username: String, in annotationView: MKAnnotationView) {
         let db = Firestore.firestore()
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] (snapshot, error) in
             if let error = error as NSError? {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                 return
             }
+            
             if let user = snapshot?.documents.first {
                 let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
-                
                 ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
                     if let error = error as NSError? {
+                        let storageError = StorageErrorCode(rawValue: error.code)!
+                        if storageError == .objectNotFound { return }
                         os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                         return
                     }
@@ -382,8 +386,11 @@ class MapViewController: UIViewController {
                     let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: (self?.captureButtonHeight ?? 0) - 10, height: (self?.captureButtonHeight ?? 0) - 10))
                     imageView.image = bitmoji
                     annotationView.leftCalloutAccessoryView = imageView
+                    return
                 }
             }
+            
+            annotationView.leftCalloutAccessoryView = nil
         }
     }
     
