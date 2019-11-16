@@ -28,3 +28,25 @@ extension UIView {
         }
     }
 }
+
+extension UIImage {
+
+    func addImagePadding(x: CGFloat, y: CGFloat) -> UIImage? {
+        let width: CGFloat = size.width + x
+        let height: CGFloat = size.height + y
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0)
+        let origin: CGPoint = CGPoint(x: (width - size.width) / 2, y: (height - size.height) / 2)
+        draw(at: origin)
+        let imageWithPadding = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return imageWithPadding
+    }
+    
+    func resized(to size: CGSize) -> UIImage {
+        return UIGraphicsImageRenderer(size: size).image { _ in
+            draw(in: CGRect(origin: .zero, size: size))
+        }
+    }
+    
+}
