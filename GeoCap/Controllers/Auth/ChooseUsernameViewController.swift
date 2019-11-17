@@ -19,6 +19,11 @@ class ChooseUsernameViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.accessibilityIdentifier = "chooseUsernameView"
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         

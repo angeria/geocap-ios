@@ -20,7 +20,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().delegate = self
         FirebaseApp.configure()
         
+        if CommandLine.arguments.contains("--uitesting") {
+            configureAppForTesting()
+        }
+        
         return true
+    }
+    
+    private func configureAppForTesting() {
+        try? Auth.auth().signOut()
+        
+        let defaultsName = Bundle.main.bundleIdentifier!
+        UserDefaults.standard.removePersistentDomain(forName: defaultsName)
+        
+        UIView.setAnimationsEnabled(false)
     }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
