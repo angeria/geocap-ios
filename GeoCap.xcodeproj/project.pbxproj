@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CF82DFB6CB327F2F2521106 /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */; };
+		41DF57E3F4D85AC59CAE99BF /* libPods-GeoCapUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */; };
 		4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301656423426C0400618731 /* AuthenticationServices.framework */; };
 		4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */; };
 		43109487230AC9020071F3A5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43109489230AC9020071F3A5 /* Localizable.strings */; };
@@ -26,7 +28,7 @@
 		437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F0A8F236474AB005582E3 /* UIButtonRounded.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
-		43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* ThirdPartyMailer */; };
+		43A7502723581E2E00053B62 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* SwiftPackageProductDependency */; };
 		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
@@ -37,8 +39,6 @@
 		43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */; };
 		43F8CFEE22F8064000824778 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43F8CFED22F8064000824778 /* GoogleService-Info.plist */; };
 		870886EF1D0A0A8EEC8A68FA /* Pods_GeoCap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F90EB683AD76A4332A5DEB3 /* Pods_GeoCap.framework */; };
-		AC5F0FF066A47DCDD63C951A /* Pods_GeoCapUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D11DE2A27D21A59A50050A4C /* Pods_GeoCapUITests.framework */; };
-		CDE28A3986113DFA399D64AE /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F0FD6CA53273032B66F9D88 /* Pods_GeoCapTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +60,9 @@
 
 /* Begin PBXFileReference section */
 		1CB1574DE0F1D41ABC35D57A /* Pods-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		235A7681BEC0DF3FD775C3F4 /* Pods-GeoCap-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCap-GeoCapTests/Pods-GeoCap-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		330692508B29B28B3603AB9F /* Pods-GeoCap-GeoCapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap-GeoCapTests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap-GeoCapTests/Pods-GeoCap-GeoCapTests.debug.xcconfig"; sourceTree = "<group>"; };
+		35EC0E83A7E575164BCA2532 /* Pods-GeoCap-GeoCapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap-GeoCapUITests.release.xcconfig"; path = "Target Support Files/Pods-GeoCap-GeoCapUITests/Pods-GeoCap-GeoCapUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4301656423426C0400618731 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		4308FD76230ADD7E000A8BD0 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43109488230AC9020071F3A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -98,13 +101,14 @@
 		43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSignInViewController.swift; sourceTree = "<group>"; };
 		43F8CFED22F8064000824778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48885E039B9EF0540DBCEA8A /* Pods-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		6F0FD6CA53273032B66F9D88 /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GeoCapUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9359028A237B8370B9E6A7E4 /* Pods-GeoCapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9F90EB683AD76A4332A5DEB3 /* Pods_GeoCap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4B70B7749D2C4F7E71E820D /* Pods-GeoCap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.debug.xcconfig"; sourceTree = "<group>"; };
 		B77FED62B589C3E94D6FC9FF /* Pods-GeoCap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.release.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.release.xcconfig"; sourceTree = "<group>"; };
-		D11DE2A27D21A59A50050A4C /* Pods_GeoCapUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E037D898D302A90A489BDC09 /* Pods-GeoCapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E4C693FFCEC99034F9374CEA /* Pods-GeoCap-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap-GeoCapUITests/Pods-GeoCap-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */,
-				43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */,
+				43A7502723581E2E00053B62 /* BuildFile in Frameworks */,
 				870886EF1D0A0A8EEC8A68FA /* Pods_GeoCap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDE28A3986113DFA399D64AE /* Pods_GeoCapTests.framework in Frameworks */,
+				3CF82DFB6CB327F2F2521106 /* Pods_GeoCapTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC5F0FF066A47DCDD63C951A /* Pods_GeoCapUITests.framework in Frameworks */,
+				41DF57E3F4D85AC59CAE99BF /* libPods-GeoCapUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,8 +268,8 @@
 			children = (
 				4301656423426C0400618731 /* AuthenticationServices.framework */,
 				9F90EB683AD76A4332A5DEB3 /* Pods_GeoCap.framework */,
-				6F0FD6CA53273032B66F9D88 /* Pods_GeoCapTests.framework */,
-				D11DE2A27D21A59A50050A4C /* Pods_GeoCapUITests.framework */,
+				4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */,
+				8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -279,6 +283,10 @@
 				1CB1574DE0F1D41ABC35D57A /* Pods-GeoCapTests.release.xcconfig */,
 				48885E039B9EF0540DBCEA8A /* Pods-GeoCapUITests.debug.xcconfig */,
 				9359028A237B8370B9E6A7E4 /* Pods-GeoCapUITests.release.xcconfig */,
+				E4C693FFCEC99034F9374CEA /* Pods-GeoCap-GeoCapUITests.debug.xcconfig */,
+				35EC0E83A7E575164BCA2532 /* Pods-GeoCap-GeoCapUITests.release.xcconfig */,
+				330692508B29B28B3603AB9F /* Pods-GeoCap-GeoCapTests.debug.xcconfig */,
+				235A7681BEC0DF3FD775C3F4 /* Pods-GeoCap-GeoCapTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -303,7 +311,7 @@
 			);
 			name = GeoCap;
 			packageProductDependencies = (
-				43A7502623581E2E00053B62 /* ThirdPartyMailer */,
+				43A7502623581E2E00053B62 /* SwiftPackageProductDependency */,
 			);
 			productName = GeoCap;
 			productReference = 432DED9722E1F28D00DFA074 /* GeoCap.app */;
@@ -392,7 +400,7 @@
 			);
 			mainGroup = 432DED8E22E1F28D00DFA074;
 			packageReferences = (
-				43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */,
+				43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
 			projectDirPath = "";
@@ -810,6 +818,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
 				INFOPLIST_FILE = GeoCapTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -832,6 +841,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
 				INFOPLIST_FILE = GeoCapTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -853,6 +863,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
 				INFOPLIST_FILE = GeoCapUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -874,6 +885,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 934788YR3T;
 				INFOPLIST_FILE = GeoCapUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -929,7 +941,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */ = {
+		43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vtourraine/ThirdPartyMailer.git";
 			requirement = {
@@ -940,9 +952,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		43A7502623581E2E00053B62 /* ThirdPartyMailer */ = {
+		43A7502623581E2E00053B62 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */;
+			package = 43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */;
 			productName = ThirdPartyMailer;
 		};
 /* End XCSwiftPackageProductDependency section */

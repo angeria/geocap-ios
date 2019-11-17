@@ -11,6 +11,11 @@ import ThirdPartyMailer
 
 class PendingSignInViewController: UIViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.accessibilityIdentifier = "checkEmailView"
+    }
+    
     @IBOutlet weak var textLabel: UILabel! {
         didSet {
             guard let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email) else { return }
