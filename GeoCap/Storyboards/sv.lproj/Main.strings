@@ -53,6 +53,12 @@
 /* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "iNu-9N-5VV"; */
 "iNu-9N-5VV.normalTitle" = "Logga ut";
 
+/* Class = "UILabel"; text = "Use your Bitmoji as your avatar by connecting to Snapchat"; ObjectID = "DIE-R7-3e4"; */
+"DIE-R7-3e4.text" = "Använd din Bitmoji som avatar genom att ansluta till Snapchat";
+
+/* Class = "UIButton"; normalTitle = "Unlink Snapchat"; ObjectID = "Ck3-jU-1CL"; */
+"Ck3-jU-1CL.normalTitle" = "Logga ut från Snapchat";
+
 /* Class = "UIButton"; normalTitle = "Change Name"; ObjectID = "nzg-G2-pGe"; */
 "nzg-G2-pGe.normalTitle" = "Byt namn";
 
