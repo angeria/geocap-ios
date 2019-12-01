@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3CF82DFB6CB327F2F2521106 /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */; };
+		3776895C58525EFB0AE37D27 /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D900A9ECFF71F84FCD964CE6 /* Pods_GeoCapTests.framework */; };
 		41DF57E3F4D85AC59CAE99BF /* libPods-GeoCapUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */; };
 		4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301656423426C0400618731 /* AuthenticationServices.framework */; };
 		4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */; };
@@ -101,12 +101,12 @@
 		43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSignInViewController.swift; sourceTree = "<group>"; };
 		43F8CFED22F8064000824778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		48885E039B9EF0540DBCEA8A /* Pods-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GeoCapUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9359028A237B8370B9E6A7E4 /* Pods-GeoCapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.release.xcconfig"; sourceTree = "<group>"; };
 		9F90EB683AD76A4332A5DEB3 /* Pods_GeoCap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4B70B7749D2C4F7E71E820D /* Pods-GeoCap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.debug.xcconfig"; sourceTree = "<group>"; };
 		B77FED62B589C3E94D6FC9FF /* Pods-GeoCap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.release.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.release.xcconfig"; sourceTree = "<group>"; };
+		D900A9ECFF71F84FCD964CE6 /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E037D898D302A90A489BDC09 /* Pods-GeoCapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E4C693FFCEC99034F9374CEA /* Pods-GeoCap-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap-GeoCapUITests/Pods-GeoCap-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3CF82DFB6CB327F2F2521106 /* Pods_GeoCapTests.framework in Frameworks */,
+				3776895C58525EFB0AE37D27 /* Pods_GeoCapTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,8 +268,8 @@
 			children = (
 				4301656423426C0400618731 /* AuthenticationServices.framework */,
 				9F90EB683AD76A4332A5DEB3 /* Pods_GeoCap.framework */,
-				4E71F241C3FB5ED1D9E6B0FA /* Pods_GeoCapTests.framework */,
 				8C1DBF88280847396A588AF9 /* libPods-GeoCapUITests.a */,
+				D900A9ECFF71F84FCD964CE6 /* Pods_GeoCapTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
