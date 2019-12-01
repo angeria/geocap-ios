@@ -21,7 +21,7 @@ target 'GeoCap' do
   target 'GeoCapTests' do
     inherit! :search_paths
     # Pods for testing
-  end
+   end
 
 end
 
