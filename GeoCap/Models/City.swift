@@ -11,17 +11,17 @@ import CoreLocation
 import Firebase
 
 struct City: Equatable, Codable {
-    
+
     let name: String
     let coordinates: CLLocationCoordinate2D
     let reference: DocumentReference // Firestore document reference
-    
+
     init(name: String, coordinates: CLLocationCoordinate2D, reference: DocumentReference) {
       self.name = name
       self.coordinates = coordinates
       self.reference = reference
     }
-    
+
     static func == (lhs: City, rhs: City) -> Bool {
         return lhs.coordinates.latitude == rhs.coordinates.latitude
             && lhs.coordinates.longitude == rhs.coordinates.longitude
@@ -35,7 +35,7 @@ struct City: Equatable, Codable {
         case longitude
         case referencePath
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
@@ -43,18 +43,18 @@ struct City: Equatable, Codable {
         try container.encode(coordinates.longitude, forKey: .longitude)
         try container.encode(reference.path, forKey: .referencePath)
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         let name = try container.decode(String.self, forKey: .name)
         let latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
         let longitude = try container.decode(CLLocationDegrees.self, forKey: .longitude)
         let referencePath = try container.decode(String.self, forKey: .referencePath)
-        
+
         let coordinates = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let reference = Firestore.firestore().document(referencePath)
-        
+
         self.init(name: name, coordinates: coordinates, reference: reference)
     }
 }

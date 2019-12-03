@@ -11,27 +11,27 @@ import AVFoundation
 import UIKit
 
 class SoundManager {
-    
+
     static let shared = SoundManager()
-    
+
     enum Sounds {
         static let quizWon = "quiz-won"
         static let quizTimerAlert = "quiz-timer-alert"
     }
-    
+
     private init() {
-        try! AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.ambient)
     }
-    
+
     private var audioPlayer: AVAudioPlayer?
-    
+
     func playSound(withName soundName: String) {
         guard !AVAudioSession.sharedInstance().isOtherAudioPlaying else { return }
         guard UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled) else { return }
-        
+
         let sound = NSDataAsset(name: soundName)!
-        audioPlayer = try! AVAudioPlayer(data: sound.data)
+        audioPlayer = try? AVAudioPlayer(data: sound.data)
         audioPlayer!.play()
     }
-    
+
 }

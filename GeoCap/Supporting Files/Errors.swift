@@ -8,7 +8,7 @@
 
 import Foundation
 
-let GeoCapErrorDomain = "GeoCapErrorDomain"
+let geoCapErrorDomain = "GeoCapErrorDomain"
 
 enum GeoCapErrorCode: Int {
     case quizLoadFailed
