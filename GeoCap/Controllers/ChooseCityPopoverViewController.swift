@@ -11,14 +11,14 @@ import Firebase
 import CoreLocation
 
 class ChooseCityPopoverViewController: UIViewController {
-    
+
     @IBOutlet weak var cityPicker: UIPickerView! {
         didSet {
             cityPicker.dataSource = self
             cityPicker.delegate = self
         }
     }
-    
+
     // Dependency injection
     var allCities = [City]()
     var currentCity: City!
@@ -26,15 +26,15 @@ class ChooseCityPopoverViewController: UIViewController {
 }
 
 extension ChooseCityPopoverViewController: UIPickerViewDataSource, UIPickerViewDelegate {
-    
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return allCities.count
     }
-    
+
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return allCities[row].name
     }

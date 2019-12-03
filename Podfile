@@ -15,8 +15,8 @@ target 'GeoCap' do
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
   pod 'Firebase/Storage'
-  
   pod 'SnapSDK', :subspecs => ['SCSDKLoginKit', 'SCSDKBitmojiKit']
+  pod 'SwiftEntryKit'
 
   target 'GeoCapTests' do
     inherit! :search_paths

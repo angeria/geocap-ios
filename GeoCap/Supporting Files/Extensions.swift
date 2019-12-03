@@ -21,11 +21,11 @@ extension UIView {
     func scale() {
         UIView.animate(withDuration: 0.125, delay: 0, options: [], animations: {
             self.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
-        }) { (completed) in
+        }, completion: { _ in
             UIView.animate(withDuration: 0.125, delay: 0, options: [.curveEaseOut], animations: {
                 self.transform = CGAffineTransform.identity
             })
-        }
+        })
     }
 }
 
@@ -42,11 +42,11 @@ extension UIImage {
 
         return imageWithPadding
     }
-    
+
     func resized(to size: CGSize) -> UIImage {
         return UIGraphicsImageRenderer(size: size).image { _ in
             draw(in: CGRect(origin: .zero, size: size))
         }
     }
-    
+
 }

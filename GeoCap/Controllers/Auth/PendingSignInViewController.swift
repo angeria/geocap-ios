@@ -15,11 +15,13 @@ class PendingSignInViewController: UIViewController {
         super.viewDidLoad()
         view.accessibilityIdentifier = "checkEmailView"
     }
-    
+
     @IBOutlet weak var textLabel: UILabel! {
         didSet {
-            guard let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email) else { return }
-            let format = NSLocalizedString("auth-pending-sign-in-message", comment: "Message telling user to check email")
+            guard let email = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.email)
+                else { return }
+            let format = NSLocalizedString("auth-pending-sign-in-message",
+                                           comment: "Message telling user to check email")
             textLabel.text = String(format: format, email)
         }
     }
@@ -29,11 +31,12 @@ class PendingSignInViewController: UIViewController {
             openEmailButton.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
-    
+
     @IBAction func openEmailButtonPressed(_ sender: UIButton) {
-        let actionTitle = NSLocalizedString("auth-choose-email-app-action-sheet-title", comment: "Title of choose email app action sheet alert")
+        let actionTitle = NSLocalizedString("auth-choose-email-app-action-sheet-title",
+                                            comment: "Title of choose email app action sheet alert")
         let actionSheet = UIAlertController(title: actionTitle, message: nil, preferredStyle: .actionSheet)
-        
+
         // Native mail app
         let mailURL = URL(string: "message://")!
         if UIApplication.shared.canOpenURL(mailURL) {
@@ -42,18 +45,18 @@ class PendingSignInViewController: UIViewController {
             }
             actionSheet.addAction(openNativeMailAppAction)
         }
-        
+
         // Third party mail apps
         let emailClients = ThirdPartyMailClient.clients()
         for client in emailClients {
             if ThirdPartyMailer.application(UIApplication.shared, isMailClientAvailable: client) {
                 let openOtherMailAppAction = UIAlertAction(title: client.name, style: .default) { _ in
-                    let _ = ThirdPartyMailer.application(UIApplication.shared, openMailClient: client)
+                    _ = ThirdPartyMailer.application(UIApplication.shared, openMailClient: client)
                 }
                 actionSheet.addAction(openOtherMailAppAction)
             }
         }
-        
+
         present(actionSheet, animated: true) { [weak self] in
             // Dismiss email app chooser when tapping outside of it
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self?.dismissEmailAppChooser))
@@ -61,7 +64,7 @@ class PendingSignInViewController: UIViewController {
             actionSheet.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
         }
     }
-    
+
     @objc func dismissEmailAppChooser() {
         dismiss(animated: true, completion: nil)
     }

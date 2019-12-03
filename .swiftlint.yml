@@ -1,0 +1,13 @@
+disabled_rules:
+  - file_length
+  - type_body_length
+  - line_length
+  - force_cast
+identifier_name:
+  max_length: 50
+  excluded:
+    - x
+    - i
+    - y
+    - db
+    - id

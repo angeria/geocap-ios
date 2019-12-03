@@ -149,7 +149,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>QuickLayout.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SnapSDK.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SwiftEntryKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

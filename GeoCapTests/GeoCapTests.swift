@@ -25,7 +25,7 @@ class GeoCapTests: XCTestCase {
             "name": "Test location",
             "center": GeoPoint(latitude: 32.4334, longitude: 23.4334)
         ], username: "John")
-        
+
         XCTAssert(location != nil)
         XCTAssertFalse(location!.isCapturedByUser)
     }

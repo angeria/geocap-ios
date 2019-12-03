@@ -28,7 +28,7 @@
 		437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F0A8F236474AB005582E3 /* UIButtonRounded.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
-		43A7502723581E2E00053B62 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* SwiftPackageProductDependency */; };
+		43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */ = {isa = PBXBuildFile; productRef = 43A7502623581E2E00053B62 /* ThirdPartyMailer */; };
 		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
@@ -117,7 +117,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */,
-				43A7502723581E2E00053B62 /* BuildFile in Frameworks */,
+				43A7502723581E2E00053B62 /* ThirdPartyMailer in Frameworks */,
 				870886EF1D0A0A8EEC8A68FA /* Pods_GeoCap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,6 +304,7 @@
 				432DED9522E1F28D00DFA074 /* Resources */,
 				9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */,
 				4304C22923333B3D00B782DF /* ShellScript */,
+				435D4D112393FF9500930F33 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -311,7 +312,7 @@
 			);
 			name = GeoCap;
 			packageProductDependencies = (
-				43A7502623581E2E00053B62 /* SwiftPackageProductDependency */,
+				43A7502623581E2E00053B62 /* ThirdPartyMailer */,
 			);
 			productName = GeoCap;
 			productReference = 432DED9722E1F28D00DFA074 /* GeoCap.app */;
@@ -400,7 +401,7 @@
 			);
 			mainGroup = 432DED8E22E1F28D00DFA074;
 			packageReferences = (
-				43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */,
+				43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */,
 			);
 			productRefGroup = 432DED9822E1F28D00DFA074 /* Products */;
 			projectDirPath = "";
@@ -462,6 +463,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "releaseConfig=\"Release\"\nif [ \"$releaseConfig\" = \"${CONFIGURATION}\" ]; then\n    echo \"Running Crashlytics\"\n    \"${PODS_ROOT}/Fabric/run\"\nfi\n";
+		};
+		435D4D112393FF9500930F33 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		9A75A8B76EB53CB96027B60E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -941,7 +959,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */ = {
+		43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/vtourraine/ThirdPartyMailer.git";
 			requirement = {
@@ -952,9 +970,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		43A7502623581E2E00053B62 /* SwiftPackageProductDependency */ = {
+		43A7502623581E2E00053B62 /* ThirdPartyMailer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 43A7502523581E2E00053B62 /* RemoteSwiftPackageReference */;
+			package = 43A7502523581E2E00053B62 /* XCRemoteSwiftPackageReference "ThirdPartyMailer" */;
 			productName = ThirdPartyMailer;
 		};
 /* End XCSwiftPackageProductDependency section */

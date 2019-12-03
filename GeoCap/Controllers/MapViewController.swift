@@ -24,11 +24,11 @@ extension MapViewController {
         static let overlayLineWidth: CGFloat = 1
         static let quizTimeoutInterval = 10.0
     }
-    
+
 }
 
 class MapViewController: UIViewController {
-    
+
     // Couldn't figure out a way to get the callout size dynamically so had to hard code values that looked good
     private var captureButtonWidth: Int {
         switch traitCollection.preferredContentSizeCategory {
@@ -91,9 +91,9 @@ class MapViewController: UIViewController {
             return 50
         }
     }
-    
+
     var currentCityIsNotSet = true
-    
+
     // Keeping map in memory all the time for background state updates (e.g. while quiz view is visible)
     // Set 'mapView.delegate = nil' somewhere to be able to deallocate it
     @IBOutlet weak var mapView: MKMapView! {
@@ -105,30 +105,31 @@ class MapViewController: UIViewController {
             mapView.isPitchEnabled = false
         }
     }
-    
+
     // MARK: - Life Cycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(Location.self))
-        
-        if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity), let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
+
+        if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity),
+            let lastCityDecoded = try? JSONDecoder().decode(City.self, from: lastCity) {
             currentCity = lastCityDecoded
         }
 
         requestUserLocationAuth()
-        
+
         setupNotifications()
-        
+
         let userTrackingBarButton = MKUserTrackingBarButtonItem(mapView: mapView)
         navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
-    
+
     func teardown() {
         locationListener?.remove()
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if let selectedAnnotation = mapView.selectedAnnotations.first {
             mapView.deselectAnnotation(selectedAnnotation, animated: true)
@@ -136,19 +137,19 @@ class MapViewController: UIViewController {
         clearMap()
         fetchLocations()
     }
-    
+
     // MARK: - Location Filter (segmented control)
-    
+
     @IBOutlet weak var locationFilter: UISegmentedControl!
-    
+
     private let feedbackGenerator = UISelectionFeedbackGenerator()
-    
+
     @IBAction func locationFilterWasPressed(_ sender: UISegmentedControl) {
         feedbackGenerator.selectionChanged()
         clearMap()
         fetchLocations()
     }
-    
+
     // MARK: - Locations
 
     @IBOutlet weak var loadingLocationsView: UIVisualEffectView! {
@@ -157,55 +158,57 @@ class MapViewController: UIViewController {
             loadingLocationsView.layer.cornerRadius = GeoCapConstants.defaultCornerRadius
         }
     }
-    
-    
+
     private var allCities = [City]()
-    
+
     private var currentCity: City? {
         didSet {
             clearMap()
             fetchLocations()
-            
-            let region = MKCoordinateRegion(center: currentCity!.coordinates, latitudinalMeters: Constants.zoomLevel, longitudinalMeters: Constants.zoomLevel)
+
+            let region = MKCoordinateRegion(center: currentCity!.coordinates,
+                                            latitudinalMeters: Constants.zoomLevel,
+                                            longitudinalMeters: Constants.zoomLevel)
             mapView.setRegion(region, animated: true)
-            
+
             currentCityBarButton.title = currentCity!.name
             allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
         }
     }
-    
+
     @IBOutlet weak var currentCityBarButton: UIBarButtonItem! {
         didSet {
             currentCityBarButton.title = nil
         }
     }
-    
+
     private func setNearestCity() {
         if UserDefaults.standard.object(forKey: GeoCapConstants.UserDefaultsKeys.lastCity) == nil {
             loadingLocationsView.isHidden = false
         }
-        
+
         let db = Firestore.firestore()
-        db.collectionGroup("cities").getDocuments() { [weak self] querySnapshot, error in
+        db.collectionGroup("cities").getDocuments { [weak self] querySnapshot, error in
             guard let query = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
             guard let self = self else { return }
-            
+
             let userLocation = self.mapView.userLocation.location!
             var closestDistanceSoFar: CLLocationDistance?
             var nearestCitySoFar: City?
-            
+
             for cityDocument in query.documents {
                 guard let cityGeoPoint = cityDocument.data()["coordinates"] as? GeoPoint else {
-                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.Map, type: .debug, cityDocument.documentID)
+                    os_log("Field 'coordinates' doesn't exist for city with id %{public}@", log: OSLog.Map, type: .debug,
+                           cityDocument.documentID)
                     continue
                 }
                 let cityLocation = CLLocation(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
                 let distanceFromUser = userLocation.distance(from: cityLocation)
-                
+
                 // Add to all cities
                 let cityCoordinates = CLLocationCoordinate2D(latitude: cityGeoPoint.latitude, longitude: cityGeoPoint.longitude)
                 let city = City(name: cityDocument.documentID.capitalized, coordinates: cityCoordinates, reference: cityDocument.reference)
@@ -218,7 +221,7 @@ class MapViewController: UIViewController {
                 }
             }
             self.allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
-            
+
             // Update only if the nearest city is not the same as the last cached city
             if let lastCity = UserDefaults.standard.data(forKey: GeoCapConstants.UserDefaultsKeys.lastCity) {
                 do {
@@ -228,7 +231,7 @@ class MapViewController: UIViewController {
                         do {
                             let nearestCityEncoded = try JSONEncoder().encode(nearestCitySoFar)
                             UserDefaults.standard.set(nearestCityEncoded, forKey: GeoCapConstants.UserDefaultsKeys.lastCity)
-                        } catch  {
+                        } catch {
                             os_log("%{public}@", log: OSLog.Map, type: .debug, error as NSError)
                         }
                     }
@@ -240,23 +243,25 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
+
     private enum LocationType: String {
         case building
         case area
     }
-    
-    // Listener not removed at all (only when signing out) and constantly listening for updates on locations even while map is not visible
+
+    // Listener not removed at all (only when signing out)
+    // and constantly listening for updates on locations even while map is not visible
     // Makes it possible to keep the map updated in the background while other views are visible
     private var locationListener: ListenerRegistration?
-    
+
+    // swiftlint:disable:next cyclomatic_complexity
     func fetchLocations() {
         guard let username = Auth.auth().currentUser?.displayName else { return }
-        
+
         loadingLocationsView.isHidden = false
-        
+
         locationListener?.remove()
-        
+
         var locationType: String
         switch locationFilter.selectedSegmentIndex {
         case 0:
@@ -266,52 +271,56 @@ class MapViewController: UIViewController {
         default:
             fatalError("Unexpected selected segment index in location filter")
         }
-        
-        locationListener = currentCity?.reference.collection("locations").whereField("type", isEqualTo: locationType).addSnapshotListener { [weak self] querySnapshot, error in
+
+        locationListener = currentCity?.reference.collection("locations")
+            .whereField("type", isEqualTo: locationType)
+            .addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
-            
+
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
                 guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
                     os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .debug, diff.document.documentID)
                     return
                 }
-                
-                if (diff.type == .added) {
+
+                if diff.type == .added {
                     self.mapView.addAnnotation(newAnnotation)
                     self.addLocationOverlay(newAnnotation)
                 }
-                
-                if (diff.type == .modified) {
-                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+
+                if diff.type == .modified {
+                    if let oldAnnotation = self.mapView.annotations
+                        .first(where: { $0.title == newAnnotation.name }) as? Location {
                         self.mapView.removeAnnotation(oldAnnotation)
                         self.mapView.removeOverlay(oldAnnotation.overlay)
                         self.mapView.addAnnotation(newAnnotation)
                         self.addLocationOverlay(newAnnotation)
                     }
                 }
-                
-                if (diff.type == .removed) {
-                    if let oldAnnotation = self.mapView.annotations.first(where: { $0.title == newAnnotation.name }) as? Location {
+
+                if diff.type == .removed {
+                    if let oldAnnotation = self.mapView.annotations
+                        .first(where: { $0.title == newAnnotation.name }) as? Location {
                         self.mapView.removeOverlay(oldAnnotation.overlay)
                         self.mapView.removeAnnotation(oldAnnotation)
                     }
                 }
             }
-            
+
             self?.loadingLocationsView.isHidden = true
         }
     }
-    
+
     func clearMap() {
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
     }
-    
+
     // Awkward solution but used for making the affected location available to the delegate function which renders overlays
     private var locationToOverlay: Location?
     private func addLocationOverlay(_ location: Location) {
@@ -325,12 +334,12 @@ class MapViewController: UIViewController {
     private func setupLocationAnnotationView(for annotation: Location, on mapView: MKMapView) -> MKMarkerAnnotationView {
         let reuseIdentifier = NSStringFromClass(Location.self)
         let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier, for: annotation) as! MKMarkerAnnotationView
-        
+
         annotationView.displayPriority = .required
         annotationView.animatesWhenAdded = true
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
-        
+
         let captureButton = UIButton(type: .system)
         let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
         captureButton.setTitle(title, for: .normal)
@@ -338,11 +347,11 @@ class MapViewController: UIViewController {
         captureButton.tintColor = .white
         captureButton.backgroundColor = .systemBlue
         captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
-        
+
         if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "checkmark")
-            
+
             let image = UIImage(systemName: "checkmark.circle")
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
@@ -360,10 +369,10 @@ class MapViewController: UIViewController {
             annotationView.rightCalloutAccessoryView = captureButton
             fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
         }
-        
+
         return annotationView
     }
-    
+
     private func fetchAndSetBitmoji(forUser username: String, in annotationView: MKAnnotationView) {
         let db = Firestore.firestore()
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] (snapshot, error) in
@@ -371,7 +380,7 @@ class MapViewController: UIViewController {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                 return
             }
-            
+
             if let user = snapshot?.documents.first {
                 let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
                 ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
@@ -383,17 +392,20 @@ class MapViewController: UIViewController {
                     }
 
                     let bitmoji = UIImage(data: data!)
-                    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: (self?.captureButtonHeight ?? 0) - 12, height: (self?.captureButtonHeight ?? 0) - 12))
+                    let imageView = UIImageView(frame: CGRect(x: 0,
+                                                              y: 0,
+                                                              width: (self?.captureButtonHeight ?? 0) - 12,
+                                                              height: (self?.captureButtonHeight ?? 0) - 12))
                     imageView.image = bitmoji
                     annotationView.leftCalloutAccessoryView = imageView
                     return
                 }
             }
-            
+
             annotationView.leftCalloutAccessoryView = nil
         }
     }
-    
+
     private func presentNotInsideAreaAlert() {
         let title = NSLocalizedString("alert-title-not-inside-area", comment: "Title of alert when user isn't inside area")
         let message = NSLocalizedString("alert-message-not-inside-area", comment: "Message of alert when user isn't inside area")
@@ -403,14 +415,14 @@ class MapViewController: UIViewController {
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-    
+
     // MARK: - Quiz
-    
+
     private func handleQuizDismissal(quizVC: QuizViewController) {
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
             captureLocation()
-            
+
             // Request notification auth after first capture
             if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
@@ -419,7 +431,7 @@ class MapViewController: UIViewController {
             quizTimeoutIsActive = true
         }
     }
-    
+
     private var quizTimeoutIsActive = false {
         willSet {
             if newValue == true {
@@ -427,13 +439,13 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
+
     private func startQuizTimeout() {
         Timer.scheduledTimer(withTimeInterval: Constants.quizTimeoutInterval, repeats: false) { [weak self] _ in
             self?.quizTimeoutIsActive = false
         }
     }
-    
+
     private func presentQuizTimeoutAlert() {
         let title = NSLocalizedString("quiz-timeout-alert-title", comment: "Title of quiz timeout alert")
         let messageFormat = NSLocalizedString("quiz-timeout-alert-message", comment: "Message of quiz timeout alert")
@@ -444,23 +456,25 @@ class MapViewController: UIViewController {
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-    
+
     private var attemptedCaptureLocation: String?
-    
+
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
         guard let locationName = attemptedCaptureLocation else { return }
-        
+
         let db = Firestore.firestore()
         let batch = db.batch()
-        
-        currentCity?.reference.collection("locations").whereField("name", isEqualTo: locationName).getDocuments() { querySnapshot, error in
+
+        currentCity?.reference.collection("locations")
+            .whereField("name", isEqualTo: locationName)
+            .getDocuments { querySnapshot, error in
             guard let query = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
-            
+
             if let document = query.documents.first {
                 let locationReference = document.reference
                 batch.updateData([
@@ -468,11 +482,12 @@ class MapViewController: UIViewController {
                     "ownerId": user.uid,
                     "captureTimestamp": FieldValue.serverTimestamp()
                 ], forDocument: locationReference)
-                
+
                 let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]), "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-                
-                batch.commit() { err in
+                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
+                                  "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+
+                batch.commit { error in
                     if let error = error as NSError? {
                         os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                         Crashlytics.sharedInstance().recordError(error)
@@ -481,14 +496,14 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
+
     // MARK: - Notifications
 
     private func setupNotifications() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
         let ref = db.collection("users").document(uid).collection("private").document("data")
-        
+
         // Setup notification token
         InstanceID.instanceID().instanceID { (result, error) in
             if let error = error {
@@ -504,9 +519,9 @@ class MapViewController: UIViewController {
                 }
             }
         }
-        
+
         // Turn off location lost notifications for user if setting is 'denied' or 'not determined'
-        UNUserNotificationCenter.current().getNotificationSettings() { settings in
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
             case .denied, .notDetermined:
                 ref.updateData(["locationLostNotificationsEnabled": false]) { error in
@@ -520,22 +535,25 @@ class MapViewController: UIViewController {
             }
         }
     }
-    
+
     private func presentRequestNotificationAuthAlert() {
-        let title = NSLocalizedString("alert-title-request-notification-auth", comment: "Title of alert when requesting notification authorization")
-        let message = NSLocalizedString("alert-message-request-notification-auth", comment: "Message of alert when requesting notification authorization")
+        let title = NSLocalizedString("alert-title-request-notification-auth",
+                                      comment: "Title of alert when requesting notification authorization")
+        let message = NSLocalizedString("alert-message-request-notification-auth",
+                                        comment: "Message of alert when requesting notification authorization")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
 
-        let dontAllowActionTitle = NSLocalizedString("alert-action-title-dont-allow", comment: "Title of alert action 'Don't Allow'")
+        let dontAllowActionTitle = NSLocalizedString("alert-action-title-dont-allow",
+                                                     comment: "Title of alert action 'Don't Allow'")
         let dontAllowAction = UIAlertAction(title: dontAllowActionTitle, style: .default) { _ in
             UserDefaults.standard.set(true, forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)
         }
         alert.addAction(dontAllowAction)
-        
+
         let allowActionTitle = NSLocalizedString("alert-action-title-allow", comment: "Title of alert action 'Allow'")
         let allowAction = UIAlertAction(title: allowActionTitle, style: .default) { _ in
             guard let user = Auth.auth().currentUser else { return }
-            
+
             let authOptions: UNAuthorizationOptions = [.alert, .sound]
             UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { (granted, error) in
                 if let error = error {
@@ -546,7 +564,7 @@ class MapViewController: UIViewController {
                     DispatchQueue.main.async {
                         UIApplication.shared.registerForRemoteNotifications()
                     }
-                    
+
                     let db = Firestore.firestore()
                     let ref = db.collection("users").document(user.uid).collection("private").document("data")
                     ref.updateData(["locationLostNotificationsEnabled": true]) { error in
@@ -560,17 +578,17 @@ class MapViewController: UIViewController {
             }
         }
         alert.addAction(allowAction)
-        
+
         // Had to delay the alert a bit to prevent getting "view is not in the window hierarchy" error
-        Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { [weak self] timer in
+        Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { [weak self] _ in
             self?.present(alert, animated: true)
         }
     }
-    
+
     // MARK: - User Location
-    
+
     private let locationManager = CLLocationManager()
-    
+
     private func requestUserLocationAuth() {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -583,25 +601,27 @@ class MapViewController: UIViewController {
             break
         }
     }
-    
+
     private func presentLocationAccessDeniedAlert() {
         let title = NSLocalizedString("alert-title-location-services-off", comment: "Alert title when location services is off")
-        let message = NSLocalizedString("alert-message-location-services-off", comment: "Alert message when location services is off")
+        let message = NSLocalizedString("alert-message-location-services-off",
+                                        comment: "Alert message when location services is off")
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
         let okAction = UIAlertAction(title: okActionTitle, style: .default)
-        let settingsActionTitle = NSLocalizedString("alert-action-title-settings", comment: "Title of alert action for going to 'Settings'")
-        let settingsAction = UIAlertAction(title: settingsActionTitle, style: .default, handler: {action in
+        let settingsActionTitle = NSLocalizedString("alert-action-title-settings",
+                                                    comment: "Title of alert action for going to 'Settings'")
+        let settingsAction = UIAlertAction(title: settingsActionTitle, style: .default, handler: { _ in
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
         })
         alert.addAction(settingsAction)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-    
+
     func user(location: MKUserLocation, isInside overlay: MKOverlay) -> Bool {
         let coordinates = location.coordinate
-        
+
         switch overlay {
         case let polygon as MKPolygon:
             let polygonRenderer = MKPolygonRenderer(polygon: polygon)
@@ -617,19 +637,19 @@ class MapViewController: UIViewController {
             fatalError("Unexpected overlay")
         }
     }
-    
+
     // MARK: - Navigation
-    
+
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         super.shouldPerformSegue(withIdentifier: identifier, sender: sender)
-        
+
         switch identifier {
         case "Show Quiz":
-            if quizTimeoutIsActive{
+            if quizTimeoutIsActive {
 //                presentQuizTimeoutAlert()
 //                return false
             }
-            
+
             if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
                 // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
                 if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
@@ -651,13 +671,13 @@ class MapViewController: UIViewController {
         default:
             fatalError("Unexpected segue identifier")
         }
-        
+
         return false
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        
+
         switch segue.identifier {
         case "Show Quiz":
             if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
@@ -679,7 +699,7 @@ class MapViewController: UIViewController {
             fatalError("Unexpected segue identifier")
         }
     }
-    
+
     @IBAction func unwindToMap(unwindSegue: UIStoryboardSegue) {
         switch unwindSegue.identifier {
         case "unwindSegueQuizToMap":
@@ -694,24 +714,22 @@ class MapViewController: UIViewController {
             fatalError("Unexpected unwind segue identifier")
         }
     }
-    
+
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         if let quizVC = presentationController.presentedViewController as? QuizViewController {
             handleQuizDismissal(quizVC: quizVC)
         }
     }
-    
+
 }
 
 // MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate {
-    
+
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        for view in views {
-            if view.annotation is MKUserLocation {
-                view.canShowCallout = false
-            }
+        for view in views where view.annotation is MKUserLocation {
+            view.canShowCallout = false
         }
     }
 
@@ -721,31 +739,31 @@ extension MapViewController: MKMapViewDelegate {
             setNearestCity()
         }
     }
-    
+
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let locationAnnotation = annotation as? Location {
             return setupLocationAnnotationView(for: locationAnnotation, on: mapView)
         }
         return nil
     }
-    
+
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         mapView.deselectAnnotation(view.annotation, animated: true)
         if shouldPerformSegue(withIdentifier: "Show Quiz", sender: view) {
             performSegue(withIdentifier: "Show Quiz", sender: view)
         }
     }
-    
+
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let location = locationToOverlay else { return MKOverlayRenderer(overlay: overlay) }
-        
+
         // Duplicate code but I can't figure out how to extract it since they are different classes
         switch overlay {
         case let polygon as MKPolygon:
             let renderer = MKPolygonRenderer(polygon: polygon)
             renderer.alpha = Constants.overlayAlpha
             renderer.lineWidth = Constants.overlayLineWidth
-            
+
             if location.isCapturedByUser {
                 renderer.fillColor = .systemBlue
                 renderer.strokeColor = .systemBlue
@@ -756,13 +774,13 @@ extension MapViewController: MKMapViewDelegate {
                 renderer.fillColor = .systemRed
                 renderer.strokeColor = .systemRed
             }
-            
+
             return renderer
         case let circle as MKCircle:
             let renderer = MKCircleRenderer(circle: circle)
             renderer.alpha = Constants.overlayAlpha
             renderer.lineWidth = Constants.overlayLineWidth
-            
+
             if location.isCapturedByUser {
                 renderer.fillColor = .systemBlue
                 renderer.strokeColor = .systemBlue
@@ -773,22 +791,22 @@ extension MapViewController: MKMapViewDelegate {
                 renderer.fillColor = .systemRed
                 renderer.strokeColor = .systemRed
             }
-            
+
             return renderer
         default:
             fatalError("Unexpected overlay")
         }
     }
-    
+
 }
 
 // MARK: - UIPopoverPresentationControllerDelegate
 
 extension MapViewController: UIPopoverPresentationControllerDelegate {
-    
+
     // Allow popovers on iPhones instead of converting them to modal presentations
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.none
     }
-    
+
 }
