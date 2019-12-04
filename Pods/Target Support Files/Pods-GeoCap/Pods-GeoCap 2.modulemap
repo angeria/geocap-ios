@@ -1,0 +1,6 @@
+framework module Pods_GeoCap {
+  umbrella header "Pods-GeoCap-umbrella.h"
+
+  export *
+  module * { export * }
+}

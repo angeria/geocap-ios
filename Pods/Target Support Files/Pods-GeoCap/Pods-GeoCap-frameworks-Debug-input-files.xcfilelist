@@ -10,6 +10,7 @@ ${PODS_ROOT}/SnapSDK/SCSDKBitmojiKit.framework
 ${PODS_ROOT}/SnapSDK/SCSDKCoreKit.framework
 ${PODS_ROOT}/SnapSDK/SCSDKLoginKit.framework
 ${BUILT_PRODUCTS_DIR}/SwiftEntryKit/SwiftEntryKit.framework
+${BUILT_PRODUCTS_DIR}/ThirdPartyMailer/ThirdPartyMailer.framework
 ${BUILT_PRODUCTS_DIR}/abseil/absl.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework
 ${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework

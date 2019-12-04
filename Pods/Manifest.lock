@@ -320,7 +320,7 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PINCache (2.3)
   - PINOperation (1.1.2)
-  - Protobuf (3.11.0)
+  - Protobuf (3.11.1)
   - QuickLayout (3.0.0)
   - SnapSDK/SCSDKBitmojiKit (1.3.3):
     - PINCache (< 3.1, >= 2.3)
@@ -328,6 +328,7 @@ PODS:
   - SnapSDK/SCSDKLoginKit (1.3.3)
   - SwiftEntryKit (1.2.3):
     - QuickLayout (= 3.0.0)
+  - ThirdPartyMailer (1.7)
 
 DEPENDENCIES:
   - Crashlytics (~> 3.14.0)
@@ -342,6 +343,7 @@ DEPENDENCIES:
   - SnapSDK/SCSDKBitmojiKit
   - SnapSDK/SCSDKLoginKit
   - SwiftEntryKit
+  - ThirdPartyMailer
 
 SPEC REPOS:
   trunk:
@@ -379,6 +381,7 @@ SPEC REPOS:
     - QuickLayout
     - SnapSDK
     - SwiftEntryKit
+    - ThirdPartyMailer
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
@@ -411,11 +414,12 @@ SPEC CHECKSUMS:
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINOperation: 24b774353ca248fcf87d67b2d61eef42087c125a
-  Protobuf: 394b2bf29ec303f4325e3ee4892c09e675647152
+  Protobuf: 20d79da7f20b5928b80043b05080b816e802659e
   QuickLayout: 07b45a72b10083fee3f095990cfed1c1e7b27f0a
   SnapSDK: e0642fe1b670cfffc45801d31ca36f5c3e07297f
   SwiftEntryKit: 340713c2e4a6662c5149629990bf1088bf5f0389
+  ThirdPartyMailer: 78a12c91f0b1a3ca8fb26eb96563addc79d9fd3f
 
-PODFILE CHECKSUM: 039b2c1575038314953d2b925f935a22c4626346
+PODFILE CHECKSUM: 428858b4c2cc61dff32fbeda51a135fecbf86630
 
 COCOAPODS: 1.8.4

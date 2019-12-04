@@ -12,6 +12,7 @@ import FirebaseAuth
 import os.log
 import AVFoundation
 import FirebaseRemoteConfig
+import SwiftEntryKit
 
 extension QuizViewController {
     enum Constants {
@@ -47,6 +48,7 @@ class QuizViewController: UIViewController {
 
     // Dismiss quiz immediately if view resigns active to prevent cheating
     @objc private func willResignActive() {
+        SwiftEntryKit.dismiss() // Dismiss "Tap anywhere to continue"-note, if visible
         quizLost = true
         countdownBarTimer?.invalidate()
         performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
@@ -193,6 +195,8 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var nextQuestionTapRecognizer: UITapGestureRecognizer!
 
     @IBAction func tap(_ sender: UITapGestureRecognizer) {
+        SwiftEntryKit.dismiss() // Dismiss "Tap anywhere to continue"-note, if visible
+
         sender.isEnabled = false
 
         if quizLost || quizWon {
@@ -235,6 +239,43 @@ class QuizViewController: UIViewController {
 
         countdownBarTimer?.invalidate()
         nextQuestionTapRecognizer.isEnabled = true
+
+        let noteDisplayCount = UserDefaults.standard.integer(forKey: GeoCapConstants.UserDefaultsKeys.tapToContinueNoteDisplayCount)
+        if noteDisplayCount < 3 {
+            Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
+                self?.presentTapToContinueNote()
+                UserDefaults.standard.set(noteDisplayCount + 1, forKey: GeoCapConstants.UserDefaultsKeys.tapToContinueNoteDisplayCount)
+            }
+        }
+    }
+
+    private func presentTapToContinueNote() {
+        var attributes = EKAttributes.topNote
+        attributes.displayMode = EKAttributes.DisplayMode.inferred
+        attributes.entryBackground = .color(color: EKColor(.systemBlue))
+        attributes.shadow = .active(
+            with: .init(
+                color: .black,
+                opacity: 0.3,
+                radius: 10,
+                offset: .zero
+            )
+        )
+        attributes.displayDuration = .infinity
+
+        let text = NSLocalizedString("quiz-tap-to-continue-note",
+                                     comment: "Text on 'Tap to continue'-note in quiz")
+        let style = EKProperty.LabelStyle(
+            font: .preferredFont(forTextStyle: .subheadline),
+            color: .white,
+            alignment: .center
+        )
+        let labelContent = EKProperty.LabelContent(
+            text: text,
+            style: style
+        )
+        let contentView = EKNoteMessageView(with: labelContent)
+        SwiftEntryKit.display(entry: contentView, using: attributes)
     }
 
     private func resetButtons() {

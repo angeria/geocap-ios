@@ -20,6 +20,7 @@ enum GeoCapConstants {
         static let username = "username"
         static let notificationAuthRequestShown = "notificationAuthRequestShown"
         static let lastCity = "lastCity"
+        static let tapToContinueNoteDisplayCount = "tapToContinueNoteDisplayCount"
     }
 
     enum RemoteConfig {
