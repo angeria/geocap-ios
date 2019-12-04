@@ -13,6 +13,7 @@ import Firebase
 import FirebaseAuth
 import os.log
 import AVFoundation
+import SwiftEntryKit
 
 extension MapViewController {
     enum Constants {
@@ -717,6 +718,7 @@ class MapViewController: UIViewController {
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         if let quizVC = presentationController.presentedViewController as? QuizViewController {
+            SwiftEntryKit.dismiss() // Dismiss "Tap anywhere to continue"-note, if visible
             handleQuizDismissal(quizVC: quizVC)
         }
     }

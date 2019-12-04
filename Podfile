@@ -12,9 +12,11 @@ target 'GeoCap' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Functions'
   pod 'Firebase/RemoteConfig'
+  pod 'Firebase/Storage'
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
-  pod 'Firebase/Storage'
+
+  pod 'ThirdPartyMailer'
   pod 'SnapSDK', :subspecs => ['SCSDKLoginKit', 'SCSDKBitmojiKit']
   pod 'SwiftEntryKit'
 

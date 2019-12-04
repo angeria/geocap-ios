@@ -106,6 +106,9 @@ OTHER VIEWS
 /* Notification body ... */
 "location-lost-notification-body" = "%@ took %@ from you 🚩";
 
+/* Text on 'Tap to continue'-note in quiz */
+"quiz-tap-to-continue-note" = "Tap anywhere to continue";
+
 /*
 MAP
 */
