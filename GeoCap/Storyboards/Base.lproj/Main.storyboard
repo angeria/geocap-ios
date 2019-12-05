@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H9h-Jh-XUs">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -51,9 +51,9 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                             </mapView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-1y-Q0W">
-                                <rect key="frame" x="113" y="398" width="188" height="105.5"/>
+                                <rect key="frame" x="113" y="397.5" width="188.5" height="106"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="c2L-wJ-CC7">
-                                    <rect key="frame" x="0.0" y="0.0" width="188" height="105.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="188.5" height="106"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KTf-tR-Fot">
@@ -66,7 +66,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="MN3-M9-4Gq">
-                                                    <rect key="frame" x="56" y="28.5" width="37" height="37"/>
+                                                    <rect key="frame" x="55.5" y="28.5" width="37" height="37"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <constraints>
@@ -445,42 +445,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7q-Td-mWu">
-                                <rect key="frame" x="16" y="741" width="382" height="67"/>
-                                <subviews>
-                                    <progressView opaque="NO" alpha="0.65000000000000002" contentMode="scaleToFill" verticalHuggingPriority="750" progress="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0l-cd-InB">
-                                        <rect key="frame" x="0.0" y="26" width="382" height="15"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="15" id="rd0-CR-rzT"/>
-                                        </constraints>
-                                        <color key="progressTintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </progressView>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstItem="G0l-cd-InB" firstAttribute="leading" secondItem="M7q-Td-mWu" secondAttribute="leading" id="H2W-jt-sP9"/>
-                                    <constraint firstItem="G0l-cd-InB" firstAttribute="centerX" secondItem="M7q-Td-mWu" secondAttribute="centerX" id="Pa6-ch-hbO"/>
-                                    <constraint firstAttribute="trailing" secondItem="G0l-cd-InB" secondAttribute="trailing" id="Xtc-7E-Fkp"/>
-                                    <constraint firstItem="G0l-cd-InB" firstAttribute="centerY" secondItem="M7q-Td-mWu" secondAttribute="centerY" id="nG5-kD-Z2u"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="M7q-Td-mWu" firstAttribute="top" secondItem="6IC-rL-MU1" secondAttribute="bottom" id="853-vx-JbN"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="8WB-hr-ywK"/>
                             <constraint firstItem="dd4-dp-ZEj" firstAttribute="top" secondItem="2g4-CM-phi" secondAttribute="top" constant="20" id="9kK-2Q-WFH"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="top" secondItem="dd4-dp-ZEj" secondAttribute="bottom" constant="8" id="DF8-mr-tK9"/>
-                            <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" secondItem="M7q-Td-mWu" secondAttribute="bottom" id="IjJ-oJ-vdw"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="nWZ-6v-edE" secondAttribute="trailing" constant="20" id="LL5-7T-dUa"/>
-                            <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="M7q-Td-mWu" secondAttribute="trailing" constant="16" id="Mov-Yp-wUo"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="6IC-rL-MU1" secondAttribute="bottom" constant="67" id="OrT-4t-OFq"/>
                             <constraint firstItem="6IC-rL-MU1" firstAttribute="top" secondItem="nWZ-6v-edE" secondAttribute="bottom" constant="8" id="QRS-T8-olZ"/>
                             <constraint firstItem="nWZ-6v-edE" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="20" id="hEo-hZ-6Dj"/>
                             <constraint firstItem="dd4-dp-ZEj" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="huh-ZP-uqs"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="dd4-dp-ZEj" secondAttribute="trailing" constant="16" id="toV-X2-dnM"/>
-                            <constraint firstItem="M7q-Td-mWu" firstAttribute="leading" secondItem="2g4-CM-phi" secondAttribute="leading" constant="16" id="v9m-U9-HOT"/>
                             <constraint firstItem="2g4-CM-phi" firstAttribute="trailing" secondItem="6IC-rL-MU1" secondAttribute="trailing" constant="16" id="z3E-LJ-JDG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2g4-CM-phi"/>
@@ -489,8 +466,6 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="countdownBar" destination="G0l-cd-InB" id="LZG-Bc-TR1"/>
-                        <outlet property="countdownBarHeightConstraint" destination="rd0-CR-rzT" id="JPi-yq-kyg"/>
                         <outlet property="nextQuestionTapRecognizer" destination="Zeh-D3-dqF" id="e3B-bL-NA6"/>
                         <outlet property="questionCountLabel" destination="dd4-dp-ZEj" id="i3s-av-wM0"/>
                         <outlet property="questionLabel" destination="nWZ-6v-edE" id="Xho-6G-Jqt"/>

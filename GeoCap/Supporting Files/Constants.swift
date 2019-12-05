@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 enum GeoCapConstants {
+    static let quizTime: Double = 5
     static let shakeAnimationDuration = 0.4
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
