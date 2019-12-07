@@ -17,6 +17,7 @@ import SwiftEntryKit
 extension QuizViewController {
     enum Constants {
         static let maxNumberOfRetries = 3
+        static let timerBarHeight: CGFloat = 15
     }
 }
 
@@ -24,10 +25,16 @@ class QuizViewController: UIViewController {
 
     private let dispatchGroup = DispatchGroup()
 
-    private let numberOfQuestions = Int(truncating:
-        RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestions].numberValue!)
+    private let numberOfQuestions = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestions].numberValue!)
+    private let quizTime = Double(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.quizTime].numberValue!)
 
     // MARK: - Life Cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        drawTimerBar()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +57,6 @@ class QuizViewController: UIViewController {
     @objc private func willResignActive() {
         SwiftEntryKit.dismiss() // Dismiss "Tap anywhere to continue"-note, if visible
         quizLost = true
-        countdownBarTimer?.invalidate()
         performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
     }
 
@@ -183,7 +189,7 @@ class QuizViewController: UIViewController {
         }
 
         resetButtons()
-        startTimer()
+        startTimerBar()
     }
 
     // Checked in the map vc after the quiz is dismissed
@@ -237,7 +243,9 @@ class QuizViewController: UIViewController {
             quizLost = true
         }
 
-        countdownBarTimer?.invalidate()
+        stopCountdownBar()
+        timer?.invalidate()
+        soundTimer?.invalidate()
         nextQuestionTapRecognizer.isEnabled = true
 
         let noteDisplayCount = UserDefaults.standard.integer(forKey: GeoCapConstants.UserDefaultsKeys.tapToContinueNoteDisplayCount)
@@ -287,48 +295,87 @@ class QuizViewController: UIViewController {
 
     // MARK: - Timer
 
-    @IBOutlet weak var countdownBarHeightConstraint: NSLayoutConstraint! {
-        didSet {
-            countdownBar.layer.cornerRadius = countdownBarHeightConstraint.constant / 2
-            countdownBar.clipsToBounds = true
-            countdownBar.layer.sublayers?[1].cornerRadius = countdownBarHeightConstraint.constant / 2
-            countdownBar.subviews[1].clipsToBounds = true
-            if traitCollection.userInterfaceStyle == .dark {
-                countdownBar.alpha = 1
-            }
+    private var timer: Timer?
+    private var soundTimer: Timer?
+    private var timerBar = CAShapeLayer()
+    private let timerBarBackground = CAShapeLayer()
+    private var strokeAnimation: CABasicAnimation {
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.toValue = 0
+        animation.duration = quizTime
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        return animation
+    }
+    private var colorAnimation: CABasicAnimation {
+        let animation = CABasicAnimation(keyPath: "strokeColor")
+        animation.toValue = UIColor.systemRed.cgColor
+        animation.duration = quizTime
+        animation.fillMode = .forwards
+        animation.isRemovedOnCompletion = false
+        return animation
+    }
+
+    private func startTimerBar() {
+        timerBar.removeFromSuperlayer()
+        view.layer.addSublayer(timerBar)
+
+        timerBar.add(strokeAnimation, forKey: "strokeAnimation")
+        timerBar.add(colorAnimation, forKey: "colorAnimation")
+
+        timer = Timer.scheduledTimer(withTimeInterval: quizTime, repeats: false) { [weak self] _ in
+            self?.timeDidRunOut()
+        }
+
+        soundTimer = Timer.scheduledTimer(withTimeInterval: quizTime * 0.75, repeats: false) { [weak self] _ in
+            guard self?.isViewLoaded == true else { return }
+            SoundManager.shared.playSound(withName: SoundManager.Sounds.quizTimerAlert)
         }
     }
 
-    @IBOutlet weak var countdownBar: UIProgressView!
+    private func timeDidRunOut() {
+        answerButtons.forEach { $0.isEnabled = false }
+        quizLost = true
+        performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
+    }
 
-    private var shortnessOfTimeModeNotActivated = true
-    private var countdownBarTimer: Timer?
-    private func startTimer() {
-        countdownBar.progress = 1
-        countdownBar.progressTintColor = .systemGreen
+    private func getTimerBarPath() -> UIBezierPath? {
+        guard let answerButtonsBottom = answerButtons.first?.superview?.frame.maxY else { return nil }
+        let y = ((view.frame.maxY - answerButtonsBottom) / 2) + Constants.timerBarHeight / 2
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 35, y: view.frame.maxY - y))
+        path.addLine(to: CGPoint(x: view.frame.maxX - 35, y: view.frame.maxY - y))
+        return path
+    }
 
-        countdownBarTimer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
+    private func drawTimerBar() {
+        guard let path = getTimerBarPath() else { return }
 
-            switch self.countdownBar.progress {
-            case ...0:
-                self.countdownBar.shake()
-                self.answerButtons.forEach { $0.isEnabled = false }
-                self.countdownBarTimer?.invalidate()
-                Timer.scheduledTimer(withTimeInterval: GeoCapConstants.shakeAnimationDuration + 0.1, repeats: false) { _ in // swiftlint:disable:this line_length
-                    self.quizLost = true
-                    self.performSegue(withIdentifier: "unwindSegueQuizToMap", sender: self)
-                }
-            case 0.29...0.30:
-                if self.shortnessOfTimeModeNotActivated {
-                    self.shortnessOfTimeModeNotActivated = false
-                    SoundManager.shared.playSound(withName: SoundManager.Sounds.quizTimerAlert)
-                    self.countdownBar.progressTintColor = .systemRed
-                }
-                fallthrough
-            default:
-                self.countdownBar.setProgress(self.countdownBar.progress - 0.001, animated: false)
-            }
+        timerBar.removeFromSuperlayer()
+        timerBarBackground.removeFromSuperlayer()
+
+        timerBarBackground.path = path.cgPath
+        timerBarBackground.strokeColor = UIColor.systemGray5.cgColor
+        timerBarBackground.lineWidth = Constants.timerBarHeight
+        // Timer bar doesn't disappear completely when using round cap
+//        timerBarBackground.lineCap = .round
+        timerBarBackground.strokeEnd = 1
+        view.layer.addSublayer(timerBarBackground)
+
+        timerBar = CAShapeLayer()
+        timerBar.path = path.cgPath
+        timerBar.strokeColor = UIColor.systemGreen.cgColor
+        timerBar.lineWidth = Constants.timerBarHeight
+//        timerBar.lineCap = .round
+        timerBar.strokeEnd = 1
+        view.layer.addSublayer(timerBar)
+    }
+
+    private func stopCountdownBar() {
+        if let countdownBar = view.layer.sublayers?.first(where: { $0 === timerBar }) {
+            let pausedTime = countdownBar.convertTime(CACurrentMediaTime(), from: nil)
+            countdownBar.speed = 0.0
+            countdownBar.timeOffset = pausedTime
         }
     }
 
