@@ -311,23 +311,45 @@ class QuizViewController: UIViewController {
         let animation = CABasicAnimation(keyPath: "strokeColor")
         animation.toValue = UIColor.systemRed.cgColor
         animation.duration = quizTime
-        animation.fillMode = .forwards
-        animation.isRemovedOnCompletion = false
         return animation
     }
 
-    private func startTimerBar() {
-        timerBar.removeFromSuperlayer()
-        view.layer.addSublayer(timerBar)
+    private func drawTimerBar() {
+        guard let path = getTimerBarPath() else { return }
 
-        timerBar.add(strokeAnimation, forKey: "strokeAnimation")
-        timerBar.add(colorAnimation, forKey: "colorAnimation")
+        timerBar.removeFromSuperlayer()
+        timerBarBackground.removeFromSuperlayer()
+
+        timerBarBackground.path = path.cgPath
+        timerBarBackground.strokeColor = UIColor.systemGray5.cgColor
+        timerBarBackground.lineWidth = Constants.timerBarHeight
+        // Timer bar doesn't disappear completely when using round cap
+        // timerBarBackground.lineCap = .round
+        timerBarBackground.strokeEnd = 1
+        view.layer.addSublayer(timerBarBackground)
+
+        timerBar = CAShapeLayer()
+        timerBar.path = path.cgPath
+        timerBar.strokeColor = UIColor.systemGreen.cgColor
+        timerBar.lineWidth = Constants.timerBarHeight
+        // timerBar.lineCap = .round
+        timerBar.strokeEnd = 1
+        view.layer.addSublayer(timerBar)
+    }
+
+    private func startTimerBar() {
+        timerBar.removeAllAnimations()
+
+        drawTimerBar()
+
+        timerBar.add(strokeAnimation, forKey: nil)
+        timerBar.add(colorAnimation, forKey: nil)
 
         timer = Timer.scheduledTimer(withTimeInterval: quizTime, repeats: false) { [weak self] _ in
             self?.timeDidRunOut()
         }
 
-        soundTimer = Timer.scheduledTimer(withTimeInterval: quizTime * 0.75, repeats: false) { [weak self] _ in
+        soundTimer = Timer.scheduledTimer(withTimeInterval: quizTime * 0.70, repeats: false) { [weak self] _ in
             guard self?.isViewLoaded == true else { return }
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizTimerAlert)
         }
@@ -346,29 +368,6 @@ class QuizViewController: UIViewController {
         path.move(to: CGPoint(x: 35, y: view.frame.maxY - y))
         path.addLine(to: CGPoint(x: view.frame.maxX - 35, y: view.frame.maxY - y))
         return path
-    }
-
-    private func drawTimerBar() {
-        guard let path = getTimerBarPath() else { return }
-
-        timerBar.removeFromSuperlayer()
-        timerBarBackground.removeFromSuperlayer()
-
-        timerBarBackground.path = path.cgPath
-        timerBarBackground.strokeColor = UIColor.systemGray5.cgColor
-        timerBarBackground.lineWidth = Constants.timerBarHeight
-        // Timer bar doesn't disappear completely when using round cap
-//        timerBarBackground.lineCap = .round
-        timerBarBackground.strokeEnd = 1
-        view.layer.addSublayer(timerBarBackground)
-
-        timerBar = CAShapeLayer()
-        timerBar.path = path.cgPath
-        timerBar.strokeColor = UIColor.systemGreen.cgColor
-        timerBar.lineWidth = Constants.timerBarHeight
-//        timerBar.lineCap = .round
-        timerBar.strokeEnd = 1
-        view.layer.addSublayer(timerBar)
     }
 
     private func stopCountdownBar() {
