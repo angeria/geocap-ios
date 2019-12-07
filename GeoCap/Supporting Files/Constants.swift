@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 enum GeoCapConstants {
-    static let quizTime: Double = 5
     static let shakeAnimationDuration = 0.4
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
@@ -28,12 +27,14 @@ enum GeoCapConstants {
 
         enum Keys { // swiftlint:disable:this nesting
             static let numberOfQuestions = "numberOfQuestions"
+            static let quizTime = "quizTime"
             static let minimumUsernameLength = "minimumUsernameLength"
             static let maximumUsernameLength = "maximumUsernameLength"
         }
 
         static let Defaults = [
             Keys.numberOfQuestions: 3 as NSObject,
+            Keys.quizTime: 13 as NSObject,
             Keys.minimumUsernameLength: 3 as NSObject,
             Keys.maximumUsernameLength: 20 as NSObject
         ]
