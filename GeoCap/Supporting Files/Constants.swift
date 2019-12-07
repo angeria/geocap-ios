@@ -13,6 +13,7 @@ enum GeoCapConstants {
     static let shakeAnimationDuration = 0.4
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
+    static let quizTimeoutInterval = 8.0
 
     enum UserDefaultsKeys {
         static let soundsAreEnabled = "soundsAreEnabled"

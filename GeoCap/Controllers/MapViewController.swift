@@ -23,9 +23,7 @@ extension MapViewController {
         static let overlayAlpha: CGFloat = 0.45
         static let markerAlpha: CGFloat = 0.75
         static let overlayLineWidth: CGFloat = 1
-        static let quizTimeoutInterval = 10.0
     }
-
 }
 
 class MapViewController: UIViewController {
@@ -441,16 +439,21 @@ class MapViewController: UIViewController {
         }
     }
 
+    @IBOutlet weak var quizTimeoutView: QuizTimeoutView!
+
     private func startQuizTimeout() {
-        Timer.scheduledTimer(withTimeInterval: Constants.quizTimeoutInterval, repeats: false) { [weak self] _ in
+        quizTimeoutView.startTimer()
+
+        Timer.scheduledTimer(withTimeInterval: GeoCapConstants.quizTimeoutInterval, repeats: false) { [weak self] _ in
             self?.quizTimeoutIsActive = false
+            self?.quizTimeoutView.stopTimer()
         }
     }
 
     private func presentQuizTimeoutAlert() {
         let title = NSLocalizedString("quiz-timeout-alert-title", comment: "Title of quiz timeout alert")
         let messageFormat = NSLocalizedString("quiz-timeout-alert-message", comment: "Message of quiz timeout alert")
-        let message = String(format: messageFormat, Int(Constants.quizTimeoutInterval))
+        let message = String(format: messageFormat, Int(GeoCapConstants.quizTimeoutInterval))
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okActionTitle = NSLocalizedString("alert-action-title-OK", comment: "Title of alert action OK")
         let okAction = UIAlertAction(title: okActionTitle, style: .default)
