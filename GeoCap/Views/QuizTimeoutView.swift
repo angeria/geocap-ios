@@ -14,6 +14,7 @@ class QuizTimeoutView: UIView {
 
     func stopTimer() {
         circle.removeAllAnimations()
+        circle.removeFromSuperlayer()
         isHidden = true
     }
 
@@ -25,7 +26,7 @@ class QuizTimeoutView: UIView {
         circle.path = path.cgPath
         circle.strokeColor = UIColor.systemRed.cgColor
         circle.fillColor = UIColor.clear.cgColor
-        circle.lineWidth = 5
+        circle.lineWidth = 6
         circle.lineCap = .round
         circle.strokeEnd = 0
         layer.addSublayer(circle)

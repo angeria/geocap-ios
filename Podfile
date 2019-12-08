@@ -17,7 +17,6 @@ target 'GeoCap' do
   pod 'Crashlytics', '~> 3.14.0'
 
   pod 'ThirdPartyMailer'
-  pod 'CircleProgressView'
   pod 'SnapSDK', :subspecs => ['SCSDKLoginKit', 'SCSDKBitmojiKit']
   pod 'SwiftEntryKit'
 
