@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		192EE30DFEAA1ED429A0ED1B /* Pods_GeoCap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD003669845E686F581B0AE3 /* Pods_GeoCap.framework */; };
-		2051790BE9F671AB1893D22A /* libPods-GeoCapUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EF4560B4056B779AE0966AC /* libPods-GeoCapUITests.a */; };
 		4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301656423426C0400618731 /* AuthenticationServices.framework */; };
 		4308FD77230ADD7E000A8BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */; };
 		43109487230AC9020071F3A5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43109489230AC9020071F3A5 /* Localizable.strings */; };
@@ -39,7 +37,9 @@
 		43E815F4234D9D4E007EAF3F /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */; };
 		43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */; };
 		43F8CFEE22F8064000824778 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 43F8CFED22F8064000824778 /* GoogleService-Info.plist */; };
-		D72AF99284DC02AA826BAE0C /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACBBC49FBDC1BE21642CEBB2 /* Pods_GeoCapTests.framework */; };
+		71B06B02162A6E97F6E6F955 /* Pods_GeoCap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9C1F57BBF737B38926A742 /* Pods_GeoCap.framework */; };
+		8D29A71C40674129722061AB /* libPods-GeoCapUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A26B33C62BEA6B9234C764 /* libPods-GeoCapUITests.a */; };
+		E644C81CCF95AC103BA4ED7A /* Pods_GeoCapTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C77CD127FFE5DB96D60977 /* Pods_GeoCapTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +60,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3EF4560B4056B779AE0966AC /* libPods-GeoCapUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GeoCapUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00369231C53432E6DFC97BF8 /* Pods-GeoCapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.debug.xcconfig"; sourceTree = "<group>"; };
+		0B9C1F57BBF737B38926A742 /* Pods_GeoCap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4301656423426C0400618731 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		4308FD76230ADD7E000A8BD0 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		43109488230AC9020071F3A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -98,16 +99,15 @@
 		43D7A12C22F2F11900552D2C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		43E5CF7422E5A81B00DBED2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseUsernameViewController.swift; sourceTree = "<group>"; };
-		43EEBFF01026AE2DF433A752 /* Pods-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSignInViewController.swift; sourceTree = "<group>"; };
 		43F8CFED22F8064000824778 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		6A7AF83291F5341CA62D0758 /* Pods-GeoCap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.debug.xcconfig"; sourceTree = "<group>"; };
-		9545E6B8C97B6A273E383FA5 /* Pods-GeoCapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.release.xcconfig"; sourceTree = "<group>"; };
-		9CAD60EF60CE8E861D2C7B6B /* Pods-GeoCap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.release.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.release.xcconfig"; sourceTree = "<group>"; };
-		ACBBC49FBDC1BE21642CEBB2 /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C9E3D31696645CAA7541C3E3 /* Pods-GeoCapTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.debug.xcconfig"; sourceTree = "<group>"; };
-		CD003669845E686F581B0AE3 /* Pods_GeoCap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC08CC57A0950BD325BE0152 /* Pods-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		7CE1BF4067CAD90BB142FE64 /* Pods-GeoCapTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapTests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapTests/Pods-GeoCapTests.release.xcconfig"; sourceTree = "<group>"; };
+		8ECB535833BED91F738FFD03 /* Pods-GeoCapUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.debug.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B9A26B33C62BEA6B9234C764 /* libPods-GeoCapUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GeoCapUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6129F0E23D0A989B96FEBA3 /* Pods-GeoCapUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCapUITests.release.xcconfig"; path = "Target Support Files/Pods-GeoCapUITests/Pods-GeoCapUITests.release.xcconfig"; sourceTree = "<group>"; };
+		D9A88A07F584BC66AD606DC8 /* Pods-GeoCap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.release.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.release.xcconfig"; sourceTree = "<group>"; };
+		E22EA2A356F7E2ACB9E0B349 /* Pods-GeoCap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GeoCap.debug.xcconfig"; path = "Target Support Files/Pods-GeoCap/Pods-GeoCap.debug.xcconfig"; sourceTree = "<group>"; };
+		F4C77CD127FFE5DB96D60977 /* Pods_GeoCapTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GeoCapTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4301656523426C0400618731 /* AuthenticationServices.framework in Frameworks */,
-				192EE30DFEAA1ED429A0ED1B /* Pods_GeoCap.framework in Frameworks */,
+				71B06B02162A6E97F6E6F955 /* Pods_GeoCap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D72AF99284DC02AA826BAE0C /* Pods_GeoCapTests.framework in Frameworks */,
+				E644C81CCF95AC103BA4ED7A /* Pods_GeoCapTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2051790BE9F671AB1893D22A /* libPods-GeoCapUITests.a in Frameworks */,
+				8D29A71C40674129722061AB /* libPods-GeoCapUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,9 +275,9 @@
 			isa = PBXGroup;
 			children = (
 				4301656423426C0400618731 /* AuthenticationServices.framework */,
-				CD003669845E686F581B0AE3 /* Pods_GeoCap.framework */,
-				ACBBC49FBDC1BE21642CEBB2 /* Pods_GeoCapTests.framework */,
-				3EF4560B4056B779AE0966AC /* libPods-GeoCapUITests.a */,
+				0B9C1F57BBF737B38926A742 /* Pods_GeoCap.framework */,
+				F4C77CD127FFE5DB96D60977 /* Pods_GeoCapTests.framework */,
+				B9A26B33C62BEA6B9234C764 /* libPods-GeoCapUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -285,12 +285,12 @@
 		CC5FC2C2DE6274E88033E11C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6A7AF83291F5341CA62D0758 /* Pods-GeoCap.debug.xcconfig */,
-				9CAD60EF60CE8E861D2C7B6B /* Pods-GeoCap.release.xcconfig */,
-				C9E3D31696645CAA7541C3E3 /* Pods-GeoCapTests.debug.xcconfig */,
-				FC08CC57A0950BD325BE0152 /* Pods-GeoCapTests.release.xcconfig */,
-				43EEBFF01026AE2DF433A752 /* Pods-GeoCapUITests.debug.xcconfig */,
-				9545E6B8C97B6A273E383FA5 /* Pods-GeoCapUITests.release.xcconfig */,
+				E22EA2A356F7E2ACB9E0B349 /* Pods-GeoCap.debug.xcconfig */,
+				D9A88A07F584BC66AD606DC8 /* Pods-GeoCap.release.xcconfig */,
+				00369231C53432E6DFC97BF8 /* Pods-GeoCapTests.debug.xcconfig */,
+				7CE1BF4067CAD90BB142FE64 /* Pods-GeoCapTests.release.xcconfig */,
+				8ECB535833BED91F738FFD03 /* Pods-GeoCapUITests.debug.xcconfig */,
+				C6129F0E23D0A989B96FEBA3 /* Pods-GeoCapUITests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -302,13 +302,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 432DEDC122E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCap" */;
 			buildPhases = (
-				FFAF31748437A04A2582ED7A /* [CP] Check Pods Manifest.lock */,
+				D733E03A23AC008B3ABDFF35 /* [CP] Check Pods Manifest.lock */,
 				432DED9322E1F28D00DFA074 /* Sources */,
 				432DED9422E1F28D00DFA074 /* Frameworks */,
 				432DED9522E1F28D00DFA074 /* Resources */,
 				4304C22923333B3D00B782DF /* ShellScript */,
 				435D4D112393FF9500930F33 /* ShellScript */,
-				4F330212771B2EE08FCE1B63 /* [CP] Embed Pods Frameworks */,
+				0CF4CEB4EA88BE0BF7A3E2C4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -323,7 +323,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 432DEDC422E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapTests" */;
 			buildPhases = (
-				F5D109883ED4E9397784BA78 /* [CP] Check Pods Manifest.lock */,
+				BD2C9326AEA172D955073C3C /* [CP] Check Pods Manifest.lock */,
 				432DEDA922E1F28E00DFA074 /* Sources */,
 				432DEDAA22E1F28E00DFA074 /* Frameworks */,
 				432DEDAB22E1F28E00DFA074 /* Resources */,
@@ -342,7 +342,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 432DEDC722E1F28E00DFA074 /* Build configuration list for PBXNativeTarget "GeoCapUITests" */;
 			buildPhases = (
-				22E3FC6E0653C12D6188B103 /* [CP] Check Pods Manifest.lock */,
+				9FC008B3FF1F0736D32263EE /* [CP] Check Pods Manifest.lock */,
 				432DEDB422E1F28E00DFA074 /* Sources */,
 				432DEDB522E1F28E00DFA074 /* Frameworks */,
 				432DEDB622E1F28E00DFA074 /* Resources */,
@@ -444,26 +444,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		22E3FC6E0653C12D6188B103 /* [CP] Check Pods Manifest.lock */ = {
+		0CF4CEB4EA88BE0BF7A3E2C4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GeoCapUITests-checkManifestLockResult.txt",
+				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4304C22923333B3D00B782DF /* ShellScript */ = {
@@ -501,24 +496,29 @@
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		4F330212771B2EE08FCE1B63 /* [CP] Embed Pods Frameworks */ = {
+		9FC008B3FF1F0736D32263EE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GeoCapUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GeoCap/Pods-GeoCap-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F5D109883ED4E9397784BA78 /* [CP] Check Pods Manifest.lock */ = {
+		BD2C9326AEA172D955073C3C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -540,7 +540,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FFAF31748437A04A2582ED7A /* [CP] Check Pods Manifest.lock */ = {
+		D733E03A23AC008B3ABDFF35 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -781,7 +781,7 @@
 		};
 		432DEDC222E1F28E00DFA074 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6A7AF83291F5341CA62D0758 /* Pods-GeoCap.debug.xcconfig */;
+			baseConfigurationReference = E22EA2A356F7E2ACB9E0B349 /* Pods-GeoCap.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -806,7 +806,7 @@
 		};
 		432DEDC322E1F28E00DFA074 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9CAD60EF60CE8E861D2C7B6B /* Pods-GeoCap.release.xcconfig */;
+			baseConfigurationReference = D9A88A07F584BC66AD606DC8 /* Pods-GeoCap.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -829,7 +829,7 @@
 		};
 		432DEDC522E1F28E00DFA074 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C9E3D31696645CAA7541C3E3 /* Pods-GeoCapTests.debug.xcconfig */;
+			baseConfigurationReference = 00369231C53432E6DFC97BF8 /* Pods-GeoCapTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -852,7 +852,7 @@
 		};
 		432DEDC622E1F28E00DFA074 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC08CC57A0950BD325BE0152 /* Pods-GeoCapTests.release.xcconfig */;
+			baseConfigurationReference = 7CE1BF4067CAD90BB142FE64 /* Pods-GeoCapTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -875,7 +875,7 @@
 		};
 		432DEDC822E1F28E00DFA074 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43EEBFF01026AE2DF433A752 /* Pods-GeoCapUITests.debug.xcconfig */;
+			baseConfigurationReference = 8ECB535833BED91F738FFD03 /* Pods-GeoCapUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -897,7 +897,7 @@
 		};
 		432DEDC922E1F28E00DFA074 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9545E6B8C97B6A273E383FA5 /* Pods-GeoCapUITests.release.xcconfig */;
+			baseConfigurationReference = C6129F0E23D0A989B96FEBA3 /* Pods-GeoCapUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
