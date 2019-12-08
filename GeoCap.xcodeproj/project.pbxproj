@@ -30,6 +30,7 @@
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
 		4397786D235072D30044808F /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397786C235072D30044808F /* AuthViewController.swift */; };
 		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
+		43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
@@ -88,8 +89,9 @@
 		437F0A8F236474AB005582E3 /* UIButtonRounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonRounded.swift; sourceTree = "<group>"; };
 		438C7F1C232E131700121CC6 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		4397786C235072D30044808F /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
-		439DC1022351A2060057E6BB /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43A7502823582CDB00053B62 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		43AB964A239D2E25007F9E48 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				434E938F2350704E00C89A8B /* Auth */,
+				43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -582,6 +585,7 @@
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
+				43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
 				43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */,
 				43A7502923582CDB00053B62 /* SoundManager.swift in Sources */,
@@ -641,7 +645,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				432DEDA122E1F28D00DFA074 /* Base */,
-				439DC1022351A2060057E6BB /* sv */,
+				43AB964A239D2E25007F9E48 /* sv */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
