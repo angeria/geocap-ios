@@ -165,10 +165,12 @@ class MapViewController: UIViewController {
             clearMap()
             fetchLocations()
 
-            let region = MKCoordinateRegion(center: currentCity!.coordinates,
-                                            latitudinalMeters: Constants.zoomLevel,
-                                            longitudinalMeters: Constants.zoomLevel)
-            mapView.setRegion(region, animated: true)
+            if !isDefendingLocation {
+                let region = MKCoordinateRegion(center: currentCity!.coordinates,
+                                                latitudinalMeters: Constants.zoomLevel,
+                                                longitudinalMeters: Constants.zoomLevel)
+                mapView.setRegion(region, animated: true)
+            }
 
             currentCityBarButton.title = currentCity!.name
             allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
@@ -418,6 +420,13 @@ class MapViewController: UIViewController {
     // MARK: - Quiz
 
     private func handleQuizDismissal(quizVC: QuizViewController) {
+        if isDefendingLocation {
+            print("Defended")
+            isDefendingLocation = false
+            defendingLocationInfo = [String: Any]()
+            return
+        }
+
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
             captureLocation()
@@ -427,6 +436,8 @@ class MapViewController: UIViewController {
                 presentRequestNotificationAuthAlert()
             }
         } else {
+            // TODO: REMOVE THIS
+            captureLocation()
             quizTimeoutIsActive = true
         }
     }
@@ -497,6 +508,51 @@ class MapViewController: UIViewController {
                         Crashlytics.sharedInstance().recordError(error)
                     }
                 }
+            }
+        }
+    }
+
+    private var isDefendingLocation = false
+    private var defendingLocationInfo = [String: Any]()
+
+    // swiftlint:disable:next function_parameter_count
+    func defendLocation(locationName: String, locationId: String, coordinates: CLLocationCoordinate2D, country: String,
+                        county: String, city: String, type: String) {
+        defendingLocationInfo = [
+            "locationName": locationName,
+            "locationId": locationId,
+            "coordinates": coordinates,
+            "country": country,
+            "county:": county,
+            "city": city
+        ]
+        isDefendingLocation = true
+
+        tabBarController?.selectedIndex = 1
+
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            let region = MKCoordinateRegion(center: coordinates, latitudinalMeters: 500, longitudinalMeters: 500)
+            self?.mapView.setRegion(region, animated: true)
+        }
+
+        Timer.scheduledTimer(withTimeInterval: 1.75, repeats: false) { [weak self] _ in
+            switch type {
+            case "building":
+                self?.locationFilter.selectedSegmentIndex = 0
+            case "area":
+                self?.locationFilter.selectedSegmentIndex = 1
+            default:
+                fatalError("Unexpected location type")
+            }
+
+            let ref = Firestore.firestore().document("countries/\(country)/counties/\(county)/cities/\(city)")
+            self?.currentCity = City(name: city.capitalized, coordinates: coordinates, reference: ref)
+        }
+
+        Timer.scheduledTimer(withTimeInterval: 2.75, repeats: false) { [weak self] _ in
+            if let quizVC = self?.storyboard?.instantiateViewController(identifier: "Quiz") as? QuizViewController {
+                quizVC.presentationController?.delegate = self
+                self?.present(quizVC, animated: true)
             }
         }
     }

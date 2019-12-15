@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import SCSDKLoginKit
+import os.log
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -23,6 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         if CommandLine.arguments.contains("--uitesting") {
             configureAppForTesting()
+        }
+
+        // Launched from push notification
+        if let options = launchOptions,
+            let userInfo = options[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable: Any] {
+                handleRemoteNotification(userInfo: userInfo)
         }
 
         return true
@@ -70,12 +78,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return SCSDKLoginClient.application(app, open: url, options: options)
     }
 
+    // MARK: Notifications
+
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
         -> Void) {
         // Show notification banners when app is in foreground
         completionHandler([.alert])
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+
+        guard response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
+        guard response.notification.request.content.categoryIdentifier == "location_lost" else { return }
+
+        let userInfo = response.notification.request.content.userInfo
+        handleRemoteNotification(userInfo: userInfo)
+
+        completionHandler()
+    }
+
+    private func handleRemoteNotification(userInfo: [AnyHashable: Any]) {
+        guard let aps = userInfo["aps"] as? [AnyHashable: Any] else { return }
+
+        Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
+            if let navVC = self?.window?.rootViewController as? UINavigationController {
+                if let tabBarVC = navVC.visibleViewController as? UITabBarController {
+                    if let mapNavVC = tabBarVC.viewControllers?[1] as? UINavigationController {
+                        if let mapVC = mapNavVC.visibleViewController as? MapViewController {
+                            guard let locationName = aps["locationName"] as? String,
+                                let locationId = aps["locationId"] as? String,
+                                let type = aps["type"] as? String,
+                                let country = aps["country"] as? String,
+                                let county = aps["county"] as? String,
+                                let city = aps["city"] as? String
+                                else { return }
+
+                            guard let coordinatesArray = aps["coordinates"] as? [AnyHashable: Any],
+                                let lat = coordinatesArray["_latitude"] as? CLLocationDegrees,
+                                let lng = coordinatesArray["_longitude"] as? CLLocationDegrees else {print("fail"); return }
+                            let coordinates = CLLocationCoordinate2D(latitude: lat,
+                                                                     longitude: lng)
+
+                            mapVC.defendLocation(locationName: locationName, locationId: locationId,
+                                                 coordinates: coordinates, country: country, county: county,
+                                                 city: city, type: type)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
