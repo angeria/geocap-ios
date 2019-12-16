@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
-import FirebaseAuth
+//import FirebaseAuth
 import os.log
 import AVFoundation
 import SwiftEntryKit
@@ -518,6 +518,7 @@ class MapViewController: UIViewController {
     // swiftlint:disable:next function_parameter_count
     func defendLocation(locationName: String, locationId: String, coordinates: CLLocationCoordinate2D, country: String,
                         county: String, city: String, type: String) {
+
         defendingLocationInfo = [
             "locationName": locationName,
             "locationId": locationId,
@@ -549,8 +550,9 @@ class MapViewController: UIViewController {
             self?.currentCity = City(name: city.capitalized, coordinates: coordinates, reference: ref)
         }
 
-        Timer.scheduledTimer(withTimeInterval: 2.75, repeats: false) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { [weak self] _ in
             if let quizVC = self?.storyboard?.instantiateViewController(identifier: "Quiz") as? QuizViewController {
+                self?.tabBarController?.view.isUserInteractionEnabled = true
                 quizVC.presentationController?.delegate = self
                 self?.present(quizVC, animated: true)
             }

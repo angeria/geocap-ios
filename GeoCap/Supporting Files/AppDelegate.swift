@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
+//import FirebaseAuth
 import SCSDKLoginKit
 import os.log
 import CoreLocation
@@ -105,6 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false) { [weak self] _ in
             if let navVC = self?.window?.rootViewController as? UINavigationController {
                 if let tabBarVC = navVC.visibleViewController as? UITabBarController {
+                    tabBarVC.view.isUserInteractionEnabled = false
                     if let mapNavVC = tabBarVC.viewControllers?[1] as? UINavigationController {
                         if let mapVC = mapNavVC.visibleViewController as? MapViewController {
                             guard let locationName = aps["locationName"] as? String,
@@ -117,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
                             guard let coordinatesArray = aps["coordinates"] as? [AnyHashable: Any],
                                 let lat = coordinatesArray["_latitude"] as? CLLocationDegrees,
-                                let lng = coordinatesArray["_longitude"] as? CLLocationDegrees else {print("fail"); return }
+                                let lng = coordinatesArray["_longitude"] as? CLLocationDegrees else { return }
                             let coordinates = CLLocationCoordinate2D(latitude: lat,
                                                                      longitude: lng)
 

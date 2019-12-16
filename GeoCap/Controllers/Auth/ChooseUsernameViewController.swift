@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import os.log
-import FirebaseRemoteConfig
+//import FirebaseRemoteConfig
 
 class ChooseUsernameViewController: UIViewController {
 

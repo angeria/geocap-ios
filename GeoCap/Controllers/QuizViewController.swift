@@ -8,10 +8,10 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
+//import FirebaseAuth
 import os.log
 import AVFoundation
-import FirebaseRemoteConfig
+//import FirebaseRemoteConfig
 import SwiftEntryKit
 
 extension QuizViewController {
