@@ -14,6 +14,7 @@
 		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
 		4326A5E62336666000A3D1A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E52336666000A3D1A1 /* Errors.swift */; };
 		4326A5E823368FC200A3D1A1 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E723368FC200A3D1A1 /* Logging.swift */; };
+		432C5FC023A902D200CEE7CE /* AttackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432C5FBF23A902D200CEE7CE /* AttackTableViewCell.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
 		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
@@ -24,7 +25,6 @@
 		433EFFAD235E0B9700027C81 /* notification-sound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 433EFFAC235E0B9700027C81 /* notification-sound.caf */; };
 		43530B7E239BF15800BA9C19 /* QuizTimeoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43530B7D239BF15800BA9C19 /* QuizTimeoutView.swift */; };
 		43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43615CAD23072E5F003FC839 /* ProfileViewController.swift */; };
-		4367B7BF23A7F40700EA26E0 /* AttacksCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4367B7BE23A7F40700EA26E0 /* AttacksCollectionViewController.swift */; };
 		4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */; };
 		437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437F0A8F236474AB005582E3 /* UIButtonRounded.swift */; };
 		438C7F1D232E131700121CC6 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438C7F1C232E131700121CC6 /* City.swift */; };
@@ -32,7 +32,7 @@
 		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
 		43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
-		43CEEEED23A8C4C60091CEF0 /* AttackCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEEEEC23A8C4C60091CEF0 /* AttackCollectionViewCell.swift */; };
+		43CEEEEF23A8FCAC0091CEF0 /* AttacksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEEEEE23A8FCAC0091CEF0 /* AttacksTableViewController.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
 		43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12C22F2F11900552D2C /* Extensions.swift */; };
@@ -71,6 +71,7 @@
 		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		4326A5E52336666000A3D1A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		4326A5E723368FC200A3D1A1 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		432C5FBF23A902D200CEE7CE /* AttackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AttackTableViewCell.swift; path = GeoCap/Controllers/Views/AttackTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		432DED9C22E1F28D00DFA074 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -87,7 +88,6 @@
 		433EFFAC235E0B9700027C81 /* notification-sound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "notification-sound.caf"; sourceTree = "<group>"; };
 		43530B7D239BF15800BA9C19 /* QuizTimeoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizTimeoutView.swift; sourceTree = "<group>"; };
 		43615CAD23072E5F003FC839 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		4367B7BE23A7F40700EA26E0 /* AttacksCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttacksCollectionViewController.swift; sourceTree = "<group>"; };
 		436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GeoCap.entitlements; sourceTree = "<group>"; };
 		4371BC4A232D25D100B28FAB /* ChooseCityPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCityPopoverViewController.swift; sourceTree = "<group>"; };
 		437F0A8F236474AB005582E3 /* UIButtonRounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonRounded.swift; sourceTree = "<group>"; };
@@ -97,7 +97,7 @@
 		43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		43AB964A239D2E25007F9E48 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		43CEEEEC23A8C4C60091CEF0 /* AttackCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackCollectionViewCell.swift; sourceTree = "<group>"; };
+		43CEEEEE23A8FCAC0091CEF0 /* AttacksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttacksTableViewController.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		43D7A12C22F2F11900552D2C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -209,7 +209,7 @@
 		43530B7C239BF13200BA9C19 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				43CEEEEC23A8C4C60091CEF0 /* AttackCollectionViewCell.swift */,
+				432C5FBF23A902D200CEE7CE /* AttackTableViewCell.swift */,
 				43530B7D239BF15800BA9C19 /* QuizTimeoutView.swift */,
 			);
 			path = Views;
@@ -230,7 +230,7 @@
 			children = (
 				434E938F2350704E00C89A8B /* Auth */,
 				43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */,
-				4367B7BE23A7F40700EA26E0 /* AttacksCollectionViewController.swift */,
+				43CEEEEE23A8FCAC0091CEF0 /* AttacksTableViewController.swift */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -585,17 +585,17 @@
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				4397786D235072D30044808F /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
+				432C5FC023A902D200CEE7CE /* AttackTableViewCell.swift in Sources */,
 				43530B7E239BF15800BA9C19 /* QuizTimeoutView.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
 				437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
-				4367B7BF23A7F40700EA26E0 /* AttacksCollectionViewController.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
 				43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
 				43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */,
-				43CEEEED23A8C4C60091CEF0 /* AttackCollectionViewCell.swift in Sources */,
+				43CEEEEF23A8FCAC0091CEF0 /* AttacksTableViewController.swift in Sources */,
 				43A7502923582CDB00053B62 /* SoundManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

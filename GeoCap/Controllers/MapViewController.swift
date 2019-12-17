@@ -730,7 +730,8 @@ class MapViewController: UIViewController {
                 return true
             }
         default:
-            fatalError("Unexpected segue identifier")
+            return true
+            // fatalError("Unexpected segue identifier")
         }
 
         return false
@@ -757,7 +758,8 @@ class MapViewController: UIViewController {
                 popoverVC.currentCity = currentCity
             }
         default:
-            fatalError("Unexpected segue identifier")
+            return
+//            fatalError("Unexpected segue identifier")
         }
     }
 
