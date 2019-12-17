@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-//import FirebaseAuth
 import os.log
 
 class LeaderboardViewController: UITableViewController {
@@ -36,7 +35,7 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - Leaderboard
 
-    struct UserCellData {
+    private struct UserCellData {
         var isOpened = false
         let username: String
         let locations: [String]
@@ -70,9 +69,7 @@ class LeaderboardViewController: UITableViewController {
         leaderboardListener?.remove()
 
         let db = Firestore.firestore()
-        leaderboardListener = db.collection("users")
-            .order(by: "capturedLocationsCount",
-                   descending: true).addSnapshotListener { [weak self] querySnapshot, error in
+        leaderboardListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Leaderboard, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
