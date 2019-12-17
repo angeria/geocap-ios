@@ -164,12 +164,10 @@ class MapViewController: UIViewController {
             clearMap()
             fetchLocations()
 
-            if !isDefendingLocation {
-                let region = MKCoordinateRegion(center: currentCity!.coordinates,
-                                                latitudinalMeters: Constants.zoomLevel,
-                                                longitudinalMeters: Constants.zoomLevel)
-                mapView.setRegion(region, animated: true)
-            }
+            let region = MKCoordinateRegion(center: currentCity!.coordinates,
+                                            latitudinalMeters: Constants.zoomLevel,
+                                            longitudinalMeters: Constants.zoomLevel)
+            mapView.setRegion(region, animated: true)
 
             currentCityBarButton.title = currentCity!.name
             allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
@@ -419,13 +417,6 @@ class MapViewController: UIViewController {
     // MARK: - Quiz
 
     private func handleQuizDismissal(quizVC: QuizViewController) {
-        if isDefendingLocation {
-            print("Defended")
-            isDefendingLocation = false
-            defendingLocationInfo = [String: Any]()
-            return
-        }
-
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
             captureLocation()
@@ -511,51 +502,71 @@ class MapViewController: UIViewController {
         }
     }
 
-    private var isDefendingLocation = false
-    private var defendingLocationInfo = [String: Any]()
+    // MARK: - Defend Locations
 
-    // swiftlint:disable:next function_parameter_count
-    func defendLocation(locationName: String, locationId: String, coordinates: CLLocationCoordinate2D, country: String,
-                        county: String, city: String, type: String) {
+    @IBAction func attacksButtonPressed(_ sender: UIButton) {
+        guard let attacksVC = storyboard?.instantiateViewController(identifier: "Attacks") else { return }
+        var attributes = EKAttributes()
 
-        defendingLocationInfo = [
-            "locationName": locationName,
-            "locationId": locationId,
-            "coordinates": coordinates,
-            "country": country,
-            "county:": county,
-            "city": city
-        ]
-        isDefendingLocation = true
+        attributes = .bottomFloat
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
+        attributes.entranceAnimation = .init(
+            translate: .init(
+                duration: 0.3,
+                spring: .init(damping: 0.9, initialVelocity: 0)
+            ),
+            scale: .init(
+                from: 0.8,
+                to: 1,
+                duration: 0.3,
+                spring: .init(damping: 0.8, initialVelocity: 0)
+            ),
+            fade: .init(
+                from: 0.7,
+                to: 1,
+                duration: 0.2
+            )
+        )
+        attributes.exitAnimation = .init(
+            translate: .init(duration: 0.3),
+            scale: .init(
+                from: 1,
+                to: 0.8,
+                duration: 0.3
+            ),
+            fade: .init(
+                from: 1,
+                to: 0,
+                duration: 0.3
+            )
+        )
+        attributes.shadow = .active(
+            with: .init(
+                color: .black,
+                opacity: 0.3,
+                radius: 6
+            )
+        )
 
-        tabBarController?.selectedIndex = 1
+        attributes.positionConstraints.verticalOffset = (tabBarController?.tabBar.bounds.maxY ?? 70) - 10
+        attributes.positionConstraints.size = .init(
+            width: .offset(value: 20),
+            height: .ratio(value: 0.4)
+        )
+//        attributes.positionConstraints.maxSize = .init(
+//            width: .constant(value: UIScreen.main.minEdge),
+//            height: .intrinsic
+//        )
 
-        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            let region = MKCoordinateRegion(center: coordinates, latitudinalMeters: 500, longitudinalMeters: 500)
-            self?.mapView.setRegion(region, animated: true)
-        }
+        SwiftEntryKit.display(entry: attacksVC, using: attributes)
+    }
 
-        Timer.scheduledTimer(withTimeInterval: 1.75, repeats: false) { [weak self] _ in
-            switch type {
-            case "building":
-                self?.locationFilter.selectedSegmentIndex = 0
-            case "area":
-                self?.locationFilter.selectedSegmentIndex = 1
-            default:
-                fatalError("Unexpected location type")
-            }
-
-            let ref = Firestore.firestore().document("countries/\(country)/counties/\(county)/cities/\(city)")
-            self?.currentCity = City(name: city.capitalized, coordinates: coordinates, reference: ref)
-        }
-
-        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { [weak self] _ in
-            if let quizVC = self?.storyboard?.instantiateViewController(identifier: "Quiz") as? QuizViewController {
-                self?.tabBarController?.view.isUserInteractionEnabled = true
-                quizVC.presentationController?.delegate = self
-                self?.present(quizVC, animated: true)
-            }
-        }
+    func defendLocation(locationRef: DocumentReference?) {
+        guard let quizVC = storyboard?.instantiateViewController(identifier: "Quiz") else { return }
+        quizVC.presentationController?.delegate = self
+        present(quizVC, animated: true)
     }
 
     // MARK: - Notifications
@@ -731,6 +742,7 @@ class MapViewController: UIViewController {
             }
         default:
             return true
+            // TODO: Remove this
             // fatalError("Unexpected segue identifier")
         }
 
@@ -759,6 +771,7 @@ class MapViewController: UIViewController {
             }
         default:
             return
+            // TODO: Remove this
 //            fatalError("Unexpected segue identifier")
         }
     }

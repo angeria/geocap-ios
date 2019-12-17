@@ -9,20 +9,14 @@
 import UIKit
 
 class AttackTableViewCell: UITableViewCell {
-    
+
     @IBOutlet weak var locationName: UILabel!
     @IBOutlet weak var attackerName: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    var defendButtonCallback: (() -> Void)?
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    @IBAction func defendButtonPressed(_ sender: UIButton) {
+        defendButtonCallback?()
     }
 
 }
