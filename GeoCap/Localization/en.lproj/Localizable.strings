@@ -101,10 +101,10 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Please turn on notifications in settings to be able to activate this feature";
 
-/* Notification title when someone else has captured a location from the user */
-"location-lost-notification-title" = "Location Lost";
+/* Notification title when someone has attacked one of the user's locations */
+"location-lost-notification-title" = "Location Attacked!";
 /* Notification body ... */
-"location-lost-notification-body" = "%@ took %@ from you 🚩";
+"location-lost-notification-body" = "%@ attacked %@, you have %@ minutes to defend it! 🚩";
 
 /* Text on 'Tap to continue'-note in quiz */
 "quiz-tap-to-continue-note" = "Tap anywhere to continue";

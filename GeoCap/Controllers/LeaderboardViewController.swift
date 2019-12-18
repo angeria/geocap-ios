@@ -16,7 +16,6 @@ class LeaderboardViewController: UITableViewController {
         static let imageHeightPadding: CGFloat = 50
         static let approxBitmojiSize: CGFloat = 150
         static let userCellOpacity: CGFloat = 0.50
-        static let maxDownloadSize: Int64 =  1 * 1024 * 1024 // 1 MB
     }
 
     // MARK: - Life Cycle
@@ -109,7 +108,7 @@ class LeaderboardViewController: UITableViewController {
 
             if let user = snapshot?.documents.first {
                 let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
-                ref.getData(maxSize: Constants.maxDownloadSize) { data, error in
+                ref.getData(maxSize: GeoCapConstants.maxDownloadSize) { data, error in
                     if let error = error as NSError? {
                         let storageError = StorageErrorCode(rawValue: error.code)!
                         if storageError == .objectNotFound { return }

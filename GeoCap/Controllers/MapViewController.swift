@@ -124,8 +124,21 @@ class MapViewController: UIViewController {
         navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        setupAttacksListener()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        attacksListener?.remove()
+    }
+
     func teardown() {
         locationListener?.remove()
+        attacksListener?.remove()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -504,6 +517,48 @@ class MapViewController: UIViewController {
 
     // MARK: - Defend Locations
 
+    @IBOutlet weak var attacksButton: UIButtonRounded!
+
+    private var attacksListener: ListenerRegistration?
+
+    private func setupAttacksListener() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        attacksListener?.remove()
+
+        let db = Firestore.firestore()
+        attacksListener = db.collection("attacks").whereField("defenderUid", isEqualTo: uid).addSnapshotListener({ [weak self] (querySnapshot, error) in
+            guard let query = querySnapshot else {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
+                Crashlytics.sharedInstance().recordError(error!)
+                return
+            }
+            guard let self = self else { return }
+
+            let activeAttacks = query.documents.filter { docSnap -> Bool in
+                if let timestamp = docSnap.data()["timestamp"] as? Timestamp {
+                    return timestamp.attackIsActive()
+                }
+                return false
+            }
+
+            let format = NSLocalizedString("%u attacks", comment: "")
+            let localized = String.localizedStringWithFormat(format, activeAttacks.count)
+            self.attacksButton.setTitle(localized, for: .normal)
+
+            switch activeAttacks.count {
+            case 0:
+                self.attacksButton.setImage(UIImage(systemName: "shield.lefthalf.fill"), for: .normal)
+                self.attacksButton.tintColor = .systemGreen
+                self.attacksButton.setTitleColor(.label, for: .normal)
+            default:
+                self.attacksButton.setImage(UIImage(systemName: "exclamationmark.shield"), for: .normal)
+                self.attacksButton.tintColor = .systemRed
+                self.attacksButton.setTitleColor(.systemRed, for: .normal)
+            }
+        })
+    }
+
     @IBAction func attacksButtonPressed(_ sender: UIButton) {
         guard let attacksVC = storyboard?.instantiateViewController(identifier: "Attacks") else { return }
         var attributes = EKAttributes()
@@ -549,16 +604,11 @@ class MapViewController: UIViewController {
                 radius: 6
             )
         )
-
-        attributes.positionConstraints.verticalOffset = (tabBarController?.tabBar.bounds.maxY ?? 70) - 10
+        attributes.positionConstraints.verticalOffset = (tabBarController?.tabBar.bounds.maxY ?? 83) - 15
         attributes.positionConstraints.size = .init(
             width: .offset(value: 20),
             height: .ratio(value: 0.4)
         )
-//        attributes.positionConstraints.maxSize = .init(
-//            width: .constant(value: UIScreen.main.minEdge),
-//            height: .intrinsic
-//        )
 
         SwiftEntryKit.display(entry: attacksVC, using: attributes)
     }

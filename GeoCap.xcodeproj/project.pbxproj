@@ -32,12 +32,12 @@
 		43A7502923582CDB00053B62 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A7502823582CDB00053B62 /* SoundManager.swift */; };
 		43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */; };
 		43CC062023279AA00005E7DD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CC061F23279AA00005E7DD /* Constants.swift */; };
+		43CD4B4623AA22AC0061E4E8 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 43CD4B4823AA22AC0061E4E8 /* Localizable.stringsdict */; };
+		43CD4B4D23AA365E0061E4E8 /* Timestamp+Attack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CD4B4C23AA365E0061E4E8 /* Timestamp+Attack.swift */; };
 		43CEEEEF23A8FCAC0091CEF0 /* AttacksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CEEEEE23A8FCAC0091CEF0 /* AttacksTableViewController.swift */; };
 		43D6284322FDAD1800F72317 /* LeaderboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */; };
 		43D7A12B22F2D49700552D2C /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12A22F2D49700552D2C /* Question.swift */; };
 		43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D7A12C22F2F11900552D2C /* Extensions.swift */; };
-		43DB3EBC23A958E50027588F /* UIScreen+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DB3EBA23A958E40027588F /* UIScreen+Utils.swift */; };
-		43DB3EBD23A958E50027588F /* CGRect+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DB3EBB23A958E40027588F /* CGRect+Utils.swift */; };
 		43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E5CF7422E5A81B00DBED2E /* Location.swift */; };
 		43E815F4234D9D4E007EAF3F /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */; };
 		43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */; };
@@ -99,12 +99,13 @@
 		43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		43AB964A239D2E25007F9E48 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
 		43CC061F23279AA00005E7DD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		43CD4B4723AA22AC0061E4E8 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sv; path = sv.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		43CD4B4923AA22D30061E4E8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		43CD4B4C23AA365E0061E4E8 /* Timestamp+Attack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timestamp+Attack.swift"; sourceTree = "<group>"; };
 		43CEEEEE23A8FCAC0091CEF0 /* AttacksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttacksTableViewController.swift; sourceTree = "<group>"; };
 		43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardViewController.swift; sourceTree = "<group>"; };
 		43D7A12A22F2D49700552D2C /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
 		43D7A12C22F2F11900552D2C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		43DB3EBA23A958E40027588F /* UIScreen+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen+Utils.swift"; sourceTree = "<group>"; };
-		43DB3EBB23A958E40027588F /* CGRect+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Utils.swift"; sourceTree = "<group>"; };
 		43E5CF7422E5A81B00DBED2E /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		43E815F3234D9D4E007EAF3F /* ChooseUsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseUsernameViewController.swift; sourceTree = "<group>"; };
 		43F2C183234CEE0F001F0EDA /* PendingSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSignInViewController.swift; sourceTree = "<group>"; };
@@ -267,6 +268,7 @@
 			children = (
 				43109489230AC9020071F3A5 /* Localizable.strings */,
 				4308FD75230ADD7E000A8BD0 /* InfoPlist.strings */,
+				43CD4B4823AA22AC0061E4E8 /* Localizable.stringsdict */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -285,8 +287,7 @@
 			children = (
 				43D7A12C22F2F11900552D2C /* Extensions.swift */,
 				437F0A8F236474AB005582E3 /* UIButtonRounded.swift */,
-				43DB3EBB23A958E40027588F /* CGRect+Utils.swift */,
-				43DB3EBA23A958E40027588F /* UIScreen+Utils.swift */,
+				43CD4B4C23AA365E0061E4E8 /* Timestamp+Attack.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -442,6 +443,7 @@
 				432DEDA722E1F28E00DFA074 /* LaunchScreen.storyboard in Resources */,
 				43F8CFEE22F8064000824778 /* GoogleService-Info.plist in Resources */,
 				433EFFAD235E0B9700027C81 /* notification-sound.caf in Resources */,
+				43CD4B4623AA22AC0061E4E8 /* Localizable.stringsdict in Resources */,
 				432DEDA422E1F28E00DFA074 /* Assets.xcassets in Resources */,
 				432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */,
 			);
@@ -601,12 +603,11 @@
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
 				432C5FC023A902D200CEE7CE /* AttackTableViewCell.swift in Sources */,
 				43530B7E239BF15800BA9C19 /* QuizTimeoutView.swift in Sources */,
+				43CD4B4D23AA365E0061E4E8 /* Timestamp+Attack.swift in Sources */,
 				4326A5E62336666000A3D1A1 /* Errors.swift in Sources */,
 				437F0A90236474AB005582E3 /* UIButtonRounded.swift in Sources */,
 				4371BC4B232D25D100B28FAB /* ChooseCityPopoverViewController.swift in Sources */,
-				43DB3EBC23A958E50027588F /* UIScreen+Utils.swift in Sources */,
 				43F2C184234CEE0F001F0EDA /* PendingSignInViewController.swift in Sources */,
-				43DB3EBD23A958E50027588F /* CGRect+Utils.swift in Sources */,
 				43E5CF7522E5A81B00DBED2E /* Location.swift in Sources */,
 				43AB9648239D29A2007F9E48 /* SettingsTableViewController.swift in Sources */,
 				43615CAE23072E5F003FC839 /* ProfileViewController.swift in Sources */,
@@ -680,6 +681,15 @@
 				432DEDA622E1F28E00DFA074 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		43CD4B4823AA22AC0061E4E8 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43CD4B4723AA22AC0061E4E8 /* sv */,
+				43CD4B4923AA22D30061E4E8 /* en */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

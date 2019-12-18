@@ -100,10 +100,10 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Slå på notiser i inställningarna för att kunna aktivera denna funktion";
 
-/* Notification title when someone else has captured a location from the user */
-"location-lost-notification-title" = "Plats förlorad";
+/* Notification title when someone has attacked one of the user's locations */
+"location-lost-notification-title" = "Plats attackerad!";
 /* Notification body ... */
-"location-lost-notification-body" = "%@ tog %@ från dig 🚩";
+"location-lost-notification-body" = "%@ attackerade %@, du har %@ minuter på dig att försvara platsen! 🚩";
 
 /* Text on 'Tap to continue'-note in quiz */
 "quiz-tap-to-continue-note" = "Tryck var som helst för att fortsätta";

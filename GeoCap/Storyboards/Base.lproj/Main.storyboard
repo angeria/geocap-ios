@@ -96,6 +96,7 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="attackerName" destination="DvV-ZB-R3i" id="WyH-Gr-TOa"/>
+                                    <outlet property="bitmoji" destination="fkf-nr-fK6" id="6gh-4P-cId"/>
                                     <outlet property="locationName" destination="AUF-5e-iwx" id="bmZ-GW-VrX"/>
                                     <outlet property="timeLabel" destination="KpI-dR-jqq" id="1RZ-uS-561"/>
                                 </connections>
@@ -256,14 +257,18 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="na5-V6-7jb" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
-                                <rect key="frame" x="274" y="733" width="120" height="60"/>
+                            <button opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="na5-V6-7jb" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
+                                <rect key="frame" x="204" y="733" width="190" height="60"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="Iep-kh-Qgz"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="190" id="Iep-kh-Qgz"/>
                                     <constraint firstAttribute="height" constant="60" id="ub2-yf-Im3"/>
                                 </constraints>
-                                <state key="normal" title="Attacks" image="shield.lefthalf.fill" catalog="system">
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
+                                <state key="normal" title="Inga attacker" image="shield.lefthalf.fill" catalog="system">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35" scale="default"/>
                                 </state>
@@ -288,6 +293,7 @@
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="bottom" secondItem="PQr-Ze-W5v" secondAttribute="bottom" id="hKO-mg-xrp"/>
                             <constraint firstItem="mYc-wv-Nm0" firstAttribute="top" secondItem="PQr-Ze-W5v" secondAttribute="top" id="tpg-zf-fxZ"/>
                             <constraint firstItem="Yce-1y-Q0W" firstAttribute="centerX" secondItem="mYc-wv-Nm0" secondAttribute="centerX" id="vlV-OQ-rfe"/>
+                            <constraint firstItem="na5-V6-7jb" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PQr-Ze-W5v" secondAttribute="leading" constant="20" id="yDU-GU-yxi"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
@@ -314,6 +320,7 @@
                         </segmentedControl>
                     </navigationItem>
                     <connections>
+                        <outlet property="attacksButton" destination="na5-V6-7jb" id="GwY-4q-9F8"/>
                         <outlet property="currentCityBarButton" destination="sLm-d7-twP" id="aOu-W3-6xA"/>
                         <outlet property="loadingLocationsView" destination="Yce-1y-Q0W" id="5dr-yL-dbA"/>
                         <outlet property="locationFilter" destination="2Tx-Iz-jwz" id="XeT-gb-Ema"/>

@@ -14,6 +14,7 @@ enum GeoCapConstants {
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
     static let quizTimeoutInterval = 8.0
+    static let maxDownloadSize: Int64 =  1 * 1024 * 1024 // 1 MB
 
     enum UserDefaultsKeys {
         static let soundsAreEnabled = "soundsAreEnabled"
@@ -31,13 +32,15 @@ enum GeoCapConstants {
             static let quizTime = "quizTime"
             static let minimumUsernameLength = "minimumUsernameLength"
             static let maximumUsernameLength = "maximumUsernameLength"
+            static let attackTimeLimit = "attackTimeLimit"
         }
 
         static let Defaults = [
             Keys.numberOfQuestions: 3 as NSObject,
             Keys.quizTime: 13 as NSObject,
             Keys.minimumUsernameLength: 3 as NSObject,
-            Keys.maximumUsernameLength: 20 as NSObject
+            Keys.maximumUsernameLength: 20 as NSObject,
+            Keys.attackTimeLimit: 15 as NSObject
         ]
     }
 }

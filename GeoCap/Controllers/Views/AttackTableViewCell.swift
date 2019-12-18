@@ -13,6 +13,8 @@ class AttackTableViewCell: UITableViewCell {
     @IBOutlet weak var locationName: UILabel!
     @IBOutlet weak var attackerName: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var bitmoji: UIImageView!
+
     var defendButtonCallback: (() -> Void)?
 
     @IBAction func defendButtonPressed(_ sender: UIButton) {
