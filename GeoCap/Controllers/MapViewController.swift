@@ -128,11 +128,17 @@ class MapViewController: UIViewController {
         super.viewDidAppear(animated)
 
         setupAttacksListener()
+
+        attacksListenerTimer?.invalidate()
+        attacksListenerTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
+            self?.setupAttacksListener()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        attacksListenerTimer?.invalidate()
         attacksListener?.remove()
     }
 
@@ -432,17 +438,21 @@ class MapViewController: UIViewController {
     private func handleQuizDismissal(quizVC: QuizViewController) {
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
-            captureLocation()
+            captureLocation(cityRef: defendingLocationCityRef)
 
             // Request notification auth after first capture
             if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
             }
         } else {
-            // TODO: REMOVE THIS
-            captureLocation()
-            quizTimeoutIsActive = true
+            captureLocation(cityRef: defendingLocationCityRef) // TODO: REMOVE THIS
+
+            if !isDefending {
+                quizTimeoutIsActive = true
+            }
         }
+
+        isDefending = false
     }
 
     private var quizTimeoutIsActive = false {
@@ -475,16 +485,23 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private var attemptedCaptureLocation: String?
+    private var attemptedCaptureLocationName: String?
 
-    private func captureLocation() {
+    private func captureLocation(cityRef: DocumentReference?) {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        guard let locationName = attemptedCaptureLocation else { return }
+        guard let locationName = attemptedCaptureLocationName else { return }
 
         let db = Firestore.firestore()
         let batch = db.batch()
 
-        currentCity?.reference.collection("locations")
+        var ref: DocumentReference?
+        if cityRef == nil {
+            ref = currentCity?.reference
+        } else {
+            ref = cityRef
+        }
+
+        ref?.collection("locations")
             .whereField("name", isEqualTo: locationName)
             .getDocuments { querySnapshot, error in
             guard let query = querySnapshot else {
@@ -519,6 +536,7 @@ class MapViewController: UIViewController {
 
     @IBOutlet weak var attacksButton: UIButtonRounded!
 
+    private var attacksListenerTimer: Timer?
     private var attacksListener: ListenerRegistration?
 
     private func setupAttacksListener() {
@@ -613,8 +631,24 @@ class MapViewController: UIViewController {
         SwiftEntryKit.display(entry: attacksVC, using: attributes)
     }
 
-    func defendLocation(locationRef: DocumentReference?) {
+    private var defendingLocationCityRef: DocumentReference?
+    private var defendingLocationRef: DocumentReference?
+    private var isDefending = false {
+        willSet {
+            if newValue == false {
+                print("here")
+                defendingLocationCityRef = nil
+                defendingLocationCityRef = nil
+            }
+        }
+    }
+
+    func defendLocation(locationName: String, locationRef: DocumentReference, cityRef: DocumentReference) {
         guard let quizVC = storyboard?.instantiateViewController(identifier: "Quiz") else { return }
+        isDefending = true
+        attemptedCaptureLocationName = locationName
+        defendingLocationCityRef = cityRef
+        defendingLocationRef = locationRef
         quizVC.presentationController?.delegate = self
         present(quizVC, animated: true)
     }
@@ -809,7 +843,7 @@ class MapViewController: UIViewController {
                 if let locationTitle = annotationView.annotation?.title {
                     if let locationName = locationTitle {
                         quizVC.presentationController?.delegate = self
-                        attemptedCaptureLocation = locationName
+                        attemptedCaptureLocationName = locationName
                     }
                 }
             }

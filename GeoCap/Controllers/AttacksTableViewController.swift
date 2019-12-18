@@ -18,6 +18,8 @@ class AttacksTableViewController: UITableViewController {
         let attackerUid: String
         let locationName: String
         let locationRef: DocumentReference
+        let cityRef: DocumentReference
+        let attackRef: DocumentReference
         let minutesLeft: Int
         var bitmoji: UIImage?
     }
@@ -73,8 +75,9 @@ class AttacksTableViewController: UITableViewController {
 
                 guard let locationName = docSnap.data()["locationName"] as? String else { return }
                 guard let locationRef = docSnap.data()["locationRef"] as? DocumentReference else { return }
+                guard let cityRef = docSnap.data()["cityRef"] as? DocumentReference else { return }
 
-                let attackCellData = AttackCellData(attackerName: attackerName, attackerUid: attackerUid, locationName: locationName, locationRef: locationRef, minutesLeft: minutesLeft, bitmoji: nil)
+                let attackCellData = AttackCellData(attackerName: attackerName, attackerUid: attackerUid, locationName: locationName, locationRef: locationRef, cityRef: cityRef, attackRef: docSnap.reference, minutesLeft: minutesLeft, bitmoji: nil)
                 self?.tableData += [attackCellData]
                 self?.tableView.reloadData()
 
@@ -134,13 +137,18 @@ class AttacksTableViewController: UITableViewController {
         let minutesLeft = tableData[indexPath.section].minutesLeft
         cell.timeLabel.text = "\(minutesLeft) minutes left"
 
+        let locationRef = tableData[indexPath.section].locationRef
+        let cityRef = tableData[indexPath.section].cityRef
+        let attackRef = tableData[indexPath.section].attackRef
         cell.defendButtonCallback = {
             SwiftEntryKit.dismiss {
                 if let navVC = UIApplication.shared.windows[0].rootViewController as? UINavigationController {
                     if let tabBarVC = navVC.visibleViewController as? UITabBarController {
                         if let mapNavVC = tabBarVC.viewControllers?[1] as? UINavigationController {
                             if let mapVC = mapNavVC.visibleViewController as? MapViewController {
-                                mapVC.defendLocation(locationRef: nil)
+                                attackRef.delete { _ in
+                                    mapVC.defendLocation(locationName: locationName, locationRef: locationRef, cityRef: cityRef)
+                                }
                             }
                         }
                     }
