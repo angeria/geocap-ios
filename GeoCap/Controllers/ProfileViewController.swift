@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
 
     @IBAction func profilePictureButtonPressed(_ sender: UIButton) {
         if SCSDKLoginClient.isUserLoggedIn {
-            unlinkSnapchat()
+            unlinkSnapchat(completion: nil)
         } else {
             linkSnapchat()
         }
@@ -99,7 +99,7 @@ class ProfileViewController: UIViewController {
         }
     }
 
-    private func unlinkSnapchat() {
+    func unlinkSnapchat(completion: (() -> Void)?) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
         SCSDKLoginClient.unlinkAllSessions { [weak self] success in
@@ -112,6 +112,13 @@ class ProfileViewController: UIViewController {
                 ref.delete { error in
                     if let error = error as NSError? {
                         os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                        completion?()
+                        return
+                    }
+
+                    if completion != nil {
+                        completion!()
+                        return
                     }
 
                     // Refresh all locations to remove user's bitmoji
@@ -122,6 +129,8 @@ class ProfileViewController: UIViewController {
                         }
                     }
                 }
+            } else {
+                completion?()
             }
         }
     }
