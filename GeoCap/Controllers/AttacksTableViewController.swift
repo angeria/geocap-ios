@@ -34,8 +34,7 @@ class AttacksTableViewController: UITableViewController {
 
         setup()
 
-        // Refresh to remove attacks that timed out
-        timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
             self?.setup()
         }
     }
@@ -135,7 +134,10 @@ class AttacksTableViewController: UITableViewController {
         cell.locationName.text = locationName
 
         let minutesLeft = tableData[indexPath.section].minutesLeft
-        cell.timeLabel.text = "\(minutesLeft) minutes left"
+
+        let format = NSLocalizedString("%d minutes left", comment: "")
+        let localized = String.localizedStringWithFormat(format, minutesLeft)
+        cell.timeLabel.text = localized
 
         let locationRef = tableData[indexPath.section].locationRef
         let cityRef = tableData[indexPath.section].cityRef

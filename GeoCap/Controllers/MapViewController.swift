@@ -488,6 +488,7 @@ class MapViewController: UIViewController {
     private var attemptedCaptureLocationName: String?
 
     private func captureLocation(cityRef: DocumentReference?) {
+        var wasDefended = isDefending
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
         guard let locationName = attemptedCaptureLocationName else { return }
 
@@ -510,22 +511,44 @@ class MapViewController: UIViewController {
                 return
             }
 
-            if let document = query.documents.first {
-                let locationReference = document.reference
-                batch.updateData([
-                    "owner": username,
-                    "ownerId": user.uid,
-                    "captureTimestamp": FieldValue.serverTimestamp()
-                ], forDocument: locationReference)
+            // Check if there is an active attack on the location and therefore a possibility to defend it
+            db.collection("attacks")
+                .whereField("defenderUid", isEqualTo: user.uid)
+                .whereField("locationName", isEqualTo: locationName)
+                .getDocuments { (querySnapshot, error) in
 
-                let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-                                  "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                guard let query2 = querySnapshot else {
+                    os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
+                    Crashlytics.sharedInstance().recordError(error!)
+                    return
+                }
 
-                batch.commit { error in
-                    if let error = error as NSError? {
-                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
-                        Crashlytics.sharedInstance().recordError(error)
+                // Mark this capture as a defence and delete stale attacks
+                query2.documents.forEach { (docSnap) in
+                    if (docSnap.data()["timestamp"] as? Timestamp)?.attackIsActive() == true {
+                        wasDefended = true
+                    }
+                    docSnap.reference.delete()
+                }
+
+                if let document = query.documents.first {
+                    let locationReference = document.reference
+                    batch.updateData([
+                        "owner": username,
+                        "ownerId": user.uid,
+                        "captureTimestamp": FieldValue.serverTimestamp(),
+                        "wasDefended": wasDefended
+                    ], forDocument: locationReference)
+
+                    let userReference = db.collection("users").document(user.uid)
+                    batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
+                                      "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+
+                    batch.commit { error in
+                        if let error = error as NSError? {
+                            os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                            Crashlytics.sharedInstance().recordError(error)
+                        }
                     }
                 }
             }
@@ -557,10 +580,12 @@ class MapViewController: UIViewController {
                 if let timestamp = docSnap.data()["timestamp"] as? Timestamp {
                     return timestamp.attackIsActive()
                 }
+
+                docSnap.reference.delete()
                 return false
             }
 
-            let format = NSLocalizedString("%u attacks", comment: "")
+            let format = NSLocalizedString("%d attacks", comment: "")
             let localized = String.localizedStringWithFormat(format, activeAttacks.count)
             self.attacksButton.setTitle(localized, for: .normal)
 
@@ -636,7 +661,6 @@ class MapViewController: UIViewController {
     private var isDefending = false {
         willSet {
             if newValue == false {
-                print("here")
                 defendingLocationCityRef = nil
                 defendingLocationCityRef = nil
             }
@@ -825,9 +849,7 @@ class MapViewController: UIViewController {
                 return true
             }
         default:
-            return true
-            // TODO: Remove this
-            // fatalError("Unexpected segue identifier")
+            fatalError("Unexpected segue identifier")
         }
 
         return false
@@ -854,9 +876,7 @@ class MapViewController: UIViewController {
                 popoverVC.currentCity = currentCity
             }
         default:
-            return
-            // TODO: Remove this
-//            fatalError("Unexpected segue identifier")
+            fatalError("Unexpected segue identifier")
         }
     }
 

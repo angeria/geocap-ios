@@ -197,6 +197,46 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
+    // MARK: - Delete Account
+
+    private func deleteAccount() {
+        let functions = Functions.functions(region: "europe-west1")
+        functions.httpsCallable("deleteAccount").call { [weak self] (result, error) in
+            if let error = error as NSError? {
+              os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
+              Crashlytics.sharedInstance().recordError(error)
+            }
+
+            if let success = (result?.data as? [String: Any])?["success"] as? Bool {
+                if success {
+                    self?.signOut()
+                }
+            }
+        }
+    }
+
+    @IBAction func deleteAccountButtonPressed(_ sender: UIButton) {
+        presentConfirmAccountDeletionAlert()
+    }
+
+    private func presentConfirmAccountDeletionAlert() {
+        let title = NSLocalizedString("alert-title-confirm-account-deletion", comment: "Alert title when asking the user to confirm account deletion")
+        let message = NSLocalizedString("alert-message-confirm-account-deletion", comment: "Alert message when asking the user to confirm account deletion")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        let yesActionTitle = NSLocalizedString("alert-action-title-yes", comment: "Title of alert action 'Yes'")
+        let yesAction = UIAlertAction(title: yesActionTitle, style: .destructive) { [weak self] (_) in
+            self?.deleteAccount()
+        }
+
+        let noActionTitle = NSLocalizedString("alert-action-title-no", comment: "Title of alert action 'No'")
+        let noAction = UIAlertAction(title: noActionTitle, style: .cancel)
+
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
+    }
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

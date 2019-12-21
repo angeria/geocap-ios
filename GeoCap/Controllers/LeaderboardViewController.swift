@@ -157,6 +157,7 @@ class LeaderboardViewController: UITableViewController {
                 cell.imageView?.image = bitmoji.addImagePadding(x: 0, y: Constants.imageHeightPadding)
             } else {
                 cell.imageView?.image = UIImage(systemName: "person.crop.circle")?
+                    .withTintColor(.systemGray)
                     .resized(to: CGSize(width: Constants.approxBitmojiSize,
                                         height: Constants.approxBitmojiSize))
                     .addImagePadding(x: 0, y: Constants.imageHeightPadding)

@@ -26,6 +26,9 @@
 /* Class = "UISegmentedControl"; 2Tx-Iz-jwz.segmentTitles[1] = "Areas"; ObjectID = "2Tx-Iz-jwz"; */
 "2Tx-Iz-jwz.segmentTitles[1]" = "Områden";
 
+/* Class = "UILabel"; text = "None of your locations are under attack"; ObjectID = "L3w-lK-kpU"; */
+"L3w-lK-kpU.text" = "Inga av dina platser är under attack";
+
 /* Class = "UILabel"; text = "Captured locations"; ObjectID = "8Mx-9u-3Gi"; */
 "8Mx-9u-3Gi.text" = "Tagna platser";
 
@@ -58,6 +61,9 @@
 
 /* Class = "UIButton"; normalTitle = "Sign Out"; ObjectID = "xBy-NM-oiJ"; */
 "xBy-NM-oiJ.normalTitle" = "Logga ut";
+
+/* Class = "UIButton"; normalTitle = "Delete Account"; ObjectID = "6ev-aJ-Yoh"; */
+"6ev-aJ-Yoh.normalTitle" = "Ta bort konto";
 
 /* Class = "UILabel"; text = "Use your Bitmoji as your avatar by connecting to Snapchat"; ObjectID = "DIE-R7-3e4"; */
 "DIE-R7-3e4.text" = "Använd din Bitmoji som avatar genom att ansluta till Snapchat";
