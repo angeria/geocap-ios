@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
 import os.log
 
 class LeaderboardViewController: UITableViewController {
@@ -17,7 +16,6 @@ class LeaderboardViewController: UITableViewController {
         static let imageHeightPadding: CGFloat = 50
         static let approxBitmojiSize: CGFloat = 150
         static let userCellOpacity: CGFloat = 0.50
-        static let maxDownloadSize: Int64 =  1 * 1024 * 1024 // 1 MB
     }
 
     // MARK: - Life Cycle
@@ -36,7 +34,7 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - Leaderboard
 
-    struct UserCellData {
+    private struct UserCellData {
         var isOpened = false
         let username: String
         let locations: [String]
@@ -70,9 +68,7 @@ class LeaderboardViewController: UITableViewController {
         leaderboardListener?.remove()
 
         let db = Firestore.firestore()
-        leaderboardListener = db.collection("users")
-            .order(by: "capturedLocationsCount",
-                   descending: true).addSnapshotListener { [weak self] querySnapshot, error in
+        leaderboardListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Leaderboard, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
@@ -112,7 +108,7 @@ class LeaderboardViewController: UITableViewController {
 
             if let user = snapshot?.documents.first {
                 let ref = Storage.storage().reference(withPath: "snapchat_bitmojis/\(user.documentID)/snapchat_bitmoji.png")
-                ref.getData(maxSize: Constants.maxDownloadSize) { data, error in
+                ref.getData(maxSize: GeoCapConstants.maxDownloadSize) { data, error in
                     if let error = error as NSError? {
                         let storageError = StorageErrorCode(rawValue: error.code)!
                         if storageError == .objectNotFound { return }
@@ -161,6 +157,7 @@ class LeaderboardViewController: UITableViewController {
                 cell.imageView?.image = bitmoji.addImagePadding(x: 0, y: Constants.imageHeightPadding)
             } else {
                 cell.imageView?.image = UIImage(systemName: "person.crop.circle")?
+                    .withTintColor(.systemGray)
                     .resized(to: CGSize(width: Constants.approxBitmojiSize,
                                         height: Constants.approxBitmojiSize))
                     .addImagePadding(x: 0, y: Constants.imageHeightPadding)

@@ -14,6 +14,7 @@ enum GeoCapConstants {
     static let scaleAnimationDuration = 0.125
     static let defaultCornerRadius: CGFloat = 10
     static let quizTimeoutInterval = 8.0
+    static let maxDownloadSize: Int64 =  1 * 1024 * 1024 // 1 MB
 
     enum UserDefaultsKeys {
         static let soundsAreEnabled = "soundsAreEnabled"

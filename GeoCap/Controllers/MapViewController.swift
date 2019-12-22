@@ -10,7 +10,6 @@ import UIKit
 import MapKit
 import CoreLocation
 import Firebase
-import FirebaseAuth
 import os.log
 import AVFoundation
 import SwiftEntryKit
@@ -125,8 +124,27 @@ class MapViewController: UIViewController {
         navigationItem.setRightBarButton(userTrackingBarButton, animated: true)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        setupAttacksListener()
+
+        attacksListenerTimer?.invalidate()
+        attacksListenerTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in
+            self?.setupAttacksListener()
+        }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        attacksListenerTimer?.invalidate()
+        attacksListener?.remove()
+    }
+
     func teardown() {
         locationListener?.remove()
+        attacksListener?.remove()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -282,7 +300,7 @@ class MapViewController: UIViewController {
 
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
-                guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
+                guard let newAnnotation = Location(data: diff.document.data(), reference: diff.document.reference, username: username) else {
                     os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .debug, diff.document.documentID)
                     return
                 }
@@ -339,15 +357,15 @@ class MapViewController: UIViewController {
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
 
-        let captureButton = UIButton(type: .system)
-        let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
-        captureButton.setTitle(title, for: .normal)
-        captureButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
-        captureButton.tintColor = .white
-        captureButton.backgroundColor = .systemBlue
-        captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
+        let captureButton = setupCaptureButton(for: annotation)
 
-        if annotation.isCapturedByUser {
+        // TODO: Improve readability
+        if annotation.isCapturedByUser && annotation.isUnderAttack {
+            annotationView.markerTintColor = UIColor.systemOrange.withAlphaComponent(Constants.markerAlpha)
+            annotationView.glyphImage = UIImage(systemName: "exclamationmark.shield.fill")
+            annotationView.rightCalloutAccessoryView = captureButton
+            fetchAndSetBitmoji(forUser: annotation.attackerName, in: annotationView)
+        } else if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "checkmark")
 
@@ -356,23 +374,67 @@ class MapViewController: UIViewController {
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
             imageView.tintColor = .systemBlue
             annotationView.rightCalloutAccessoryView = imageView
-            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
         } else if annotation.owner == nil {
             annotationView.glyphImage = UIImage(systemName: "circle")
             annotationView.markerTintColor = UIColor.systemGray.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
             annotationView.leftCalloutAccessoryView = nil
+        } else if annotation.attackerName == Auth.auth().currentUser?.displayName {
+            annotationView.glyphImage = UIImage(systemName: "exclamationmark")
+            annotationView.markerTintColor = UIColor.systemTeal.withAlphaComponent(Constants.markerAlpha)
+
+            let image = UIImage(systemName: "exclamationmark")
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth / 3, height: Constants.calloutImageHeight)
+            imageView.tintColor = .systemTeal
+            annotationView.rightCalloutAccessoryView = imageView
+
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
+        } else if !annotation.isCapturedByUser && annotation.isUnderAttack {
+            annotationView.glyphImage = UIImage(systemName: "xmark.shield.fill")
+            annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
+
+            let image = UIImage(systemName: "xmark.shield.fill")
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
+            imageView.tintColor = .systemRed
+            annotationView.rightCalloutAccessoryView = imageView
+
+            fetchAndSetBitmoji(forUser: annotation.attackerName, in: annotationView)
         } else {
             annotationView.glyphImage = UIImage(systemName: "flag.fill")
             annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
-            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
         }
 
         return annotationView
     }
 
-    private func fetchAndSetBitmoji(forUser username: String, in annotationView: MKAnnotationView) {
+    private func setupCaptureButton(for annotation: Location) -> UIButton {
+        let captureButton = UIButton(type: .system)
+
+        var title: String
+        switch annotation.isUnderAttack {
+        case true:
+            title = NSLocalizedString("callout-button-defend", comment: "Defend button on location callout view")
+        case false:
+            title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
+        }
+        captureButton.setTitle(title, for: .normal)
+        captureButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
+        captureButton.tintColor = .white
+        captureButton.backgroundColor = .systemBlue
+        captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
+        return captureButton
+    }
+
+    private func fetchAndSetBitmoji(forUser username: String?, in annotationView: MKAnnotationView) {
+        guard let username = username else {
+            annotationView.leftCalloutAccessoryView = nil
+            return
+        }
         let db = Firestore.firestore()
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] (snapshot, error) in
             if let error = error as NSError? {
@@ -420,15 +482,22 @@ class MapViewController: UIViewController {
     private func handleQuizDismissal(quizVC: QuizViewController) {
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
-            captureLocation()
+            handleQuizWin()
+//            captureLocation()
 
             // Request notification auth after first capture
             if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
             }
         } else {
-            quizTimeoutIsActive = true
+//            captureLocation() // TODO: REMOVE THIS
+
+            if !isDefending {
+                quizTimeoutIsActive = true
+            }
         }
+
+        isDefending = false
     }
 
     private var quizTimeoutIsActive = false {
@@ -461,44 +530,184 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private var attemptedCaptureLocation: String?
+    // Set to the currently attempted capture or defend location
+    private var currentLocationReference: DocumentReference?
+    private var currentLocationName: String?
 
     private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        guard let locationName = attemptedCaptureLocation else { return }
+        guard let locationReference = currentLocationReference else { return }
+        guard let locationName = currentLocationName else { return }
 
         let db = Firestore.firestore()
         let batch = db.batch()
 
-        currentCity?.reference.collection("locations")
-            .whereField("name", isEqualTo: locationName)
-            .getDocuments { querySnapshot, error in
-            guard let query = querySnapshot else {
+        batch.updateData([
+            "owner": username,
+            "ownerId": user.uid,
+            "captureTimestamp": FieldValue.serverTimestamp(),
+            "wasDefended": false
+        ], forDocument: locationReference)
+
+        let userReference = db.collection("users").document(user.uid)
+        batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
+                          "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+
+        batch.commit { error in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                Crashlytics.sharedInstance().recordError(error)
+            }
+        }
+    }
+
+    private func attackLocation() {
+
+    }
+
+    private func handleQuizWin() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        currentLocationReference?.getDocument(completion: { [weak self] (docSnap, error) in
+            guard let doc = docSnap else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
 
-            if let document = query.documents.first {
-                let locationReference = document.reference
-                batch.updateData([
-                    "owner": username,
-                    "ownerId": user.uid,
-                    "captureTimestamp": FieldValue.serverTimestamp()
-                ], forDocument: locationReference)
-
-                let userReference = db.collection("users").document(user.uid)
-                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-                                  "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-
-                batch.commit { error in
-                    if let error = error as NSError? {
-                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
-                        Crashlytics.sharedInstance().recordError(error)
-                    }
+            if let ownerId = doc.data()?["ownerId"] as? String {
+                switch ownerId {
+                case uid:
+                    self?.defendLocation()
+                default
+                    self?.attackLocation()
                 }
+            } else {
+                self?.captureLocation()
+            }
+        })
+    }
+
+    // MARK: - Capture and Defend Locations
+
+    @IBOutlet weak var attacksButton: UIButtonRounded!
+
+    private var attacksListenerTimer: Timer?
+    private var attacksListener: ListenerRegistration?
+
+    private func setupAttacksListener() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        attacksListener?.remove()
+
+        let db = Firestore.firestore()
+        attacksListener = db.collection("attacks").whereField("defenderUid", isEqualTo: uid).addSnapshotListener({ [weak self] (querySnapshot, error) in
+            guard let query = querySnapshot else {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
+                Crashlytics.sharedInstance().recordError(error!)
+                return
+            }
+            guard let self = self else { return }
+
+            let activeAttacks = query.documents.filter { docSnap -> Bool in
+                if let timestamp = docSnap.data()["timestamp"] as? Timestamp {
+                    return timestamp.attackIsActive()
+                }
+
+                docSnap.reference.delete()
+                return false
+            }
+
+            let format = NSLocalizedString("%d attacks", comment: "")
+            let localized = String.localizedStringWithFormat(format, activeAttacks.count)
+            self.attacksButton.setTitle(localized, for: .normal)
+
+            switch activeAttacks.count {
+            case 0:
+                self.attacksButton.setImage(UIImage(systemName: "shield.lefthalf.fill"), for: .normal)
+                self.attacksButton.tintColor = .systemGreen
+                self.attacksButton.setTitleColor(.label, for: .normal)
+            default:
+                self.attacksButton.setImage(UIImage(systemName: "exclamationmark.shield"), for: .normal)
+                self.attacksButton.tintColor = .systemRed
+                self.attacksButton.setTitleColor(.systemRed, for: .normal)
+            }
+        })
+    }
+
+    @IBAction func attacksButtonPressed(_ sender: UIButton) {
+        guard let attacksVC = storyboard?.instantiateViewController(identifier: "Attacks") else { return }
+        var attributes = EKAttributes()
+
+        attributes = .bottomFloat
+        attributes.displayDuration = .infinity
+        attributes.screenInteraction = .dismiss
+        attributes.entryInteraction = .forward
+        attributes.entranceAnimation = .init(
+            translate: .init(
+                duration: 0.3,
+                spring: .init(damping: 0.9, initialVelocity: 0)
+            ),
+            scale: .init(
+                from: 0.8,
+                to: 1,
+                duration: 0.3,
+                spring: .init(damping: 0.8, initialVelocity: 0)
+            ),
+            fade: .init(
+                from: 0.7,
+                to: 1,
+                duration: 0.2
+            )
+        )
+        attributes.exitAnimation = .init(
+            translate: .init(duration: 0.3),
+            scale: .init(
+                from: 1,
+                to: 0.8,
+                duration: 0.3
+            ),
+            fade: .init(
+                from: 1,
+                to: 0,
+                duration: 0.3
+            )
+        )
+        attributes.shadow = .active(
+            with: .init(
+                color: .black,
+                opacity: 0.3,
+                radius: 6
+            )
+        )
+        attributes.positionConstraints.verticalOffset = (tabBarController?.tabBar.bounds.maxY ?? 83) - 15
+        attributes.positionConstraints.size = .init(
+            width: .offset(value: 20),
+            height: .ratio(value: 0.4)
+        )
+
+        SwiftEntryKit.display(entry: attacksVC, using: attributes)
+    }
+
+    private var defendingLocationCityRef: DocumentReference?
+    private var isDefending = false {
+        willSet {
+            if newValue == false {
+                defendingLocationCityRef = nil
+                defendingLocationCityRef = nil
             }
         }
+    }
+
+    func defendLocation(locationName: String, locationRef: DocumentReference, cityRef: DocumentReference) {
+        guard let quizVC = storyboard?.instantiateViewController(identifier: "Quiz") else { return }
+        isDefending = true
+        // TODO: Fix
+//        attemptedCaptureLocationName = locationName
+        defendingLocationCityRef = cityRef
+        currentLocationReference = locationRef
+        quizVC.presentationController?.delegate = self
+        present(quizVC, animated: true)
     }
 
     // MARK: - Notifications
@@ -650,22 +859,19 @@ class MapViewController: UIViewController {
         switch identifier {
         case "Show Quiz":
             if quizTimeoutIsActive {
+                // TODO: Fix before release
 //                presentQuizTimeoutAlert()
 //                return false
             }
 
-            if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
-                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
-                if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
-                    if currentCity != nil {
-                        if user(location: mapView.userLocation, isInside: annotation.overlay) {
-                            return true
-                        } else {
-//                            presentNotInsideAreaAlert()
-//                            return false
-                            return true
-                        }
-                    }
+            if let annotationView = sender as? MKAnnotationView, let location = annotationView.annotation as? Location {
+                if user(location: mapView.userLocation, isInside: location.overlay) {
+                    return true
+                } else {
+                    // TODO: Fix before release
+//                    presentNotInsideAreaAlert()
+//                    return false
+                    return true
                 }
             }
         case "Show Choose City Popover":
@@ -684,14 +890,12 @@ class MapViewController: UIViewController {
 
         switch segue.identifier {
         case "Show Quiz":
-            if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
-                if let locationTitle = annotationView.annotation?.title {
-                    if let locationName = locationTitle {
-                        quizVC.presentationController?.delegate = self
-                        attemptedCaptureLocation = locationName
-                    }
-                }
+            if let quizVC = segue.destination as? QuizViewController,
+                let annotationView = sender as? MKAnnotationView,
+                let location = annotationView.annotation as? Location {
+                    quizVC.presentationController?.delegate = self
+                    currentLocationReference = location.reference
+                    currentLocationName = location.name
             }
         case "Show Choose City Popover":
             if let popoverVC = segue.destination as? ChooseCityPopoverViewController {

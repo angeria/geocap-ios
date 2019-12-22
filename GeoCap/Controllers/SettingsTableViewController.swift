@@ -37,18 +37,28 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Sign Out
 
     @IBAction func signOutPressed(_ sender: UIButton) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        unregisterNotifications(completion: teardownBeforeSignOut)
+    }
 
-        // Unregister for notifications
-        let db = Firestore.firestore()
-        let ref = db.collection("users").document(uid).collection("private").document("data")
-        ref.updateData(["notificationToken": FieldValue.delete()]) { [weak self] error in
-            if let error = error {
-                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
-                Crashlytics.sharedInstance().recordError(error)
-                return
-            }
-            self?.signOut()
+    private func teardownBeforeSignOut() {
+        // Removing listeners here also to not get "Missing or insufficient permissions" error after signing out
+        let navVC = tabBarController!.viewControllers![1] as! UINavigationController
+        let mapVC = navVC.viewControllers[0] as! MapViewController
+        mapVC.teardown()
+
+        settingsListener?.remove()
+
+        if let profileVC = navigationController?.viewControllers[0] as? ProfileViewController {
+            profileVC.unlinkSnapchat(completion: signOut)
+        }
+    }
+
+    private func signOut() {
+        do {
+            try Auth.auth().signOut()
+        } catch let error as NSError {
+            os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
+            Crashlytics.sharedInstance().recordError(error)
         }
     }
 
@@ -74,6 +84,20 @@ class SettingsTableViewController: UITableViewController {
                 DispatchQueue.main.async {
                     self?.locationLostNotificationsSwitch.isOn = document.get("locationLostNotificationsEnabled") as? Bool == true ? true : false
                 }
+        }
+    }
+
+    private func unregisterNotifications(completion: (() -> Void)?) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(uid).collection("private").document("data")
+        ref.updateData(["notificationToken": FieldValue.delete()]) { error in
+            if let error = error {
+                os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
+                Crashlytics.sharedInstance().recordError(error)
+                return
+            }
+            completion?()
         }
     }
 
@@ -164,22 +188,6 @@ class SettingsTableViewController: UITableViewController {
         present(alert, animated: true)
     }
 
-    private func signOut() {
-        do {
-            // Removing listeners here also to not get "Missing or insufficient permissions" error after signing out
-            let navVC = tabBarController!.viewControllers![1] as! UINavigationController
-            let mapVC = navVC.viewControllers[0] as! MapViewController
-            mapVC.teardown()
-
-            settingsListener?.remove()
-
-            try Auth.auth().signOut()
-        } catch let error as NSError {
-            os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
-            Crashlytics.sharedInstance().recordError(error)
-        }
-    }
-
     // MARK: - Sound Setting
 
     @IBOutlet weak var soundSettingSwitch: UISwitch! {
@@ -195,6 +203,46 @@ class SettingsTableViewController: UITableViewController {
         case false:
             UserDefaults.standard.set(false, forKey: GeoCapConstants.UserDefaultsKeys.soundsAreEnabled)
         }
+    }
+
+    // MARK: - Delete Account
+
+    private func deleteAccount() {
+        let functions = Functions.functions(region: "europe-west1")
+        functions.httpsCallable("deleteAccount").call { [weak self] (result, error) in
+            if let error = error as NSError? {
+              os_log("%{public}@", log: OSLog.Profile, type: .debug, error)
+              Crashlytics.sharedInstance().recordError(error)
+            }
+
+            if let success = (result?.data as? [String: Any])?["success"] as? Bool {
+                if success {
+                    self?.teardownBeforeSignOut()
+                }
+            }
+        }
+    }
+
+    @IBAction func deleteAccountButtonPressed(_ sender: UIButton) {
+        presentConfirmAccountDeletionAlert()
+    }
+
+    private func presentConfirmAccountDeletionAlert() {
+        let title = NSLocalizedString("alert-title-confirm-account-deletion", comment: "Alert title when asking the user to confirm account deletion")
+        let message = NSLocalizedString("alert-message-confirm-account-deletion", comment: "Alert message when asking the user to confirm account deletion")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        let yesActionTitle = NSLocalizedString("alert-action-title-yes", comment: "Title of alert action 'Yes'")
+        let yesAction = UIAlertAction(title: yesActionTitle, style: .destructive) { [weak self] (_) in
+            self?.deleteAccount()
+        }
+
+        let noActionTitle = NSLocalizedString("alert-action-title-no", comment: "Title of alert action 'No'")
+        let noAction = UIAlertAction(title: noActionTitle, style: .cancel)
+
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
     }
 
     // MARK: - Navigation

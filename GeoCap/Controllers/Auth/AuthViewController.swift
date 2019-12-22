@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 import os.log
 import Firebase
-import FirebaseAuth
-import FirebaseRemoteConfig
 
 class AuthViewController: UIViewController {
 

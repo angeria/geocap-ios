@@ -17,6 +17,7 @@ extension Location {
 }
 
 class Location: NSObject, MKAnnotation {
+    let reference: DocumentReference
     let name: String
     var title: String?
     var subtitle: String? = NSLocalizedString("callout-subtitle-not-captured-yet",
@@ -29,11 +30,12 @@ class Location: NSObject, MKAnnotation {
     var areaCoordinates: [CLLocationCoordinate2D]?
     var overlay: MKOverlay
 
-    init?(data: [String: Any], username: String) {
+    init?(data: [String: Any], reference: DocumentReference, username: String) {
         guard
             let name = data["name"] as? String,
             let center = data["center"] as? GeoPoint else { return nil }
 
+        self.reference = reference
         self.name = name
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude)

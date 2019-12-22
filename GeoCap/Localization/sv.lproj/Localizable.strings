@@ -139,3 +139,13 @@ MAP
 "callout-subtitle-captured-by-other-user" = "Tagen av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
+
+/*
+SETTINGS
+*/
+
+/* Alert title when asking the user to confirm account deletion */
+"alert-title-confirm-account-deletion" = "Bekräfta borttagning";
+
+/* Alert message when asking the user to confirm account deletion */
+"alert-message-confirm-account-deletion" = "Är du säker på att du vill ta bort ditt konto och all din data permanent?";

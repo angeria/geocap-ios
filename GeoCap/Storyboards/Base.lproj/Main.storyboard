@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H9h-Jh-XUs">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H9h-Jh-XUs">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,7 +37,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JLC-2l-wTd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="IXJ-SQ-dKH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3150.0000000000005" y="-781.47321428571422"/>
+            <point key="canvasLocation" x="3150" y="-638"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="hNz-n2-bh7">
@@ -51,9 +51,9 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                             </mapView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-1y-Q0W">
-                                <rect key="frame" x="113" y="397.5" width="188" height="106"/>
+                                <rect key="frame" x="113" y="398" width="188.5" height="105.5"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="c2L-wJ-CC7">
-                                    <rect key="frame" x="0.0" y="0.0" width="188" height="106"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="188.5" height="105.5"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KTf-tR-Fot">
@@ -66,7 +66,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="MN3-M9-4Gq">
-                                                    <rect key="frame" x="56" y="28.5" width="37" height="37"/>
+                                                    <rect key="frame" x="55.5" y="28.5" width="37" height="37"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <constraints>
@@ -306,6 +306,35 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="" footerTitle="" id="Fsk-gH-7u0">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="T2k-xT-yFr">
+                                        <rect key="frame" x="20" y="350.5" width="374" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="T2k-xT-yFr" id="wZd-Ji-5Vp">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ev-aJ-Yoh">
+                                                    <rect key="frame" x="20" y="7" width="334" height="30.5"/>
+                                                    <state key="normal" title="Delete Account">
+                                                        <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="deleteAccountButtonPressed:" destination="zS6-oC-1Kn" eventType="touchUpInside" id="JDY-aG-lq6"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="6ev-aJ-Yoh" firstAttribute="top" secondItem="wZd-Ji-5Vp" secondAttribute="top" constant="7" id="9xn-wH-j1l"/>
+                                                <constraint firstAttribute="bottom" secondItem="6ev-aJ-Yoh" secondAttribute="bottom" constant="6.5" id="Cj8-nY-dGR"/>
+                                                <constraint firstItem="6ev-aJ-Yoh" firstAttribute="leading" secondItem="wZd-Ji-5Vp" secondAttribute="leading" constant="20" id="Pju-VK-amB"/>
+                                                <constraint firstAttribute="trailing" secondItem="6ev-aJ-Yoh" secondAttribute="trailing" constant="20" id="kod-iK-Ja0"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="zS6-oC-1Kn" id="r3f-4P-114"/>
@@ -350,13 +379,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8yK-tK-yx0">
-                                <rect key="frame" x="363" y="108" width="31" height="31"/>
+                                <rect key="frame" x="354" y="108" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="31" id="DAV-AU-NiB"/>
-                                    <constraint firstAttribute="width" constant="31" id="h1v-DX-4tg"/>
+                                    <constraint firstAttribute="height" constant="40" id="DAV-AU-NiB"/>
+                                    <constraint firstAttribute="width" constant="40" id="h1v-DX-4tg"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Button" image="gear" catalog="system">
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="40"/>
                                 </state>
                                 <connections>
                                     <segue destination="zS6-oC-1Kn" kind="show" id="3Hq-GA-WhZ"/>
@@ -438,7 +468,7 @@
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="person.crop.circle" catalog="system" id="4Hk-PK-vvp">
                                             <rect key="frame" x="21.5" y="19.5" width="21" height="20"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="tintColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="18" scale="default"/>
                                         </imageView>
                                     </subviews>
@@ -479,7 +509,7 @@
         <!--Quiz View Controller-->
         <scene sceneID="JwK-ng-cbg">
             <objects>
-                <viewController id="XzZ-RX-21L" customClass="QuizViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Quiz" id="XzZ-RX-21L" customClass="QuizViewController" customModule="GeoCap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Z6d-1K-Ooa">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -815,19 +845,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check your email" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="McC-ua-Zhx">
-                                <rect key="frame" x="20" y="625.5" width="374" height="41"/>
+                                <rect key="frame" x="20" y="576.5" width="374" height="41"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To sign in, tap the button in the email we sent to benjamin.angeria@icloud.com" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zyS-yw-LAv">
-                                <rect key="frame" x="20" y="674.5" width="374" height="42.5"/>
+                                <rect key="frame" x="20" y="625.5" width="374" height="42.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mZT-lJ-opy" customClass="UIButtonRounded" customModule="GeoCap" customModuleProvider="target">
-                                <rect key="frame" x="20" y="757" width="374" height="55"/>
+                                <rect key="frame" x="20" y="708" width="374" height="55"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="elx-nZ-FQo"/>
@@ -844,7 +874,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="250" image="email-sent-astronaut" translatesAutoresizingMaskIntoConstraints="NO" id="vBG-a6-ZVa">
-                                <rect key="frame" x="60" y="108" width="294" height="509.5"/>
+                                <rect key="frame" x="60" y="108" width="294" height="460.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -967,7 +997,7 @@
         <image name="star.fill" catalog="system" width="64" height="58"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="1m3-G5-LjG"/>
+        <segue reference="CNR-td-l7V"/>
         <segue reference="fiP-Ed-JCR"/>
     </inferredMetricsTieBreakers>
 </document>

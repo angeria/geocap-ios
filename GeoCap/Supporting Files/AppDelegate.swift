@@ -8,7 +8,6 @@
 
 import UIKit
 import Firebase
-import FirebaseAuth
 import SCSDKLoginKit
 
 @UIApplicationMain
@@ -69,6 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         return SCSDKLoginClient.application(app, open: url, options: options)
     }
+
+    // MARK: Notifications
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
