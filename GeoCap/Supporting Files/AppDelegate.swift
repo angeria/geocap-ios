@@ -9,8 +9,6 @@
 import UIKit
 import Firebase
 import SCSDKLoginKit
-import os.log
-import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {

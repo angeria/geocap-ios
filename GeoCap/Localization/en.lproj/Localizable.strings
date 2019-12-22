@@ -101,10 +101,10 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Please turn on notifications in settings to be able to activate this feature";
 
-/* Notification title when someone has attacked one of the user's locations */
-"location-lost-notification-title" = "Location Attacked!";
+/* Notification title when someone else has captured a location from the user */
+"location-lost-notification-title" = "Location Lost";
 /* Notification body ... */
-"location-lost-notification-body" = "%@ attacked %@, you have %@ minutes to defend it! 🚩";
+"location-lost-notification-body" = "%@ took %@ from you 🚩";
 
 /* Text on 'Tap to continue'-note in quiz */
 "quiz-tap-to-continue-note" = "Tap anywhere to continue";
@@ -132,18 +132,12 @@ MAP
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Capture";
-/* Defend button on location callout view */
-"callout-button-defend" = "Defend";
 /* Callout subtitle when location is owned by user */
 "callout-subtitle-captured-by-user" = "Owned by you";
 /* Callout subtitle with name of owner: Captured by ‰@{username} */
 "callout-subtitle-captured-by-other-user" = "Owned by %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Not captured yet";
-/* Callout subtitle when location is attacked by someone else */
-"callout-subtitle-attacked-by-other" = "Attacked by %@";
-/* Callout subtitle when location is attacked by player */
-"callout-subtitle-attacked-by-player" = "Attacked by you";
 
 /*
 SETTINGS

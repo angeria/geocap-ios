@@ -100,10 +100,10 @@ OTHER VIEWS
 /* Alert message when notification auth is off */
 "alert-message-notification-auth-off" = "Slå på notiser i inställningarna för att kunna aktivera denna funktion";
 
-/* Notification title when someone has attacked one of the user's locations */
-"location-lost-notification-title" = "Plats attackerad!";
+/* Notification title when someone else has captured a location from the user */
+"location-lost-notification-title" = "Plats förlorad";
 /* Notification body ... */
-"location-lost-notification-body" = "%@ attackerade %@, du har %@ minuter på dig att försvara platsen! 🚩";
+"location-lost-notification-body" = "%@ tog %@ från dig 🚩";
 
 /* Text on 'Tap to continue'-note in quiz */
 "quiz-tap-to-continue-note" = "Tryck var som helst för att fortsätta";
@@ -133,18 +133,12 @@ MAP
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Ta över";
-/* Defend button on location callout view */
-"callout-button-defend" = "Försvara";
 /* Callout subtitle when location is owned by user */
 "callout-subtitle-captured-by-user" = "Tagen av dig";
 /* Callout subtitle with name of owner: Captured by ‰@{username} */
 "callout-subtitle-captured-by-other-user" = "Tagen av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
-/* Callout subtitle when location is attacked by someone else */
-"callout-subtitle-attacked-by-other" = "Attackerad av %@";
-/* Callout subtitle when location is attacked by player */
-"callout-subtitle-attacked-by-player" = "Attackerad av dig";
 
 /*
 SETTINGS

@@ -482,14 +482,15 @@ class MapViewController: UIViewController {
     private func handleQuizDismissal(quizVC: QuizViewController) {
         if quizVC.quizWon {
             SoundManager.shared.playSound(withName: SoundManager.Sounds.quizWon)
-            captureLocation(cityRef: defendingLocationCityRef)
+            handleQuizWin()
+//            captureLocation()
 
             // Request notification auth after first capture
             if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
             }
         } else {
-            captureLocation(cityRef: defendingLocationCityRef) // TODO: REMOVE THIS
+//            captureLocation() // TODO: REMOVE THIS
 
             if !isDefending {
                 quizTimeoutIsActive = true
@@ -531,58 +532,63 @@ class MapViewController: UIViewController {
 
     // Set to the currently attempted capture or defend location
     private var currentLocationReference: DocumentReference?
+    private var currentLocationName: String?
 
-    private func captureLocation(cityRef: DocumentReference?) {
-        var wasDefended = isDefending
+    private func captureLocation() {
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
         guard let locationReference = currentLocationReference else { return }
+        guard let locationName = currentLocationName else { return }
 
         let db = Firestore.firestore()
         let batch = db.batch()
 
-        // Check if there is an active attack on the location and therefore a possibility to defend it
-        db.collection("attacks").whereField("defenderUid", isEqualTo: user.uid)
-            .whereField("locationReference", isEqualTo: locationReference)
-            .getDocuments { (querySnapshot, error) in
+        batch.updateData([
+            "owner": username,
+            "ownerId": user.uid,
+            "captureTimestamp": FieldValue.serverTimestamp(),
+            "wasDefended": false
+        ], forDocument: locationReference)
 
-            guard let query2 = querySnapshot else {
+        let userReference = db.collection("users").document(user.uid)
+        batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
+                          "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+
+        batch.commit { error in
+            if let error = error as NSError? {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+                Crashlytics.sharedInstance().recordError(error)
+            }
+        }
+    }
+
+    private func attackLocation() {
+
+    }
+
+    private func handleQuizWin() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+
+        currentLocationReference?.getDocument(completion: { [weak self] (docSnap, error) in
+            guard let doc = docSnap else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
 
-            // Mark this capture as a defence and delete stale attacks
-            query2.documents.forEach { (docSnap) in
-                if (docSnap.data()["timestamp"] as? Timestamp)?.attackIsActive() == true {
-                    wasDefended = true
+            if let ownerId = doc.data()?["ownerId"] as? String {
+                switch ownerId {
+                case uid:
+                    self?.defendLocation()
+                default
+                    self?.attackLocation()
                 }
-                docSnap.reference.delete()
+            } else {
+                self?.captureLocation()
             }
-
-//            if let document = query.documents.first {
-//                let locationReference = document.reference
-//                batch.updateData([
-//                    "owner": username,
-//                    "ownerId": user.uid,
-//                    "captureTimestamp": FieldValue.serverTimestamp(),
-//                    "wasDefended": wasDefended
-//                ], forDocument: locationReference)
-//
-//                let userReference = db.collection("users").document(user.uid)
-//                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-//                                  "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-//
-//                batch.commit { error in
-//                    if let error = error as NSError? {
-//                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
-//                        Crashlytics.sharedInstance().recordError(error)
-//                    }
-//                }
-//            }
-        }
+        })
     }
 
-    // MARK: - Defend Locations
+    // MARK: - Capture and Defend Locations
 
     @IBOutlet weak var attacksButton: UIButtonRounded!
 
@@ -853,22 +859,19 @@ class MapViewController: UIViewController {
         switch identifier {
         case "Show Quiz":
             if quizTimeoutIsActive {
+                // TODO: Fix before release
 //                presentQuizTimeoutAlert()
 //                return false
             }
 
-            if let annotationView = sender as? MKAnnotationView, let annotation = annotationView.annotation as? Location {
-                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
-                if let locationTitle = annotationView.annotation?.title, locationTitle != nil {
-                    if currentCity != nil {
-                        if user(location: mapView.userLocation, isInside: annotation.overlay) {
-                            return true
-                        } else {
-//                            presentNotInsideAreaAlert()
-//                            return false
-                            return true
-                        }
-                    }
+            if let annotationView = sender as? MKAnnotationView, let location = annotationView.annotation as? Location {
+                if user(location: mapView.userLocation, isInside: location.overlay) {
+                    return true
+                } else {
+                    // TODO: Fix before release
+//                    presentNotInsideAreaAlert()
+//                    return false
+                    return true
                 }
             }
         case "Show Choose City Popover":
@@ -887,15 +890,12 @@ class MapViewController: UIViewController {
 
         switch segue.identifier {
         case "Show Quiz":
-            if let quizVC = segue.destination as? QuizViewController, let annotationView = sender as? MKAnnotationView {
-                // Annotation title is a double optional 'String??' so it has to be doubly unwrapped
-                if let locationTitle = annotationView.annotation?.title {
-                    if let locationName = locationTitle {
-                        quizVC.presentationController?.delegate = self
-                        // TODO: Fix
-//                        attemptedCaptureLocationName = locationName
-                    }
-                }
+            if let quizVC = segue.destination as? QuizViewController,
+                let annotationView = sender as? MKAnnotationView,
+                let location = annotationView.annotation as? Location {
+                    quizVC.presentationController?.delegate = self
+                    currentLocationReference = location.reference
+                    currentLocationName = location.name
             }
         case "Show Choose City Popover":
             if let popoverVC = segue.destination as? ChooseCityPopoverViewController {

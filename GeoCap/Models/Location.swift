@@ -24,8 +24,6 @@ class Location: NSObject, MKAnnotation {
                                               comment: "Callout subtitle when a location isn't captured yet")
     var owner: String?
     var isCapturedByUser = false
-    var isUnderAttack = false // Not available to capture if currently attacked
-    var attackerName: String?
     // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
     @objc dynamic var coordinate: CLLocationCoordinate2D
     // Coordinates enclosing location
@@ -57,23 +55,6 @@ class Location: NSObject, MKAnnotation {
 
         if let owner = data["owner"] as? String {
             changeOwner(newOwner: owner, username: username)
-        }
-
-        if let isUnderAttack = data["isUnderAttack"] as? Bool {
-            self.isUnderAttack = isUnderAttack
-
-            if let attackerName = data["attackerName"] as? String {
-                self.attackerName = attackerName
-
-                if attackerName == username {
-                    subtitle = NSLocalizedString("callout-subtitle-attacked-by-player",
-                                                 comment: "Callout subtitle when location is attacked by player")
-                } else {
-                    let messageFormat = NSLocalizedString("callout-subtitle-attacked-by-other",
-                                                          comment: "Callout subtitle when location is attacked")
-                    subtitle = String(format: messageFormat, attackerName)
-                }
-            }
         }
     }
 
