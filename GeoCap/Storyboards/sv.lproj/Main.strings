@@ -26,9 +26,6 @@
 /* Class = "UISegmentedControl"; 2Tx-Iz-jwz.segmentTitles[1] = "Areas"; ObjectID = "2Tx-Iz-jwz"; */
 "2Tx-Iz-jwz.segmentTitles[1]" = "Områden";
 
-/* Class = "UILabel"; text = "None of your locations are under attack"; ObjectID = "L3w-lK-kpU"; */
-"L3w-lK-kpU.text" = "Inga av dina platser är under attack";
-
 /* Class = "UILabel"; text = "Captured locations"; ObjectID = "8Mx-9u-3Gi"; */
 "8Mx-9u-3Gi.text" = "Tagna platser";
 
