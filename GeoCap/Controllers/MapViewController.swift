@@ -359,6 +359,7 @@ class MapViewController: UIViewController {
 
         let captureButton = setupCaptureButton(for: annotation)
 
+        // TODO: Improve readability
         if annotation.isCapturedByUser && annotation.isUnderAttack {
             annotationView.markerTintColor = UIColor.systemOrange.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "exclamationmark.shield.fill")
