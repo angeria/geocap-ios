@@ -68,30 +68,33 @@ class LeaderboardViewController: UITableViewController {
         leaderboardListener?.remove()
 
         let db = Firestore.firestore()
-        leaderboardListener = db.collection("users").order(by: "capturedLocationsCount", descending: true).addSnapshotListener { [weak self] querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                os_log("%{public}@", log: OSLog.Leaderboard, type: .debug, error! as NSError)
-                Crashlytics.sharedInstance().recordError(error!)
-                return
-            }
-            guard let self = self else { return }
+        leaderboardListener = db.collection("users")
+            .order(by: "capturedLocationsCount", descending: true)
+            .addSnapshotListener { [weak self] querySnapshot, error in
 
-            self.tableViewData.removeAll()
-
-            snapshot.documents.forEach { documentSnapshot in
-                guard let userCellData = UserCellData(data: documentSnapshot.data()) else {
-                    os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'",
-                           log: OSLog.Leaderboard,
-                           type: .debug, documentSnapshot.documentID)
+                guard let snapshot = querySnapshot else {
+                    os_log("%{public}@", log: OSLog.Leaderboard, type: .debug, error! as NSError)
+                    Crashlytics.sharedInstance().recordError(error!)
                     return
                 }
+                guard let self = self else { return }
 
-                self.tableViewData += [userCellData]
-                self.tableView.reloadData()
+                self.tableViewData.removeAll()
 
-                // Fetch bitmoji async
-                self.fetchAndSetBitmoji(for: userCellData)
-            }
+                snapshot.documents.forEach { documentSnapshot in
+                    guard let userCellData = UserCellData(data: documentSnapshot.data()) else {
+                        os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'",
+                               log: OSLog.Leaderboard,
+                               type: .debug, documentSnapshot.documentID)
+                        return
+                    }
+
+                    self.tableViewData += [userCellData]
+                    self.tableView.reloadData()
+
+                    // Fetch bitmoji async
+                    self.fetchAndSetBitmoji(for: userCellData)
+                }
         }
     }
 
