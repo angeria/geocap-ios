@@ -363,7 +363,7 @@ class MapViewController: UIViewController {
             annotationView.markerTintColor = UIColor.systemOrange.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "exclamationmark.shield.fill")
             annotationView.rightCalloutAccessoryView = captureButton
-            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.attackerName, in: annotationView)
         } else if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "checkmark")
@@ -373,17 +373,39 @@ class MapViewController: UIViewController {
             imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
             imageView.tintColor = .systemBlue
             annotationView.rightCalloutAccessoryView = imageView
-            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
         } else if annotation.owner == nil {
             annotationView.glyphImage = UIImage(systemName: "circle")
             annotationView.markerTintColor = UIColor.systemGray.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
             annotationView.leftCalloutAccessoryView = nil
+        } else if annotation.attackerName == Auth.auth().currentUser?.displayName {
+            annotationView.glyphImage = UIImage(systemName: "exclamationmark")
+            annotationView.markerTintColor = UIColor.systemTeal.withAlphaComponent(Constants.markerAlpha)
+
+            let image = UIImage(systemName: "exclamationmark")
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth / 3, height: Constants.calloutImageHeight)
+            imageView.tintColor = .systemTeal
+            annotationView.rightCalloutAccessoryView = imageView
+
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
+        } else if !annotation.isCapturedByUser && annotation.isUnderAttack {
+            annotationView.glyphImage = UIImage(systemName: "xmark.shield.fill")
+            annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
+
+            let image = UIImage(systemName: "xmark.shield.fill")
+            let imageView = UIImageView(image: image)
+            imageView.frame = CGRect(x: 0, y: 0, width: Constants.calloutImageWidth, height: Constants.calloutImageHeight)
+            imageView.tintColor = .systemRed
+            annotationView.rightCalloutAccessoryView = imageView
+
+            fetchAndSetBitmoji(forUser: annotation.attackerName, in: annotationView)
         } else {
             annotationView.glyphImage = UIImage(systemName: "flag.fill")
             annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
-            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+            fetchAndSetBitmoji(forUser: annotation.owner, in: annotationView)
         }
 
         return annotationView
@@ -407,7 +429,11 @@ class MapViewController: UIViewController {
         return captureButton
     }
 
-    private func fetchAndSetBitmoji(forUser username: String, in annotationView: MKAnnotationView) {
+    private func fetchAndSetBitmoji(forUser username: String?, in annotationView: MKAnnotationView) {
+        guard let username = username else {
+            annotationView.leftCalloutAccessoryView = nil
+            return
+        }
         let db = Firestore.firestore()
         db.collection("users").whereField("username", isEqualTo: username).getDocuments { [weak self] (snapshot, error) in
             if let error = error as NSError? {

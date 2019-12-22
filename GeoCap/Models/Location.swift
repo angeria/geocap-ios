@@ -63,9 +63,16 @@ class Location: NSObject, MKAnnotation {
             self.isUnderAttack = isUnderAttack
 
             if let attackerName = data["attackerName"] as? String {
-                let messageFormat = NSLocalizedString("callout-subtitle-attacked",
-                                                      comment: "Callout subtitle when location is attacked")
-                subtitle = String(format: messageFormat, attackerName)
+                self.attackerName = attackerName
+
+                if attackerName == username {
+                    subtitle = NSLocalizedString("callout-subtitle-attacked-by-player",
+                                                 comment: "Callout subtitle when location is attacked by player")
+                } else {
+                    let messageFormat = NSLocalizedString("callout-subtitle-attacked-by-other",
+                                                          comment: "Callout subtitle when location is attacked")
+                    subtitle = String(format: messageFormat, attackerName)
+                }
             }
         }
     }

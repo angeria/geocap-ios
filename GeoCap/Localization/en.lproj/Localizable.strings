@@ -140,8 +140,10 @@ MAP
 "callout-subtitle-captured-by-other-user" = "Owned by %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Not captured yet";
-/* Callout subtitle when location is attacked */
-"callout-subtitle-attacked" = "Attacked by %@";
+/* Callout subtitle when location is attacked by someone else */
+"callout-subtitle-attacked-by-other" = "Attacked by %@";
+/* Callout subtitle when location is attacked by player */
+"callout-subtitle-attacked-by-player" = "Attacked by you";
 
 /*
 SETTINGS

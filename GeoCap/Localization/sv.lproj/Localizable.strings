@@ -141,8 +141,10 @@ MAP
 "callout-subtitle-captured-by-other-user" = "Tagen av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
-/* Callout subtitle when location is attacked */
-"callout-subtitle-attacked" = "Attackerad av %@";
+/* Callout subtitle when location is attacked by someone else */
+"callout-subtitle-attacked-by-other" = "Attackerad av %@";
+/* Callout subtitle when location is attacked by player */
+"callout-subtitle-attacked-by-player" = "Attackerad av dig";
 
 /*
 SETTINGS
