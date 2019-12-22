@@ -62,11 +62,9 @@ class ChooseUsernameViewController: UIViewController {
 
     @objc func keyboardDidChange(notification: Notification) {
         let userInfo = notification.userInfo! as [AnyHashable: Any]
-        // swiftlint:disable force_cast
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
         let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).uintValue
-        // swiftlint:enable force_cast
         let curveAnimationOption = UIView.AnimationOptions(rawValue: animationCurve << 16)
 
         bottomToButtonConstraint.constant = endFrame.height - view.safeAreaInsets.bottom

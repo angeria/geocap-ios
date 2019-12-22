@@ -88,7 +88,8 @@ class AuthViewController: UIViewController {
             }
         }
 
-        // For debugging
+        // Normally, remote configs are updated in 24h intervals
+        // Uncomment this to force update for every session
 //        remoteConfig.fetch(withExpirationDuration: 0) { (_, error) in
 //            if let error = error as NSError? {
 //                os_log("%{public}@", log: OSLog.Auth, type: .debug, error)
@@ -130,11 +131,9 @@ class AuthViewController: UIViewController {
 
     @objc private func keyboardDidChange(notification: Notification) {
         let userInfo = notification.userInfo! as [AnyHashable: Any]
-        // swiftlint:disable force_cast
         let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
         let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).uintValue
-        // swiftlint:enable force_cast
         let curveAnimationOption = UIView.AnimationOptions(rawValue: animationCurve << 16)
         var hideEmailTextField = true
         var buttonTitle = ""
@@ -409,4 +408,4 @@ extension AuthViewController: UITextFieldDelegate {
         return emailTextFieldDidEndEditing()
     }
 
-} // swiftlint:disable:this file_length
+}

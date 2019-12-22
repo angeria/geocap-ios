@@ -123,7 +123,7 @@ class QuizViewController: UIViewController {
                                         code: GeoCapErrorCode.quizLoadFailed.rawValue,
                                         userInfo: [
                         NSLocalizedDescriptionKey: "Couldn't load quiz",
-                        NSDebugDescriptionErrorKey: "Couldn't get questions after several retries with different indices", // swiftlint:disable:this line_length
+                        NSDebugDescriptionErrorKey: "Couldn't get questions after several retries with different indices",
                         "triedIndices": String(describing: self.usedIndices),
                         "numberOfRetries": String(Constants.maxNumberOfRetries)
                     ])

@@ -26,7 +26,6 @@ enum GeoCapConstants {
     }
 
     enum RemoteConfig {
-
         enum Keys { // swiftlint:disable:this nesting
             static let numberOfQuestions = "numberOfQuestions"
             static let quizTime = "quizTime"

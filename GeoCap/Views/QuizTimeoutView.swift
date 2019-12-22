@@ -21,7 +21,11 @@ class QuizTimeoutView: UIView {
     func startTimer() {
         isHidden = false
 
-        let path = UIBezierPath(arcCenter: CGPoint(x: bounds.maxX / 2, y: bounds.maxY / 2), radius: bounds.maxX * 0.4, startAngle: -CGFloat.pi / 2, endAngle: 3 * CGFloat.pi / 2, clockwise: true)
+        let path = UIBezierPath(arcCenter: CGPoint(x: bounds.maxX / 2, y: bounds.maxY / 2),
+                                radius: bounds.maxX * 0.4,
+                                startAngle: -CGFloat.pi / 2,
+                                endAngle: 3 * CGFloat.pi / 2,
+                                clockwise: true)
 
         circle.path = path.cgPath
         circle.strokeColor = UIColor.systemRed.cgColor
@@ -46,8 +50,4 @@ class QuizTimeoutView: UIView {
         circle.add(colorAnimation, forKey: nil)
     }
 
-//    override func draw(_ rect: CGRect) {
-//        layer.cornerRadius = GeoCapConstants.defaultCornerRadius
-//        layer.masksToBounds = true
-//    }
 }

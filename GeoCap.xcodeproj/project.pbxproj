@@ -164,7 +164,7 @@
 		432DED9922E1F28D00DFA074 /* GeoCap */ = {
 			isa = PBXGroup;
 			children = (
-				43DB3EBE23A959050027588F /* Utils */,
+				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				43BF7BDA231C129E0007666B /* Supporting Files */,
 				43BF7BDB231C12C20007666B /* Localization */,
 				43530B7C239BF13200BA9C19 /* Views */,
@@ -243,10 +243,11 @@
 				432DEDA822E1F28E00DFA074 /* Info.plist */,
 				43F8CFED22F8064000824778 /* GoogleService-Info.plist */,
 				436DF17C2303EA1E00DCA268 /* GeoCap.entitlements */,
-				432DED9A22E1F28D00DFA074 /* AppDelegate.swift */,
 				4326A5E52336666000A3D1A1 /* Errors.swift */,
 				4326A5E723368FC200A3D1A1 /* Logging.swift */,
 				43CC061F23279AA00005E7DD /* Constants.swift */,
+				43D7A12C22F2F11900552D2C /* Extensions.swift */,
+				437F0A8F236474AB005582E3 /* UIButtonRounded.swift */,
 				43A7502823582CDB00053B62 /* SoundManager.swift */,
 			);
 			path = "Supporting Files";
@@ -268,15 +269,6 @@
 				432DEDA022E1F28D00DFA074 /* Main.storyboard */,
 			);
 			path = Storyboards;
-			sourceTree = "<group>";
-		};
-		43DB3EBE23A959050027588F /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				43D7A12C22F2F11900552D2C /* Extensions.swift */,
-				437F0A8F236474AB005582E3 /* UIButtonRounded.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 		8C06367070EC0B91C0517455 /* Frameworks */ = {
