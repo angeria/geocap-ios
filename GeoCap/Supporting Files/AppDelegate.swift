@@ -27,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
 
+    // MARK: Testing
+
     private func configureAppForTesting() {
         try? Auth.auth().signOut()
 
@@ -35,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         UIView.setAnimationsEnabled(false)
     }
+
+    // MARK: Sign in
 
     func application(_ application: UIApplication,
                      continue userActivity: NSUserActivity,
@@ -62,7 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return false
     }
 
-    // Snap Kit integration
+    // MARK: Snap Kit integration
+
     func application(_ app: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
@@ -73,10 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions)
-        -> Void) {
-        // Show notification banners when app is in foreground
-        completionHandler([.alert])
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound]) // Also show notifications when app is in foreground
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
