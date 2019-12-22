@@ -133,12 +133,16 @@ MAP
 
 /* Capture button on location callout view */
 "callout-button-capture" = "Ta över";
+/* Defend button on location callout view */
+"callout-button-defend" = "Försvara";
 /* Callout subtitle when location is owned by user */
 "callout-subtitle-captured-by-user" = "Tagen av dig";
 /* Callout subtitle with name of owner: Captured by ‰@{username} */
 "callout-subtitle-captured-by-other-user" = "Tagen av %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Ej tagen ännu";
+/* Callout subtitle when location is attacked */
+"callout-subtitle-attacked" = "Attackerad av %@";
 
 /*
 SETTINGS

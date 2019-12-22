@@ -17,23 +17,27 @@ extension Location {
 }
 
 class Location: NSObject, MKAnnotation {
+    let reference: DocumentReference
     let name: String
     var title: String?
     var subtitle: String? = NSLocalizedString("callout-subtitle-not-captured-yet",
                                               comment: "Callout subtitle when a location isn't captured yet")
     var owner: String?
     var isCapturedByUser = false
+    var isUnderAttack = false // Not available to capture if currently attacked
+    var attackerName: String?
     // Center coordinate (has to be called 'coordinate' to conform to MKAnnotation)
     @objc dynamic var coordinate: CLLocationCoordinate2D
     // Coordinates enclosing location
     var areaCoordinates: [CLLocationCoordinate2D]?
     var overlay: MKOverlay
 
-    init?(data: [String: Any], username: String) {
+    init?(data: [String: Any], reference: DocumentReference, username: String) {
         guard
             let name = data["name"] as? String,
             let center = data["center"] as? GeoPoint else { return nil }
 
+        self.reference = reference
         self.name = name
         self.title = name
         self.coordinate = CLLocationCoordinate2D(latitude: center.latitude, longitude: center.longitude)
@@ -53,6 +57,16 @@ class Location: NSObject, MKAnnotation {
 
         if let owner = data["owner"] as? String {
             changeOwner(newOwner: owner, username: username)
+        }
+
+        if let isUnderAttack = data["isUnderAttack"] as? Bool {
+            self.isUnderAttack = isUnderAttack
+
+            if let attackerName = data["attackerName"] as? String {
+                let messageFormat = NSLocalizedString("callout-subtitle-attacked",
+                                                      comment: "Callout subtitle when location is attacked")
+                subtitle = String(format: messageFormat, attackerName)
+            }
         }
     }
 

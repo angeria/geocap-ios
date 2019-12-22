@@ -300,7 +300,7 @@ class MapViewController: UIViewController {
 
             snapshot.documentChanges.forEach { diff in
                 guard let self = self else { return }
-                guard let newAnnotation = Location(data: diff.document.data(), username: username) else {
+                guard let newAnnotation = Location(data: diff.document.data(), reference: diff.document.reference, username: username) else {
                     os_log("Couldn't initialize location with id %{public}@", log: OSLog.Map, type: .debug, diff.document.documentID)
                     return
                 }
@@ -357,15 +357,14 @@ class MapViewController: UIViewController {
         annotationView.canShowCallout = true
         annotationView.subtitleVisibility = .hidden
 
-        let captureButton = UIButton(type: .system)
-        let title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
-        captureButton.setTitle(title, for: .normal)
-        captureButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
-        captureButton.tintColor = .white
-        captureButton.backgroundColor = .systemBlue
-        captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
+        let captureButton = setupCaptureButton(for: annotation)
 
-        if annotation.isCapturedByUser {
+        if annotation.isCapturedByUser && annotation.isUnderAttack {
+            annotationView.markerTintColor = UIColor.systemOrange.withAlphaComponent(Constants.markerAlpha)
+            annotationView.glyphImage = UIImage(systemName: "exclamationmark.shield.fill")
+            annotationView.rightCalloutAccessoryView = captureButton
+            fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
+        } else if annotation.isCapturedByUser {
             annotationView.markerTintColor = UIColor.systemBlue.withAlphaComponent(Constants.markerAlpha)
             annotationView.glyphImage = UIImage(systemName: "checkmark")
 
@@ -388,6 +387,24 @@ class MapViewController: UIViewController {
         }
 
         return annotationView
+    }
+
+    private func setupCaptureButton(for annotation: Location) -> UIButton {
+        let captureButton = UIButton(type: .system)
+
+        var title: String
+        switch annotation.isUnderAttack {
+        case true:
+            title = NSLocalizedString("callout-button-defend", comment: "Defend button on location callout view")
+        case false:
+            title = NSLocalizedString("callout-button-capture", comment: "Capture button on location callout view")
+        }
+        captureButton.setTitle(title, for: .normal)
+        captureButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .callout)
+        captureButton.tintColor = .white
+        captureButton.backgroundColor = .systemBlue
+        captureButton.frame = CGRect(x: 0, y: 0, width: captureButtonWidth, height: captureButtonHeight)
+        return captureButton
     }
 
     private func fetchAndSetBitmoji(forUser username: String, in annotationView: MKAnnotationView) {
@@ -485,73 +502,56 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    private var attemptedCaptureLocationName: String?
+    // Set to the currently attempted capture or defend location
+    private var currentLocationReference: DocumentReference?
 
     private func captureLocation(cityRef: DocumentReference?) {
         var wasDefended = isDefending
         guard let user = Auth.auth().currentUser, let username = user.displayName else { return }
-        guard let locationName = attemptedCaptureLocationName else { return }
+        guard let locationReference = currentLocationReference else { return }
 
         let db = Firestore.firestore()
         let batch = db.batch()
 
-        var ref: DocumentReference?
-        if cityRef == nil {
-            ref = currentCity?.reference
-        } else {
-            ref = cityRef
-        }
+        // Check if there is an active attack on the location and therefore a possibility to defend it
+        db.collection("attacks").whereField("defenderUid", isEqualTo: user.uid)
+            .whereField("locationReference", isEqualTo: locationReference)
+            .getDocuments { (querySnapshot, error) in
 
-        ref?.collection("locations")
-            .whereField("name", isEqualTo: locationName)
-            .getDocuments { querySnapshot, error in
-            guard let query = querySnapshot else {
+            guard let query2 = querySnapshot else {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
                 Crashlytics.sharedInstance().recordError(error!)
                 return
             }
 
-            // Check if there is an active attack on the location and therefore a possibility to defend it
-            db.collection("attacks")
-                .whereField("defenderUid", isEqualTo: user.uid)
-                .whereField("locationName", isEqualTo: locationName)
-                .getDocuments { (querySnapshot, error) in
-
-                guard let query2 = querySnapshot else {
-                    os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
-                    Crashlytics.sharedInstance().recordError(error!)
-                    return
+            // Mark this capture as a defence and delete stale attacks
+            query2.documents.forEach { (docSnap) in
+                if (docSnap.data()["timestamp"] as? Timestamp)?.attackIsActive() == true {
+                    wasDefended = true
                 }
-
-                // Mark this capture as a defence and delete stale attacks
-                query2.documents.forEach { (docSnap) in
-                    if (docSnap.data()["timestamp"] as? Timestamp)?.attackIsActive() == true {
-                        wasDefended = true
-                    }
-                    docSnap.reference.delete()
-                }
-
-                if let document = query.documents.first {
-                    let locationReference = document.reference
-                    batch.updateData([
-                        "owner": username,
-                        "ownerId": user.uid,
-                        "captureTimestamp": FieldValue.serverTimestamp(),
-                        "wasDefended": wasDefended
-                    ], forDocument: locationReference)
-
-                    let userReference = db.collection("users").document(user.uid)
-                    batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-                                      "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
-
-                    batch.commit { error in
-                        if let error = error as NSError? {
-                            os_log("%{public}@", log: OSLog.Map, type: .debug, error)
-                            Crashlytics.sharedInstance().recordError(error)
-                        }
-                    }
-                }
+                docSnap.reference.delete()
             }
+
+//            if let document = query.documents.first {
+//                let locationReference = document.reference
+//                batch.updateData([
+//                    "owner": username,
+//                    "ownerId": user.uid,
+//                    "captureTimestamp": FieldValue.serverTimestamp(),
+//                    "wasDefended": wasDefended
+//                ], forDocument: locationReference)
+//
+//                let userReference = db.collection("users").document(user.uid)
+//                batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
+//                                  "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+//
+//                batch.commit { error in
+//                    if let error = error as NSError? {
+//                        os_log("%{public}@", log: OSLog.Map, type: .debug, error)
+//                        Crashlytics.sharedInstance().recordError(error)
+//                    }
+//                }
+//            }
         }
     }
 
@@ -657,7 +657,6 @@ class MapViewController: UIViewController {
     }
 
     private var defendingLocationCityRef: DocumentReference?
-    private var defendingLocationRef: DocumentReference?
     private var isDefending = false {
         willSet {
             if newValue == false {
@@ -670,9 +669,10 @@ class MapViewController: UIViewController {
     func defendLocation(locationName: String, locationRef: DocumentReference, cityRef: DocumentReference) {
         guard let quizVC = storyboard?.instantiateViewController(identifier: "Quiz") else { return }
         isDefending = true
-        attemptedCaptureLocationName = locationName
+        // TODO: Fix
+//        attemptedCaptureLocationName = locationName
         defendingLocationCityRef = cityRef
-        defendingLocationRef = locationRef
+        currentLocationReference = locationRef
         quizVC.presentationController?.delegate = self
         present(quizVC, animated: true)
     }
@@ -865,7 +865,8 @@ class MapViewController: UIViewController {
                 if let locationTitle = annotationView.annotation?.title {
                     if let locationName = locationTitle {
                         quizVC.presentationController?.delegate = self
-                        attemptedCaptureLocationName = locationName
+                        // TODO: Fix
+//                        attemptedCaptureLocationName = locationName
                     }
                 }
             }
