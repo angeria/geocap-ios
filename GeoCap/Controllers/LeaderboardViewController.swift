@@ -23,7 +23,7 @@ class LeaderboardViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        setupLeaderboard()
+        setupLeaderboard(userLimit: 10)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,12 +64,13 @@ class LeaderboardViewController: UITableViewController {
 
     private var leaderboardListener: ListenerRegistration?
 
-    private func setupLeaderboard() {
+    private func setupLeaderboard(userLimit: Int) {
         leaderboardListener?.remove()
 
         let db = Firestore.firestore()
         leaderboardListener = db.collection("users")
             .order(by: "capturedLocationsCount", descending: true)
+            .limit(to: userLimit)
             .addSnapshotListener { [weak self] querySnapshot, error in
 
                 guard let snapshot = querySnapshot else {
@@ -196,6 +197,48 @@ class LeaderboardViewController: UITableViewController {
         tableViewData[indexPath.section].isOpened = !tableViewData[indexPath.section].isOpened
         sectionsToReload.insert(indexPath.section)
         tableView.reloadSections(sectionsToReload, with: .automatic)
+    }
+
+    // MARK: - Leaderboard Limit
+
+    @IBAction func limitControlWasPressed(_ sender: UISegmentedControl) {
+//        feedbackGenerator.selectionChanged()
+        switch sender.selectedSegmentIndex {
+        case 0:
+            setupLeaderboard(userLimit: 10)
+        case 1:
+            setupLeaderboard(userLimit: 50)
+        default:
+            fatalError("Unexpected selected segment index in leaderboard limit segment control")
+        }
+
+    }
+
+    // MARK: - City Picker
+
+    let cities = ["Global", "Uppsala", "Stockholm", "Göteborg"]
+
+    @IBOutlet weak var cityPicker: UIPickerView! {
+        didSet {
+            cityPicker.dataSource = self
+            cityPicker.delegate = self
+        }
+    }
+
+}
+
+extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        cities.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        cities[row]
     }
 
 }

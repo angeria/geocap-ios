@@ -51,9 +51,9 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                             </mapView>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-1y-Q0W">
-                                <rect key="frame" x="113" y="398" width="188.5" height="105.5"/>
+                                <rect key="frame" x="113" y="397.5" width="188" height="106"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="c2L-wJ-CC7">
-                                    <rect key="frame" x="0.0" y="0.0" width="188.5" height="105.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="188" height="106"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KTf-tR-Fot">
@@ -66,7 +66,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="MN3-M9-4Gq">
-                                                    <rect key="frame" x="55.5" y="28.5" width="37" height="37"/>
+                                                    <rect key="frame" x="56" y="28.5" width="37" height="37"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <constraints>
@@ -424,26 +424,48 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="HeK-k0-gTl">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="130"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Captured locations" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Mx-9u-3Gi">
-                                    <rect key="frame" x="8" y="12" width="386" height="20.5"/>
+                                    <rect key="frame" x="261" y="101" width="145" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C4d-9X-mpt">
+                                    <rect key="frame" x="8" y="8" width="398" height="75"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="75" id="Qch-6z-ESw"/>
+                                    </constraints>
+                                </pickerView>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Chn-Py-NCH">
+                                    <rect key="frame" x="8" y="91" width="123" height="32"/>
+                                    <segments>
+                                        <segment title="Top 10"/>
+                                        <segment title="Top 50"/>
+                                    </segments>
+                                    <connections>
+                                        <action selector="limitControlWasPressed:" destination="e3c-V5-gWS" eventType="valueChanged" id="Hu6-8D-Q0e"/>
+                                    </connections>
+                                </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             <constraints>
-                                <constraint firstItem="8Mx-9u-3Gi" firstAttribute="centerY" secondItem="HeK-k0-gTl" secondAttribute="centerY" id="I8k-4e-Ybl"/>
-                                <constraint firstItem="8Mx-9u-3Gi" firstAttribute="leading" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="8" id="cj7-RU-ed8"/>
-                                <constraint firstAttribute="trailing" secondItem="8Mx-9u-3Gi" secondAttribute="trailing" constant="20" id="kJl-Gp-78P"/>
+                                <constraint firstAttribute="trailing" secondItem="C4d-9X-mpt" secondAttribute="trailing" constant="8" id="7TI-4b-ubY"/>
+                                <constraint firstAttribute="trailing" secondItem="8Mx-9u-3Gi" secondAttribute="trailing" constant="8" id="8Tj-mf-Kw6"/>
+                                <constraint firstItem="8Mx-9u-3Gi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Chn-Py-NCH" secondAttribute="trailing" constant="8" id="GpW-vi-8j8"/>
+                                <constraint firstItem="Chn-Py-NCH" firstAttribute="top" secondItem="C4d-9X-mpt" secondAttribute="bottom" constant="8" id="QlH-5E-YnC"/>
+                                <constraint firstItem="Chn-Py-NCH" firstAttribute="leading" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="8" id="Zyd-T4-J9K"/>
+                                <constraint firstItem="C4d-9X-mpt" firstAttribute="top" secondItem="HeK-k0-gTl" secondAttribute="top" constant="8" id="eWa-zB-exg"/>
+                                <constraint firstAttribute="bottom" secondItem="8Mx-9u-3Gi" secondAttribute="bottom" constant="8" id="kf9-Gb-MDt"/>
+                                <constraint firstAttribute="bottom" secondItem="Chn-Py-NCH" secondAttribute="bottom" constant="8" id="moi-N4-Ahh"/>
+                                <constraint firstItem="C4d-9X-mpt" firstAttribute="leading" secondItem="HeK-k0-gTl" secondAttribute="leading" constant="8" id="rh4-1b-SCe"/>
                             </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" textLabel="RWD-pg-QPG" detailTextLabel="0AR-VL-9Qc" imageView="4Hk-PK-vvp" rowHeight="60" style="IBUITableViewCellStyleValue1" id="gwE-Fa-bzN">
-                                <rect key="frame" x="0.0" y="72" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="158" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gwE-Fa-bzN" id="dKo-6w-cJU">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
@@ -476,7 +498,7 @@
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="locationCell" textLabel="w6g-Oz-nF6" style="IBUITableViewCellStyleDefault" id="E3a-10-iug">
-                                <rect key="frame" x="0.0" y="132" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="218" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="E3a-10-iug" id="e5n-iw-RFC">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -501,6 +523,9 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Leaderboard" image="star.fill" catalog="system" selectedImage="star.fill" id="9zQ-09-F47"/>
+                    <connections>
+                        <outlet property="cityPicker" destination="C4d-9X-mpt" id="Egb-YI-go6"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1V-bT-rg7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
