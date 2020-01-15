@@ -20,6 +20,17 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - Life Cycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if cityPicker.numberOfRows(inComponent: 0) > 1 {
+            cityPicker.selectRow(1, inComponent: 0, animated: false)
+        } else {
+            cityPicker.selectRow(0, inComponent: 0, animated: false)
+        }
+
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -216,8 +227,6 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - City Picker
 
-    let cities = ["Global", "Uppsala", "Stockholm", "Göteborg"]
-
     @IBOutlet weak var cityPicker: UIPickerView! {
         didSet {
             cityPicker.dataSource = self
@@ -229,16 +238,34 @@ class LeaderboardViewController: UITableViewController {
 
 extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 
+    var mapVC: MapViewController? {
+        if let navVC = tabBarController?.viewControllers?[1] as? UINavigationController {
+            if let mapVC = navVC.viewControllers[0] as? MapViewController {
+                return mapVC
+            }
+        }
+        return nil
+    }
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        cities.count
+        if let count = mapVC?.allCities.count {
+            return count + 1
+        } else {
+            return 1
+        }
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        cities[row]
+        switch row {
+        case 0:
+            return "Global 🌍" // TODO: Localize
+        default:
+            return mapVC?.allCities[row - 1].name
+        }
     }
 
 }

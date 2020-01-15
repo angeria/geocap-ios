@@ -157,7 +157,7 @@ class MapViewController: UIViewController {
         }
     }
 
-    private var allCities = [City]()
+    var allCities = [City]()
 
     private var currentCity: City? {
         didSet {
