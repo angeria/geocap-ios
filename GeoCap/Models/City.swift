@@ -13,19 +13,25 @@ import Firebase
 struct City: Equatable, Codable {
 
     let name: String
+    let county: String
+    let country: String
     let coordinates: CLLocationCoordinate2D
     let reference: DocumentReference // Firestore document reference
 
     init(name: String, coordinates: CLLocationCoordinate2D, reference: DocumentReference) {
-      self.name = name
-      self.coordinates = coordinates
-      self.reference = reference
+        self.name = name
+        self.coordinates = coordinates
+        self.reference = reference
+        self.county = reference.parent.parent!.documentID
+        self.country = reference.parent.parent!.parent.parent!.documentID
     }
 
     static func == (lhs: City, rhs: City) -> Bool {
         return lhs.coordinates.latitude == rhs.coordinates.latitude
             && lhs.coordinates.longitude == rhs.coordinates.longitude
             && lhs.name == rhs.name
+            && lhs.county == rhs.county
+            && lhs.country == rhs.country
             && lhs.reference == rhs.reference
     }
 

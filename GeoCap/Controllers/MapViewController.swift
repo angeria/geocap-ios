@@ -469,7 +469,6 @@ class MapViewController: UIViewController {
         present(alert, animated: true)
     }
 
-    // Set to the currently attempted capture location
     private var currentLocationReference: DocumentReference?
     private var currentLocationName: String?
 
@@ -477,6 +476,7 @@ class MapViewController: UIViewController {
         guard let user = Auth.auth().currentUser,
             let username = user.displayName,
             let locationReference = currentLocationReference,
+            let currentCity = currentCity,
             let locationName = currentLocationName else { return }
 
         let db = Firestore.firestore()
@@ -485,13 +485,16 @@ class MapViewController: UIViewController {
         batch.updateData([
             "owner": username,
             "ownerId": user.uid,
-            "captureTimestamp": FieldValue.serverTimestamp(),
-            "wasDefended": false
+            "captureTimestamp": FieldValue.serverTimestamp()
         ], forDocument: locationReference)
 
         let userReference = db.collection("users").document(user.uid)
+        let cityDictRef = "capturedLocationsTest.\(currentCity.country).\(currentCity.county).\(currentCity.name.lowercased())"
         batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-                          "capturedLocationsCount": FieldValue.increment(Int64(1))], forDocument: userReference)
+                          "capturedLocationsCount": FieldValue.increment(Int64(1)),
+                          "\(cityDictRef).locationCount": FieldValue.increment(Int64(1)),
+                          "\(cityDictRef).locations": FieldValue.arrayUnion([locationName])
+        ], forDocument: userReference)
 
         batch.commit { error in
             if let error = error as NSError? {

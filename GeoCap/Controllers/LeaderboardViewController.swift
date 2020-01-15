@@ -34,7 +34,7 @@ class LeaderboardViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        setupLeaderboard(userLimit: 10)
+        setupLeaderboard()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -52,18 +52,27 @@ class LeaderboardViewController: UITableViewController {
         let locationCount: Int
         var bitmoji: UIImage?
 
-        init?(data: [String: Any]) {
-            guard
-                let username = data["username"] as? String,
-                let locations = data["capturedLocations"] as? [String],
-                let locationCount = data["capturedLocationsCount"] as? Int
-            else {
-                return nil
+        init?(data: [String: Any], country: String?, county: String?, city: String?) {
+            guard let username = data["username"] as? String else { return nil }
+
+            var locations: [String]?
+            var locationCount: Int?
+            if let city = city {
+                if let capturedLocations = data["capturedLocationsTest"] as? [String: [String: [String: [String: Any]]]] {
+                    if let city = capturedLocations[country!]?[county!]?[city] {
+                        locations = city["locations"] as? [String]
+                        locationCount = city["locationCount"] as? Int
+                    }
+                }
+            } else {
+                locations = data["capturedLocations"] as? [String]
+                locationCount = data["capturedLocationsCount"] as? Int
             }
+            guard locations != nil, locationCount != nil else {print("lol"); return nil }
 
             self.username = username
-            self.locations = locations.sorted()
-            self.locationCount = locationCount
+            self.locations = locations!.sorted()
+            self.locationCount = locationCount!
         }
     }
 
@@ -75,12 +84,34 @@ class LeaderboardViewController: UITableViewController {
 
     private var leaderboardListener: ListenerRegistration?
 
-    private func setupLeaderboard(userLimit: Int) {
+    private struct LeaderboardQuery {
+        let query: String
+        let type: String
+    }
+
+    private func setupLeaderboard() {
         leaderboardListener?.remove()
+        guard let allCities = mapVC?.allCities else { return }
+
+        var queryField: String
+        var country: String?
+        var county: String?
+        var cityName: String?
+        if allCities.count == 0 || cityPicker.selectedRow(inComponent: 0) == 0 {
+            queryField = "capturedLocationsCount" // Global
+        } else {
+            let city = allCities[cityPicker.selectedRow(inComponent: 0) - 1]
+            cityName = city.name.lowercased()
+            county = city.reference.parent.parent!.documentID
+            country = city.reference.parent.parent!.parent.parent!.documentID
+            queryField = "capturedLocationsTest.\(country!).\(county!).\(cityName!).locationCount"
+        }
+
+        let userLimit = limitControl.selectedSegmentIndex == 0 ? 10 : 50
 
         let db = Firestore.firestore()
         leaderboardListener = db.collection("users")
-            .order(by: "capturedLocationsCount", descending: true)
+            .order(by: queryField, descending: true)
             .limit(to: userLimit)
             .addSnapshotListener { [weak self] querySnapshot, error in
 
@@ -94,7 +125,7 @@ class LeaderboardViewController: UITableViewController {
                 self.tableViewData.removeAll()
 
                 snapshot.documents.forEach { documentSnapshot in
-                    guard let userCellData = UserCellData(data: documentSnapshot.data()) else {
+                    guard let userCellData = UserCellData(data: documentSnapshot.data(), country: country, county: county, city: cityName) else {
                         os_log("Couldn't initialize 'userCellData' from user with id '%{public}@'",
                                log: OSLog.Leaderboard,
                                type: .debug, documentSnapshot.documentID)
@@ -107,6 +138,7 @@ class LeaderboardViewController: UITableViewController {
                     // Fetch bitmoji async
                     self.fetchAndSetBitmoji(for: userCellData)
                 }
+                self.tableView.reloadData()
         }
     }
 
@@ -212,17 +244,11 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - Leaderboard Limit
 
-    @IBAction func limitControlWasPressed(_ sender: UISegmentedControl) {
-//        feedbackGenerator.selectionChanged()
-        switch sender.selectedSegmentIndex {
-        case 0:
-            setupLeaderboard(userLimit: 10)
-        case 1:
-            setupLeaderboard(userLimit: 50)
-        default:
-            fatalError("Unexpected selected segment index in leaderboard limit segment control")
-        }
+    @IBOutlet weak var limitControl: UISegmentedControl!
 
+    @IBAction func limitControlWasPressed(_ sender: UISegmentedControl) {
+        feedbackGenerator.selectionChanged()
+        setupLeaderboard()
     }
 
     // MARK: - City Picker
@@ -238,17 +264,13 @@ class LeaderboardViewController: UITableViewController {
 
 extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegate {
 
-    var mapVC: MapViewController? {
-        if let navVC = tabBarController?.viewControllers?[1] as? UINavigationController {
-            if let mapVC = navVC.viewControllers[0] as? MapViewController {
-                return mapVC
-            }
-        }
-        return nil
-    }
-
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        35
+
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -266,6 +288,23 @@ extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegat
         default:
             return mapVC?.allCities[row - 1].name
         }
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        setupLeaderboard()
+    }
+
+}
+
+extension LeaderboardViewController {
+
+    var mapVC: MapViewController? {
+        if let navVC = tabBarController?.viewControllers?[1] as? UINavigationController {
+            if let mapVC = navVC.viewControllers[0] as? MapViewController {
+                return mapVC
+            }
+        }
+        return nil
     }
 
 }
