@@ -82,7 +82,6 @@ class LeaderboardViewController: UITableViewController {
             // If a specific city is selected in the leaderboard
             if let country = country, let county = county, let city = city {
                 if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: Any]]]] {
-                    print(capturedLocationsPerCity)
                     if let city = capturedLocationsPerCity[country]?[county]?[city] {
                         if let locationsDict = city["locations"] as? [String: Any] {
                             locationsDict.values.forEach { (location) in
@@ -114,7 +113,7 @@ class LeaderboardViewController: UITableViewController {
                     }
                 }
             }
-            guard !locations.isEmpty, locationCount != nil else { return nil }
+            guard locationCount != nil else { return nil }
 
             self.locations = locations.sorted()
             self.locationCount = locationCount!

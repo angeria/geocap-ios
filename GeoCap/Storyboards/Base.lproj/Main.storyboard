@@ -53,7 +53,7 @@
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yce-1y-Q0W">
                                 <rect key="frame" x="113" y="398" width="188.5" height="105.5"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="c2L-wJ-CC7">
-                                    <rect key="frame" x="0.0" y="0.0" width="188.5" height="105.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="189" height="105"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KTf-tR-Fot">
@@ -392,14 +392,22 @@
                                     <segue destination="zS6-oC-1Kn" kind="show" id="3Hq-GA-WhZ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="hello@geocap.app" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qQp-Aq-YiN">
+                                <rect key="frame" x="20" y="772" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="TWL-KT-s0b" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="149" id="6GS-cB-0Jz"/>
+                            <constraint firstItem="qQp-Aq-YiN" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="Ihg-8I-auZ"/>
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" secondItem="0G2-vA-Jv9" secondAttribute="trailing" constant="20" id="OBG-jS-TrD"/>
                             <constraint firstItem="8yK-tK-yx0" firstAttribute="top" secondItem="fUE-k9-7Rq" secondAttribute="top" constant="20" id="PiT-pn-fLg"/>
+                            <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" secondItem="qQp-Aq-YiN" secondAttribute="trailing" constant="20" id="htI-mz-LWm"/>
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" secondItem="8yK-tK-yx0" secondAttribute="trailing" constant="20" id="lEo-u6-AKL"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="top" secondItem="TWL-KT-s0b" secondAttribute="bottom" constant="100" id="nsH-A8-XC0"/>
+                            <constraint firstItem="fUE-k9-7Rq" firstAttribute="bottom" secondItem="qQp-Aq-YiN" secondAttribute="bottom" constant="20" id="pCl-Xm-T75"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="sRS-H3-PSL"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="top" secondItem="fUE-k9-7Rq" secondAttribute="top" constant="166" id="xOH-zc-Mb5"/>
                         </constraints>

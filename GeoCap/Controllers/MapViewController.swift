@@ -253,7 +253,6 @@ class MapViewController: UIViewController {
     // Makes it possible to keep the map updated in the background while other views are visible
     private var locationListener: ListenerRegistration?
 
-    // swiftlint:disable:next cyclomatic_complexity
     func fetchLocations() {
         guard let username = Auth.auth().currentUser?.displayName else { return }
 
