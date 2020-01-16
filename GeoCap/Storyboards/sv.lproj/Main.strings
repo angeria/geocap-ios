@@ -62,6 +62,9 @@
 /* Class = "UIButton"; normalTitle = "Delete Account"; ObjectID = "6ev-aJ-Yoh"; */
 "6ev-aJ-Yoh.normalTitle" = "Ta bort konto";
 
+/* Class = "UIButton"; normalTitle = "Contact Us"; ObjectID = "h09-uy-9Vp"; */
+"h09-uy-9Vp.normalTitle" = "Kontakta oss";
+
 /* Class = "UILabel"; text = "Use your Bitmoji as your avatar by connecting to Snapchat"; ObjectID = "DIE-R7-3e4"; */
 "DIE-R7-3e4.text" = "Använd din Bitmoji som avatar genom att ansluta till Snapchat";
 

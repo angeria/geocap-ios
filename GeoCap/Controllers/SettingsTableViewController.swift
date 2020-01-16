@@ -9,6 +9,7 @@
 import UIKit
 import os.log
 import Firebase
+import ThirdPartyMailer
 
 class SettingsTableViewController: UITableViewController {
 
@@ -243,6 +244,50 @@ class SettingsTableViewController: UITableViewController {
         alert.addAction(yesAction)
         alert.addAction(noAction)
         present(alert, animated: true)
+    }
+
+    // MARK: - Contact
+
+    @IBAction func openEmailButtonPressed(_ sender: UIButton) {
+        let actionTitle = NSLocalizedString("auth-choose-email-app-action-sheet-title",
+                                            comment: "Title of choose email app action sheet alert")
+        let actionSheet = UIAlertController(title: actionTitle, message: nil, preferredStyle: .actionSheet)
+
+        // Native mail app
+        let mailURL = URL(string: "mailto:hello@geocap.app")!
+        if UIApplication.shared.canOpenURL(mailURL) {
+            let openNativeMailAppAction = UIAlertAction(title: "Mail", style: .default) { _ in
+                UIApplication.shared.open(mailURL, options: [:], completionHandler: nil)
+            }
+            actionSheet.addAction(openNativeMailAppAction)
+        }
+
+        // Third party mail apps
+        let emailClients = ThirdPartyMailClient.clients()
+        for client in emailClients {
+            if ThirdPartyMailer.application(UIApplication.shared, isMailClientAvailable: client) {
+                let openOtherMailAppAction = UIAlertAction(title: client.name, style: .default) { _ in
+                    _ = ThirdPartyMailer.application(UIApplication.shared,
+                                                     openMailClient: client,
+                                                     recipient: "hello@geocap.app",
+                                                     subject: nil,
+                                                     body: nil
+                    )
+                }
+                actionSheet.addAction(openOtherMailAppAction)
+            }
+        }
+
+        present(actionSheet, animated: true) { [weak self] in
+            // Dismiss email app chooser when tapping outside of it
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self?.dismissEmailAppChooser))
+            actionSheet.view.superview?.subviews[0].isUserInteractionEnabled = true
+            actionSheet.view.superview?.subviews[0].addGestureRecognizer(tapGesture)
+        }
+    }
+
+    @objc func dismissEmailAppChooser() {
+        dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Navigation
