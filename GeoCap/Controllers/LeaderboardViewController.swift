@@ -51,6 +51,7 @@ class LeaderboardViewController: UITableViewController {
             lhs.name < rhs.name
         }
 
+        let city: String?
         let name: String
         let ref: DocumentReference
 
@@ -59,6 +60,7 @@ class LeaderboardViewController: UITableViewController {
                 let ref = data["ref"] as? DocumentReference
                 else { return nil }
 
+            self.city = ref.parent.parent!.documentID.capitalized
             self.name = name
             self.ref = ref
         }
@@ -261,7 +263,13 @@ class LeaderboardViewController: UITableViewController {
         } else {
             let dataIndex = indexPath.row - 1
             let cell = tableView.dequeueReusableCell(withIdentifier: "locationCell", for: indexPath)
-            cell.textLabel?.text = tableViewData[indexPath.section].locations[dataIndex].name
+            let locationName = tableViewData[indexPath.section].locations[dataIndex].name
+            if cityPicker.selectedRow(inComponent: 0) == 0, let city = tableViewData[indexPath.section].locations[dataIndex].city {
+                cell.textLabel?.text = locationName + " (\(city))"
+            } else {
+                cell.textLabel?.text = locationName
+            }
+
             return cell
         }
     }
