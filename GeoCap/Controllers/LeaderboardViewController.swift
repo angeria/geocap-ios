@@ -28,7 +28,6 @@ class LeaderboardViewController: UITableViewController {
         } else {
             cityPicker.selectRow(0, inComponent: 0, animated: false)
         }
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -54,23 +53,25 @@ class LeaderboardViewController: UITableViewController {
 
         init?(data: [String: Any], country: String?, county: String?, city: String?) {
             guard let username = data["username"] as? String else { return nil }
+            self.username = username
 
             var locations: [String]?
             var locationCount: Int?
-            if let city = city {
-                if let capturedLocations = data["capturedLocationsTest"] as? [String: [String: [String: [String: Any]]]] {
-                    if let city = capturedLocations[country!]?[county!]?[city] {
+            // If a specific city is selected in the leaderboard
+            if let country = country, let county = county, let city = city {
+                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: Any]]]] {
+                    if let city = capturedLocationsPerCity[country]?[county]?[city] {
                         locations = city["locations"] as? [String]
                         locationCount = city["locationCount"] as? Int
                     }
                 }
             } else {
+                // If 'global' is selected
                 locations = data["capturedLocations"] as? [String]
                 locationCount = data["capturedLocationsCount"] as? Int
             }
-            guard locations != nil, locationCount != nil else {print("lol"); return nil }
+            guard locations != nil, locationCount != nil else { return nil }
 
-            self.username = username
             self.locations = locations!.sorted()
             self.locationCount = locationCount!
         }
@@ -104,7 +105,7 @@ class LeaderboardViewController: UITableViewController {
             cityName = city.name.lowercased()
             county = city.reference.parent.parent!.documentID
             country = city.reference.parent.parent!.parent.parent!.documentID
-            queryField = "capturedLocationsTest.\(country!).\(county!).\(cityName!).locationCount"
+            queryField = "capturedLocationsPerCity.\(country!).\(county!).\(cityName!).locationCount"
         }
 
         let userLimit = limitControl.selectedSegmentIndex == 0 ? 10 : 50
@@ -146,8 +147,7 @@ class LeaderboardViewController: UITableViewController {
         var cellData = userCellData
 
         let db = Firestore.firestore()
-        db.collection("users").whereField("username",
-                                          isEqualTo: cellData.username).getDocuments { [weak self] (snapshot, error) in
+        db.collection("users").whereField("username", isEqualTo: cellData.username).getDocuments { [weak self] (snapshot, error) in
             if let error = error as NSError? {
                 os_log("%{public}@", log: OSLog.Map, type: .debug, error)
                 return
@@ -284,7 +284,7 @@ extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegat
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch row {
         case 0:
-            return "Global 🌍" // TODO: Localize
+            return NSLocalizedString("leaderboard-global", comment: "Global location filter in leaderboard")
         default:
             return mapVC?.allCities[row - 1].name
         }

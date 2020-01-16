@@ -120,6 +120,8 @@ MAP
 
 /* Title for leaderboard tab */
 "tab-bar-leaderboard" = "Leaderboard";
+/* Global location filter in leaderboard */
+"leaderboard-global" = "Globalt 🌍";
 
 /* Title of quiz timeout alert */
 "quiz-timeout-alert-title" = "Timeout";

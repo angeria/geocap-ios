@@ -119,6 +119,8 @@ MAP
 "tab-bar-profile" = "Profile";
 /* Title for leaderboard tab */
 "tab-bar-leaderboard" = "Leaderboard";
+/* Global location filter in leaderboard */
+"leaderboard-global" = "Global 🌍";
 
 /* Title of quiz timeout alert */
 "quiz-timeout-alert-title" = "Timeout";

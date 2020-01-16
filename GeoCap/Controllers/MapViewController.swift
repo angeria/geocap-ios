@@ -481,7 +481,6 @@ class MapViewController: UIViewController {
 
         let db = Firestore.firestore()
         let batch = db.batch()
-
         batch.updateData([
             "owner": username,
             "ownerId": user.uid,
@@ -489,11 +488,11 @@ class MapViewController: UIViewController {
         ], forDocument: locationReference)
 
         let userReference = db.collection("users").document(user.uid)
-        let cityDictRef = "capturedLocationsTest.\(currentCity.country).\(currentCity.county).\(currentCity.name.lowercased())"
+        let cityDictKey = "capturedLocationsPerCity.\(currentCity.country).\(currentCity.county).\(currentCity.name.lowercased())"
         batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
                           "capturedLocationsCount": FieldValue.increment(Int64(1)),
-                          "\(cityDictRef).locationCount": FieldValue.increment(Int64(1)),
-                          "\(cityDictRef).locations": FieldValue.arrayUnion([locationName])
+                          "\(cityDictKey).locationCount": FieldValue.increment(Int64(1)),
+                          "\(cityDictKey).locations": FieldValue.arrayUnion([locationName])
         ], forDocument: userReference)
 
         batch.commit { error in
