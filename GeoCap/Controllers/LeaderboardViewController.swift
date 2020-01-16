@@ -51,21 +51,14 @@ class LeaderboardViewController: UITableViewController {
             lhs.name < rhs.name
         }
 
-        let id: String
         let name: String
         let ref: DocumentReference
 
         init?(data: [String: Any]) {
-            print(data["id"])
-            print(data["name"])
-            print(data["ref"])
-
-            guard let id = data["id"] as? String,
-                let name = data["name"] as? String,
+            guard let name = data["name"] as? String,
                 let ref = data["ref"] as? DocumentReference
-                else {print("fuck"); return nil }
+                else { return nil }
 
-            self.id = id
             self.name = name
             self.ref = ref
         }
@@ -89,14 +82,11 @@ class LeaderboardViewController: UITableViewController {
                 if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: Any]]]] {
                     print(capturedLocationsPerCity)
                     if let city = capturedLocationsPerCity[country]?[county]?[city] {
-                        print("city: \(city)")
                         if let locationsDict = city["locations"] as? [String: Any] {
-                            print("locationDict: \(locationsDict)")
                             locationsDict.values.forEach { (location) in
                                 if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
                                     locations += [leaderboardLocation]
-                            }
-
+                                }
                             }
                         }
                         locationCount = city["locationCount"] as? Int
@@ -104,10 +94,23 @@ class LeaderboardViewController: UITableViewController {
                 }
             } else {
                 // If 'global' is selected
-                return nil
-                // TODO: Fix this
-//                locations = data["capturedLocations"] as? [String]
-//                locationCount = data["capturedLocationsCount"] as? Int
+                locationCount = data["capturedLocationsCount"] as? Int
+
+                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: AnyObject]]]] {
+                    for country in capturedLocationsPerCity.values {
+                        for county in country.values {
+                            for city in county.values {
+                                if let locationsDict = city["locations"] as? [String: Any] {
+                                    locationsDict.values.forEach { (location) in
+                                        if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
+                                            locations += [leaderboardLocation]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             guard !locations.isEmpty, locationCount != nil else { return nil }
 

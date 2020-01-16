@@ -432,6 +432,7 @@ class MapViewController: UIViewController {
                 return
             }
 
+            // Change location type filter
             if let type = doc.get("type") as? String {
                 guard let locationType = LocationType(rawValue: type) else { return }
                 switch locationType {
@@ -455,7 +456,7 @@ class MapViewController: UIViewController {
                 let region = MKCoordinateRegion(center: center,
                                                 latitudinalMeters: Constants.zoomLevel / 4,
                                                 longitudinalMeters: Constants.zoomLevel / 4)
-                self?.mapView.setRegion(region, animated: true)
+                self?.mapView.setRegion(region, animated: false)
             }
 
         }
@@ -526,11 +527,14 @@ class MapViewController: UIViewController {
         ], forDocument: locationReference)
 
         let userReference = db.collection("users").document(user.uid)
+        let locationId = locationReference.documentID
         let cityDictKey = "capturedLocationsPerCity.\(currentCity.country).\(currentCity.county).\(currentCity.name.lowercased())"
-        batch.updateData(["capturedLocations": FieldValue.arrayUnion([locationName]),
-                          "capturedLocationsCount": FieldValue.increment(Int64(1)),
+        batch.updateData(["capturedLocationsCount": FieldValue.increment(Int64(1)),
                           "\(cityDictKey).locationCount": FieldValue.increment(Int64(1)),
-                          "\(cityDictKey).locations": FieldValue.arrayUnion([locationName])
+                          "\(cityDictKey).locations.\(locationId)": [
+                                "name": locationName,
+                                "ref": locationReference
+                            ]
         ], forDocument: userReference)
 
         batch.commit { error in
