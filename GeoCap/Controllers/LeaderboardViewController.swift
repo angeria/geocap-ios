@@ -92,12 +92,12 @@ class LeaderboardViewController: UITableViewController {
 
     private func setupLeaderboard() {
         leaderboardListener?.remove()
-        guard let allCities = mapVC?.allCities else { return }
 
         var queryField: String
         var country: String?
         var county: String?
         var cityName: String?
+        let allCities = mapVC.allCities
         if allCities.count == 0 || cityPicker.selectedRow(inComponent: 0) == 0 {
             queryField = "capturedLocationsCount" // Global
         } else {
@@ -270,15 +270,10 @@ extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegat
 
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         35
-
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if let count = mapVC?.allCities.count {
-            return count + 1
-        } else {
-            return 1
-        }
+        mapVC.allCities.count + 1
     }
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -286,7 +281,7 @@ extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegat
         case 0:
             return NSLocalizedString("leaderboard-global", comment: "Global location filter in leaderboard")
         default:
-            return mapVC?.allCities[row - 1].name
+            return mapVC.allCities[row - 1].name
         }
     }
 
@@ -298,13 +293,9 @@ extension LeaderboardViewController: UIPickerViewDataSource, UIPickerViewDelegat
 
 extension LeaderboardViewController {
 
-    var mapVC: MapViewController? {
-        if let navVC = tabBarController?.viewControllers?[1] as? UINavigationController {
-            if let mapVC = navVC.viewControllers[0] as? MapViewController {
-                return mapVC
-            }
-        }
-        return nil
+    var mapVC: MapViewController {
+        let navVC = tabBarController!.viewControllers![1] as! UINavigationController
+        return navVC.viewControllers[0] as! MapViewController
     }
 
 }
