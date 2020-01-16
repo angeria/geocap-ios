@@ -162,12 +162,13 @@ class MapViewController: UIViewController {
     private var currentCity: City? {
         didSet {
             clearMap()
-            fetchLocations()
 
             let region = MKCoordinateRegion(center: currentCity!.coordinates,
                                             latitudinalMeters: Constants.zoomLevel,
                                             longitudinalMeters: Constants.zoomLevel)
-            mapView.setRegion(region, animated: true)
+            mapView.setRegion(region, animated: false)
+
+            fetchLocations()
 
             currentCityBarButton.title = currentCity!.name
             allCities.sort { city, _ in city.name == self.currentCity?.name } // Put the current city first
@@ -421,6 +422,43 @@ class MapViewController: UIViewController {
         let okAction = UIAlertAction(title: okActionTitle, style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+
+    func focusRegionOnLocation(withRef ref: DocumentReference) {
+        ref.getDocument { [weak self] (documentSnapshot, error) in
+            guard let doc = documentSnapshot else {
+                os_log("%{public}@", log: OSLog.Map, type: .debug, error! as NSError)
+                Crashlytics.sharedInstance().recordError(error!)
+                return
+            }
+
+            if let type = doc.get("type") as? String {
+                guard let locationType = LocationType(rawValue: type) else { return }
+                switch locationType {
+                case .building:
+                    self?.locationFilter.selectedSegmentIndex = 0
+                case .area:
+                    self?.locationFilter.selectedSegmentIndex = 1
+                }
+            }
+
+            // Set current city to the city where the selected location is
+            if let cityName = ref.parent.parent {
+                let city = self?.allCities.first { (city) -> Bool in
+                    city.name == cityName.documentID.capitalized
+                }
+                self?.currentCity = city
+            }
+
+            if let coordinates = doc.get("center") as? GeoPoint {
+                let center = CLLocationCoordinate2D(latitude: coordinates.latitude, longitude: coordinates.longitude)
+                let region = MKCoordinateRegion(center: center,
+                                                latitudinalMeters: Constants.zoomLevel / 4,
+                                                longitudinalMeters: Constants.zoomLevel / 4)
+                self?.mapView.setRegion(region, animated: true)
+            }
+
+        }
     }
 
     // MARK: - Quiz

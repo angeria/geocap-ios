@@ -33,6 +33,8 @@ class LeaderboardViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        cityPicker.reloadAllComponents()
+
         setupLeaderboard()
     }
 
@@ -44,10 +46,35 @@ class LeaderboardViewController: UITableViewController {
 
     // MARK: - Leaderboard
 
+    private struct LeaderboardLocation: Comparable {
+        static func < (lhs: LeaderboardViewController.LeaderboardLocation, rhs: LeaderboardViewController.LeaderboardLocation) -> Bool {
+            lhs.name < rhs.name
+        }
+
+        let id: String
+        let name: String
+        let ref: DocumentReference
+
+        init?(data: [String: Any]) {
+            print(data["id"])
+            print(data["name"])
+            print(data["ref"])
+
+            guard let id = data["id"] as? String,
+                let name = data["name"] as? String,
+                let ref = data["ref"] as? DocumentReference
+                else {print("fuck"); return nil }
+
+            self.id = id
+            self.name = name
+            self.ref = ref
+        }
+    }
+
     private struct UserCellData {
         var isOpened = false
         let username: String
-        let locations: [String]
+        let locations: [LeaderboardLocation]
         let locationCount: Int
         var bitmoji: UIImage?
 
@@ -55,24 +82,36 @@ class LeaderboardViewController: UITableViewController {
             guard let username = data["username"] as? String else { return nil }
             self.username = username
 
-            var locations: [String]?
+            var locations = [LeaderboardLocation]()
             var locationCount: Int?
             // If a specific city is selected in the leaderboard
             if let country = country, let county = county, let city = city {
                 if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: Any]]]] {
+                    print(capturedLocationsPerCity)
                     if let city = capturedLocationsPerCity[country]?[county]?[city] {
-                        locations = city["locations"] as? [String]
+                        print("city: \(city)")
+                        if let locationsDict = city["locations"] as? [String: Any] {
+                            print("locationDict: \(locationsDict)")
+                            locationsDict.values.forEach { (location) in
+                                if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
+                                    locations += [leaderboardLocation]
+                            }
+
+                            }
+                        }
                         locationCount = city["locationCount"] as? Int
                     }
                 }
             } else {
                 // If 'global' is selected
-                locations = data["capturedLocations"] as? [String]
-                locationCount = data["capturedLocationsCount"] as? Int
+                return nil
+                // TODO: Fix this
+//                locations = data["capturedLocations"] as? [String]
+//                locationCount = data["capturedLocationsCount"] as? Int
             }
-            guard locations != nil, locationCount != nil else { return nil }
+            guard !locations.isEmpty, locationCount != nil else { return nil }
 
-            self.locations = locations!.sorted()
+            self.locations = locations.sorted()
             self.locationCount = locationCount!
         }
     }
@@ -219,7 +258,7 @@ class LeaderboardViewController: UITableViewController {
         } else {
             let dataIndex = indexPath.row - 1
             let cell = tableView.dequeueReusableCell(withIdentifier: "locationCell", for: indexPath)
-            cell.textLabel?.text = tableViewData[indexPath.section].locations[dataIndex]
+            cell.textLabel?.text = tableViewData[indexPath.section].locations[dataIndex].name
             return cell
         }
     }
@@ -230,6 +269,14 @@ class LeaderboardViewController: UITableViewController {
         feedbackGenerator.selectionChanged()
 
         guard tableViewData[indexPath.section].locationCount > 0 else { return }
+
+        // Location selected
+        if indexPath.row > 0 {
+            let ref = tableViewData[indexPath.section].locations[indexPath.row - 1].ref
+            tabBarController?.selectedIndex = 1
+            mapVC.focusRegionOnLocation(withRef: ref)
+            return
+        }
 
         var sectionsToReload = IndexSet()
         if let openSectionIndex = tableViewData.firstIndex(where: { $0.isOpened }), openSectionIndex != indexPath.section {
