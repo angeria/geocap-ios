@@ -38,6 +38,9 @@
 /* Class = "UITabBarItem"; title = "Profile"; ObjectID = "Ehp-tO-H9e"; */
 "Ehp-tO-H9e.title" = "Profil";
 
+/* Class = "UILabel"; text = "Captured locations: %d"; ObjectID = "GAM-b5-EZ1"; */
+"GAM-b5-EZ1.text" = "Tagna platser: 0";
+
 /* Class = "UILabel"; text = "Signing in..."; ObjectID = "HoG-mY-iaB"; */
 "HoG-mY-iaB.text" = "Loggar in...";
 

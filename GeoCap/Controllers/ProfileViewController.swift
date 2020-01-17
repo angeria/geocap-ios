@@ -36,7 +36,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var capturedLocationsLabel: UILabel!
 
     func setLocationCount(to count: Int) {
-        capturedLocationsLabel.text = "Captured locations: \(count)"
+        let format = NSLocalizedString("profile-captured-locations", comment: "Captured locations count label")
+        capturedLocationsLabel.text = String(format: format, count)
     }
 
     // MARK: - Snapchat & Profile Picture

@@ -119,8 +119,6 @@ MAP
 "tab-bar-profile" = "Profile";
 /* Title for leaderboard tab */
 "tab-bar-leaderboard" = "Leaderboard";
-/* Global location filter in leaderboard */
-"leaderboard-global" = "Global 🌍";
 
 /* Title of quiz timeout alert */
 "quiz-timeout-alert-title" = "Timeout";
@@ -140,6 +138,20 @@ MAP
 "callout-subtitle-captured-by-other-user" = "Owned by %@";
 /* Callout subtitle when a location isn't captured yet */
 "callout-subtitle-not-captured-yet" = "Not captured yet";
+
+/*
+LEADERBOARD
+*/
+
+/* Global location filter in leaderboard */
+"leaderboard-global" = "Global 🌍";
+
+/*
+PROFILE
+*/
+
+/* Captured locations count label */
+"profile-captured-locations" = "Captured locations: %d";
 
 /*
 SETTINGS
