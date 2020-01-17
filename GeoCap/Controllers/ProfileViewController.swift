@@ -31,7 +31,15 @@ class ProfileViewController: UIViewController {
         view.sendSubviewToBack(bitmoji)
     }
 
-    // Snapchat & Profile Picture
+    // MARK: - Captured locations
+
+    @IBOutlet weak var capturedLocationsLabel: UILabel!
+
+    func setLocationCount(to count: Int) {
+        capturedLocationsLabel.text = "Captured locations: \(count)"
+    }
+
+    // MARK: - Snapchat & Profile Picture
 
     private var bitmoji = SCSDKBitmojiIconView()
 

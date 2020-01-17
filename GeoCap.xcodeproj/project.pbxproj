@@ -14,6 +14,7 @@
 		431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431A3D8C22EC496B002D6026 /* QuizViewController.swift */; };
 		4326A5E62336666000A3D1A1 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E52336666000A3D1A1 /* Errors.swift */; };
 		4326A5E823368FC200A3D1A1 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326A5E723368FC200A3D1A1 /* Logging.swift */; };
+		4326B7B723D0D17600C462F0 /* CapturedLocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4326B7B623D0D17600C462F0 /* CapturedLocationsTableViewController.swift */; };
 		432DED9B22E1F28D00DFA074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9A22E1F28D00DFA074 /* AppDelegate.swift */; };
 		432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432DED9C22E1F28D00DFA074 /* MapViewController.swift */; };
 		432DEDA222E1F28D00DFA074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 432DEDA022E1F28D00DFA074 /* Main.storyboard */; };
@@ -69,6 +70,7 @@
 		431A3D8C22EC496B002D6026 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		4326A5E52336666000A3D1A1 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		4326A5E723368FC200A3D1A1 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		4326B7B623D0D17600C462F0 /* CapturedLocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturedLocationsTableViewController.swift; sourceTree = "<group>"; };
 		432DED9722E1F28D00DFA074 /* GeoCap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoCap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		432DED9A22E1F28D00DFA074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		432DED9C22E1F28D00DFA074 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			children = (
 				434E938F2350704E00C89A8B /* Auth */,
 				43AB9647239D29A2007F9E48 /* SettingsTableViewController.swift */,
+				4326B7B623D0D17600C462F0 /* CapturedLocationsTableViewController.swift */,
 				43D6284222FDAD1800F72317 /* LeaderboardViewController.swift */,
 				43615CAD23072E5F003FC839 /* ProfileViewController.swift */,
 				431A3D8C22EC496B002D6026 /* QuizViewController.swift */,
@@ -576,6 +579,7 @@
 				4326A5E823368FC200A3D1A1 /* Logging.swift in Sources */,
 				43D7A12D22F2F11900552D2C /* Extensions.swift in Sources */,
 				432DED9D22E1F28D00DFA074 /* MapViewController.swift in Sources */,
+				4326B7B723D0D17600C462F0 /* CapturedLocationsTableViewController.swift in Sources */,
 				431A3D8D22EC496B002D6026 /* QuizViewController.swift in Sources */,
 				4397786D235072D30044808F /* AuthViewController.swift in Sources */,
 				43CC062023279AA00005E7DD /* Constants.swift in Sources */,
