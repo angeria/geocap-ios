@@ -40,7 +40,6 @@ class CapturedLocationsTableViewController: UITableViewController {
     }
 
     private struct LocationCellData {
-        var isOpened: Bool
         let name: String
         let ref: DocumentReference
 
@@ -49,7 +48,6 @@ class CapturedLocationsTableViewController: UITableViewController {
                 let ref = data["ref"] as? DocumentReference
                 else { return nil }
 
-            self.isOpened = false
             self.name = name
             self.ref = ref
         }
@@ -74,9 +72,9 @@ class CapturedLocationsTableViewController: UITableViewController {
             if let locationCount = userDoc.get("capturedLocationsCount") as? Int {
                 self?.updateLocationCount(to: locationCount)
             }
-
-            guard let capturedLocations = userDoc.get("capturedLocationsPerCity") as? [String: [String: [String: [String: AnyObject]]]] else { return }
-            self?.setupData(capturedLocations)
+            if let capturedLocations = userDoc.get("capturedLocationsPerCity") as? [String: [String: [String: [String: AnyObject]]]] {
+                self?.setupData(capturedLocations)
+            }
         }
     }
 
@@ -101,8 +99,10 @@ class CapturedLocationsTableViewController: UITableViewController {
                                 }
                             }
                         }
-                        cityLocations.sort(by: { $0.name < $1.name })
-                        tableViewData += [City(name: cityName.capitalized, locations: cityLocations)]
+                        if !cityLocations.isEmpty {
+                            cityLocations.sort(by: { $0.name < $1.name })
+                            tableViewData += [City(name: cityName.capitalized, locations: cityLocations)]
+                        }
                     }
                 }
             }
