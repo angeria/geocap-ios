@@ -106,7 +106,7 @@ class LeaderboardViewController: UITableViewController {
                                         if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
                                             locations += [leaderboardLocation]
                                         }
-                                    } 
+                                    }
                                 }
                             }
                         }

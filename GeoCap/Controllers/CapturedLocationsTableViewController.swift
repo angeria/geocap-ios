@@ -88,8 +88,8 @@ class CapturedLocationsTableViewController: UITableViewController {
         tableViewData.removeAll()
 
         for country in capturedLocations.values {
-            for (cityName, county) in country {
-                for city in county.values {
+            for county in country.values {
+                for (cityName, city) in county {
                     if let locations = city["locations"] as? [String: AnyObject] {
                         var cityLocations = [LocationCellData]()
                         for location in locations.values {
