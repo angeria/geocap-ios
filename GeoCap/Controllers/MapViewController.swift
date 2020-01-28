@@ -747,10 +747,8 @@ class MapViewController: UIViewController {
                 if user(location: mapView.userLocation, isInside: location.overlay) {
                     return true
                 } else {
-                    // TODO: Fix
-//                    presentNotInsideAreaAlert()
-//                    return false
-                    return true
+                    presentNotInsideAreaAlert()
+                    return false
                 }
             }
         case "Show Choose City Popover":

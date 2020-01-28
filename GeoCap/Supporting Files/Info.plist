@@ -59,7 +59,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is needed to determine if you&apos;re near specific places</string>
+	<string>Your location is needed to determine if you're near specific places</string>
 	<key>SCSDKClientId</key>
 	<string>7972d8fb-dbc0-499c-a477-624f170164c0</string>
 	<key>SCSDKRedirectUrl</key>
