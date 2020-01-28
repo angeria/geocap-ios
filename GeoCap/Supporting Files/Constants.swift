@@ -27,14 +27,14 @@ enum GeoCapConstants {
 
     enum RemoteConfig {
         enum Keys { // swiftlint:disable:this nesting
-            static let numberOfQuestions = "numberOfQuestions"
+            static let numberOfQuestionsBaseline = "numberOfQuestionsBaseline"
             static let quizTime = "quizTime"
             static let minimumUsernameLength = "minimumUsernameLength"
             static let maximumUsernameLength = "maximumUsernameLength"
         }
 
         static let Defaults = [
-            Keys.numberOfQuestions: 3 as NSObject,
+            Keys.numberOfQuestionsBaseline: 3 as NSObject,
             Keys.quizTime: 13 as NSObject,
             Keys.minimumUsernameLength: 3 as NSObject,
             Keys.maximumUsernameLength: 20 as NSObject

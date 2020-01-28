@@ -29,6 +29,7 @@ class Location: NSObject, MKAnnotation {
     // Coordinates enclosing location
     var areaCoordinates: [CLLocationCoordinate2D]?
     var overlay: MKOverlay
+    var captureTimestamps = [Timestamp]()
 
     init?(data: [String: Any], reference: DocumentReference, username: String) {
         guard
@@ -52,6 +53,10 @@ class Location: NSObject, MKAnnotation {
         }
 
         super.init()
+
+        if let captureTimestamps = data["captureTimestamps"] as? [Timestamp] {
+            self.captureTimestamps.append(contentsOf: captureTimestamps.suffix(6))
+        }
 
         if let owner = data["owner"] as? String {
             changeOwner(newOwner: owner, username: username)

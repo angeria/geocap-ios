@@ -356,13 +356,30 @@ class MapViewController: UIViewController {
             annotationView.rightCalloutAccessoryView = captureButton
             annotationView.leftCalloutAccessoryView = nil
         } else {
-            annotationView.glyphImage = UIImage(systemName: "flag.fill")
+            if locationIsHot(annotation) {
+                annotationView.glyphImage = UIImage(systemName: "flame.fill")
+            } else {
+                annotationView.glyphImage = UIImage(systemName: "flag.fill")
+            }
             annotationView.markerTintColor = UIColor.systemRed.withAlphaComponent(Constants.markerAlpha)
             annotationView.rightCalloutAccessoryView = captureButton
             fetchAndSetBitmoji(forUser: annotation.owner!, in: annotationView)
         }
 
         return annotationView
+    }
+
+    private func locationIsHot(_ location: Location) -> Bool {
+        let today = Date()
+        var todayCaptureCount = 0
+        for timestamp in location.captureTimestamps {
+            if Calendar.current.compare(timestamp.dateValue(),
+                                        to: today,
+                                        toGranularity: .day) == .orderedSame {
+                todayCaptureCount += 1
+            }
+        }
+        return todayCaptureCount > 1
     }
 
     private func setupCaptureButton() -> UIButton {
@@ -522,7 +539,7 @@ class MapViewController: UIViewController {
         batch.updateData([
             "owner": username,
             "ownerId": user.uid,
-            "captureTimestamp": FieldValue.serverTimestamp()
+            "captureTimestamps": FieldValue.arrayUnion([Timestamp()])
         ], forDocument: locationReference)
 
         let userReference = db.collection("users").document(user.uid)
@@ -729,6 +746,7 @@ class MapViewController: UIViewController {
                 let annotationView = sender as? MKAnnotationView,
                 let location = annotationView.annotation as? Location {
                     quizVC.presentationController?.delegate = self
+                    quizVC.captureTimestamps = Array(location.captureTimestamps.prefix(6))
                     currentLocationReference = location.reference
                     currentLocationName = location.name
             }
