@@ -411,7 +411,7 @@
                                 <rect key="frame" x="354" y="108" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="DAV-AU-NiB"/>
-                                    <constraint firstAttribute="width" constant="40" id="h1v-DX-4tg"/>
+                                    <constraint firstAttribute="width" secondItem="8yK-tK-yx0" secondAttribute="height" multiplier="1:1" id="nCK-Xl-v89"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Button" image="gear" catalog="system">
@@ -447,6 +447,7 @@
                             <constraint firstItem="fUE-k9-7Rq" firstAttribute="trailing" secondItem="8yK-tK-yx0" secondAttribute="trailing" constant="20" id="lEo-u6-AKL"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="top" secondItem="TWL-KT-s0b" secondAttribute="bottom" constant="100" id="nsH-A8-XC0"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="sRS-H3-PSL"/>
+                            <constraint firstItem="8yK-tK-yx0" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="354" id="sbJ-u5-uEs"/>
                             <constraint firstItem="tjn-jR-huo" firstAttribute="trailing" secondItem="fUE-k9-7Rq" secondAttribute="trailing" id="x5y-1l-OqH"/>
                             <constraint firstItem="0G2-vA-Jv9" firstAttribute="top" secondItem="fUE-k9-7Rq" secondAttribute="top" constant="166" id="xOH-zc-Mb5"/>
                             <constraint firstItem="GAM-b5-EZ1" firstAttribute="leading" secondItem="fUE-k9-7Rq" secondAttribute="leading" constant="20" id="xXt-If-MdL"/>

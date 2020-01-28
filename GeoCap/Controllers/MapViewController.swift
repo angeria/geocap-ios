@@ -13,6 +13,7 @@ import Firebase
 import os.log
 import AVFoundation
 import SwiftEntryKit
+import StoreKit
 
 extension MapViewController {
     enum Constants {
@@ -478,6 +479,31 @@ class MapViewController: UIViewController {
         }
     }
 
+    // MARK: App Store
+
+    private func requestReview() {
+        var count = UserDefaults.standard.integer(forKey: GeoCapConstants.UserDefaultsKeys.quizWonCount)
+        count += 1
+        UserDefaults.standard.set(count, forKey: GeoCapConstants.UserDefaultsKeys.quizWonCount)
+
+        // Get the current bundle version for the app
+        let infoDictionaryKey = kCFBundleVersionKey as String
+        guard let currentVersion = Bundle.main.object(forInfoDictionaryKey: infoDictionaryKey) as? String
+            else { os_log("Bundle version not fond", log: OSLog.Map, type: .error); return }
+
+        let lastVersionPromptedForReview = UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.lastVersionPromptedForReview)
+
+        if count >= 5 && currentVersion != lastVersionPromptedForReview {
+            let oneSecondFromNow = DispatchTime.now() + 1.0
+            DispatchQueue.main.asyncAfter(deadline: oneSecondFromNow) { [navigationController] in
+                if navigationController?.topViewController is MapViewController {
+                    SKStoreReviewController.requestReview()
+                    UserDefaults.standard.set(currentVersion, forKey: GeoCapConstants.UserDefaultsKeys.lastVersionPromptedForReview)
+                }
+            }
+        }
+    }
+
     // MARK: - Quiz
 
     private func handleQuizDismissal(quizVC: QuizViewController) {
@@ -489,6 +515,8 @@ class MapViewController: UIViewController {
             if !(UserDefaults.standard.bool(forKey: GeoCapConstants.UserDefaultsKeys.notificationAuthRequestShown)) {
                 presentRequestNotificationAuthAlert()
             }
+
+            requestReview()
         } else {
             quizTimeoutIsActive = true
         }
@@ -711,16 +739,15 @@ class MapViewController: UIViewController {
         switch identifier {
         case "Show Quiz":
             if quizTimeoutIsActive {
-                // TODO: Fix before release
-//                presentQuizTimeoutAlert()
-//                return false
+                presentQuizTimeoutAlert()
+                return false
             }
 
             if let annotationView = sender as? MKAnnotationView, let location = annotationView.annotation as? Location {
                 if user(location: mapView.userLocation, isInside: location.overlay) {
                     return true
                 } else {
-                    // TODO: Fix before release
+                    // TODO: Fix
 //                    presentNotInsideAreaAlert()
 //                    return false
                     return true
