@@ -23,8 +23,23 @@ class QuizViewController: UIViewController {
 
     private let dispatchGroup = DispatchGroup()
 
-    private let numberOfQuestions = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestions].numberValue!)
+    private var numberOfQuestionsWeighted = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestionsBaseline].numberValue!)
+    private let numberOfQuestionsBaseline = Int(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.numberOfQuestionsBaseline].numberValue!)
     private let quizTime = Double(truncating: RemoteConfig.remoteConfig()[GeoCapConstants.RemoteConfig.Keys.quizTime].numberValue!)
+    var captureTimestamps = [Timestamp]() {
+        didSet {
+            let today = Date()
+            var todayCaptureCount = 0.0
+            for timestamp in captureTimestamps {
+                if Calendar.current.compare(timestamp.dateValue(),
+                                            to: today,
+                                            toGranularity: .day) == .orderedSame {
+                    todayCaptureCount += 1
+                }
+            }
+            numberOfQuestionsWeighted = lround(Double(numberOfQuestionsBaseline) + todayCaptureCount / 2.2)
+        }
+    }
 
     // MARK: - Life Cycle
 
@@ -156,7 +171,7 @@ class QuizViewController: UIViewController {
 
     private var currentQuestionNumber = 0 {
         didSet {
-            questionCountLabel.text = "\(currentQuestionNumber)/\(numberOfQuestions)"
+            questionCountLabel.text = "\(currentQuestionNumber)/\(numberOfQuestionsWeighted)"
         }
     }
 
@@ -224,10 +239,10 @@ class QuizViewController: UIViewController {
             feedbackGenerator.notificationOccurred(.success)
 
             correctAnswers += 1
-            if correctAnswers == numberOfQuestions {
+            if correctAnswers == numberOfQuestionsWeighted {
                 quizWon = true
             // Prefetch question only if there's more than one left
-            } else if correctAnswers < numberOfQuestions - 1 {
+            } else if correctAnswers < numberOfQuestionsWeighted - 1 {
                 dispatchGroup.enter()
                 fetchQuestions(amount: 1)
             }
