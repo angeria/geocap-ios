@@ -96,7 +96,6 @@ class SettingsTableViewController: UITableViewController {
             if let error = error {
                 os_log("%{public}@", log: OSLog.Profile, type: .debug, error as NSError)
                 Crashlytics.sharedInstance().recordError(error)
-                return
             }
             completion?()
         }
@@ -216,7 +215,7 @@ class SettingsTableViewController: UITableViewController {
               Crashlytics.sharedInstance().recordError(error)
             }
 
-            if let success = (result?.data as? [String: Any])?["success"] as? Bool {
+            if let success = (result?.data as? [String: Any])?["result"] as? Bool {
                 if success {
                     self?.teardownBeforeSignOut()
                 }
