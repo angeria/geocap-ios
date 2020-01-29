@@ -135,12 +135,10 @@ class AuthViewController: UIViewController {
         let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
         let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber).uintValue
         let curveAnimationOption = UIView.AnimationOptions(rawValue: animationCurve << 16)
-        var hideEmailTextField = true
         var buttonTitle = ""
 
         // Prevents iPad undocked keyboard
         if endFrame.height != 0, view.frame.height == endFrame.height + endFrame.origin.y {
-            hideEmailTextField = false
             buttonTitle = NSLocalizedString("auth-email-button-continue",
                                             comment: "Text on button below email text field to confirm input")
             bottomConstraint.constant = view.frame.height - endFrame.origin.y - view.safeAreaInsets.bottom
@@ -152,7 +150,6 @@ class AuthViewController: UIViewController {
                                             - iconHeightConstraint.constant) / 2
         } else {
             infoLabel.isHidden = true
-            hideEmailTextField = true
             buttonTitle = NSLocalizedString("auth-email-button-continue-with-email",
                 comment: "Text on button below email text field to continue and show the email text field")
             bottomConstraint.constant = bottomConstraintConstantInStoryboard!
@@ -163,7 +160,6 @@ class AuthViewController: UIViewController {
                        delay: 0,
                        options: [curveAnimationOption],
                        animations: {
-            self.emailTextField.isHidden = hideEmailTextField
             self.continueButton.setTitle(buttonTitle, for: .normal)
             self.view.layoutIfNeeded()
         })
