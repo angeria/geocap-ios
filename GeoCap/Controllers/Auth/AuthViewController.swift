@@ -180,6 +180,7 @@ class AuthViewController: UIViewController {
     @IBOutlet weak var continueButton: UIButton!
 
     @IBAction func continueButtonPressed(_ sender: UIButton) {
+        emailTextField.isHidden = false
         if emailTextField.isFirstResponder {
             _ = emailTextFieldDidEndEditing()
         } else {
