@@ -573,13 +573,9 @@ class MapViewController: UIViewController {
         let userReference = db.collection("users").document(user.uid)
         let locationId = locationReference.documentID
 
-        let countryDictKey = "capturedLocationsPerCity.\(currentCity.country)"
-        let countyDictKey = "\(countryDictKey).\(currentCity.county)"
         let cityDictKey = "capturedLocationsPerCity.\(currentCity.country).\(currentCity.county).\(currentCity.name.lowercased())"
         batch.updateData([
             "capturedLocationsCount": FieldValue.increment(Int64(1)),
-            "\(countryDictKey).locationCount": FieldValue.increment(Int64(1)),
-            "\(countyDictKey).locationCount": FieldValue.increment(Int64(1)),
             "\(cityDictKey).locationCount": FieldValue.increment(Int64(1)),
             "\(cityDictKey).locations.\(locationId)": [
                                 "name": locationName,
