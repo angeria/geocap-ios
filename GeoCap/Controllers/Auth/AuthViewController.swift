@@ -352,7 +352,6 @@ class AuthViewController: UIViewController {
         let db = Firestore.firestore()
         db.collection("users").document(user.uid).setData([
             "username": UserDefaults.standard.string(forKey: GeoCapConstants.UserDefaultsKeys.username)!,
-            "capturedLocations": [],
             "capturedLocationsCount": 0
             ]) { [weak self] error in
                 if let error = error as NSError? {
