@@ -1,3 +1,3 @@
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Din position behövs för att avgöra om du befinner dig inom specifika områden";
+"NSLocationWhenInUseUsageDescription" = "Din position behövs för att avgöra om du befinner dig i närheten av platser som du försöker ta över";
 
