@@ -72,7 +72,7 @@ class CapturedLocationsTableViewController: UITableViewController {
             if let locationCount = userDoc.get("capturedLocationsCount") as? Int {
                 self?.updateLocationCount(to: locationCount)
             }
-            if let capturedLocations = userDoc.get("capturedLocationsPerCity") as? [String: [String: [String: [String: AnyObject]]]] {
+            if let capturedLocations = userDoc.get("capturedLocationsPerCity") as? [String: [String: AnyObject]] {
                 self?.setupData(capturedLocations)
             }
         }
@@ -84,24 +84,26 @@ class CapturedLocationsTableViewController: UITableViewController {
         }
     }
 
-    private func setupData(_ capturedLocations: [String: [String: [String: [String: AnyObject]]]]) {
+    private func setupData(_ capturedLocations: [String: [String: AnyObject]]) {
         tableViewData.removeAll()
 
         for country in capturedLocations.values {
             for county in country.values {
-                for (cityName, city) in county {
-                    if let locations = city["locations"] as? [String: AnyObject] {
-                        var cityLocations = [LocationCellData]()
-                        for location in locations.values {
-                            if let location = location as? [String: Any] {
-                                if let locationCell = LocationCellData(data: location) {
-                                    cityLocations += [locationCell]
+                if let county = county as? [String: AnyObject] {
+                    for (cityName, city) in county {
+                        if let locations = (city as? [String: Any])?["locations"] as? [String: Any] {
+                            var cityLocations = [LocationCellData]()
+                            for location in locations.values {
+                                if let location = location as? [String: Any] {
+                                    if let locationCell = LocationCellData(data: location) {
+                                        cityLocations += [locationCell]
+                                    }
                                 }
                             }
-                        }
-                        if !cityLocations.isEmpty {
-                            cityLocations.sort(by: { $0.name < $1.name })
-                            tableViewData += [City(name: cityName.capitalized, locations: cityLocations)]
+                            if !cityLocations.isEmpty {
+                                cityLocations.sort(by: { $0.name < $1.name })
+                                tableViewData += [City(name: cityName.capitalized, locations: cityLocations)]
+                            }
                         }
                     }
                 }
