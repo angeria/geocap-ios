@@ -61,7 +61,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is needed to determine if you're close to locations that you try to capture</string>
 	<key>SCSDKClientId</key>
-	<string>7972d8fb-dbc0-499c-a477-624f170164c0</string>
+	<string>7212acde-7e3e-4996-9be4-3e68af949495</string>
 	<key>SCSDKRedirectUrl</key>
 	<string>geocap://snapkit/auth</string>
 	<key>SCSDKScopes</key>
