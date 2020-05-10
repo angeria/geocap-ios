@@ -81,8 +81,8 @@ class LeaderboardViewController: UITableViewController {
             var locationCount: Int?
             // If a specific city is selected in the leaderboard
             if let country = country, let county = county, let city = city {
-                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: Any]]]] {
-                    if let city = capturedLocationsPerCity[country]?[county]?[city] {
+                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: AnyObject]] {
+                    if let city = (capturedLocationsPerCity[country]?[county] as? [String: AnyObject])?[city] as? [String: AnyObject] {
                         if let locationsDict = city["locations"] as? [String: Any] {
                             locationsDict.values.forEach { (location) in
                                 if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
@@ -97,14 +97,16 @@ class LeaderboardViewController: UITableViewController {
                 // If 'global' is selected
                 locationCount = data["capturedLocationsCount"] as? Int
 
-                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: [String: [String: AnyObject]]]] {
+                if let capturedLocationsPerCity = data["capturedLocationsPerCity"] as? [String: [String: AnyObject]] {
                     for country in capturedLocationsPerCity.values {
                         for county in country.values {
-                            for city in county.values {
-                                if let locationsDict = city["locations"] as? [String: Any] {
-                                    locationsDict.values.forEach { (location) in
-                                        if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
-                                            locations += [leaderboardLocation]
+                            if let county = county as? [String: AnyObject] {
+                                for city in county.values {
+                                    if let locationsDict = (city as? [String: Any])?["locations"] as? [String: Any] {
+                                        locationsDict.values.forEach { (location) in
+                                            if let location = location as? [String: Any], let leaderboardLocation = LeaderboardLocation(data: location) {
+                                                locations += [leaderboardLocation]
+                                            }
                                         }
                                     }
                                 }
